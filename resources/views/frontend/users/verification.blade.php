@@ -41,7 +41,7 @@
                    
                             $mobile = session('accountInfo.mobile');
                             $email = session('accountInfo.email');
-                                @dump(  $email, $mobile)
+                               
                         @endphp
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
                             {{-- @php
@@ -65,6 +65,7 @@
                                 @endforeach
                             @endif --}}
                             {{-- <div id="alert-container-resend" class="mt-3"></div> --}}
+
                             @if (session()->has('success'))
                                 <div class="alert alert-success" role="alert">
                                     {{ session('success') }}
@@ -92,7 +93,7 @@
                                         <div class="mb-3 text-center">
                                             <input type="text" class="form-control text-center" name="otp"
                                                 id="otp" placeholder="Enter OTP" maxlength="6">
-                                                @dump($email)
+                                                
                                             <input type="hidden" name="email" id="email" value="{{ $email }}">
                                             <input type="hidden" name="mobile" id="mobile" value="{{ $mobile }}">
                                         </div>
@@ -114,7 +115,7 @@
                                                 id="countVerify"></span><b>s</b></div>
                                     </div>
                                     <button type="submit" class="btn gt-btn-orange mt-10" id="resendOTPBtn" disabled>
-                                        Send OTP Again
+                                        Resend OTP
                                     </button>
                                 </form>
                                 <script>

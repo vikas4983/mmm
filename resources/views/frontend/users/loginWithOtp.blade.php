@@ -14,8 +14,8 @@
                         
                         <div class="col-xxl-6 col-xs-16 col-xl-6 col-xs-offset-0 col-xxl-offset-5 col-sm-offset-0 col-md-offset-0 col-xl-offset-5 col-lg-10 col-lg-offset-3">
                             <form class="gt-login-form gtLogin" action="{{ route('login.otp') }}" method="post" id="forgot_form">
-                                @dump((url('send-otp')))
-                                @csrf
+                                <input type="hidden" name='action' value="UserLoginWithOTP">
+                               @csrf
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Login With OTP</h2>
                                 <p class="inPageSubTitle text-center mb-30">We are always happy to help.</p>
                                 @if ($errors->any())
@@ -27,6 +27,7 @@
                                         </ul>
                                     </div>
                                 @endif
+                              
                                 <div class="form-check mr-3 mb-3 d-inline-block">
                                     <input class="form-check-input" type="radio" name="contactMethod" id="emailRadio" value="email" checked>
                                     <label class="form-check-label" for="emailRadio">Email</label>
@@ -45,7 +46,7 @@
                                 <div class="gt-margin-top-30 form-group" id="input-box"></div> <!-- Adjusted input-box -->
                 
                                 <div class="form-group gt-margin-top-30">
-                                    <button class="btn gt-btn-orange btn-block" name="action" value="UserLoginWithOTP" type="submit">Get Otp</button>
+                                    <button class="btn gt-btn-orange btn-block"  type="submit">Get Otp</button>
                                 </div>
                             </form>
                         </div>

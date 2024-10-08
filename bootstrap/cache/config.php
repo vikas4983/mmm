@@ -551,6 +551,56 @@
         'rules' => 'required|min:8|regex:/^[a-zA-Z0-9\\s\\-\\_\\@\\.\\,\\!\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\=]*$/',
       ),
     ),
+    'basicDetails' => 
+    array (
+      'dob' => 
+      array (
+        'type' => 'date',
+        'name' => 'dob',
+        'label' => 'Date of Birth',
+        'rules' => 'required|date|max:6',
+      ),
+      'height' => 
+      array (
+        'type' => 'select',
+        'label' => 'Height',
+        'name' => 'height',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|string',
+      ),
+      'mother_tongue' => 
+      array (
+        'type' => 'select',
+        'label' => 'Mother Tongue',
+        'name' => 'mother_tongue',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|string',
+      ),
+      'religion' => 
+      array (
+        'type' => 'select',
+        'name' => 'religion',
+        'label' => 'Religion',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|string',
+      ),
+      'marital_status' => 
+      array (
+        'type' => 'select',
+        'name' => 'marital_status',
+        'label' => 'Marital Status',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|string',
+      ),
+    ),
   ),
   'fortify-options' => 
   array (

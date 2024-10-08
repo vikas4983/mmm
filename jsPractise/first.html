@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>java Script</h1>
+    <script>
+// Random Number
+
+// document.write('Random Number = ');
+// let x = Math.floor(Math.random() * 10);// 0 to 9
+// document.write(x);
+// document.write('<br>');
+// document.write('Random Number = ');
+// let y = Math.floor(Math.random() * (10 , 25));// 0 to 9
+// document.write(y);
+// // 
+// function getRandom(min, max){
+//     let a = Math.floor(Math.random() * (min , max + 1));
+//     return a;
+// }
+// let z = getRandom(10,26);
+// document.write('<br>');
+// document.write('Random Number = ');// 10 to 26
+// document.write(z);
+
+
+
+// Generate Date
+
+// let b = new Date();
+// console.log(b);
+// console.log(b.getFullYear());
+// console.log(b.getMonth());
+// console.log(b.getDate());
+// console.log(b.getTime());
+
+//Create Object
+
+// let person = new Object();
+// person.name = "Vikas";
+// person.last_name = "kumar";
+// console.log(person.name);
+// console.log(person.last_name);
+
+let person = {
+    name : "vikas",
+    age : "29",
+
+    getName: function(){
+        return this.name.toUpperCase();
+    },
+
+    get getName1(){
+        return this.name.toLocaleUpperCase();
+    },
+
+    set setName(n){
+        return this.name = n.toUpperCase();
+    },
+
+    
+   
+}
+person.setName = "Kumar",
+   
+console.log(person.getName());
+console.log(person.getName1);
+console.log(person);
+
+
+
+
+
+
+    </script>
+</body>
+</html>

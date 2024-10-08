@@ -22,9 +22,8 @@
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Change Password?
                                 </h2>
                                 <p class="inPageSubTitle text-center mb-30">We are always happy to help.</p>
-
                                 @if ($errors->has('error'))
-                                    <div class="alert alert-danger" role="alert">
+                                    <div class="alert alert-error" role="alert">
                                         {{ $errors->first('error') }}
                                     </div>
                                 @endif
@@ -84,29 +83,29 @@
         </div>
         <!-- Right Click Disable -->
         <!--
-            <script language=JavaScript>
-                function clickIE4() {
-                    if (event.button == 2) {
-                        return false;
-                    }
-                }
-
-                function clickNS4(e) {
-                    if (document.layers || document.getElementById && !document.all) {
-                        if (e.which == 2 || e.which == 3) {
+                <script language=JavaScript>
+                    function clickIE4() {
+                        if (event.button == 2) {
                             return false;
                         }
                     }
-                }
-                if (document.layers) {
-                    document.captureEvents(Event.MOUSEDOWN);
-                    document.onmousedown = clickNS4;
-                } else if (document.all && !document.getElementById) {
-                    document.onmousedown = clickIE4;
-                }
-                document.oncontextmenu = new Function("return false")
-            </script>
-            -->
+
+                    function clickNS4(e) {
+                        if (document.layers || document.getElementById && !document.all) {
+                            if (e.which == 2 || e.which == 3) {
+                                return false;
+                            }
+                        }
+                    }
+                    if (document.layers) {
+                        document.captureEvents(Event.MOUSEDOWN);
+                        document.onmousedown = clickNS4;
+                    } else if (document.all && !document.getElementById) {
+                        document.onmousedown = clickIE4;
+                    }
+                    document.oncontextmenu = new Function("return false")
+                </script>
+                -->
 
 
     @endsection

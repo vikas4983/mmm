@@ -3,56 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
-use App\Http\Requests\MemberCreateRequest;
-use App\Jobs\SendEmailJob;
-use App\Jobs\UserEmailJob;
 use App\Jobs\UserSendEmailJob;
-use App\Models\EmailTemplate;
 use App\Models\Member;
 use App\Models\MemberOtp;
 use App\Models\User;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\UserEmailTemplateTrait;
 use App\Traits\MemberOtpTrait;
-use Illuminate\Container\Attributes\Auth as AttributesAuth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
-use Session;
-
-
 
 class MemberController extends Controller
 {
-    //protected $UserEmailJob;
-    /**
-     * Display a listing of the resource.
-     */
     use UserEmailTemplateTrait;
     use MemberOtpTrait;
 
-
-
-
-
-
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $fields = config('formFields.register');
@@ -69,21 +34,31 @@ class MemberController extends Controller
             $accountInfo = [
                 'name' => $validateData['name'],
                 'mobile' => $validateData['mobile'],
-                'email' => $validateData['email']
+                'email' => $validateData['email'],
             ];
             session(['accountInfo' => $accountInfo]);
 
             $emailTemplate = $this->userEmailTemplate($name);
             UserSendEmailJob::dispatch($user, $emailTemplate);
-            return redirect('verification');
+            return redirect('verification')->with(['success' =>  'OTP has been sent to your email & mobile number!']);
         } else {
-            return redirect()->back()->withErrors(['error' => 'Fill the all fields correctly']);
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'Fill the all fields correctly']);
         }
     }
     public function verification()
+
     {
 
-        return view('frontend.users.verification')->withErrors(['success' => 'Otp has been sent to your email & mobile number!']);
+        return view('frontend.users.verification');
+    }
+    public function otpVerification(Request $request)
+
+    {
+
+        $data = session()->get('data');
+        return view('frontend.users.otpValidate', compact('data'));
     }
     public function otpValidate(Request $request)
     {
@@ -95,30 +70,33 @@ class MemberController extends Controller
         $otp = $validatedData['otp'];
         $mobile = $validatedData['mobile'] ?? null;
         $email = $validatedData['email'] ?? null;
-        $userByMobile = User::where('mobile',  $mobile)->first();
-        $userByEmail = User::where('email',  $email)->first();
+        $userByMobile = User::where('mobile', $mobile)->first();
+        $userByEmail = User::where('email', $email)->first();
         if (!$userByMobile) {
             return redirect()->back()->with('error', 'Mobile number not found!');
         }
         if (!$userByEmail) {
             return redirect()->back()->with('error', 'Email not found!');
         }
-
         $user = User::where('mobile', $mobile)->where('email', $email)->first();
-        $otp = MemberOtp::where('otp', $otp)->where('user_id', $user->id)->latest('id')->first();
+        $otp = MemberOtp::where('otp', $otp)
+            ->where('user_id', $user->id)
+            ->latest('id')
+            ->first();
         if (!$otp) {
             return redirect()->back()->with('error', 'Incorrect OTP!');
         }
         if (now()->greaterThan($otp->expires_at)) {
             return redirect()->back()->with('error', 'OTP has expired');
         }
-
         if ($otp && $mobile && $email) {
             Auth::login($user);
-            return redirect('dashboard')->with('success', 'Logedin successfully!');
+            if (Auth::user()) {
+                return redirect()->route('basicDetails.create');
+            }
+            //return redirect('dashboard')->with('success', 'Logedin successfully!');
         }
     }
-
     public function loginWithOtp()
     {
         return view('frontend.users.loginWithOtp');
@@ -127,9 +105,9 @@ class MemberController extends Controller
     {
         return view('forgotPassword');
     }
-
     public function loginOtp(Request $request)
     {
+
         if ($request->contactMethod == 'email') {
             $validatedData = $request->validate([
                 'contact' => 'required|email',
@@ -139,17 +117,19 @@ class MemberController extends Controller
                 'contact' => 'required|numeric|digits:10',
             ]);
         } else {
-            return redirect()->back()->withErrors(['error' => 'Invalid contact method specified.']);
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'Invalid contact method specified.']);
         }
 
         $user = User::where('email', $validatedData['contact'])
             ->orWhere('mobile', $validatedData['contact'])
             ->first();
         if (!$user) {
-            $errorMessage = $request->contactMethod == 'email'
-                ? 'Email id does not match our records!'
-                : 'Mobile number does not match our records!';
-            return redirect()->back()->withErrors(['error' => $errorMessage]);
+            $errorMessage = $request->contactMethod == 'email' ? 'Email id does not match our records!' : 'Mobile number does not match our records!';
+            return redirect()
+                ->back()
+                ->withErrors(['error' => $errorMessage]);
         }
         MemberOtp::where('user_id', $user->id)->delete();
 
@@ -167,12 +147,14 @@ class MemberController extends Controller
             'mobile' => $user['mobile'],
             'email' => $user['email'],
             'action' => $request->action,
+            'success' => 'OTP has sent successfully!',
         ];
-        return view('frontend.users.otpValidate', compact('data'))->withErrors(['success' => 'OTP has sent successfully!']);
+        session()->put('data', $data);
+        return redirect('otp-verification');
     }
-
     public function otpResend(Request $request)
     {
+
         $validateData = $request->validate([
             'mobile' => 'required|digits:10',
             'email' => 'required|email',
@@ -186,13 +168,30 @@ class MemberController extends Controller
             return redirect()->back()->with('error', 'Somethning went wrong, please try again!');
         }
         $name = 'UserResendOTP';
-        session(['accountInfo' => $validateData]);
         MemberOtp::where('user_id', $user->id)->delete();
         $emailTemplate = $this->userEmailTemplate($name);
         UserSendEmailJob::dispatch($user, $emailTemplate);
-        $data =  $validateData;
-        return view('frontend.users.otpValidate', compact('data'))
-            ->withErrors(['error' => 'Resend OTP sent successfully!']);
+        
+
+        if ($request['action'] == 'UserResendOTP') {
+
+            return redirect('verification')->with(
+                [
+                    'success' => 'OTP Resend sent successfully!',
+
+                ],
+            );
+        }
+        $data = [
+            'mobile' => $user['mobile'],
+            'email' => $user['email'],
+            'action' => $request->action,
+            'success' => 'OTP Resend sent successfully!',
+
+        ];
+
+        session()->put('data', $data);
+        return redirect('otp-verification');
     }
     public function loginOtpValidate(Request $request)
     {
@@ -206,8 +205,8 @@ class MemberController extends Controller
         $otp = $validatedData['otp'];
         $mobile = $validatedData['mobile'] ?? null;
         $email = $validatedData['email'] ?? null;
-        $userByMobile = User::where('mobile',  $mobile)->first();
-        $userByEmail = User::where('email',  $email)->first();
+        $userByMobile = User::where('mobile', $mobile)->first();
+        $userByEmail = User::where('email', $email)->first();
 
         if (!$userByMobile) {
             return redirect()->back()->with('error', 'Mobile number not found!');
@@ -217,81 +216,96 @@ class MemberController extends Controller
         }
 
         $user = User::where('mobile', $mobile)->orWhere('email', $email)->first();
-        $otps = MemberOtp::where('otp', $otp)->where('user_id', $user->id)->latest('id')->first();
-        $data = ($validatedData);
+        $otps = MemberOtp::where('otp', $otp)
+            ->where('user_id', $user->id)
+            ->latest('id')
+            ->first();
+        $data = $validatedData;
 
         if (!$otps) {
-            return view('frontend.users.otpValidate', compact('data'))
-                ->withErrors(['error' => 'Incorrect OTP!']);
+            $data = [
+                'mobile' => $user['mobile'],
+                'email' => $user['email'],
+                'action' => $request->action,
+                'error' => 'Oops! Incorrect OTP.'
+
+            ];
+            session()->put('data', $data);
+            return redirect('otp-verification');
         }
-
-
         if (now()->greaterThan($otps->expires_at)) {
-            return view('frontend.users.otpValidate', compact('data'))->withErrors(['error' => 'OTP has expired']);
+            $data = [
+                'mobile' => $user['mobile'],
+                'email' => $user['email'],
+                'action' => $request->action,
+                'error' => 'Oops! OTP has expired.'
+
+            ];
+            session()->put('data', $data);
+            return redirect('otp-verification');
         }
         $otps->delete();
-
         if ($request->action == 'UserLoginWithOTP') {
             Auth::login($user);
+
             return redirect('dashboard')->with('success', 'LoggedIn successfully!');
         }
-        if ($request->action == 'UserResendOTP') {
 
-            $user->update([
-                'status' => 1,
-
-            ]);
-            return response()->json(['message' => 'Congratulations, profile verified successfully! Now complete your profile.']);
-        }
         return view('frontend.users.changePasswordForm', compact('data'))->withErrors(['success' => 'OTP verified, Now Set the new password!']);
     }
-
 
     public function userForgotPassword()
     {
         return view('frontend.users.forgotPassword');
     }
-
-
     public function updatePassword(Request $request)
     {
-
         $validatedData = $request->validate([
             'mobile' => 'required|numeric|digits:10',
             'email' => 'required|email',
             'password' => 'required|min:8|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*?&]/|confirmed',
         ]);
-
         $user = User::where('email', $validatedData['email'])
             ->orWhere('mobile', $validatedData['mobile'])
             ->first();
-
         if (!$user) {
             return redirect()->back()->with('error', 'User not found!');
         }
-
         $user->update([
             'password' => Hash::make($validatedData['password']),
         ]);
         return redirect('/login')->withErrors(['success' => 'Password change successfully!!']);
     }
-
-
     public function changePassword(ChangePasswordRequest $request)
     {
-
-        $user = auth()->user();
-        if (!Hash::check($request->current_password, $user->password)) {
-            return back()->withErrors(['current_password' => 'Current password is incorrect']);
+        if ($user = Auth()->user()) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->withErrors(['current_password' => 'Current password is incorrect']);
+            }
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            return redirect()->back()->with('success', 'Password changed successfully!');
+        } else {
+            return redirect()->back()->with('success', 'Something went wrong, please try again!');
         }
-        $user->password = Hash::make($request->new_password);
-        $user->save();
-
-        return redirect()->back()->with('success', 'Password changed successfully!');
     }
 
+    public function index()
+    {
+        //
+    }
 
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     /**
      * Display the specified resource.
      */

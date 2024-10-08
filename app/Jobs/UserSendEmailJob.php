@@ -36,10 +36,7 @@ class UserSendEmailJob implements ShouldQueue
     {
         if ($this->user && $this->emailTemplate) {
             try {
-
-                Mail::to($this->user->email)
-
-                    ->send(new UserEmail($this->user, $this->emailTemplate));
+                Mail::to($this->user->email)->send(new UserEmail($this->user, $this->emailTemplate));
             } catch (\Exception $e) {
                 Log::error('Email sending failed for user: ' . $this->user->email . ', Error: ' . $e->getMessage());
             }

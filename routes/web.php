@@ -41,6 +41,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\admin_auth\MobileLoginController;
 use App\Http\Controllers\AdminApiTokenController;
 use App\Http\Controllers\AdminMenuController;
+use App\Http\Controllers\AjaxRequestController;
+use App\Http\Controllers\BasicDetailController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\ModelCountController;
 use App\Models\City;
@@ -52,6 +55,9 @@ use Aws\Middleware;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::get('/get-view', [DemoController::class, 'getView']);
+Route::get('/get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
 
 Route::get('/localization/{locale}', function (string $locale) {
     if (!in_array($locale, ['en', 'hi', 'fr'])) {
@@ -73,21 +79,31 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+    Route::prefix('frontend/registration')->group(function () {
+        Route::resource('basicDetails', BasicDetailController::class);
+        
+    });
 });
 
 //User Registration
 Route::post('registration', [MemberController::class, 'store'])->name('registration');
+Route::get('basic-details', [BasicDetailController::class, 'index'])->name('basic.detail');
+
+
+
+
 Route::get('verification', [MemberController::class, 'verification'])->name('verification');
+Route::get('otp-verification', [MemberController::class, 'otpVerification'])->name('otp-verification');
 Route::post('otp-validate', [MemberController::class, 'otpValidate'])->name('otp.validate');
 //User Login System
-Route::get('login-with-otp', [MemberController::class,'loginWithOtp'])->name('login.with.otp');
-Route::post('login-otp',[MemberController::class,'loginOtp'])->name('login.otp');
-Route::post('login-otp-validate',[MemberController::class,'loginOtpValidate'])->name('login.otp.validate');
+Route::get('login-with-otp', [MemberController::class, 'loginWithOtp'])->name('login.with.otp');
+Route::post('login-otp', [MemberController::class, 'loginOtp'])->name('login.otp');
+Route::post('login-otp-validate', [MemberController::class, 'loginOtpValidate'])->name('login.otp.validate');
 Route::post('otp-resend', [MemberController::class, 'otpResend'])->name('otp.resend');
 // User Forgot Password
 Route::get('user-forgot-password', [MemberController::class, 'userForgotPassword'])->name('user.forgot.password');
-Route::get('change-password-form',[MemberController::class,'changePasswordForm'])->name('change.password.form');
-Route::post('update-password',[MemberController::class,'updatePassword'])->name('update.password');
+Route::get('change-password-form', [MemberController::class, 'changePasswordForm'])->name('change.password.form');
+Route::post('update-password', [MemberController::class, 'updatePassword'])->name('update.password');
 //Footer
 Route::view('aboutUs', 'aboutUs');
 Route::view('faq', 'faq');
@@ -110,6 +126,11 @@ Route::resource('menus', MenuController::class);
 Route::post('userUpdate/{id}', [UserController::class, 'userUpdate'])->name('userUpdate');
 //Search
 Route::view('frontend.search.quick', 'frontend.search.quick')->name('quickSearch');
+
+
+
+
+
 
 
 
@@ -156,7 +177,7 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
 
 
 Route::prefix('admin')->middleware(['admin'])->group(function () {
-Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('dashboard', [DashboardController::class, 'index']);
     Route::post('logout', [AdminController::class, 'logout'])->name('admins.logout');
     Route::get('plan', [PlanController::class, 'plan']);
     Route::resource('admins', AdminController::class);
@@ -269,15 +290,14 @@ Route::get('create', [AdminController::class, 'create']);
 Route::get('profile', [AdminController::class, 'twoFactor']);
 
 
-route::middleware('auth')->group(function () {
-});
+route::middleware('auth')->group(function () {});
 Route::get('home', function () {
     return view('index');
 });
 
 Route::prefix('admin')->group(function () {
     // Admin Auth
-    Route::middleware(['admin'])->group(function () { });
+    Route::middleware(['admin'])->group(function () {});
 });
 
 Route::get('/mail', [EmailController::class, 'sendWelcomeEmail']);

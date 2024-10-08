@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('basic_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('dob')->nullable();
-            $table->string('gender')->nullable();
-            $table->string('height')->nullable();
-            $table->string('mother_tongue')->nullable();
-            $table->string('religion')->nullable();
-            $table->string('caste')->nullable();
-            $table->string('marital_status')->nullable();
+            $table->timestamp('dob');
+            $table->string('height');
+            $table->string('mother_tongue');
+            $table->string('religion');
+            $table->string('caste');
+            $table->string('marital_status');
             $table->string('status')->default(1);
             $table->timestamps();
         });

@@ -64,6 +64,7 @@ return [
 
 
     ],
+
     'login' => [
         'email' => [
             'name' => 'email',
@@ -81,32 +82,48 @@ return [
         ]
     ],
 
+    'basicDetails' => [
+        'dob' => [
+            'type' => 'date',
+            'name' => 'dob',
+            'label' => 'Date of Birth',
+            'rules' => 'required|date|max:6',
+        ],
+        'height' => [
+            'type' => 'select',
+            'label' => 'Height',
+            'name' => 'height',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        'mother_tongue' => [
+            'type' => 'select',
+            'label' => 'Mother Tongue',
+            'name' => 'mother_tongue',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        'religion' => [
+            'type' => 'select',
+            'name' => 'religion',
+            'label' => 'Religion',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        // 'caste' => [
+        //     'type' => 'select',
+        //     'name' => 'caste',
+        //     'label' => 'Caste',
+        //     'options' => [],
+        //     'rules' => 'required|string',
+        // ],
+        'marital_status' => [
+            'type' => 'select',
+            'name' => 'marital_status',
+            'label' => 'Marital Status',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
 
+    ],
 ];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

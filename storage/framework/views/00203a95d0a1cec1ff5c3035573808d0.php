@@ -29,11 +29,9 @@
                         <div class="text-center inThemeOrange">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
-                        <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Mobile No Verfication
+                        <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verfication
                         </h2>
-
-
-                        <p class="inPageSubTitle text-center mb-20">Verify your mobile number now to activate your
+                           <p class="inPageSubTitle text-center mb-20">Verify your mobile number now to activate your
                             profile.</p>
                         <article class="text-center text-danger">
                             It is mandatory to verify your mobile number otherwise your profile will not be displayed to
@@ -43,11 +41,13 @@
                    
                             $mobile = session('accountInfo.mobile');
                             $email = session('accountInfo.email');
-                                @dump(  $email, $mobile)
+                               
                         ?>
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
                             
-                            <div id="alert-container-resend" class="mt-3"></div>
+                            
+                            
+
                             <?php if(session()->has('success')): ?>
                                 <div class="alert alert-success" role="alert">
                                     <?php echo e(session('success')); ?>
@@ -77,7 +77,7 @@
                                         <div class="mb-3 text-center">
                                             <input type="text" class="form-control text-center" name="otp"
                                                 id="otp" placeholder="Enter OTP" maxlength="6">
-                                                <?php dump($email); ?>
+                                                
                                             <input type="hidden" name="email" id="email" value="<?php echo e($email); ?>">
                                             <input type="hidden" name="mobile" id="mobile" value="<?php echo e($mobile); ?>">
                                         </div>
@@ -93,12 +93,13 @@
                                     <?php echo csrf_field(); ?>
                                     <input type="hidden" name="mobile" id="mobile" value="<?php echo e($mobile); ?>">
                                     <input type="hidden" name="email" id="email" value="<?php echo e($email); ?>">
+                                    <input type="hidden" name="action" id="action" value="UserResendOTP">
                                     <div class="row">
                                         <div class="col-xs-16 font-12">Not received verification code yet? <span
                                                 id="countVerify"></span><b>s</b></div>
                                     </div>
                                     <button type="submit" class="btn gt-btn-orange mt-10" id="resendOTPBtn" disabled>
-                                        Send OTP Again
+                                        Resend OTP
                                     </button>
                                 </form>
                                 <script>

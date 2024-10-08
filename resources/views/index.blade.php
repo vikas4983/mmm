@@ -129,12 +129,31 @@
                         <!-- /. Main Carousel -->
                         <div class="container gt-pad-lr-0-479">
 
+                            <script>
+                                function handlJSView() {
+                                    $.ajax({
+                                        url: "{{ url('get-view') }}", // URL to fetch the view
+                                        type: 'GET',
+                                        success: function(response) {
+                                            // Insert the returned view into the #viewContainer div
+                                            $('#viewContainer').html(response);
+                                        },
+                                        error: function() {
+                                            alert('Failed to load view');
+                                        }
+                                    });
+                                }
+                            </script>
+
                             <!-- Signup form -->
                             <div
                                 class="col-xxl-6 col-xxl-offset-10 col-xl-7 col-xl-offset-9 col-lg-16 gt-pad-lr-0-479">
                                 <div class="gt-slideup-form">
                                     <div class="gt-slideUp-form-head">
                                         <h4>REGISTER NOW</h4>
+                                        <button onclick="return handlJSView()">Load View Using JavaScript</button>
+
+                                        <div id="viewContainer"></div>
                                     </div>
                                     <div class="gt-slideUp-form-body">
 
@@ -147,7 +166,8 @@
                                             <x-form-fields-component :fields="$fields" />
                                             <div class="row form-group">
                                                 <div class="col-xxl-16 text-center">
-                                                    <button type="submit" class="btn gt-btn-green inIndexRegBtn mt-10"
+                                                    <button type="submit"
+                                                        class="btn gt-btn-green inIndexRegBtn mt-10"
                                                         name="reg_sub">Register Now</button>
                                                 </div>
                                             </div>

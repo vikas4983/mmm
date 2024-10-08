@@ -8,8 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Religion extends Model
 {
     use HasFactory;
+
     public $fillable = ['religion', 'status'];
+
     public function getStatusAttribute($value)
     {
         return $value == 1 ? 'Active' : 'Inactive';
-    }}
+    }
+
+    public function castes(){
+        return $this->hasMany(Caste::class);
+    }
+}

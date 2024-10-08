@@ -65,7 +65,7 @@
                         <div class="col-xxl-5 col-xl-4 col-xs-8 col-md-8 col-lg-5">
                             <a href="/" class="ripplelink">
                                 <img src="<?php echo e(isset($logos->name) && $logos->name ? asset('storage/admin/logo-favicon/logos/' . $logos->name) : asset('storage/admin/logo-favicon/logos/mangal_logo-removebg-preview.png')); ?>"
-                                    class="img-responsive gt-header-logo">
+                                    class="img-responsive gt-header-logo" max-height="50px">
                             </a>
 
                         </div>
