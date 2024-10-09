@@ -5,6 +5,9 @@
         @case('email')
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="email" />
         @break
+        @case('dob')
+            <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="email" />
+        @break
 
         @case('password')
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="password" />

@@ -57,26 +57,108 @@
                 <p>You have many matching profiles based on your details. Completing this page will take you closer to your
                     perfect match.</p>
             </article>
+            <div id="message"></div>
             <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
             <br><br>
 
-            <form action="{{ route('registration') }}" id="basicDetails" method="post"
-            name="basicDetails">
-            @csrf
-            @php
-                $fields = config('formFields.basicDetails');
-               
-            @endphp
-            <x-form-fields-component :fields="$fields" />
-            <div class="row form-group">
-                <div class="col-xxl-16 text-center">
-                    <button type="submit"
-                        class="btn gt-btn-green inIndexRegBtn mt-10"
-                        name="reg_sub">Submit</button>
+            <form id="basicDetailsForm" action="{{ route('basicDetails.store') }}" method="post" name="basicDetails">
+                @csrf
+                @php
+                    $fields = config('formFields.basicDetails');
+
+                @endphp
+                <x-form-fields-component :fields="$fields" />
+                <div class="row form-group">
+                    <div class="col-xxl-16 text-center">
+                        <button type="submit" class="btn gt-btn-green inIndexRegBtn mt-10" id="basicDetailsBtn"
+                            name="basicDetailsBtn">Submit</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+
+            </form>
         </div>
     </div>
-    
+
+    <script>
+        let basicDetailsBtn = document.getElementById("basicDetailsBtn");
+        let basicDetailsForm = document.getElementById("basicDetailsForm");
+        basicDetailsForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            basicDetailsBtn.disabled = true;
+            const formData = new FormData(this);
+            for (let [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+            fetch('{{ route('basicDetails.store') }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("message").innerHTML = `<div class="alert alert-success">
+                    ${data.message}
+                </div>`;
+                        //basicDetailsForm.reset(); // Reset the form
+                        basicDetailsBtn.disabled = true;
+                    } else {
+                        document.getElementById("message").innerHTML = `<div class="alert alert-danger">
+                    ${data.message}
+                </div>`;
+                        basicDetailsBtn.disabled = true;
+
+                    }
+                })
+                .catch(error => {
+                    basicDetailsBtn.disabled = false;
+                    console.error('Error:', error);
+                    document.getElementById("message").innerText =
+                        'An error occurred while submitting the form.';
+                });
+        });
+    </script>
+    <script>
+        const religion = document.getElementById("religion");
+        const caste = document.getElementById("hiddenCaste");
+        caste.style.display = 'none';
+        religion.addEventListener("change", function(e) {
+            let religionId = religion.value;
+            console.log(religionId);
+            if (religionId) {
+                caste.style.display = 'block';
+                $.ajax({
+                    url: '/get-caste/' + religionId,
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        $("#caste").empty();
+                        $("#caste").append('<option value="">Select Caste</option>');
+                        $.each(data, function(key, value) {
+                            $('#caste').append('<option value="' + value.id + '">' + value
+                                .name + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error Status:', status);
+                        console.error('Error Details:', xhr.responseText);
+                        alert(
+                            'An error occurred while fetching the caste data. Please try again later.'
+                        );
+                    }
+                });
+            } else {
+
+                $(caste).fadeOut();
+                $('#caste').empty();
+                $('#caste').append('<option value="">Select Caste</option>');
+            }
+        });
+    </script>
 @endsection

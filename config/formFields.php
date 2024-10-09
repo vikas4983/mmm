@@ -87,7 +87,7 @@ return [
             'type' => 'date',
             'name' => 'dob',
             'label' => 'Date of Birth',
-            'rules' => 'required|date|max:6',
+            'rules' => 'required|date|max:15',
         ],
         'height' => [
             'type' => 'select',

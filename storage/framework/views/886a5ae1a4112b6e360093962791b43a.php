@@ -24,6 +24,28 @@
 <?php unset($__componentOriginald69afe920a3c2ac1f07889a3f5b5f303); ?>
 <?php endif; ?>
         <?php break; ?>
+        <?php case ('dob'): ?>
+            <?php if (isset($component)) { $__componentOriginald69afe920a3c2ac1f07889a3f5b5f303 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald69afe920a3c2ac1f07889a3f5b5f303 = $attributes; } ?>
+<?php $component = App\View\Components\InputComponent::resolve(['name' => $field['name'],'label' => $field['label'],'type' => 'email'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('input-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\InputComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['rules' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($field['rules'])]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald69afe920a3c2ac1f07889a3f5b5f303)): ?>
+<?php $attributes = $__attributesOriginald69afe920a3c2ac1f07889a3f5b5f303; ?>
+<?php unset($__attributesOriginald69afe920a3c2ac1f07889a3f5b5f303); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald69afe920a3c2ac1f07889a3f5b5f303)): ?>
+<?php $component = $__componentOriginald69afe920a3c2ac1f07889a3f5b5f303; ?>
+<?php unset($__componentOriginald69afe920a3c2ac1f07889a3f5b5f303); ?>
+<?php endif; ?>
+        <?php break; ?>
 
         <?php case ('password'): ?>
             <?php if (isset($component)) { $__componentOriginald69afe920a3c2ac1f07889a3f5b5f303 = $component; } ?>

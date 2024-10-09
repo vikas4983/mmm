@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('horoscope_details', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('time_of_birth');
             $table->integer('manglik');
             $table->string('city_of_birth');
