@@ -23,7 +23,7 @@
 
     <!-- Font Awsome -->
     <script src="https://kit.fontawesome.com/48403ccd1a.js" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--GOOGLE FONTS-->
     <link
         href="<?php echo e(isset($favicons->name) && !empty($favicons->name)
@@ -44,7 +44,7 @@
 
     <!-- Angular JS-->
     <script src="<?php echo e(asset('frontend/assets/js/angular.min.js')); ?>"></script>
-
+    
 
 </head>
 
@@ -435,6 +435,7 @@
     </div>
     <!-- Jquery Js-->
     <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
+    
     <!-- Bootstrap & Green Js -->
     <script src="<?php echo e(asset('frontend/assets/js/bootstrap.js')); ?>"></script>
     <script src="<?php echo e(asset('frontend/assets/js/green.js')); ?>"></script>
@@ -739,4 +740,84 @@
         });
     });
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    const country = document.getElementById("country");
+    const state = document.getElementById("hiddenState");
+    state.style.display = 'none';
+    country.addEventListener("change", function(e) {
+        let countryId = country.value;
+        console.log(countryId);
+        if (countryId) {
+            state.style.display = 'block';
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $("#state").empty();
+                    $("#state").append('<option value="">Select state</option>');
+                    $.each(data, function(key, value) {
+                        $('#state').append('<option value="' + value.id + '">' + value
+                            .state + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+
+            $('#state').fadeOut();
+            $('#state').empty();
+            $('#state').append('<option value="">Select state</option>');
+        }
+    });
+</script>
+<script>
+    const state1 = document.getElementById("state");
+    const city = document.getElementById("hiddenCity");
+    city.style.display = 'none';
+    state1.addEventListener("change", function(e) {
+        let stateId = state1.value;
+        if (stateId) {
+            city.style.display = 'block';
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $("#city").empty();
+                    $("#city").append('<option value="">Select City</option>');
+                    $.each(data, function(key, value) {
+                        $('#city').append('<option value="' + value.id + '">' + value
+                            .city + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+            $('#city').fadeOut();
+            $('#city').empty();
+            $('#city').append('<option value="">Select City</option>');
+        }
+    });
+</script>
+
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views\layouts\frontend\master.blade.php ENDPATH**/ ?>

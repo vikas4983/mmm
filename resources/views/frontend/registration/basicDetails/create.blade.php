@@ -1,38 +1,6 @@
 @extends('layouts.frontend.master')
 @section('title', 'Basic Details')
-
 @section('content')
-
-    {{-- <style>
-        h4 {
-            margin-top: 25px;
-            margin-bottom: -3px;
-        }
-    </style>
-
-    <div class="container col-lg-8" style=" min-height: 100vh;">
-        <div class="card w-100" style="min-width: 600px;">
-            <div class="card-body ">
-                <div class="row text-center">
-                    <h4 class="text-dark mt-30px">Register</h4>
-                </div>
-
-                <form action="{{ route('register') }}" method="post" enctype="multipart/form-data">
-                    @csrf
-                    @php
-                        $fields = config('formFields.register');
-                    @endphp
-                    <x-form-fields-component :fields="$fields" />
-                    <div class="row text-center">
-                        <button class="btn btn-primary">Submit</button>
-                    </div>
-            </div>
-            </form>
-        </div>
-    </div> --}}
-
-
-
     <div class="container">
         <div class="row mt-10 inRegTopTitle">
             <div class="col-xxl-11">
@@ -46,6 +14,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="gtRegister col-xxl-11">
             <div class="row mb-20">
                 <img src="{{ asset('frontend/assets/img/reg-step-1.png') }}" class="img-responsive">
@@ -54,14 +23,13 @@
                 <i class="fa fa-user mr-10"></i>Basic Information
             </h3>
             <article>
-                <p>You have many matching profiles based on your details. Completing this page will take you closer to your
+                <p>You have many matching profiles based on your details. Completing this page will take you closer to
+                    your
                     perfect match.</p>
             </article>
-            <div id="message"></div>
             <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
             <br><br>
-
-            <form id="basicDetailsForm" action="{{ route('basicDetails.store') }}" method="post" name="basicDetails">
+            <form action="{{ route('basicDetails.store') }}" method="POST">
                 @csrf
                 @php
                     $fields = config('formFields.basicDetails');
@@ -74,60 +42,17 @@
                             name="basicDetailsBtn">Submit</button>
                     </div>
                 </div>
-
-            </form>
         </div>
+        </form>
     </div>
-
-    <script>
-        let basicDetailsBtn = document.getElementById("basicDetailsBtn");
-        let basicDetailsForm = document.getElementById("basicDetailsForm");
-        basicDetailsForm.addEventListener("submit", function(e) {
-            e.preventDefault();
-            basicDetailsBtn.disabled = true;
-            const formData = new FormData(this);
-            for (let [key, value] of formData.entries()) {
-                console.log(key, value);
-            }
-            fetch('{{ route('basicDetails.store') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.getElementById("message").innerHTML = `<div class="alert alert-success">
-                    ${data.message}
-                </div>`;
-                        //basicDetailsForm.reset(); // Reset the form
-                        basicDetailsBtn.disabled = true;
-                    } else {
-                        document.getElementById("message").innerHTML = `<div class="alert alert-danger">
-                    ${data.message}
-                </div>`;
-                        basicDetailsBtn.disabled = true;
-
-                    }
-                })
-                .catch(error => {
-                    basicDetailsBtn.disabled = false;
-                    console.error('Error:', error);
-                    document.getElementById("message").innerText =
-                        'An error occurred while submitting the form.';
-                });
-        });
-    </script>
+    </div>
     <script>
         const religion = document.getElementById("religion");
         const caste = document.getElementById("hiddenCaste");
         caste.style.display = 'none';
         religion.addEventListener("change", function(e) {
             let religionId = religion.value;
-            console.log(religionId);
+
             if (religionId) {
                 caste.style.display = 'block';
                 $.ajax({
@@ -155,10 +80,11 @@
                 });
             } else {
 
-                $(caste).fadeOut();
+                $('#caste').fadeOut();
                 $('#caste').empty();
                 $('#caste').append('<option value="">Select Caste</option>');
             }
         });
     </script>
+
 @endsection

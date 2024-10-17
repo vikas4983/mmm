@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CarrierDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CarrierDetailController extends Controller
 {
@@ -20,7 +21,7 @@ class CarrierDetailController extends Controller
      */
     public function create()
     {
-        //
+        return view('frontend.registration.carrierDetails.create');
     }
 
     /**
@@ -28,7 +29,64 @@ class CarrierDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dump($request->all());
+        $user = Auth::user();
+        if (!$user) {
+            
+            return redirect()->back()->with('error', 'User not authenticated!');
+        }
+
+        $fields = config('formFields.carrierDetails');
+        
+        $validationRules = [];
+
+        foreach ($fields as $field) {
+           
+            $validationRules[$field['name']] = $field['rules'];
+        }
+
+        if ($request->input('country')) {
+           
+            $validationRules['country'] = 'required|numeric';
+
+            if ($request->input('state')) {
+               
+                $validationRules['state'] = 'required|numeric';
+               
+            }
+
+            if ($request->input('city')) {
+                
+                $validationRules['city'] = 'required|numeric';
+            }
+            if ($request->input('employee')) {
+               
+                $validationRules['occupation'] = 'required|numeric';
+                
+            }
+        }
+        
+        $validatedData = $request->validate($validationRules);
+        
+        $validatedData['user_id'] = $user->id;
+        $existingRecord = CarrierDetail::where('user_id', $user->id)->first();
+        try {
+          
+            if ($existingRecord) {
+                $existingRecord->update($validatedData);
+                return redirect()->route('familyDetails.create')->with('success', 'Carrier details saved successfully!');
+            } else {
+                
+                CarrierDetail::create($validatedData); // Add user_id to the created record
+                return redirect()->route('familyDetails.create')->with('success', 'Carrier details saved successfully!');
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            dd('e');
+            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            dd('f');
+            return redirect()->back()->with('error', 'An unexpected error occurred: ' . $e->getMessage());
+        }
     }
 
     /**

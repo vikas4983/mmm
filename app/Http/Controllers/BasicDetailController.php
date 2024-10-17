@@ -29,50 +29,42 @@ class BasicDetailController extends Controller
      */
     public function store(Request $request)
     {
+
         $fields = config('formFields.basicDetails');
         $validationRules = [];
-        foreach ($fields as $key => $field) {
-            if ($request->input('religion')) {
 
-                $validationRules['caste'] = 'required|string';
-            } else {
-                return redirect()->back();
-            }
-            $validationRules[$field['name']] = $field['rules'];
-        }
-        $validateData = $request->validate($validationRules);
-
-        if ($validateData) {
-            if ($userId = Auth::user()) {
-                $validateData['user_id'] = $userId->id;
-                $existingRecord  = BasicDetail::where('user_id', $userId->id)->first();
-                if ($existingRecord) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Basic details saved successfully!',
-                        'redirect' => route('horoscopes.create'),
-                    ]);
+        try {
+            foreach ($fields as $key => $field) {
+                if ($request->input('religion')) {
+                    $validationRules['caste'] = 'required|string';
                 } else {
-                    $basicDetail = BasicDetail::create($validateData);
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Basic details saved successfully!',
-                        'redirect' => route('horoscopes.create'),
-
-                    ]);
+                    return redirect()->back()->with('error', 'Religion must be selected!');
                 }
-            } else {
-
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User not authenticated.',
-                ]);
+                $validationRules[$field['name']] = $field['rules'];
             }
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'User not authenticated.',
-            ]);
+
+            $validateData = $request->validate($validationRules);
+
+            if ($validateData) {
+                if ($userId = Auth::user()) {
+                    $validateData['user_id'] = $userId->id;
+                    $existingRecord = BasicDetail::where('user_id', $userId->id)->first();
+
+                    if ($existingRecord) {
+                        $existingRecord->update($validateData);
+                        return redirect()->route('horoscopes.create')->with('success', 'Basic details saved successfully!');
+                    } else {
+                        BasicDetail::create($validateData);
+                        return redirect()->route('horoscopes.create')->with('success', 'Basic details saved successfully!');
+                    }
+                } else {
+                    return redirect()->back()->with('error', 'User not authenticated!');
+                }
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An unexpected error occurred: ' . $e->getMessage());
         }
     }
 

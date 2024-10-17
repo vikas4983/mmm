@@ -43,9 +43,13 @@ use App\Http\Controllers\AdminApiTokenController;
 use App\Http\Controllers\AdminMenuController;
 use App\Http\Controllers\AjaxRequestController;
 use App\Http\Controllers\BasicDetailController;
+use App\Http\Controllers\CarrierDetailController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\EmailTemplateController;
+use App\Http\Controllers\FamilyDetailController;
+use App\Http\Controllers\HoroscopeDetailController;
 use App\Http\Controllers\ModelCountController;
+use App\Models\CarrierDetail;
 use App\Models\City;
 use App\Models\Email;
 use App\Models\Payment;
@@ -57,7 +61,11 @@ Route::get('/', function () {
 });
 
 Route::get('/get-view', [DemoController::class, 'getView']);
+Route::get('signUp', [AjaxRequestController::class, 'signUp'])->name('sign.up');
 Route::get('/get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
+Route::get('/get-state/{countryId}', [AjaxRequestController::class, 'getState']);
+Route::get('/get-city/{stateId}', [AjaxRequestController::class, 'getCity']);
+Route::get('/get-occupation/{employeeId}', [AjaxRequestController::class, 'getOccupation']);
 
 Route::get('/localization/{locale}', function (string $locale) {
     if (!in_array($locale, ['en', 'hi', 'fr'])) {
@@ -81,6 +89,9 @@ Route::middleware([
     })->name('dashboard');
     Route::prefix('frontend/registration')->group(function () {
         Route::resource('basicDetails', BasicDetailController::class);
+        Route::resource('horoscopes', HoroscopeDetailController::class);
+        Route::resource('carrierDetails', CarrierDetailController::class);
+        Route::resource('familyDetails', FamilyDetailController::class);
         
     });
 });

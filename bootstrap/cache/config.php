@@ -601,6 +601,187 @@
         'rules' => 'required|string',
       ),
     ),
+    'horoscopeDetails' => 
+    array (
+      'country_of_birth' => 
+      array (
+        'type' => 'select',
+        'label' => 'Country of birth',
+        'name' => 'country',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'time_of_birth' => 
+      array (
+        'type' => 'time',
+        'name' => 'time_of_birth',
+        'label' => 'Time of Birth',
+        'rules' => 'max:255',
+      ),
+      'rashi' => 
+      array (
+        'type' => 'select',
+        'name' => 'rashi',
+        'label' => 'Rashi',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'manglik' => 
+      array (
+        'type' => 'radio',
+        'label' => 'Manglik',
+        'name' => 'manglik',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+          'don\'t know' => 'Don\'t Know',
+        ),
+        'rules' => 'string',
+      ),
+      'horoscope_match' => 
+      array (
+        'type' => 'radio',
+        'name' => 'horoscope_match',
+        'label' => 'Horoscope Match',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+          'doesn\'t matter' => 'Does\'t Matter',
+        ),
+        'rules' => 'string',
+      ),
+      'horoscope_show' => 
+      array (
+        'type' => 'radio',
+        'name' => 'horoscope_show',
+        'label' => 'Horoscope Show',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'only accept member' => 'Only Accept Member',
+          'no' => 'No',
+        ),
+        'rules' => 'string',
+      ),
+    ),
+    'carrierDetails' => 
+    array (
+      'country' => 
+      array (
+        'type' => 'select',
+        'label' => 'Country',
+        'name' => 'country',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'education' => 
+      array (
+        'type' => 'select',
+        'name' => 'education',
+        'label' => 'Highest Degree',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'employee' => 
+      array (
+        'type' => 'select',
+        'name' => 'employee',
+        'label' => 'Employed In',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'income' => 
+      array (
+        'type' => 'select',
+        'name' => 'income',
+        'label' => 'Income',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'about_me' => 
+      array (
+        'type' => 'textarea',
+        'name' => 'about_me',
+        'label' => 'About you',
+        'placeholder' => 'Enter about yourself',
+        'rules' => 'string',
+      ),
+    ),
+    'familyDetails' => 
+    array (
+      'father_occupation' => 
+      array (
+        'type' => 'select',
+        'label' => 'Father Occupation',
+        'name' => 'father_occupation',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'mother_occupation' => 
+      array (
+        'type' => 'select',
+        'label' => 'Mother Occupation',
+        'name' => 'mother_occupation',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'brother' => 
+      array (
+        'type' => 'select',
+        'name' => 'brother',
+        'label' => 'Brother',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'sister' => 
+      array (
+        'type' => 'select',
+        'name' => 'sister',
+        'label' => 'Sister',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'family_living' => 
+      array (
+        'type' => 'select',
+        'name' => 'country',
+        'label' => 'Family Living In',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'about_family' => 
+      array (
+        'type' => 'textarea',
+        'name' => 'about_family',
+        'label' => 'About Family',
+        'placeholder' => 'Describe about your family',
+        'rules' => 'nullable|string',
+      ),
+    ),
   ),
   'fortify-options' => 
   array (

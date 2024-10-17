@@ -171,7 +171,7 @@ class MemberController extends Controller
         MemberOtp::where('user_id', $user->id)->delete();
         $emailTemplate = $this->userEmailTemplate($name);
         UserSendEmailJob::dispatch($user, $emailTemplate);
-        
+
 
         if ($request['action'] == 'UserResendOTP') {
 
@@ -247,6 +247,7 @@ class MemberController extends Controller
         $otps->delete();
         if ($request->action == 'UserLoginWithOTP') {
             Auth::login($user);
+            session()->forget('data');
 
             return redirect('dashboard')->with('success', 'LoggedIn successfully!');
         }

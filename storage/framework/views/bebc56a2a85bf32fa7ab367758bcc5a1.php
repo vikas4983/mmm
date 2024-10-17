@@ -1,0 +1,1 @@
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views\frontend\registration\horoscopes\index.blade.php ENDPATH**/ ?>

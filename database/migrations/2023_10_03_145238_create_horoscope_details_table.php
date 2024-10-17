@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('time_of_birth');
-            $table->integer('manglik');
-            $table->string('city_of_birth');
-            $table->integer('rashi');
-            $table->integer('horoscope_match');
-            $table->integer('horoscope_show');
+            $table->string('manglik');
+            $table->string('place_of_birth');
+            $table->string('rashi');
+            $table->string('horoscope_match');
+            $table->string('horoscope_show');
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

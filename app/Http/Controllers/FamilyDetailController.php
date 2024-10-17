@@ -20,7 +20,7 @@ class FamilyDetailController extends Controller
      */
     public function create()
     {
-        //
+        return view('frontend.registration.familyDetails.create');
     }
 
     /**
