@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('religion');
             $table->string('caste');
             $table->string('marital_status');
+            $table->string('children')->nullable();
             $table->string('status')->default(1);
             $table->timestamps();
         });

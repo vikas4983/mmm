@@ -14,7 +14,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="gtRegister col-xxl-11">
             <div class="row mb-20">
                 <img src="{{ asset('frontend/assets/img/reg-step-1.png') }}" class="img-responsive">
@@ -48,8 +48,11 @@
     </div>
     <script>
         const religion = document.getElementById("religion");
+        const maritalStatus = document.getElementById("marital_status");
         const caste = document.getElementById("hiddenCaste");
+        const children = document.getElementById("hiddenChildren");
         caste.style.display = 'none';
+        children.style.display = 'none';
         religion.addEventListener("change", function(e) {
             let religionId = religion.value;
 
@@ -83,6 +86,19 @@
                 $('#caste').fadeOut();
                 $('#caste').empty();
                 $('#caste').append('<option value="">Select Caste</option>');
+            }
+        });
+        maritalStatus.addEventListener("change", function(e) {
+            let maritalStatusId = maritalStatus.value;
+            const selectOptions = maritalStatus.options[maritalStatus.selectedIndex].text.trim();
+            if (selectOptions === 'Awaiting Divorce' ||
+                selectOptions === 'Divorced' ||
+                selectOptions === 'Widowed' ||
+                selectOptions === 'Annulled') {
+                children.style.display = 'block';
+            } else {
+                children.style.display = 'none';
+
             }
         });
     </script>

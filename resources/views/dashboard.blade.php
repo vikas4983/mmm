@@ -6,10 +6,12 @@
         <div class="row">
             <div class="col-xxl-4 col-xs-16 col-sm-16 mb-30">
                 <div class="thumbnail gt-margin-bottom-0 inHomeMainThumb">
-                    <img src="{{ asset('storage/users/images/' . ($user->image ?? 'male-default.jpg')) }}" alt="User Image"
-                        class="img-responsive gtFullWidth">
-                    <a href="my-photo" class="gt-myhome-caption ripplelink">
-                        <i class="fa fa-camera gt-margin-right-10"></i><span class="">Change Profile Picture</span>
+                    @foreach ($user->images as $image)
+                        <img src="{{ isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($image->display_picture == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg')) }}"
+                            class="img-responsive gtFullWidth" alt="User Image">
+                        <a href="my-photo" class="gt-myhome-caption ripplelink">
+                    @endforeach
+                    <i class="fa fa-camera gt-margin-right-10"></i><span class="">Change Profile Picture</span>
                     </a>
                 </div>
                 <div id="loaderID"></div>

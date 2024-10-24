@@ -24,7 +24,7 @@ class TextareaComponent extends Component
         $this->label = $label;
         $this->type = $type;
         $this->value = $value;
-        $this->value = $placeholder;
+        $this->placeholder = $placeholder ? : 'Enter'. $label;
     }
 
     /**

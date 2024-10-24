@@ -32,7 +32,7 @@
                 </article>
                 <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
-                <form action="<?php echo e(route('carrierDetails.store')); ?>" method="post">
+                <form action="<?php echo e(route('familyDetails.store')); ?>" method="post">
                     <?php echo csrf_field(); ?>
                     <?php
                         $fields = config('formFields.familyDetails');

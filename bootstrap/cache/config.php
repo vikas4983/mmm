@@ -475,7 +475,7 @@
         'name' => 'name',
         'label' => 'Full Name',
         'placeholder' => 'Enter Full Name',
-        'rules' => 'required|string|regex:/^[\\pL\\s]+$/u|max:255',
+        'rules' => 'required|string|regex:/^[\\pL\\s]+$/u|max:30',
       ),
       'email' => 
       array (
@@ -483,7 +483,7 @@
         'name' => 'email',
         'label' => 'Email',
         'placeholder' => 'Enter Email',
-        'rules' => 'required|email|unique:users,email|max:255',
+        'rules' => 'required|email|unique:users,email|max:30',
       ),
       'password' => 
       array (
@@ -507,7 +507,7 @@
         'name' => 'mobile',
         'label' => 'Mobile',
         'placeholder' => 'Enter Mobile Number',
-        'rules' => 'required|numeric|digits:10',
+        'rules' => 'required|numeric|regex:/^[0-9]{10,12}$/',
       ),
       'profileFor' => 
       array (
@@ -540,7 +540,7 @@
         'type' => 'email',
         'label' => 'Email',
         'placeholder' => 'Enter Email',
-        'rules' => 'required|email|unique:users,email|max:255',
+        'rules' => 'required|email|unique:users,email|max:30',
       ),
       'password' => 
       array (
@@ -548,7 +548,7 @@
         'type' => 'password',
         'label' => 'Password',
         'placeholder' => 'Enter Password',
-        'rules' => 'required|min:8|regex:/^[a-zA-Z0-9\\s\\-\\_\\@\\.\\,\\!\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\=]*$/',
+        'rules' => 'required|min:8|max:16|regex:/^[a-zA-Z0-9\\s\\-\\_\\@\\.\\,\\!\\#\\$\\%\\^\\&\\*\\(\\)\\_\\+\\=]*$/',
       ),
     ),
     'basicDetails' => 
@@ -692,6 +692,14 @@
         ),
         'rules' => 'required|numeric',
       ),
+      'education_detail' => 
+      array (
+        'type' => 'text',
+        'name' => 'education_detail',
+        'label' => 'Education Detail',
+        'placeholder' => 'Enter Education Details',
+        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:100',
+      ),
       'employee' => 
       array (
         'type' => 'select',
@@ -701,6 +709,14 @@
         array (
         ),
         'rules' => 'required|numeric',
+      ),
+      'occupation_detail' => 
+      array (
+        'type' => 'text',
+        'name' => 'occupation_detail',
+        'label' => 'Occupation Detail',
+        'placeholder' => 'Enter Occupation Details',
+        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:100',
       ),
       'income' => 
       array (
@@ -717,8 +733,11 @@
         'type' => 'textarea',
         'name' => 'about_me',
         'label' => 'About you',
-        'placeholder' => 'Enter about yourself',
-        'rules' => 'string',
+        'options' => 
+        array (
+        ),
+        'placeholder' => 'Enter about  you',
+        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:300',
       ),
     ),
     'familyDetails' => 
@@ -750,6 +769,24 @@
         'label' => 'Brother',
         'options' => 
         array (
+          'none' => 'None',
+          1 => '1',
+          2 => '2',
+          3 => '3+',
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'brother_married' => 
+      array (
+        'type' => 'select',
+        'name' => 'brother_married',
+        'label' => 'Brother Married',
+        'options' => 
+        array (
+          'none' => 'None',
+          1 => '1',
+          2 => '2',
+          3 => '3+',
         ),
         'rules' => 'nullable|numeric',
       ),
@@ -760,6 +797,24 @@
         'label' => 'Sister',
         'options' => 
         array (
+          'none' => 'None',
+          1 => '1',
+          2 => '2',
+          3 => '3+',
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'sister_married' => 
+      array (
+        'type' => 'select',
+        'name' => 'sister_married',
+        'label' => 'Sister Married',
+        'options' => 
+        array (
+          'none' => 'None',
+          1 => '1',
+          2 => '2',
+          3 => '3+',
         ),
         'rules' => 'nullable|numeric',
       ),
@@ -773,13 +828,364 @@
         ),
         'rules' => 'nullable|numeric',
       ),
+      'contact_address' => 
+      array (
+        'type' => 'text',
+        'name' => 'contact_address',
+        'label' => 'Contact Address',
+        'placeholder' => 'Enter Address',
+        'rules' => 'nullable|string|max:50',
+      ),
       'about_family' => 
       array (
         'type' => 'textarea',
         'name' => 'about_family',
         'label' => 'About Family',
         'placeholder' => 'Describe about your family',
+        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:300',
+      ),
+    ),
+    'EditfamilyDetails' => 
+    array (
+      'father_gotra' => 
+      array (
+        'type' => 'text',
+        'name' => 'father_gotra',
+        'label' => 'Father Gotra',
+        'placeholder' => 'Enter Gotra',
         'rules' => 'nullable|string',
+      ),
+      'mother_gotra' => 
+      array (
+        'type' => 'text',
+        'name' => 'mother_gotra',
+        'label' => 'Contact Address',
+        'placeholder' => 'Enter Gotra',
+        'rules' => 'nullable|string',
+      ),
+      'family_type' => 
+      array (
+        'type' => 'select',
+        'name' => 'family_type',
+        'label' => 'Family Type',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'family_value' => 
+      array (
+        'type' => 'select',
+        'name' => 'family_value',
+        'label' => 'Family Value',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'family_status' => 
+      array (
+        'type' => 'select',
+        'name' => 'family_status',
+        'label' => 'Family Status',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'native_place' => 
+      array (
+        'type' => 'text',
+        'name' => 'native_place',
+        'label' => 'Family Native Place',
+        'placeholder' => 'Enter Native Place',
+        'rules' => 'nullable|string|max:30',
+      ),
+    ),
+    'lifestyleDetails' => 
+    array (
+      'body_type' => 
+      array (
+        'type' => 'select',
+        'name' => 'body_type',
+        'label' => 'Body Type',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'complexion' => 
+      array (
+        'type' => 'select',
+        'name' => 'complexion',
+        'label' => 'Complexion',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'dietary_habit' => 
+      array (
+        'type' => 'select',
+        'name' => 'dietary_habit',
+        'label' => 'Dietary Habits',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'smoking_habit' => 
+      array (
+        'type' => 'select',
+        'name' => 'smoking_habit',
+        'label' => 'Smoking Habits',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'drinking_habit' => 
+      array (
+        'type' => 'select',
+        'name' => 'drinking_habit',
+        'label' => 'Drinking Habits',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'physical_status' => 
+      array (
+        'type' => 'select',
+        'name' => 'physical_status',
+        'label' => 'Physical Status',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'blood_group' => 
+      array (
+        'type' => 'select',
+        'name' => 'blood_group',
+        'label' => 'Blood Group ',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'Weight' => 
+      array (
+        'type' => 'text',
+        'name' => 'weight',
+        'label' => 'Weight',
+        'placeholder' => 'Enter weight in number',
+        'rules' => 'nullable|numeric',
+      ),
+    ),
+    'EditlifestyleDetails' => 
+    array (
+      'Weight' => 
+      array (
+        'type' => 'text',
+        'name' => 'weight',
+        'label' => 'Weight',
+        'placeholder' => 'Enter weight in number',
+        'rules' => 'nullable|numeric',
+      ),
+      'open_to_pet' => 
+      array (
+        'type' => 'select',
+        'name' => 'open_to_pet',
+        'label' => 'Open To Pet ',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+        ),
+        'rules' => 'nullable|string',
+      ),
+      'own_house' => 
+      array (
+        'type' => 'select',
+        'name' => 'own_house',
+        'label' => 'Own House',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+        ),
+        'rules' => 'nullable|string',
+      ),
+      'own_car' => 
+      array (
+        'type' => 'select',
+        'name' => 'own_car',
+        'label' => 'Own Car',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+        ),
+        'rules' => 'nullable|string',
+      ),
+      'language_speak' => 
+      array (
+        'type' => 'select',
+        'name' => 'language_speak',
+        'label' => 'Language Speak  ',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|string',
+      ),
+      'hiv' => 
+      array (
+        'type' => 'select',
+        'name' => 'hiv',
+        'label' => 'Hiv+  ',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+        ),
+        'rules' => 'nullable|string',
+      ),
+      'thalassemia' => 
+      array (
+        'type' => 'select',
+        'name' => 'thalassemia',
+        'label' => 'Thalassemia  ',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+        ),
+        'rules' => 'nullable|string',
+      ),
+    ),
+    'likeDetails' => 
+    array (
+      'hobby' => 
+      array (
+        'type' => 'select',
+        'name' => 'hobby',
+        'label' => 'Hobbies ',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|[]',
+      ),
+      'interest' => 
+      array (
+        'type' => 'select',
+        'name' => 'interest',
+        'label' => 'Interests ',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|[]',
+      ),
+      'music' => 
+      array (
+        'type' => 'select',
+        'name' => 'music',
+        'label' => 'Favourite Music ',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|[]',
+      ),
+      'dress' => 
+      array (
+        'type' => 'select',
+        'name' => 'dress',
+        'label' => 'Dress Style ',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|[]',
+      ),
+      'movie' => 
+      array (
+        'type' => 'select',
+        'name' => 'movie',
+        'label' => 'Movies',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|[]',
+      ),
+      'sport' => 
+      array (
+        'type' => 'select',
+        'name' => 'sport',
+        'label' => 'Sports',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|[]',
+      ),
+    ),
+    'contactDetails' => 
+    array (
+      'alternate_mobile' => 
+      array (
+        'type' => 'text',
+        'name' => 'alternate_mobile',
+        'label' => 'Alternate Mobile Number ',
+        'placeholder' => 'Enter number',
+        'rules' => 'nullable|numeric|regex:/^[0-9]{10,12}$/',
+      ),
+      'alternate_owned_by' => 
+      array (
+        'type' => 'select',
+        'name' => 'alternate_owned_by',
+        'label' => 'Alternate Mobile number owned by ',
+        'options' => 
+        array (
+          'self' => 'Self',
+          'parent' => 'Parent',
+          'brother' => 'Brother',
+          'sister' => 'Sister',
+          'sibling' => 'Sibling',
+          'relative' => 'Relative',
+        ),
+        'rules' => 'nullable|string',
+      ),
+      'landline_number' => 
+      array (
+        'type' => 'text',
+        'name' => 'landline_number',
+        'label' => 'Landline number with code ',
+        'placeholder' => 'Enter number',
+        'rules' => 'nullable|numeric|regex:/^[0-9]{10,12}$/',
+      ),
+      'landline_owned_by' => 
+      array (
+        'type' => 'select',
+        'name' => 'landline_owned_by',
+        'label' => 'Landline number owned by ',
+        'options' => 
+        array (
+          'self' => 'Self',
+          'parent' => 'Parent',
+          'brother' => 'Brother',
+          'sister' => 'Sister',
+          'sibling' => 'Sibling',
+          'relative' => 'Relative',
+        ),
+        'rules' => 'nullable|string',
+      ),
+    ),
+    'images' => 
+    array (
+      'image' => 
+      array (
+        'type' => 'file',
+        'name' => 'display_picture',
+        'label' => 'Select Image',
+        'rules' => 'required|file|mimes:jpeg,jpg,png|max:2048',
       ),
     ),
   ),

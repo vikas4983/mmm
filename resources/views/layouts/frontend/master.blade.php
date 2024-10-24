@@ -44,6 +44,7 @@
 
     <!-- Angular JS-->
     <script src="{{ asset('frontend/assets/js/angular.min.js') }}"></script>
+    <script src="{{asset('frontend/assets/js/custom-js/select-all-checkbox.js')}}"></script>
     
 
 </head>

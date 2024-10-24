@@ -38,8 +38,11 @@
         <div class="row">
             <div class="col-xxl-3 col-xl-4 col-xs-16 col-sm-16">
                 <div class="thumbnail gt-margin-bottom-0">
-                    <img src="<?php echo e(isset($user->image) && $user->image ? asset('storage/users/images/' . $user->image) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
-                        class="img-responsive gtFullWidth" alt="User Image">
+                    <?php $__currentLoopData = $user->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <img src="<?php echo e(isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
+                            class="img-responsive gtFullWidth" alt="User Image">
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
 
                     
                     

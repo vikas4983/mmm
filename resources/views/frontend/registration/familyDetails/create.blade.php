@@ -32,7 +32,7 @@
                 </article>
                 @include('partials.alerts')
                 <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
-                <form action="{{ route('carrierDetails.store') }}" method="post">
+                <form action="{{ route('familyDetails.store') }}" method="post">
                     @csrf
                     @php
                         $fields = config('formFields.familyDetails');

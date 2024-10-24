@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Like;
+use App\Models\BloodGroup;
 use Illuminate\Http\Request;
 
-class LikeController extends Controller
+class BloodGroupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class LikeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Like $like)
+    public function show(BloodGroup $bloodGroup)
     {
         //
     }
@@ -42,7 +42,7 @@ class LikeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Like $like)
+    public function edit(BloodGroup $bloodGroup)
     {
         //
     }
@@ -50,7 +50,7 @@ class LikeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Like $like)
+    public function update(Request $request, BloodGroup $bloodGroup)
     {
         //
     }
@@ -58,7 +58,7 @@ class LikeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Like $like)
+    public function destroy(BloodGroup $bloodGroup)
     {
         //
     }

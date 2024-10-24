@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ContactDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ContactDetailController extends Controller
 {
@@ -20,7 +21,7 @@ class ContactDetailController extends Controller
      */
     public function create()
     {
-        //
+        return view('frontend.registration.contactdetails.create');
     }
 
     /**
@@ -28,7 +29,40 @@ class ContactDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request->all());
+        $user = Auth::user();
+        if (!$user) {
+
+            return redirect()->back()->with('error', 'User not authenticated!');
+        }
+        $fields = config('formFields.contactDetails');
+        $validationRules = [];
+        foreach ($fields as $field) {
+
+            $validationRules[$field['name']] = $field['rules'];
+        }
+        $validatedData = $request->validate($validationRules);
+
+        $validatedData['user_id'] = $user->id;
+
+        $existingRecord = ContactDetail::where('user_id', $user->id)->first();
+        try {
+
+            if ($existingRecord) {
+                $existingRecord->update($validatedData);
+                return redirect()->route('images.create')->with('success', 'Completed your profile, now fins your life partner!');
+            } else {
+
+                ContactDetail::create($validatedData); 
+                return redirect()->route('images.create')->with('success', 'Completed your profile, now fins your life partner!');
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            return redirect()->back()->with('error', 'Database error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'An unexpected error occurred: ' . $e->getMessage());
+        }
     }
 
     /**

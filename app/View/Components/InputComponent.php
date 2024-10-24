@@ -16,12 +16,13 @@ class InputComponent extends Component
     public $label;
     public $placeholder;
     public $value;
-    public function __construct($type = 'text', $name, $label, $placeholder = '', $value = '')
+    public function __construct($type = 'text', $name, $label, $placeholder =  '', $value = '')
     {
-        $this->type = $type;
+
+        $this->type = $this->determineInputType($name, $type);
         $this->name = $name;
         $this->label = $label;
-        $this->placeholder = $placeholder;
+        $this->placeholder = $placeholder ?: 'Enter ' . $label;
         $this->value = $value;
     }
 
@@ -31,5 +32,22 @@ class InputComponent extends Component
     public function render(): View|Closure|string
     {
         return view('components.input-component');
+    }
+
+    private function determineInputType($name, $defaultType)
+    {
+        $types = [
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'email' => 'email',
+            'mobile' => 'number',
+            'alternate_mobile' => 'number',
+            'landline_number' => 'number',
+            'time_of_birth' => 'time',
+            'weight' => 'number',
+            'dob' => 'date',
+        ];
+
+        return $types[$name] ?? $defaultType;
     }
 }

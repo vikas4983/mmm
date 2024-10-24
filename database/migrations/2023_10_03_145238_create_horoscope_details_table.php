@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('horoscope_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('time_of_birth');
-            $table->string('manglik');
-            $table->string('place_of_birth');
-            $table->string('rashi');
-            $table->string('horoscope_match');
-            $table->string('horoscope_show');
+            $table->string('time_of_birth')->nullable();
+            $table->string('manglik')->nullable();
+            $table->string('place_of_birth')->nullable();
+            $table->string('rashi')->nullable();
+            $table->string('horoscope_match')->nullable();
+            $table->string('horoscope_show')->nullable();
             $table->string('status')->default(0);
             $table->timestamps();
         });

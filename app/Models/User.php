@@ -21,7 +21,7 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
     use HasTeams;
-    
+
 
     /**
      * The attributes that are mass assignable.
@@ -71,6 +71,10 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
     public function approvals()
     {
         return $this->hasMany(Approval::class);
@@ -94,11 +98,11 @@ class User extends Authenticatable
     }
     public function spotelights()
     {
-        return $this->hasMany(SpoteLight::class,'user_id');
+        return $this->hasMany(SpoteLight::class, 'user_id');
     }
     public function razorpays()
     {
-        return $this->hasMany(RazorPay::class,'user_id');
+        return $this->hasMany(RazorPay::class, 'user_id');
     }
 
     public function getPaidUsersAttribute()
@@ -108,20 +112,16 @@ class User extends Authenticatable
             ->get();
 
         $paidUsers = [];
-        $userIds = []; // To keep track of processed user IDs
-
+        $userIds = [];
         foreach ($payments as $payment) {
             $paidPaymentDate = Carbon::parse($payment->expiry_date);
             $currentDate = Carbon::now('Asia/Kolkata');
-            // Check if the payment is still valid
             if ($paidPaymentDate >= $currentDate) {
-                // Check if the user has already been added
                 if (!in_array($payment->user_id, $userIds)) {
-                    $paidUsers[] = $payment; // Add the payment (with user)
-                    $userIds[] = $payment->user_id; // Mark this user as processed
+                    $paidUsers[] = $payment;
+                    $userIds[] = $payment->user_id;
                 }
             } else {
-                // Update expired payments
                 $payment->update([
                     'contact' => null,
                     'is_paid' => 0

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class CarrierDetail extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'country', 'state','city', 'education', 'employee','occupation','income', 'about_me','approved_about_me','status'];
+    protected $fillable = ['user_id', 'country', 'state','city', 'education','education_detail', 'employee','occupation','occupation_detail','income', 'about_me','approved_about_me','status'];
     function getApprovedAboutMeAttribute($value)
     {
         return $value == 1 ? 'Approved' : 'Disapproved';

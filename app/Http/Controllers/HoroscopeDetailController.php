@@ -29,7 +29,7 @@ class HoroscopeDetailController extends Controller
      */
     public function store(Request $request)
     {
-
+      //dd($request->all());
 
         $user = Auth::user();
         if (!$user) {
@@ -54,7 +54,7 @@ class HoroscopeDetailController extends Controller
         }
         if ($request->input('country') || $request->input('rashi') || $request->input('time_of_birth')) {
             if ($request->input('state')) {
-                $validationRules['city'] = 'string';
+                $validationRules['city'] = 'nullable|string';
             }
         }
         $validatedData = $request->validate($validationRules);
@@ -65,8 +65,10 @@ class HoroscopeDetailController extends Controller
                 $existingRecord->update(array_merge($validatedData, ['place_of_birth' => $request->input('city', '')]));
                 return redirect()->route('carrierDetails.create')->with('success', 'Horoscope details created successfully!');
             } else {
-
-                HoroscopeDetail::create(array_merge($validatedData, ['place_of_birth' => $request->input('city', '')]));
+                $validatedData['user_id'] = $user->id;
+                HoroscopeDetail::create(
+                    array_merge($validatedData, ['place_of_birth' => $request->input('city', '')])
+                );
                 return redirect()->route('carrierDetails.create')->with('success', 'Horoscope details created successfully!');
             }
         } catch (\Illuminate\Database\QueryException $e) {

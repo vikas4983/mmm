@@ -1,6 +1,6 @@
 <div class="form-group">
     <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
-    <textarea  name="<?php echo e($name); ?>" id="<?php echo e($name); ?>" value="<?php echo e(old($name, $value)); ?>"
+    <textarea  name="<?php echo e($name); ?>" id="<?php echo e($name); ?>" value="<?php echo e(old($name, $value)); ?>" placeholder="<?php echo e($placeholder); ?>"
         class="form-control <?php $__errorArgs = [$name];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

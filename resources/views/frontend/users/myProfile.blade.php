@@ -39,8 +39,11 @@
         <div class="row">
             <div class="col-xxl-3 col-xl-4 col-xs-16 col-sm-16">
                 <div class="thumbnail gt-margin-bottom-0">
-                    <img src="{{ isset($user->image) && $user->image ? asset('storage/users/images/' . $user->image) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg')) }}"
-                        class="img-responsive gtFullWidth" alt="User Image">
+                    @foreach ($user->images as $image)
+                        <img src="{{ isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg')) }}"
+                            class="img-responsive gtFullWidth" alt="User Image">
+                    @endforeach
+
 
                     {{-- <img src="{{ asset('storage/users/images/' . ($user->image ?? 'male-default.jpg')) }}" alt="User Image" --}}
                     {{-- class="img-responsive gtFullWidth"> --}}

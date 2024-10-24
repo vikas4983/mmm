@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('carrier_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
             $table->integer('country');
             $table->integer('state');
             $table->integer('city');
             $table->integer('education');
+            $table->string('education_detail')->nullable();
+            $table->string('occupation_detail')->nullable();
             $table->integer('employee');
             $table->integer('occupation');
             $table->integer('income');

@@ -1,18 +1,17 @@
-@foreach($fields as $field)
+@foreach ($fields as $field)
 
-     @switch($field['type'])
+    @switch($field['type'])
         @case('email')
+       
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="email" />
         @break
 
-        
         @case('password')
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="password" />
         @break
 
         @case('textarea')
-       
-         <x-textarea-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="text" />
+            <x-textarea-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="text" />
         @break
 
         @case('select')
@@ -24,10 +23,12 @@
         @break
 
         @case('file')
+     
             <x-file-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" />
         @break
 
         @default
+
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="text" />
     @endswitch
 @endforeach

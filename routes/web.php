@@ -44,10 +44,15 @@ use App\Http\Controllers\AdminMenuController;
 use App\Http\Controllers\AjaxRequestController;
 use App\Http\Controllers\BasicDetailController;
 use App\Http\Controllers\CarrierDetailController;
+use App\Http\Controllers\ContactDetailController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\FamilyDetailController;
 use App\Http\Controllers\HoroscopeDetailController;
+use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LifeStyleController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LikeDetailController;
 use App\Http\Controllers\ModelCountController;
 use App\Models\CarrierDetail;
 use App\Models\City;
@@ -92,7 +97,10 @@ Route::middleware([
         Route::resource('horoscopes', HoroscopeDetailController::class);
         Route::resource('carrierDetails', CarrierDetailController::class);
         Route::resource('familyDetails', FamilyDetailController::class);
-        
+        Route::resource('lifestyleDetails', LifeStyleController::class);
+        Route::resource('likeDetails', LikeDetailController::class);
+        Route::resource('contactDetails', ContactDetailController::class);
+        Route::resource('images', ImageController::class);
     });
 });
 
@@ -100,21 +108,21 @@ Route::middleware([
 Route::post('registration', [MemberController::class, 'store'])->name('registration');
 Route::get('basic-details', [BasicDetailController::class, 'index'])->name('basic.detail');
 
-
-
-
 Route::get('verification', [MemberController::class, 'verification'])->name('verification');
 Route::get('otp-verification', [MemberController::class, 'otpVerification'])->name('otp-verification');
 Route::post('otp-validate', [MemberController::class, 'otpValidate'])->name('otp.validate');
+
 //User Login System
 Route::get('login-with-otp', [MemberController::class, 'loginWithOtp'])->name('login.with.otp');
 Route::post('login-otp', [MemberController::class, 'loginOtp'])->name('login.otp');
 Route::post('login-otp-validate', [MemberController::class, 'loginOtpValidate'])->name('login.otp.validate');
 Route::post('otp-resend', [MemberController::class, 'otpResend'])->name('otp.resend');
+
 // User Forgot Password
 Route::get('user-forgot-password', [MemberController::class, 'userForgotPassword'])->name('user.forgot.password');
 Route::get('change-password-form', [MemberController::class, 'changePasswordForm'])->name('change.password.form');
 Route::post('update-password', [MemberController::class, 'updatePassword'])->name('update.password');
+
 //Footer
 Route::view('aboutUs', 'aboutUs');
 Route::view('faq', 'faq');
@@ -123,10 +131,12 @@ Route::view('misuse', 'misuse');
 Route::view('plans', 'plans');
 Route::view('refund', 'refund');
 Route::view('successStory', 'successStory');
+
 //After Login
 Route::view('frontend.settings.changePassword', 'frontend.settings.changePassword')->name('changePassword');
 Route::post('changePassword', [MemberController::class, 'changePassword']);
 Route::view('frontend.users.myProfile', 'frontend.users.myProfile')->name('myProfile');
+
 //
 Route::resource('logos', LogoFaviconController::class);
 Route::resource('favicons', FaviconController::class);
