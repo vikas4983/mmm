@@ -1,6 +1,5 @@
 <?php $__env->startSection('title', 'Dashboard - Mangal Mandap'); ?>
 <?php $__env->startSection('content'); ?>
-
     <div class="container mt-20">
         <div class="row">
             <div class="col-xxl-4 col-xs-16 col-sm-16 mb-30">
@@ -13,6 +12,7 @@
                     <i class="fa fa-camera gt-margin-right-10"></i><span class="">Change Profile Picture</span>
                     </a>
                 </div>
+             <?php dump(session('login')); ?>
                 <div id="loaderID"></div>
             </div>
             <div class="clearfix visible-xs visible-sm mb-10"></div>

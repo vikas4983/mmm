@@ -107,6 +107,8 @@
                                 <li class="ripplelink"><a href="{{ url('help') }}" class="inPrem2Link">Help</a></li>
                                 <a href="{{ route('login') }}" class="btn gt-btn-green"><i
                                         class="fas fa-lock mr-10 font-15"></i>Login</a>
+                                <a href="{{ route('members.create') }}" class="btn gt-btn-green"><i
+                                        class="fas fa-lock mr-10 font-15"></i>Register</a>
                             </ul>
                         </div>
                     </div>
@@ -151,14 +153,13 @@
                                 <div class="gt-slideup-form">
                                     <div class="gt-slideUp-form-head">
                                         <h4>REGISTER NOW</h4>
-                                        <button onclick="return handlJSView()">Load View Using JavaScript</button>
-
-                                        <div id="viewContainer"></div>
+                                        {{-- <button onclick="return handlJSView()">Load View Using JavaScript</button>
+                                        <div id="viewContainer"></div> --}}
                                     </div>
                                     <div class="gt-slideUp-form-body">
 
-                                        <form action="{{ route('registration') }}" id="registerPage1" method="post"
-                                            name="registerPage1" onsubmit="return validateForm()">
+                                        <form action="{{ route('members.store') }}" id="registerPage1"
+                                            method="post" name="registerPage1" onsubmit="return validateForm()">
                                             @csrf
                                             @php
                                                 $fields = config('formFields.register');

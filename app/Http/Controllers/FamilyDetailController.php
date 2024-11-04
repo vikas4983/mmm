@@ -69,10 +69,12 @@ class FamilyDetailController extends Controller
 
             if ($existingRecord) {
                 $existingRecord->update($validatedData);
+                session(['registration_step' => '8']);
                 return redirect()->route('lifestyleDetails.create')->with('success', 'Family details saved successfully!');
             } else {
 
                 FamilyDetail::create($validatedData); // Add user_id to the created record
+                session(['registration_step' => '8']);
                 return redirect()->route('lifestyleDetails.create')->with('success', 'Family details saved successfully!');
             }
         } catch (\Illuminate\Database\QueryException $e) {

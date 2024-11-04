@@ -1,5 +1,5 @@
 @extends('layouts.frontend.master')
-@section('title', 'Plans - Mangal Mandap')
+@section('title', 'Account Verfication')
 @section('styles')
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <!-- Bootstrap & Green Js -->
@@ -24,6 +24,7 @@
                         return true;
                     }
                 </script> <!-- /. Header & Menu -->
+                {{-- @dump((session()->all())) --}}
                 <div class="container">
                     <div class="gtMobileVerification col-xxl-10 col-xxl-offset-3 col-xs-16 col-xs-offset-0">
                         <div class="text-center inThemeOrange">
@@ -31,92 +32,69 @@
                         </div>
                         <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verfication
                         </h2>
-                           <p class="inPageSubTitle text-center mb-20">Verify your mobile number now to activate your
+                        <p class="inPageSubTitle text-center mb-20">Verify Account now to activate your
                             profile.</p>
                         <article class="text-center text-danger">
                             It is mandatory to verify your mobile number otherwise your profile will not be displayed to
                             other members.
                         </article>
                         @php
-                   
                             $mobile = session('accountInfo.mobile');
                             $email = session('accountInfo.email');
-                               
+
                         @endphp
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            {{-- @php
-                                $alertTypes = ['success', 'error', 'info', 'warning'];
-                            @endphp
-
-                            @foreach ($alertTypes as $alert)
-                                @if (isset($$alert))
-                                    <!-- Note the double $$ -->
-                                    <div class="alert alert-{{ $alert }}" role="alert">
-                                        {{ $$alert }}
-                                        <!-- This accesses the variable with the name stored in $alert -->
-                                    </div>
-                                @endif
-                            @endforeach --}}
-                            {{-- @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    <div class="alert alert-success" role="alert">
-                                        {{ $error }}
-                                    </div>
-                                @endforeach
-                            @endif --}}
-                            {{-- <div id="alert-container-resend" class="mt-3"></div> --}}
-
-                            @if (session()->has('success'))
-                                <div class="alert alert-success" role="alert">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-
-                            @if (session()->has('error'))
-                                <div class="alert alert-danger" role="alert">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-                            <h4>Verify mobile number through SMS</h4>
+                            @include('partials.alerts')
+                            <h4>Verify Account through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>
                             <h5 class="gtMobileNo">+91-{{ $mobile ?? 'NA' }}</h5>
                             <div class="col-xxl-16">
                                 <a href="#myModal" data-toggle="modal" class="btn gt-btn-orange gt-margin-top-5">Edit
                                     Mobile No</a>
                             </div>
+
                             <div class="clearfix"></div>
                             <div class="form-group mt-30">
-                                <form action="{{ route('otp.validate') }}" method="post">
-                                    @csrf
-                                    <div class="d-flex flex-column align-items-center justify-content-center">
-                                        <!-- Centered Text Box -->
-                                        <div class="mb-3 text-center">
-                                            <input type="text" class="form-control text-center" name="otp"
-                                                id="otp" placeholder="Enter OTP" maxlength="6">
-                                                
-                                            <input type="hidden" name="email" id="email" value="{{ $email }}">
-                                            <input type="hidden" name="mobile" id="mobile" value="{{ $mobile }}">
-                                        </div>
-                                        <!-- Centered Button -->
-                                        <div class="text-center">
-                                            <button type="submit" class="btn gt-btn-green btnVerify mt-10">Verify</button>
-                                        </div>
+                                @if (session()->has('registration_step'))
+                                    <form action="{{ route('otp.varify') }}" method="post">
+                                    @else
+                                        <form action="{{ route('otp.validate') }}" id="resendForm" method="post">
+                                @endif
+
+                                @csrf
+                                <div class="d-flex flex-column align-items-center justify-content-center">
+                                    <!-- Centered Text Box -->
+                                    <div class="mb-3 text-center">
+                                        <input type="text" class="form-control text-center" name="otp" id="otp"
+                                            placeholder="Enter OTP" maxlength="6">
+
+                                        <input type="hidden" name="email" id="email" value="{{ $email }}">
+                                        <input type="hidden" name="mobile" id="mobile" value="{{ $mobile }}">
                                     </div>
+                                    <!-- Centered Button -->
+                                    <div class="text-center">
+                                        <button type="submit" class="btn gt-btn-green btnVerify mt-10">Verify</button>
+                                    </div>
+                                </div>
                                 </form>
                             </div>
                             <div class="col-xs-16">
-                                <form action="{{ route('otp.resend') }}" id="resendForm" method="post">
-                                    @csrf
-                                    <input type="hidden" name="mobile" id="mobile" value="{{ $mobile }}">
-                                    <input type="hidden" name="email" id="email" value="{{ $email }}">
-                                    <input type="hidden" name="action" id="action" value="UserResendOTP">
-                                    <div class="row">
-                                        <div class="col-xs-16 font-12">Not received verification code yet? <span
-                                                id="countVerify"></span><b>s</b></div>
-                                    </div>
-                                    <button type="submit" class="btn gt-btn-orange mt-10" id="resendOTPBtn" disabled>
-                                        Resend OTP
-                                    </button>
+                                @if (session()->has('registration_step'))
+                                    <form action="{{ route('otp.again') }}" id="resendForm" method="post">
+                                    @else
+                                        <form action="{{ route('otp.resend') }}" id="resendForm" method="post">
+                                @endif
+                                @csrf
+                                <input type="hidden" name="mobile" id="mobile" value="{{ $mobile }}">
+                                <input type="hidden" name="email" id="email" value="{{ $email }}">
+                                <input type="hidden" name="action" id="action" value="UserResendOTP">
+                                <div class="row">
+                                    <div class="col-xs-16 font-12">Not received verification code yet? <span
+                                            id="countVerify"></span><b>s</b></div>
+                                </div>
+                                <button type="submit" class="btn gt-btn-orange mt-10" id="resendOTPBtn" disabled>
+                                    Resend OTP
+                                </button>
                                 </form>
                                 <script>
                                     var spn = document.getElementById("countVerify");
@@ -130,25 +108,25 @@
                                         spn.textContent = count;
 
                                         if (count > 0) {
-                                            count--; // Decrement before setting the timeout for accurate display
-                                            resendOTPBtn.setAttribute("disabled", true); // Disable the button during the countdown
+                                            count--;
+                                            resendOTPBtn.setAttribute("disabled", false);
                                             timer = setTimeout(countDown, 1000);
                                         } else {
-                                            resendOTPBtn.removeAttribute("disabled"); // Re-enable the button when countdown is complete
-                                            clearTimeout(timer); // Clear the timer to ensure no more countdowns
+                                            resendOTPBtn.removeAttribute("disabled");
+                                            clearTimeout(timer);
                                         }
                                     }
 
-                                    // Handle button click to restart countdown and prevent multiple clicks
+
 
                                     resendOTPBtn.addEventListener("click", function(e) {
                                         resendForm.submit();
-                                        this.disabled = true; // Disable the button immediately to prevent multiple clicks
-                                        count = 5; // Reset countdown to 5
-                                        countDown(); // Start the countdown again
+                                        this.disabled = true;
+                                        count = 5;
+                                        countDown();
                                     });
 
-                                    // Start the countdown immediately when the page is loaded
+
                                     window.onload = function() {
                                         countDown();
                                     };
@@ -167,6 +145,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
                         <form action="" method="post" class="inMobileVerifyChange gt-search-opt">
+                            @csrf
                             <div class="row">
                                 <div class="col-xxl-16 text-center">
                                     <h4 class="fontMerriWeather">Edit Mobile No</h4>
@@ -208,6 +187,7 @@
                     </div>
                     <div class="modal-body">
                         <form class="" action="login-with-otp" method="post">
+                            @csrf
                             <div class="form-group">
                                 <label>Email/Mobile No/Matri id</label>
                                 <input type="text" name="userId" class="gt-form-control"
@@ -224,29 +204,29 @@
         </div>
         <!-- Right Click Disable -->
         <!--
-                                                                                                                            <script language=JavaScript>
-                                                                                                                                function clickIE4() {
-                                                                                                                                    if (event.button == 2) {
-                                                                                                                                        return false;
-                                                                                                                                    }
-                                                                                                                                }
+                                                                                                                                                        <script language=JavaScript>
+                                                                                                                                                            function clickIE4() {
+                                                                                                                                                                if (event.button == 2) {
+                                                                                                                                                                    return false;
+                                                                                                                                                                }
+                                                                                                                                                            }
 
-                                                                                                                                function clickNS4(e) {
-                                                                                                                                    if (document.layers || document.getElementById && !document.all) {
-                                                                                                                                        if (e.which == 2 || e.which == 3) {
-                                                                                                                                            return false;
-                                                                                                                                        }
-                                                                                                                                    }
-                                                                                                                                }
-                                                                                                                                if (document.layers) {
-                                                                                                                                    document.captureEvents(Event.MOUSEDOWN);
-                                                                                                                                    document.onmousedown = clickNS4;
-                                                                                                                                } else if (document.all && !document.getElementById) {
-                                                                                                                                    document.onmousedown = clickIE4;
-                                                                                                                                }
-                                                                                                                                document.oncontextmenu = new Function("return false")
-                                                                                                                            </script>
-                                                                                                                                                                                                        -->
+                                                                                                                                                            function clickNS4(e) {
+                                                                                                                                                                if (document.layers || document.getElementById && !document.all) {
+                                                                                                                                                                    if (e.which == 2 || e.which == 3) {
+                                                                                                                                                                        return false;
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                            if (document.layers) {
+                                                                                                                                                                document.captureEvents(Event.MOUSEDOWN);
+                                                                                                                                                                document.onmousedown = clickNS4;
+                                                                                                                                                            } else if (document.all && !document.getElementById) {
+                                                                                                                                                                document.onmousedown = clickIE4;
+                                                                                                                                                            }
+                                                                                                                                                            document.oncontextmenu = new Function("return false")
+                                                                                                                                                        </script>
+                                                                                                                                                                                                                                    -->
         <!-- /.Right Click Disable -->
 
         <!-- Live Chat -->
@@ -299,7 +279,36 @@
             $('#pincode-input1').pincodeInput().data('plugin_pincodeInput').focus();
         };
     </script>
+    <script>
+        var spn = document.getElementById("countVerify");
+        var resendOTPBtn = document.getElementById("resendOTPBtn");
+        var resendForm = document.getElementById("resendForm");
 
+        var count = 5;
+        var timer = null;
+
+        function countDown() {
+            spn.textContent = count;
+
+            if (count > 0) {
+                count--;
+                resendOTPBtn.setAttribute("disabled", true);
+                timer = setTimeout(countDown, 1000);
+            } else {
+                resendOTPBtn.removeAttribute("disabled");
+                clearTimeout(timer);
+            }
+        }
+        resendOTPBtn.addEventListener("click", function(e) {
+            resendForm.submit();
+            this.disabled = true;
+            count = 5;
+            countDown();
+        });
+        window.onload = function() {
+            countDown();
+        };
+    </script>
     <script>
         // var spn = document.getElementById("countVerify");
         // var btn = document.getElementById("btnCounterVerify");

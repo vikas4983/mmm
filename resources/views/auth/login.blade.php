@@ -6,10 +6,11 @@
     <script src="{{ asset('assets/js/bootstrap.js') }}"></script>
     <script src="{{ asset('assets/js/green.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 @endsection
 @section('content')
+    
     <div id="body" style="display">
         <div id="wrap" class="gtLogin">
             <div id="main">
@@ -20,7 +21,17 @@
                             <form class="gt-login-form" action="{{ route('login') }}" name="login_form" id="login_form"
                                 method="post">
                                 @csrf
-                                {{-- @if ($errors->any())
+
+                                @php
+                                    session()->forget('registration_step');
+                                @endphp
+                                {{-- @dump(session()->all()) --}}
+                                <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
+                                    {{ trans('auth.login') }}
+                                </h2>
+                                <p class="inPageSubTitle text-center mb-30">And search your life partner</p>
+
+                                @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>
                                             @foreach ($errors->all() as $error)
@@ -28,30 +39,8 @@
                                             @endforeach
                                         </ul>
                                     </div>
-                                @endif --}}
-                                
-                                <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
-                                    {{ trans('auth.login') }}
-                                </h2>
-                                <p class="inPageSubTitle text-center mb-30">And search your life partner</p>
-
-                                @if ($errors->any())
-                                    <div class="alert alert-success">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
                                 @endif
-                                @if (session('success'))
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        {{ session('success') }}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                @endif
+                                @include('partials.alerts')
                                 @php
                                     $fields = config('formFields.login');
                                 @endphp
@@ -65,7 +54,8 @@
                                                     id="keep_login">&nbsp;&nbsp;Keep me logged in </label>
                                         </div>
                                         <div class="col-xxl-8 text-right">
-                                            <a href="{{ route('user.forgot.password') }}" class="inForgotText">Forgot Password ?
+                                            <a href="{{ route('user.forgot.password') }}" class="inForgotText">Forgot
+                                                Password ?
                                             </a>
                                         </div>
                                     </div>
@@ -76,7 +66,7 @@
                                 </div>
                                 <h5 class="text-center">OR</h5>
                                 <div class="form-group text-center">
-                                    <a href="{{route('login.with.otp')}}"  class="btn gt-btn-green btn-block">Login
+                                    <a href="{{ route('login.with.otp') }}" class="btn gt-btn-green btn-block">Login
                                         With OTP</a>
                                 </div>
                                 <div class="clearfix"></div>

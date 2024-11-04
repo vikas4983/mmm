@@ -62,8 +62,26 @@ use Aws\Middleware;
 
 // User Routes
 Route::get('/', function () {
+    if (session()->get('registration_step') === '2') {
+        return redirect()->route('verification');
+    }
     return view('index');
 });
+Route::get('login', function () {
+    if (session()->get('registration_step') === '2') {
+        return redirect()->route('verification');
+    } else {
+        // Clear the 'registration_step' session variable
+        session()->forget('registration_step');
+        return view('auth.login');
+    }
+})->name('login')->middleware('checkRegistrationStep');;
+Route::post('logout', function () {
+    session()->flush();
+    return redirect('/');
+})->name('logout');
+
+
 
 Route::get('/get-view', [DemoController::class, 'getView']);
 Route::get('signUp', [AjaxRequestController::class, 'signUp'])->name('sign.up');
@@ -88,41 +106,41 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
     Route::prefix('frontend/registration')->group(function () {
-        Route::resource('basicDetails', BasicDetailController::class);
-        Route::resource('horoscopes', HoroscopeDetailController::class);
-        Route::resource('carrierDetails', CarrierDetailController::class);
-        Route::resource('familyDetails', FamilyDetailController::class);
-        Route::resource('lifestyleDetails', LifeStyleController::class);
-        Route::resource('likeDetails', LikeDetailController::class);
-        Route::resource('contactDetails', ContactDetailController::class);
-        Route::resource('images', ImageController::class);
+        Route::resource('basicDetails', BasicDetailController::class)->middleware('checkRegistrationStep');
+        Route::resource('horoscopes', HoroscopeDetailController::class)->middleware('checkRegistrationStep');
+        Route::resource('carrierDetails', CarrierDetailController::class)->middleware('checkRegistrationStep');
+        Route::resource('familyDetails', FamilyDetailController::class)->middleware('checkRegistrationStep');
+        Route::resource('lifestyleDetails', LifeStyleController::class)->middleware('checkRegistrationStep');
+        Route::resource('likeDetails', LikeDetailController::class)->middleware('checkRegistrationStep');
+        Route::resource('contactDetails', ContactDetailController::class)->middleware('checkRegistrationStep');
+        Route::resource('images', ImageController::class)->middleware('checkRegistrationStep');
     });
 });
+Route::resource('members', MemberController::class)->middleware('checkRegistrationStep');
+Route::get('verification', [MemberOtpController::class, 'verification'])->name('verification')->middleware('checkRegistrationStep');
+Route::post('otp-varify', [MemberController::class, 'otpVarify'])->name('otp.varify');
+Route::post('otp-again', [MemberController::class, 'otpAgain'])->name('otp.again');
 
 //User Registration
-Route::post('registration', [MemberController::class, 'store'])->name('registration');
+Route::post('registration', [MemberController::class, 'store'])->name('registration')->middleware('checkRegistrationStep');
 Route::get('basic-details', [BasicDetailController::class, 'index'])->name('basic.detail');
-
-Route::get('verification', [MemberController::class, 'verification'])->name('verification');
-Route::get('otp-verification', [MemberController::class, 'otpVerification'])->name('otp-verification');
-Route::post('otp-validate', [MemberController::class, 'otpValidate'])->name('otp.validate');
-
-//User Login System
-Route::get('login-with-otp', [MemberController::class, 'loginWithOtp'])->name('login.with.otp');
-Route::post('login-otp', [MemberController::class, 'loginOtp'])->name('login.otp');
-Route::post('login-otp-validate', [MemberController::class, 'loginOtpValidate'])->name('login.otp.validate');
-Route::post('otp-resend', [MemberController::class, 'otpResend'])->name('otp.resend');
-
-// User Forgot Password
-Route::get('user-forgot-password', [MemberController::class, 'userForgotPassword'])->name('user.forgot.password');
-Route::get('change-password-form', [MemberController::class, 'changePasswordForm'])->name('change.password.form');
 Route::post('update-password', [MemberController::class, 'updatePassword'])->name('update.password');
-
+// User Forgot Password
+Route::get('user-forgot-password', [MemberOtpController::class, 'userForgotPassword'])->name('user.forgot.password');
+Route::get('change-password-form', [MemberOtpController::class, 'changePasswordForm'])->name('change.password.form');
+Route::post('otp-validate', [MemberOtpController::class, 'otpValidate'])->name('otp.validate');
+//User Login System
+Route::get('login-with-otp', [MemberOtpController::class, 'loginWithOtp'])->name('login.with.otp');
+Route::get('otp-verification', [MemberOtpController::class, 'otpVerification'])->name('otp-verification');
+Route::post('login-otp', [MemberOtpController::class, 'loginOtp'])->name('login.otp');
+Route::post('login-otp-validate', [MemberOtpController::class, 'loginOtpValidate'])->name('login.otp.validate');
+Route::post('otp-resend', [MemberOtpController::class, 'otpResend'])->name('otp.resend');
 //Footer
 Route::view('aboutUs', 'aboutUs');
 Route::view('faq', 'faq');

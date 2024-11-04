@@ -29,7 +29,9 @@
              <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
              <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
              <br>
+            
             <form action="<?php echo e(route('horoscopes.store')); ?>" method="POST">
+                <input type="hidden" name="user_id" value="<?php echo e(Auth::user()->id); ?>">
                  <?php echo csrf_field(); ?>
                  <?php
                      $fields = config('formFields.horoscopeDetails');

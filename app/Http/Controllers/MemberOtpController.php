@@ -21,76 +21,118 @@ class MemberOtpController
 
 
 
+    public function verification()
+
+    {
+
+        return view('frontend.users.verification');
+    }
+    public function otpVerification(Request $request)
+
+    {
+
+        $data = session()->get('data');
+        return view('frontend.users.otpValidate', compact('data'));
+    }
+    public function otpValidate(Request $request)
+    {
+
+        $validatedData = $request->validate([
+            'otp' => 'required|numeric|digits:6',
+            'mobile' => 'required|numeric|digits:10',
+            'email' => 'required|email',
+        ]);
+
+        $otp = $validatedData['otp'];
+        $mobile = $validatedData['mobile'] ?? null;
+        $email = $validatedData['email'] ?? null;
+        $userByMobile = User::where('mobile', $mobile)->first();
+        $userByEmail = User::where('email', $email)->first();
+        if (!$userByMobile) {
+            return redirect()->back()->with('error', 'Mobile number not found!');
+        }
+        if (!$userByEmail) {
+            return redirect()->back()->with('error', 'Email not found!');
+        }
+        $user = User::where('mobile', $mobile)->where('email', $email)->first();
+        $otp = MemberOtp::where('otp', $otp)
+            ->where('user_id', $user->id)
+            ->latest('id')
+            ->first();
+        if (!$otp) {
+            return redirect()->back()->with('error', 'Incorrect OTP!');
+        }
+        dd('ok');
+        if (now()->greaterThan($otp->expires_at)) {
+            return redirect()->back()->with('error', 'OTP has expired');
+        }
+
+        Auth::login($user);
+        session(['registration_step' => '1']);
+        return redirect()->route('basicDetails.create');
+    }
     public function loginWithOtp()
     {
         return view('frontend.users.loginWithOtp');
     }
-
-    public function loginWithSendOtp(Request $request)
+    public function forgotPasswordForm()
     {
-        $validateData = $request->validate([
-            'mobile' => 'required|digits:10',
-        ]);
+        return view('forgotPassword');
+    }
+    public function loginOtp(Request $request)
+    {
 
-
-        $contact = $validateData['mobile'];
-        $user = User::where('mobile', $contact)->first();
-        if (!$user) {
-            return redirect()->back()->with('error', 'Mobile number not found!');
+        if ($request->contactMethod == 'email') {
+            $validatedData = $request->validate([
+                'contact' => 'required|email',
+            ]);
+        } elseif ($request->contactMethod == 'mobile') {
+            $validatedData = $request->validate([
+                'contact' => 'required|numeric|digits:10',
+            ]);
+        } else {
+            return redirect()
+                ->back()
+                ->withErrors(['error' => 'Invalid contact method specified.']);
         }
-        $name = 'UserLoginWithOTP';
+
+        $user = User::where('email', $validatedData['contact'])
+            ->orWhere('mobile', $validatedData['contact'])
+            ->first();
+        if (!$user) {
+            $errorMessage = $request->contactMethod == 'email' ? 'Email id does not match our records!' : 'Mobile number does not match our records!';
+            return redirect()
+                ->back()
+                ->withErrors(['error' => $errorMessage]);
+        }
+        MemberOtp::where('user_id', $user->id)->delete();
+
+        switch ($request->action) {
+            case 'UserLoginWithOTP':
+                $name = 'UserLoginWithOTP';
+                break;
+
+            default:
+                $name = 'UserForgotPasswordOTP';
+        }
         $emailTemplate = $this->userEmailTemplate($name);
         UserSendEmailJob::dispatch($user, $emailTemplate);
-
-        return redirect()->route('', [
-            'email' => $user['email'],
+        $data = [
             'mobile' => $user['mobile'],
-        ]);
+            'email' => $user['email'],
+            'action' => $request->action,
+            'success' => 'OTP has sent successfully!',
+        ];
+        session()->put('data', $data);
+        return redirect('otp-verification');
     }
-
-
-    public function validateOtp(Request $request)
-    {
-
-        $request->validate([
-            'otp' => 'required',
-            'mobile' => 'required|digit:10',
-            'email' => 'required|email',
-        ]);
-
-        $requestOtp = $request->otp;
-        $requestMobile = $request->mobile;
-        $requestEmail = $request->email;
-
-        $user = User::where('email', $requestEmail)->where('mobile', $requestMobile)->first();
-
-        if (!$user) {
-            return redirect()->back()->with('error', 'Email & Mobile number do not match our records!');
-        }
-        $otp = MemberOtp::where('otp', $requestOtp)->where('user_id', $user->id)->latest('id')->first();
-        if (!$otp) {
-            return redirect()->back()->with('error', 'Incorrect OTP or OTP expired!');
-        }
-        if (now()->greaterThan($otp->expires_at)) {
-            return redirect()->back()->with('error', 'OTP has expired');
-        }
-        if ($user && $otp) {
-            $user->update([
-                'status' => 1
-            ]);
-            $otp->delete();
-        }
-        return response()->json(['success' => 'OTP has been verified successfully!']);
-    }
-
-
     public function otpResend(Request $request)
     {
-        //dd($request->all());
 
         $validateData = $request->validate([
-            'mobile' => 'nullable|digits:10',
-            'email' => 'nullable|email',
+            'mobile' => 'required|digits:10',
+            'email' => 'required|email',
+            'action' => 'required|string',
         ]);
         $requestMobile = $request->mobile;
         $requestEmail = $request->email;
@@ -100,40 +142,96 @@ class MemberOtpController
             return redirect()->back()->with('error', 'Somethning went wrong, please try again!');
         }
         $name = 'UserResendOTP';
-        session(['accountInfo' => $validateData]);
         MemberOtp::where('user_id', $user->id)->delete();
         $emailTemplate = $this->userEmailTemplate($name);
         UserSendEmailJob::dispatch($user, $emailTemplate);
+
+
+        if ($request['action'] == 'UserResendOTP') {
+
+            return redirect('verification')->with(
+                [
+                    'success' => 'OTP Resend sent successfully!',
+
+                ],
+            );
+        }
         $data = [
             'mobile' => $user['mobile'],
             'email' => $user['email'],
+            'action' => $request->action,
+            'success' => 'OTP Resend sent successfully!',
+
         ];
-        return view('frontend.users.otpValidate', compact('data'))
-            ->withErrors(['success' => 'Resend OTP sent successfully!']);
+
+        session()->put('data', $data);
+        return redirect('otp-verification');
     }
-    public function forgotPassword(Request $request)
+    public function loginOtpValidate(Request $request)
     {
 
-        $validateData = $request->validate([
-            'mobile' => 'required',
-            'email' => 'required',
+        $validatedData = $request->validate([
+            'otp' => 'required|numeric|digits:6',
+            'mobile' => 'required|numeric|digits:10',
+            'email' => 'required|email',
+            'action' => 'required|string',
         ]);
-        $requestMobile = $request->mobile;
-        $requestEmail = $request->email;
-        $userByEmail = User::where('email', $requestEmail)->first();
-        $userByMobile = User::where('mobile', $requestMobile)->first();
-        if (!$userByEmail) {
-            return redirect()->back()->with('error', 'Email does not match our records!');
-        } elseif (!$userByMobile) {
-            return redirect()->back()->with('error', 'Mobile number does not match our records!');
+        $otp = $validatedData['otp'];
+        $mobile = $validatedData['mobile'] ?? null;
+        $email = $validatedData['email'] ?? null;
+        $userByMobile = User::where('mobile', $mobile)->first();
+        $userByEmail = User::where('email', $email)->first();
+
+        if (!$userByMobile) {
+            return redirect()->back()->with('error', 'Mobile number not found!');
         }
-        $user = User::where('email', $requestEmail)
-            ->where('mobile', $requestMobile)
+        if (!$userByEmail) {
+            return redirect()->back()->with('error', 'Email not found!');
+        }
+
+        $user = User::where('mobile', $mobile)->orWhere('email', $email)->first();
+        $otps = MemberOtp::where('otp', $otp)
+            ->where('user_id', $user->id)
+            ->latest('id')
             ->first();
-        $name = 'UserForgotPasswordOTP';
-        session(['accountInfo' => $validateData]);
-        $emailTemplate = $this->userEmailTemplate($name);
-        UserSendEmailJob::dispatch($user, $emailTemplate);
-        return redirect()->back()->with('success', 'OTP sent for forgot password successfully!');
+        $data = $validatedData;
+
+        if (!$otps) {
+            $data = [
+                'mobile' => $user['mobile'],
+                'email' => $user['email'],
+                'action' => $request->action,
+                'error' => 'Oops! Incorrect OTP.'
+
+            ];
+            session()->put('data', $data);
+            return redirect('otp-verification');
+        }
+        if (now()->greaterThan($otps->expires_at)) {
+            $data = [
+                'mobile' => $user['mobile'],
+                'email' => $user['email'],
+                'action' => $request->action,
+                'error' => 'Oops! OTP has expired.'
+
+            ];
+            session()->put('data', $data);
+            return redirect('otp-verification');
+        }
+
+        $otps->delete();
+        if ($request->action == 'UserLoginWithOTP') {
+            Auth::login($user);
+            session()->forget('data');
+            session(['login' => 'yes']);
+
+            return redirect('dashboard')->with('success', 'LoggedIn successfully!');
+        }
+
+        return view('frontend.users.changePasswordForm', compact('data'))->withErrors(['success' => 'OTP verified, Now Set the new password!']);
+    }
+    public function userForgotPassword()
+    {
+        return view('frontend.users.forgotPassword');
     }
 }

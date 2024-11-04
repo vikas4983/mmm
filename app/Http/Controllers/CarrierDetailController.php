@@ -70,10 +70,12 @@ class CarrierDetailController extends Controller
 
             if ($existingRecord) {
                 $existingRecord->update($validatedData);
+                session(['registration_step' => '7']);
                 return redirect()->route('familyDetails.create')->with('success', 'Carrier details saved successfully!');
             } else {
 
                 CarrierDetail::create($validatedData);
+                session(['registration_step' => '7']);
                 return redirect()->route('familyDetails.create')->with('success', 'Carrier details saved successfully!');
             }
         } catch (\Illuminate\Database\QueryException $e) {

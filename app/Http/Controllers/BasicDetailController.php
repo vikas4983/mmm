@@ -49,15 +49,18 @@ class BasicDetailController extends Controller
                 }
                 $validationRules[$field['name']] = $field['rules'];
             }
+            $validatedData = $request->validate($validationRules);
             $validatedData['user_id'] = $user->id;
             $validatedData['children'] = $request->marital_status == '1' ? null : $request->input('children');
-            $validatedData = $request->validate($validationRules);
             $existingRecord = BasicDetail::where('user_id', $user->id)->first();
             if ($existingRecord) {
-                $existingRecord->update($validatedData);
+                $existingRecord->update(array_merge($validatedData, ['status' => 1]));
+                session(['registration_step' => '5']);
+                
                 return redirect()->route('horoscopes.create')->with('success', 'Basic details updated successfully!');
             } else {
-                BasicDetail::create($validatedData);
+                BasicDetail::create(array_merge($validatedData, ['status' => 1]));
+                session(['registration_step' => '5']);
                 return redirect()->route('horoscopes.create')->with('success', 'Basic details saved successfully!');
             }
         } catch (\Illuminate\Database\QueryException $e) {

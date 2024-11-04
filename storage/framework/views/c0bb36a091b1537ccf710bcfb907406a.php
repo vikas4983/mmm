@@ -11,7 +11,7 @@
             <div id="main">
                 <div class="container" id="container"> <!-- Added ID for targeting -->
                     <div class="row">
-                        
+                        <?php dump(session()->all()); ?>
                         <div class="col-xxl-6 col-xs-16 col-xl-6 col-xs-offset-0 col-xxl-offset-5 col-sm-offset-0 col-md-offset-0 col-xl-offset-5 col-lg-10 col-lg-offset-3">
                             <form class="gt-login-form gtLogin" action="<?php echo e(route('login.otp')); ?>" method="post" id="forgot_form">
                                 <input type="hidden" name='action' value="UserLoginWithOTP">

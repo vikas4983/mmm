@@ -45,10 +45,12 @@ class LifeStyleController extends Controller
         try {
             if ($existingRecord) {
                 $existingRecord->update($validatedData);
+                session(['registration_step' => '9']);
                 return redirect()->back()->with('success', 'Lifestyle details saved successfully!');
             } else {
 
                 LifeStyle::create($validatedData);
+                session(['registration_step' => '9']);
                 return redirect()->route('likeDetails.create')->with('success', 'Lifestyle details saved successfully!');
             }
         } catch (\Illuminate\Database\QueryException $e) {

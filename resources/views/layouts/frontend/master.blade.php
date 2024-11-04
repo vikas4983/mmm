@@ -44,8 +44,8 @@
 
     <!-- Angular JS-->
     <script src="{{ asset('frontend/assets/js/angular.min.js') }}"></script>
-    <script src="{{asset('frontend/assets/js/custom-js/select-all-checkbox.js')}}"></script>
-    
+    <script src="{{ asset('frontend/assets/js/custom-js/select-all-checkbox.js') }}"></script>
+
 
 </head>
 
@@ -105,10 +105,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-xxl-5 pull-right text-right mb-5">
-                                    <a href="{{ route('user.forgot.password') }}" class="gt-text-Grey">Forgot Password ?</a>
+                                    <a href="{{ route('user.forgot.password') }}" class="gt-text-Grey">Forgot Password
+                                        ?</a>
                                 </div>
                                 <div class="col-xxl-6 pull-right text-right mb-5">
-                                    <a href="{{route('login.with.otp')}}" class="gt-text-Grey">Login with OTP</a>
+                                    <a href="{{ route('login.with.otp') }}" class="gt-text-Grey">Login with OTP</a>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +158,8 @@
                                         <a href="forgot-password-password" class="gt-text-Grey">Forgot Password ?</a>
                                     </div>
                                     <div class="col-xxl-6 pull-right text-right mb-5">
-                                        <a href="{{route('login.with.otp')}}" class="gt-text-Grey" data-toggle="modal">Login with
+                                        <a href="{{ route('login.with.otp') }}" class="gt-text-Grey"
+                                            data-toggle="modal">Login with
                                             OTP</a>
                                     </div>
                                 </div>
@@ -216,17 +218,27 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li
                                     class="active ripplelink gt-border-right-green gt-border-left-green gtBorderRightSMXS0 gtBorderLeftSMXS0">
-                                    <a href="{{ route('login') }}"><i
-                                            class="fas fa-sign-in-alt mr-10 fa-lg"></i>Login</a>
+                                    <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt mr-10 fa-lg"></i>
+                                        Login</a>
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="{{ url('/') }}"><i
-                                            class="fas fa-pen-square mr-10 fa-lg"></i>Signup</a>
+                                    <a href="{{ url('/') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                        Signup</a>
                                 </li>
-
+                                @if (session()->get('registration_step') != '1')
+                                    <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
+                                        <form action="{{ url('logout') }}" method="post" style="display: inline;">
+                                            @csrf
+                                            <button type="submit"
+                                                class="ripplelink gt-border-right-green gtBorderRightSMXS0"
+                                                style="background: none; border: none; color: #ffffff; padding: 15px 13px; font: inherit; cursor: pointer; display: inline-flex; align-items: center;">
+                                                <i class="fas fa-sign-out-alt mr-10 fa-lg"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                @endif
                             </ul>
-
                         </div>
                         <!-- /.Menu tabs -->
                     </div>
@@ -495,7 +507,7 @@
     </div>
     <!-- Jquery Js-->
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
-    
+
     <!-- Bootstrap & Green Js -->
     <script src="{{ asset('frontend/assets/js/bootstrap.js') }}"></script>
     <script src="{{ asset('frontend/assets/js/green.js') }}"></script>
@@ -879,4 +891,3 @@
         }
     });
 </script>
-

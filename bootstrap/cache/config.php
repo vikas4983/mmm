@@ -698,7 +698,7 @@
         'name' => 'education_detail',
         'label' => 'Education Detail',
         'placeholder' => 'Enter Education Details',
-        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:100',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:100',
       ),
       'employee' => 
       array (
@@ -716,7 +716,7 @@
         'name' => 'occupation_detail',
         'label' => 'Occupation Detail',
         'placeholder' => 'Enter Occupation Details',
-        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:100',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:100',
       ),
       'income' => 
       array (
@@ -737,7 +737,7 @@
         array (
         ),
         'placeholder' => 'Enter about  you',
-        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:300',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:300',
       ),
     ),
     'familyDetails' => 
@@ -842,7 +842,7 @@
         'name' => 'about_family',
         'label' => 'About Family',
         'placeholder' => 'Describe about your family',
-        'rules' => 'nullable|regex:/^[A-Za-z\\s]+$/|max:300',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:300',
       ),
     ),
     'EditfamilyDetails' => 

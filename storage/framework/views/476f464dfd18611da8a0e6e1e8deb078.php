@@ -107,6 +107,8 @@
                                 <li class="ripplelink"><a href="<?php echo e(url('help')); ?>" class="inPrem2Link">Help</a></li>
                                 <a href="<?php echo e(route('login')); ?>" class="btn gt-btn-green"><i
                                         class="fas fa-lock mr-10 font-15"></i>Login</a>
+                                <a href="<?php echo e(route('members.create')); ?>" class="btn gt-btn-green"><i
+                                        class="fas fa-lock mr-10 font-15"></i>Register</a>
                             </ul>
                         </div>
                     </div>
@@ -151,14 +153,12 @@
                                 <div class="gt-slideup-form">
                                     <div class="gt-slideUp-form-head">
                                         <h4>REGISTER NOW</h4>
-                                        <button onclick="return handlJSView()">Load View Using JavaScript</button>
-
-                                        <div id="viewContainer"></div>
+                                        
                                     </div>
                                     <div class="gt-slideUp-form-body">
 
-                                        <form action="<?php echo e(route('registration')); ?>" id="registerPage1" method="post"
-                                            name="registerPage1" onsubmit="return validateForm()">
+                                        <form action="<?php echo e(route('members.store')); ?>" id="registerPage1"
+                                            method="post" name="registerPage1" onsubmit="return validateForm()">
                                             <?php echo csrf_field(); ?>
                                             <?php
                                                 $fields = config('formFields.register');

@@ -233,6 +233,27 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
+            <div class="form-group" id="hiddenChildren" style="display: none">
+                <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
+                <select id="children" name="children" class="form-control" required >
+                    <option value="">Select</option>
+                    <option value="0">None</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                    <option value="4">Four</option>
+                </select>
+                <?php $__errorArgs = ['children'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <span class="text-danger" style="font-size: 0.8em;"><?php echo e($message); ?></span>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+            </div>
         <?php break; ?>
 
         <?php case ('rashi'): ?>

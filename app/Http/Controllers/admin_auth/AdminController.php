@@ -245,7 +245,7 @@ class AdminController extends Controller
       
        
         if ($admin) {
-            dump($admin);
+          
             $filePath = public_path('storage/admin/admin-images/');
             $previousFilePath = $filePath . $admin->image;
             if (File::exists($previousFilePath)) {

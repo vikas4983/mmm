@@ -63,6 +63,7 @@ class ImageController extends Controller
                     $existingRecord->update([
                         'display_picture' => $fileName,
                     ]);
+                    session(['registration_step' => 'done']);
                 }
                 return redirect()->route('dashboard')->with('success', 'Display picture updated successfully!');
             } else {
@@ -75,6 +76,8 @@ class ImageController extends Controller
                         'user_id' => $user->id,
                         'display_picture' => $fileName,
                     ]);
+                    session(['registration_step' => 'done']);
+                   
                 }
                 return redirect()->route('dashboard')->with('success', 'Display picture saved successfully!');
             }

@@ -5,10 +5,11 @@
     <script src="<?php echo e(asset('assets/js/bootstrap.js')); ?>"></script>
     <script src="<?php echo e(asset('assets/js/green.js')); ?>"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+    
     <div id="body" style="display">
         <div id="wrap" class="gtLogin">
             <div id="main">
@@ -19,8 +20,11 @@
                             <form class="gt-login-form" action="<?php echo e(route('login')); ?>" name="login_form" id="login_form"
                                 method="post">
                                 <?php echo csrf_field(); ?>
-                                
-                                
+
+                                <?php
+                                    session()->forget('registration_step');
+                                ?>
+                                <?php dump(session()->all()); ?>
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
                                     <?php echo e(trans('auth.login')); ?>
 
@@ -28,7 +32,7 @@
                                 <p class="inPageSubTitle text-center mb-30">And search your life partner</p>
 
                                 <?php if($errors->any()): ?>
-                                    <div class="alert alert-success">
+                                    <div class="alert alert-danger">
                                         <ul>
                                             <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <li><?php echo e($error); ?></li>
@@ -36,15 +40,7 @@
                                         </ul>
                                     </div>
                                 <?php endif; ?>
-                                <?php if(session('success')): ?>
-                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                        <?php echo e(session('success')); ?>
-
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                <?php endif; ?>
+                                <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 <?php
                                     $fields = config('formFields.login');
                                 ?>
@@ -77,7 +73,8 @@
                                                     id="keep_login">&nbsp;&nbsp;Keep me logged in </label>
                                         </div>
                                         <div class="col-xxl-8 text-right">
-                                            <a href="<?php echo e(route('user.forgot.password')); ?>" class="inForgotText">Forgot Password ?
+                                            <a href="<?php echo e(route('user.forgot.password')); ?>" class="inForgotText">Forgot
+                                                Password ?
                                             </a>
                                         </div>
                                     </div>
@@ -88,7 +85,7 @@
                                 </div>
                                 <h5 class="text-center">OR</h5>
                                 <div class="form-group text-center">
-                                    <a href="<?php echo e(route('login.with.otp')); ?>"  class="btn gt-btn-green btn-block">Login
+                                    <a href="<?php echo e(route('login.with.otp')); ?>" class="btn gt-btn-green btn-block">Login
                                         With OTP</a>
                                 </div>
                                 <div class="clearfix"></div>

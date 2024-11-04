@@ -29,7 +29,9 @@
              @include('partials.alerts')
              <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
              <br>
+            
             <form action="{{ route('horoscopes.store') }}" method="POST">
+                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                  @csrf
                  @php
                      $fields = config('formFields.horoscopeDetails');

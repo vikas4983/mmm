@@ -50,10 +50,12 @@ class ContactDetailController extends Controller
 
             if ($existingRecord) {
                 $existingRecord->update($validatedData);
+                session(['registration_step' => '11']);
                 return redirect()->route('images.create')->with('success', 'Completed your profile, now fins your life partner!');
             } else {
 
                 ContactDetail::create($validatedData); 
+                session(['registration_step' => '11']);
                 return redirect()->route('images.create')->with('success', 'Completed your profile, now fins your life partner!');
             }
         } catch (\Illuminate\Database\QueryException $e) {

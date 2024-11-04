@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Traits;
+
 use App\Models\MemberOtp;
 use Carbon\Carbon;
 
@@ -8,7 +9,6 @@ trait MemberOtpTrait
 {
     public function generateOTP($userId)
     {
-        @dump($userId);
         $otp = rand(100000, 999999);
         MemberOtp::create([
             'user_id' => $userId,
@@ -16,13 +16,6 @@ trait MemberOtpTrait
             'expires_at' => Carbon::now()->addMinutes(5),
             'status' => 1,
         ]);
-
         return $otp;
-
     }
 }
-
-
-
-
-

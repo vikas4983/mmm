@@ -158,7 +158,7 @@
             @enderror
             <div class="form-group" id="hiddenChildren" style="display: none">
                 <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
-                <select id="children" name="children" class="form-control" >
+                <select id="children" name="children" class="form-control" required >
                     <option value="">Select</option>
                     <option value="0">None</option>
                     <option value="1">One</option>

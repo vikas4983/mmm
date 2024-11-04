@@ -45,7 +45,7 @@
     <!-- Angular JS-->
     <script src="<?php echo e(asset('frontend/assets/js/angular.min.js')); ?>"></script>
     <script src="<?php echo e(asset('frontend/assets/js/custom-js/select-all-checkbox.js')); ?>"></script>
-    
+
 
 </head>
 
@@ -103,7 +103,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-xxl-5 pull-right text-right mb-5">
-                                    <a href="<?php echo e(route('user.forgot.password')); ?>" class="gt-text-Grey">Forgot Password ?</a>
+                                    <a href="<?php echo e(route('user.forgot.password')); ?>" class="gt-text-Grey">Forgot Password
+                                        ?</a>
                                 </div>
                                 <div class="col-xxl-6 pull-right text-right mb-5">
                                     <a href="<?php echo e(route('login.with.otp')); ?>" class="gt-text-Grey">Login with OTP</a>
@@ -155,7 +156,8 @@
                                         <a href="forgot-password-password" class="gt-text-Grey">Forgot Password ?</a>
                                     </div>
                                     <div class="col-xxl-6 pull-right text-right mb-5">
-                                        <a href="<?php echo e(route('login.with.otp')); ?>" class="gt-text-Grey" data-toggle="modal">Login with
+                                        <a href="<?php echo e(route('login.with.otp')); ?>" class="gt-text-Grey"
+                                            data-toggle="modal">Login with
                                             OTP</a>
                                     </div>
                                 </div>
@@ -222,6 +224,20 @@
                                     <a href="<?php echo e(url('/')); ?>"><i
                                             class="fas fa-pen-square mr-10 fa-lg"></i>Signup</a>
                                 </li>
+                                <?php if(session()->get('registration_step') != '1'): ?>
+                                    <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
+                                        <form action="<?php echo e(url('logout')); ?>" method="post" style="display: inline;">
+                                            <?php echo csrf_field(); ?>
+                                            <button type="submit">
+                                                <i class="fas fa-pen-square mr-10 fa-lg"></i>logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                <?php endif; ?>
+                               
+
+                                
+
 
                             </ul>
 
@@ -436,7 +452,7 @@
     </div>
     <!-- Jquery Js-->
     <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
-    
+
     <!-- Bootstrap & Green Js -->
     <script src="<?php echo e(asset('frontend/assets/js/bootstrap.js')); ?>"></script>
     <script src="<?php echo e(asset('frontend/assets/js/green.js')); ?>"></script>
@@ -820,5 +836,4 @@
         }
     });
 </script>
-
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views\layouts\frontend\master.blade.php ENDPATH**/ ?>
