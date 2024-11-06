@@ -13,7 +13,7 @@ class BasicDetailController extends Controller
      */
     public function index()
     {
-        //
+        return 'success';
     }
 
     /**

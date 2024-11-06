@@ -62,6 +62,7 @@ class LikeDetailController extends Controller
                     'dress' => $dress,
                     'movie' => $movie,
                     'sport' => $sport,
+                    'status' => 1,
                 ]);
                 session(['registration_step' => '10']);
                 return redirect()->route('contactDetails.create')->with('success', 'Like details saved successfully!');
@@ -75,6 +76,7 @@ class LikeDetailController extends Controller
                     'dress' => $dress,
                     'movie' => $movie,
                     'sport' => $sport,
+                    'status' => 1,
                 ]);
                 session(['registration_step' => '10']);
                 return redirect()->route('contactDetails.create')->with('success', 'Like details saved successfully!');

@@ -65,10 +65,12 @@ class CarrierDetailController extends Controller
         $validatedData = $request->validate($validationRules);
 
         $validatedData['user_id'] = $user->id;
+        $validatedData['status'] = 1;
         $existingRecord = CarrierDetail::where('user_id', $user->id)->first();
         try {
 
             if ($existingRecord) {
+                dd('anc');
                 $existingRecord->update($validatedData);
                 session(['registration_step' => '7']);
                 return redirect()->route('familyDetails.create')->with('success', 'Carrier details saved successfully!');

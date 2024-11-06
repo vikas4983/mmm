@@ -11,11 +11,17 @@
             <div id="main">
                 <div class="container" id="container"> <!-- Added ID for targeting -->
                     <div class="row">
+                        @php
+                            session()->forget('registration_step');
+                            session()->forget('data');
+                        @endphp
                         @dump(session()->all())
-                        <div class="col-xxl-6 col-xs-16 col-xl-6 col-xs-offset-0 col-xxl-offset-5 col-sm-offset-0 col-md-offset-0 col-xl-offset-5 col-lg-10 col-lg-offset-3">
-                            <form class="gt-login-form gtLogin" action="{{ route('login.otp') }}" method="post" id="forgot_form">
+                        <div
+                            class="col-xxl-6 col-xs-16 col-xl-6 col-xs-offset-0 col-xxl-offset-5 col-sm-offset-0 col-md-offset-0 col-xl-offset-5 col-lg-10 col-lg-offset-3">
+                            <form class="gt-login-form gtLogin" action="{{ route('login.otp') }}" method="post"
+                                id="forgot_form">
                                 <input type="hidden" name='action' value="UserLoginWithOTP">
-                               @csrf
+                                @csrf
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Login With OTP</h2>
                                 <p class="inPageSubTitle text-center mb-30">We are always happy to help.</p>
                                 @if ($errors->any())
@@ -27,49 +33,52 @@
                                         </ul>
                                     </div>
                                 @endif
-                              
+
                                 <div class="form-check mr-3 mb-3 d-inline-block">
-                                    <input class="form-check-input" type="radio" name="contactMethod" id="emailRadio" value="email" checked>
+                                    <input class="form-check-input" type="radio" name="contactMethod" id="emailRadio"
+                                        value="email" checked>
                                     <label class="form-check-label" for="emailRadio">Email</label>
                                 </div>
-                
+
                                 <div class="form-check mr-3 mb-3 d-inline-block">
-                                    <input class="form-check-input" type="radio" name="contactMethod" id="mobileRadio" value="mobile">
+                                    <input class="form-check-input" type="radio" name="contactMethod" id="mobileRadio"
+                                        value="mobile">
                                     <label class="form-check-label" for="mobileRadio">Mobile</label>
                                 </div>
-                
+
                                 <div class="gt-margin-top-30 form-group">
                                     <label for="contactInput">Enter Email id / Mobile No </label>
-                                    <input type="text" id="contactInput" class="gt-form-control" name="contact" placeholder="Enter Email id / Mobile No " data-validetta="required">
+                                    <input type="text" id="contactInput" class="gt-form-control" name="contact"
+                                        placeholder="Enter Email id / Mobile No " data-validetta="required">
                                 </div>
-                
+
                                 <div class="gt-margin-top-30 form-group" id="input-box"></div> <!-- Adjusted input-box -->
-                
+
                                 <div class="form-group gt-margin-top-30">
-                                    <button class="btn gt-btn-orange btn-block"  type="submit">Get Otp</button>
+                                    <button class="btn gt-btn-orange btn-block" type="submit">Get Otp</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                
+
                 <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         const emailRadio = document.getElementById("emailRadio");
                         const mobileRadio = document.getElementById("mobileRadio");
                         const inputBox = document.getElementById("input-box");
                         const contactInput = document.getElementById("contactInput");
-                
+
                         emailRadio.addEventListener("click", function(e) {
                             contactInput.placeholder = "Enter Email id"; // Update placeholder for Email
                         });
-                
+
                         mobileRadio.addEventListener("click", function(e) {
                             contactInput.placeholder = "Enter Mobile No"; // Update placeholder for Mobile
                         });
                     });
                 </script>
-                
+
             </div>
         </div>
         <div class="container gt-margin-top-10">
@@ -103,29 +112,29 @@
         </div>
         <!-- Right Click Disable -->
         <!--
-        <script language=JavaScript>
-            function clickIE4() {
-                if (event.button == 2) {
-                    return false;
-                }
-            }
-
-            function clickNS4(e) {
-                if (document.layers || document.getElementById && !document.all) {
-                    if (e.which == 2 || e.which == 3) {
+            <script language=JavaScript>
+                function clickIE4() {
+                    if (event.button == 2) {
                         return false;
                     }
                 }
-            }
-            if (document.layers) {
-                document.captureEvents(Event.MOUSEDOWN);
-                document.onmousedown = clickNS4;
-            } else if (document.all && !document.getElementById) {
-                document.onmousedown = clickIE4;
-            }
-            document.oncontextmenu = new Function("return false")
-        </script>
-        -->
+
+                function clickNS4(e) {
+                    if (document.layers || document.getElementById && !document.all) {
+                        if (e.which == 2 || e.which == 3) {
+                            return false;
+                        }
+                    }
+                }
+                if (document.layers) {
+                    document.captureEvents(Event.MOUSEDOWN);
+                    document.onmousedown = clickNS4;
+                } else if (document.all && !document.getElementById) {
+                    document.onmousedown = clickIE4;
+                }
+                document.oncontextmenu = new Function("return false")
+            </script>
+            -->
 
 
     @endsection

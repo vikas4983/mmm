@@ -66,7 +66,7 @@ Route::get('/', function () {
         return redirect()->route('verification');
     }
     return view('index');
-});
+})->middleware('checkRegistrationStep');;
 Route::get('login', function () {
     if (session()->get('registration_step') === '2') {
         return redirect()->route('verification');
@@ -138,6 +138,7 @@ Route::post('otp-validate', [MemberOtpController::class, 'otpValidate'])->name('
 //User Login System
 Route::get('login-with-otp', [MemberOtpController::class, 'loginWithOtp'])->name('login.with.otp');
 Route::get('otp-verification', [MemberOtpController::class, 'otpVerification'])->name('otp-verification');
+Route::get('account-verification', [MemberOtpController::class, 'accountVerification'])->name('account.verification');
 Route::post('login-otp', [MemberOtpController::class, 'loginOtp'])->name('login.otp');
 Route::post('login-otp-validate', [MemberOtpController::class, 'loginOtpValidate'])->name('login.otp.validate');
 Route::post('otp-resend', [MemberOtpController::class, 'otpResend'])->name('otp.resend');

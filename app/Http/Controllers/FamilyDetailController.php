@@ -64,6 +64,7 @@ class FamilyDetailController extends Controller
         $validatedData = $request->validate($validationRules);
         $validatedData['user_id'] = $user->id;
         $validatedData['family_living'] = $request->input('city');
+        $validatedData['status'] = 1;
         $existingRecord = FamilyDetail::where('user_id', $user->id)->first();
         try {
 

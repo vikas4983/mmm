@@ -24,7 +24,7 @@
                                 </article>
                             <?php break; ?>
 
-                            <?php case ('UserResendOTP'): ?>
+                            <?php case ('accountVerification'): ?>
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verification</h2>
                                 <article class="text-center text-danger">
                                     Verify OTP with mobile number & Email id & Login to your account.
@@ -38,8 +38,7 @@
                                     Verify OTP with mobile number & Email id & set up your new password.
                                 </article>
                         <?php endswitch; ?>
-                        <?php dump(session()->all()); ?>
-
+                        
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
                             <?php if(isset($data['success']) && !empty($data['success'])): ?>
                                 <div class="alert alert-success" role="alert">
@@ -176,29 +175,29 @@
         </div>
         <!-- Right Click Disable -->
         <!--
-                                                                                                                                                                                                                                            <script language=JavaScript>
-                                                                                                                                                                                                                                                function clickIE4() {
-                                                                                                                                                                                                                                                    if (event.button == 2) {
-                                                                                                                                                                                                                                                        return false;
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                function clickNS4(e) {
-                                                                                                                                                                                                                                                    if (document.layers || document.getElementById && !document.all) {
-                                                                                                                                                                                                                                                        if (e.which == 2 || e.which == 3) {
+                                                                                                                                                                                                                                                <script language=JavaScript>
+                                                                                                                                                                                                                                                    function clickIE4() {
+                                                                                                                                                                                                                                                        if (event.button == 2) {
                                                                                                                                                                                                                                                             return false;
                                                                                                                                                                                                                                                         }
                                                                                                                                                                                                                                                     }
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                if (document.layers) {
-                                                                                                                                                                                                                                                    document.captureEvents(Event.MOUSEDOWN);
-                                                                                                                                                                                                                                                    document.onmousedown = clickNS4;
-                                                                                                                                                                                                                                                } else if (document.all && !document.getElementById) {
-                                                                                                                                                                                                                                                    document.onmousedown = clickIE4;
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                document.oncontextmenu = new Function("return false")
-                                                                                                                                                                                                                                            </script>
-                                                                                                                                                                                                                                                                                                                        -->
+
+                                                                                                                                                                                                                                                    function clickNS4(e) {
+                                                                                                                                                                                                                                                        if (document.layers || document.getElementById && !document.all) {
+                                                                                                                                                                                                                                                            if (e.which == 2 || e.which == 3) {
+                                                                                                                                                                                                                                                                return false;
+                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                    if (document.layers) {
+                                                                                                                                                                                                                                                        document.captureEvents(Event.MOUSEDOWN);
+                                                                                                                                                                                                                                                        document.onmousedown = clickNS4;
+                                                                                                                                                                                                                                                    } else if (document.all && !document.getElementById) {
+                                                                                                                                                                                                                                                        document.onmousedown = clickIE4;
+                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                    document.oncontextmenu = new Function("return false")
+                                                                                                                                                                                                                                                </script>
+                                                                                                                                                                                                                                                                                                                            -->
         <!-- /.Right Click Disable -->
 
         <!-- Live Chat -->
