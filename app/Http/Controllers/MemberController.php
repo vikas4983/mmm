@@ -82,7 +82,8 @@ class MemberController extends Controller
         $user->update([
             'password' => Hash::make($validatedData['password']),
         ]);
-        return redirect('/login')->withErrors(['success' => 'Password change successfully!!']);
+        session()->forget('data');
+        return redirect('/login')->with(['success' => 'Password change successfully!!']);
     }
     public function changePassword(ChangePasswordRequest $request)
     {

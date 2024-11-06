@@ -1,12 +1,12 @@
-
-<?php $__env->startSection('title', 'OTP-Validate'); ?>
-<?php $__env->startSection('styles'); ?>
-    <script src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>
+@extends('layouts.frontend.master')
+@section('title', 'Account Verification')
+@section('styles')
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <!-- Bootstrap & Green Js -->
-    <script src="<?php echo e(asset('assets/js/bootstrap.js')); ?>"></script>
-    <script src="<?php echo e(asset('assets/js/green.js')); ?>"></script>
-<?php $__env->stopSection(); ?>
-<?php $__env->startSection('content'); ?>
+    <script src="{{ asset('assets/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/js/green.js') }}"></script>
+@endsection
+@section('content')
     <div id="body">
         <div id="wrap">
             <div id="main">
@@ -15,68 +15,47 @@
                         <div class="text-center inThemeOrange">
                             <i class="fas fa-mobile-alt"></i>
                         </div>
-
-                        <?php switch($data['action'] ?? ''):
-                            case ('UserLoginWithOTP'): ?>
-                                <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Login With OTP</h2>
-                                <article class="text-center text-danger">
-                                    Verify OTP with mobile number & Email id & Login to your account.
-                                </article>
-                            <?php break; ?>
-
-                            <?php case ('UserResendOTP'): ?>
-                                <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verification</h2>
-                                <article class="text-center text-danger">
-                                    Verify OTP with mobile number & Email id & Login to your account.
-                                </article>
-                            <?php break; ?>
-
-                            <?php default: ?>
-                                <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Forgot Password OTP
-                                    Verification</h2>
-                                <article class="text-center text-danger">
-                                    Verify OTP with mobile number & Email id & set up your new password.
-                                </article>
-                        <?php endswitch; ?>
-                        <?php dump(session()->all()); ?>
-
+                        <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verification</h2>
+                        <article class="text-center text-danger">
+                            Verify OTP with mobile number & Email id & Login to your account.
+                        </article>
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            <?php if(isset($data['success']) && !empty($data['success'])): ?>
+                            {{-- @if (isset($data['success']) && !empty($data['success']))
                                 <div class="alert alert-success" role="alert">
-                                    <?php echo e($data['success']); ?>
-
+                                    {{ $data['success'] }}
                                 </div>
-                            <?php endif; ?>
+                            @endif
 
-                            <?php if(isset($data['error']) && !empty($data['error'])): ?>
+                            @if (isset($data['error']) && !empty($data['error']))
                                 <div class="alert alert-danger" role="alert">
-                                    <?php echo e($data['error']); ?>
-
+                                    {{ $data['error'] }}
                                 </div>
-                            <?php endif; ?>
+                            @endif --}}
+                            @dump($data)
+                            @include('partials.alerts')
                             <div id="alert-container-resend" class="mt-3"></div>
                             <h4>Verify mobile number through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>
-                            <h5 class="gtMobileNo">+91-<?php echo e($data['mobile'] ?? $data['email']); ?></h5>
+                            <h5 class="gtMobileNo">+91-{{ $data['mobile'] ?? $data['email'] }}</h5>
                             <div class="col-xxl-16">
                                 <a href="#myModal" data-toggle="modal" class="btn gt-btn-orange gt-margin-top-5">Edit
                                     Mobile No</a>
                             </div>
                             <div class="clearfix"></div>
                             <div class="form-group mt-30">
-                                <form action="<?php echo e(route('login.otp.validate')); ?>" method="post">
-                                    <?php echo csrf_field(); ?>
+                                <form action="{{ route('login.otp.validate') }}" method="post">
+                                    @csrf
                                     <div class="d-flex flex-column align-items-center justify-content-center">
 
                                         <div class="mb-3 text-center">
                                             <input type="text" class="form-control text-center" name="otp"
                                                 id="otp" placeholder="Enter OTP" maxlength="6" required>
                                             <input type="hidden" name="email" id="email"
-                                                value="<?php echo e($data['email'] ?? 'NA'); ?>">
+                                                value="{{ $data['email'] ?? 'NA' }}">
                                             <input type="hidden" name="mobile" id="mobile"
-                                                value="<?php echo e($data['mobile'] ?? 'NA'); ?>">
+                                                value="{{ $data['mobile'] ?? 'NA' }}">
                                             <input type="hidden" name="action" id="action"
-                                                value="<?php echo e($data['action'] ?? 'NA'); ?>">
+                                                value="{{ $data['action'] ?? 'NA' }}">
                                         </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn gt-btn-green btnVerify mt-10">Verify</button>
@@ -84,17 +63,15 @@
                                     </div>
                                 </form>
                             </div>
-
                             <div class="col-xs-16">
-                                <form action="<?php echo e(route('otp.resend')); ?>" method="post">
-
-                                    <?php echo csrf_field(); ?>
+                                <form action="{{ route('otp.resend') }}" method="post">
+                                    @csrf
                                     <input type="hidden" name="mobile" id="mobile"
-                                        value="<?php echo e($data['mobile'] ?? 'NA'); ?>">
+                                        value="{{ $data['mobile'] ?? 'NA' }}">
                                     <input type="hidden" name="email" id="email"
-                                        value="<?php echo e($data['email'] ?? 'NA'); ?>">
+                                        value="{{ $data['email'] ?? 'NA' }}">
                                     <input type="hidden" name="action" id="action"
-                                        value="<?php echo e($data['action'] ?? 'NA'); ?>">
+                                        value="{{ $data['action'] ?? 'NA' }}">
                                     <div class="row">
                                         <div class="col-xs-16 font-12">Not received verification code yet? <span
                                                 id="countVerify"></span><b>s</b></div>
@@ -118,7 +95,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
                         <form action="" method="post" class="inMobileVerifyChange gt-search-opt">
-                            <?php echo csrf_field(); ?>
+                            @csrf
                             <div class="row">
                                 <div class="col-xxl-16 text-center">
                                     <h4 class="fontMerriWeather">Edit Mobile No</h4>
@@ -176,29 +153,29 @@
         </div>
         <!-- Right Click Disable -->
         <!--
-                                                                                                                                                                                                                                            <script language=JavaScript>
-                                                                                                                                                                                                                                                function clickIE4() {
-                                                                                                                                                                                                                                                    if (event.button == 2) {
-                                                                                                                                                                                                                                                        return false;
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }
-
-                                                                                                                                                                                                                                                function clickNS4(e) {
-                                                                                                                                                                                                                                                    if (document.layers || document.getElementById && !document.all) {
-                                                                                                                                                                                                                                                        if (e.which == 2 || e.which == 3) {
-                                                                                                                                                                                                                                                            return false;
+                                                                                                                                                                                                                                                    <script language=JavaScript>
+                                                                                                                                                                                                                                                        function clickIE4() {
+                                                                                                                                                                                                                                                            if (event.button == 2) {
+                                                                                                                                                                                                                                                                return false;
+                                                                                                                                                                                                                                                            }
                                                                                                                                                                                                                                                         }
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                if (document.layers) {
-                                                                                                                                                                                                                                                    document.captureEvents(Event.MOUSEDOWN);
-                                                                                                                                                                                                                                                    document.onmousedown = clickNS4;
-                                                                                                                                                                                                                                                } else if (document.all && !document.getElementById) {
-                                                                                                                                                                                                                                                    document.onmousedown = clickIE4;
-                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                document.oncontextmenu = new Function("return false")
-                                                                                                                                                                                                                                            </script>
-                                                                                                                                                                                                                                                                                                                        -->
+
+                                                                                                                                                                                                                                                        function clickNS4(e) {
+                                                                                                                                                                                                                                                            if (document.layers || document.getElementById && !document.all) {
+                                                                                                                                                                                                                                                                if (e.which == 2 || e.which == 3) {
+                                                                                                                                                                                                                                                                    return false;
+                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                        if (document.layers) {
+                                                                                                                                                                                                                                                            document.captureEvents(Event.MOUSEDOWN);
+                                                                                                                                                                                                                                                            document.onmousedown = clickNS4;
+                                                                                                                                                                                                                                                        } else if (document.all && !document.getElementById) {
+                                                                                                                                                                                                                                                            document.onmousedown = clickIE4;
+                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                        document.oncontextmenu = new Function("return false")
+                                                                                                                                                                                                                                                    </script>
+                                                                                                                                                                                                                                                                                                                                -->
         <!-- /.Right Click Disable -->
 
         <!-- Live Chat -->
@@ -236,7 +213,7 @@
         });
     </script>
 
-    <script type="text/javascript" src="<?php echo e(asset('frontend/assets/js/bootstrap-pincode-input.js')); ?>"></script>
+    <script type="text/javascript" src="{{ asset('frontend/assets/js/bootstrap-pincode-input.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#pincode-input1').pincodeInput({
@@ -284,6 +261,4 @@
         };
     </script>
 
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('layouts.frontend.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mmm\resources\views/frontend/users/otpValidate.blade.php ENDPATH**/ ?>
+@endsection

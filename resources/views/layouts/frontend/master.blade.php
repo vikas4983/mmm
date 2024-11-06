@@ -226,7 +226,7 @@
                                     <a href="{{ url('/') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
-                                @if (session()->get('registration_step') != '1')
+                                @if (session()->has('registration_step') && session()->get('registration_step') != '1')
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
                                         <form action="{{ url('logout') }}" method="post" style="display: inline;">
                                             @csrf
@@ -234,6 +234,7 @@
                                                 class="ripplelink gt-border-right-green gtBorderRightSMXS0"
                                                 style="background: none; border: none; color: #ffffff; padding: 15px 13px; font: inherit; cursor: pointer; display: inline-flex; align-items: center;">
                                                 <i class="fas fa-sign-out-alt mr-10 fa-lg"></i> Logout
+                                               
                                             </button>
                                         </form>
                                     </li>

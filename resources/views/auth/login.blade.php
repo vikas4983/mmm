@@ -24,14 +24,15 @@
 
                                 @php
                                     session()->forget('registration_step');
+                                    //session()->flush();
                                 @endphp
-                                {{-- @dump(session()->all()) --}}
+                                @dump(session()->all())
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
                                     {{ trans('auth.login') }}
                                 </h2>
                                 <p class="inPageSubTitle text-center mb-30">And search your life partner</p>
 
-                                @if ($errors->any())
+                                {{-- @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>
                                             @foreach ($errors->all() as $error)
@@ -39,7 +40,7 @@
                                             @endforeach
                                         </ul>
                                     </div>
-                                @endif
+                                @endif --}}
                                 @include('partials.alerts')
                                 @php
                                     $fields = config('formFields.login');

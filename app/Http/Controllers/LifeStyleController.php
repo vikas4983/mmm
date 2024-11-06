@@ -41,6 +41,7 @@ class LifeStyleController extends Controller
         }
         $validatedData = $request->validate($validationRules);
         $validatedData['user_id'] = $user->id;
+        $validatedData['status'] = 1;
         $existingRecord = LifeStyle::where('user_id', $user->id)->first();
         try {
             if ($existingRecord) {

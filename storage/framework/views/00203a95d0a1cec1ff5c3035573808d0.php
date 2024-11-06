@@ -24,7 +24,7 @@
                         return true;
                     }
                 </script> <!-- /. Header & Menu -->
-                <?php dump((session()->all())); ?>
+                
                 <div class="container">
                     <div class="gtMobileVerification col-xxl-10 col-xxl-offset-3 col-xs-16 col-xs-offset-0">
                         <div class="text-center inThemeOrange">
