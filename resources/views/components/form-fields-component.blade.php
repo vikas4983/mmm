@@ -1,8 +1,6 @@
 @foreach ($fields as $field)
-
     @switch($field['type'])
         @case('email')
-       
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="email" />
         @break
 
@@ -23,12 +21,10 @@
         @break
 
         @case('file')
-     
             <x-file-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" />
         @break
 
         @default
-
             <x-input-component :name="$field['name']" :label="$field['label']" :rules="$field['rules']" type="text" />
     @endswitch
 @endforeach

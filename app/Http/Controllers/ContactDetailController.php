@@ -44,6 +44,7 @@ class ContactDetailController extends Controller
         $validatedData = $request->validate($validationRules);
 
         $validatedData['user_id'] = $user->id;
+        $validatedData['status'] = 1;
 
         $existingRecord = ContactDetail::where('user_id', $user->id)->first();
         try {

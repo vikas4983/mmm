@@ -181,7 +181,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
             <div class="form-group" id="hiddenState" style="display: none">
-                <label for="state">State</label>
+                <label for="state"><b class="text-danger mr-5 gtRegMandatory">*</b>State</label>
                 <select id="state" name="state" class="form-control">
                 </select>
                 <?php $__errorArgs = ['state'];
@@ -196,7 +196,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             </div>
             <div class="form-group" id="hiddenCity" style="display: none">
-                <label for="city">City</label>
+                <label for="city"><b class="text-danger mr-5 gtRegMandatory">*</b>City</label>
                 <select id="city" name="city" class="form-control">
                 </select>
                 <?php $__errorArgs = ['city'];
@@ -235,7 +235,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             <div class="form-group" id="hiddenChildren" style="display: none">
                 <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
-                <select id="children" name="children" class="form-control" required >
+                <select id="children" name="children" class="form-control"  >
                     <option value="">Select</option>
                     <option value="0">None</option>
                     <option value="1">One</option>

@@ -1,8 +1,6 @@
 <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $field): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
     <?php switch($field['type']):
         case ('email'): ?>
-       
             <?php if (isset($component)) { $__componentOriginald69afe920a3c2ac1f07889a3f5b5f303 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald69afe920a3c2ac1f07889a3f5b5f303 = $attributes; } ?>
 <?php $component = App\View\Components\InputComponent::resolve(['name' => $field['name'],'label' => $field['label'],'type' => 'email'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -118,7 +116,6 @@
         <?php break; ?>
 
         <?php case ('file'): ?>
-     
             <?php if (isset($component)) { $__componentOriginalf82a045ca5e11a6892e6cb780d2dda6e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf82a045ca5e11a6892e6cb780d2dda6e = $attributes; } ?>
 <?php $component = App\View\Components\FileComponent::resolve(['name' => $field['name'],'label' => $field['label']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -142,7 +139,6 @@
         <?php break; ?>
 
         <?php default: ?>
-
             <?php if (isset($component)) { $__componentOriginald69afe920a3c2ac1f07889a3f5b5f303 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald69afe920a3c2ac1f07889a3f5b5f303 = $attributes; } ?>
 <?php $component = App\View\Components\InputComponent::resolve(['name' => $field['name'],'label' => $field['label'],'type' => 'text'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

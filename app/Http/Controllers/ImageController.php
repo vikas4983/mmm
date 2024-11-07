@@ -62,6 +62,7 @@ class ImageController extends Controller
                     }
                     $existingRecord->update([
                         'display_picture' => $fileName,
+                        'status' => 1,
                     ]);
                     session(['registration_step' => 'done']);
                 }
@@ -75,8 +76,11 @@ class ImageController extends Controller
                     Image::create([
                         'user_id' => $user->id,
                         'display_picture' => $fileName,
+                        'status' => 1,
                     ]);
                     session(['registration_step' => 'done']);
+                    session(['login' => 'yes']);
+
                    
                 }
                 return redirect()->route('dashboard')->with('success', 'Display picture saved successfully!');

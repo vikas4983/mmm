@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Traits\UserEmailTemplateTrait;
 use App\Traits\MemberOtpTrait;
+use App\Traits\RegistrationStepsTrait;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,7 @@ class MemberOtpController
 
     use UserEmailTemplateTrait;
     use MemberOtpTrait;
-
+    use RegistrationStepsTrait;
 
 
 
@@ -223,8 +224,23 @@ class MemberOtpController
         if ($request->action == 'UserLoginWithOTP') {
             Auth::login($user);
             session()->forget('data');
+            $userId = $user->id;
+            $redirect = $this->registrationStep($userId);
+            if ($redirect) {
+                return $redirect;
+            }
             session(['login' => 'yes']);
-
+            return redirect('dashboard')->with('success', 'LoggedIn successfully!');
+        }
+        if ($request->action == 'accountVerification') {
+            $user->update(['status' => 1]);
+            Auth::login($user);
+            $userId = $user->id;
+            $redirect = $this->registrationStep($userId);
+            if ($redirect) {
+                return $redirect;
+            }
+            session(['login' => 'yes']);
             return redirect('dashboard')->with('success', 'LoggedIn successfully!');
         }
 

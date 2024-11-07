@@ -87,7 +87,7 @@ return [
             'type' => 'date',
             'name' => 'dob',
             'label' => 'Date of Birth',
-            'rules' => 'required|date|max:15',
+           'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
         ],
         'height' => [
             'type' => 'select',

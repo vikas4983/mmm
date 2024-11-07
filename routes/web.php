@@ -109,6 +109,7 @@ Route::middleware([
 
 ])->group(function () {
     Route::get('/dashboard', function () {
+        session(['login' => 'yes']);
         return view('dashboard');
     })->name('dashboard');
     Route::prefix('frontend/registration')->group(function () {

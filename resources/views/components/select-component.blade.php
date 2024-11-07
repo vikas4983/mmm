@@ -126,7 +126,7 @@
                 <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>
             @enderror
             <div class="form-group" id="hiddenState" style="display: none">
-                <label for="state">State</label>
+                <label for="state"><b class="text-danger mr-5 gtRegMandatory">*</b>State</label>
                 <select id="state" name="state" class="form-control">
                 </select>
                 @error('state')
@@ -134,7 +134,7 @@
                 @enderror
             </div>
             <div class="form-group" id="hiddenCity" style="display: none">
-                <label for="city">City</label>
+                <label for="city"><b class="text-danger mr-5 gtRegMandatory">*</b>City</label>
                 <select id="city" name="city" class="form-control">
                 </select>
                 @error('city')
@@ -158,7 +158,7 @@
             @enderror
             <div class="form-group" id="hiddenChildren" style="display: none">
                 <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
-                <select id="children" name="children" class="form-control" required >
+                <select id="children" name="children" class="form-control"  >
                     <option value="">Select</option>
                     <option value="0">None</option>
                     <option value="1">One</option>
