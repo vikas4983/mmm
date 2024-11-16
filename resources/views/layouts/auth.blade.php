@@ -29,7 +29,7 @@
     <!-- COUNT CSS -->
     <link rel="stylesheet" href="{{ asset('assets/auth/css/badge badge-primary badge-pill.css') }}" />
     <!-- LOGO CSS -->
-    <link rel="stylesheet" href="{{asset('assets/auth/css/custom-css/brand-logo.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/auth/css/custom-css/brand-logo.css') }}">
     <!-- FAVICON -->
     <link
         href="{{ isset($favicons->name) && !empty($favicons->name)
@@ -126,7 +126,7 @@
             <div id="sidebar" class="sidebar sidebar-with-footer">
                 <!-- Aplication Brand -->
                 <div class="app-brand">
-                  
+
                     <a href="{{ url('dashboard') }}">
                         <img src="{{ $logos && $logos->name
                             ? asset('storage/admin/logo-favicon/logos/' . $logos->name)
@@ -191,7 +191,8 @@
                                             style="color: #38d3db;"></i> {{ $sub->name ?? '' }}
                                         @if ($sub->count == 0)
                                         @else
-                                            <span class="badge badge-primary badge-pill">{{ $sub->count ?? '' }}</span>
+                                            <span
+                                                class="badge badge-primary badge-pill">{{ $sub->count ?? '' }}</span>
                                         @endif
                                     </span>
                                     <b class="caret"></b>
@@ -559,12 +560,11 @@
                             </li>
 
                             <!-- User Account -->
-                            <li class="dropdown user-menu">
+                            {{-- <li class="dropdown user-menu">
                                 <button class="dropdown-toggle nav-link" data-toggle="dropdown">
 
                                     @if ($activePlan ?? '')
-                                        {{-- <span class="nav-link" class="d-none d-lg-inline-block" ><i
-                                                class="mdi mdi-chess-queen mr-1"></i>Premium</span> --}}
+                                       
                                         <span
                                             style="color: rgb(5, 5, 5); text-decoration: none; font-family:'Karla', 'sans-serif'"
                                             onmouseover="this.style.color='rgb(137,77,217)';"
@@ -585,9 +585,6 @@
 
 
                                 </button>
-
-
-
                                 <ul class="dropdown-menu dropdown-menu-right">
                                     @if ($activePlan ?? '')
                                         <li>
@@ -612,49 +609,49 @@
                                     @endif
                             </li>
                         </ul>
-                        </li>
+                            </li> --}}
 
-                        <li class="dropdown user-menu">
-                            <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                @php
-                                    $admin = Auth::guard('admin')->user();
+                            <li class="dropdown user-menu">
+                                <button class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    @php
+                                        $admin = Auth::guard('admin')->user();
 
-                                @endphp
-                                @if ($admin->image ?? '')
-                                    <img src="{{ asset('storage/admin/admin-images/' . $admin->image ?? '') }}"
-                                        class="user-image rounded-circle" alt="image"
-                                        style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
-                                @else()
-                                    <img src="{{ asset('storage/admin/image/default.jpg') }}"
-                                        class="user-image rounded-circle" alt="image"
-                                        style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
-                                @endif
-                                @if ($admin = $admin ?? '')
-                                    <span class="d-none d-lg-inline-block"
-                                        style = "color:#976AD8;">{{ $admin->name = $admin->name ?? '' }}</span>
-                                @else
-                                    <h5>Gaust</h5>
-                                @endif
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a class="dropdown-link-item" href="{{ route('admins.show', $admin->id) }}">
-                                        <i class="mdi mdi-account-outline"></i>
-                                        <span class="nav-text">My Profile</span>
-                                    </a>
-                                    {{-- <a class="dropdown-link-item" href="{{ route('profile.show') }}">
+                                    @endphp
+                                    @if ($admin->image ?? '')
+                                        <img src="{{ asset('storage/admin/admin-images/' . $admin->image ?? '') }}"
+                                            class="user-image rounded-circle" alt="image"
+                                            style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
+                                    @else()
+                                        <img src="{{ asset('storage/admin/image/default.jpg') }}"
+                                            class="user-image rounded-circle" alt="image"
+                                            style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
+                                    @endif
+                                    @if ($admin = $admin ?? '')
+                                        <span class="d-none d-lg-inline-block"
+                                            style = "color:#976AD8;">{{ $admin->name = $admin->name ?? '' }}</span>
+                                    @else
+                                        <h5>Gaust</h5>
+                                    @endif
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li>
+                                        <a class="dropdown-link-item" href="{{ route('admins.show', $admin->id) }}">
+                                            <i class="mdi mdi-account-outline"></i>
+                                            <span class="nav-text">My Profile</span>
+                                        </a>
+                                        {{-- <a class="dropdown-link-item" href="{{ route('profile.show') }}">
                                         <i class="mdi mdi-account-outline"></i>
                                         <span class="nav-text">My Profile</span>
                                     </a> --}}
-                                </li>
-                                <li>
-                                    <a class="dropdown-link-item" href="http://localhost:8000/user/api-tokens">
-                                        <i class="mdi mdi-database-plus"></i>
-                                        <span class="nav-text">API Tokens</span>
-                                        {{-- <span class="badge badge-pill badge-primary">24</span> --}}
-                                    </a>
-                                </li>
-                                {{-- <li>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-link-item" href="http://localhost:8000/user/api-tokens">
+                                            <i class="mdi mdi-database-plus"></i>
+                                            <span class="nav-text">API Tokens</span>
+                                            {{-- <span class="badge badge-pill badge-primary">24</span> --}}
+                                        </a>
+                                    </li>
+                                    {{-- <li>
                                         <a class="dropdown-link-item" href="user-activities.html">
                                             <i class="mdi mdi-diamond-stone"></i>
                                             <span class="nav-text">Activitise</span></a>
@@ -666,16 +663,17 @@
                                         </a>
                                     </li> --}}
 
-                                <li class="dropdown-footer">
-                                    <form id="admin_logout-form" action="{{ url('admin-logout') }}" method="post">
-                                        @csrf
-                                        <a id="admin_logout-button" class="dropdown-link-item"
-                                            href="javascript:void(0)">
-                                            Log Out <i class="mdi mdi-logout" style="color: #976AD8"></i></a>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                                    <li class="dropdown-footer">
+                                        <form id="admin_logout-form" action="{{ url('admin-logout') }}"
+                                            method="post">
+                                            @csrf
+                                            <a id="admin_logout-button" class="dropdown-link-item"
+                                                href="javascript:void(0)">
+                                                Log Out <i class="mdi mdi-logout" style="color: #976AD8"></i></a>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </nav>

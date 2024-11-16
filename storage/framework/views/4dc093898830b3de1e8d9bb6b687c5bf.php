@@ -161,7 +161,8 @@
                                         <span class="mr-5">My Profile</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(route('myProfile')); ?>">View Profile</a></li>
+                                        <li><a href="<?php echo e(route('my.profile')); ?>">View Profile</a>
+                                        </li>
                                         
                                         <li><a href="<?php echo e(url('saved-search')); ?>">My Saved Searches</a></li>
                                         <li><a href="<?php echo e(url('messages')); ?>">My Messages</a></li>

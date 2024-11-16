@@ -26,14 +26,14 @@ class MemberOtpController
 
     {
 
-        return view('frontend.users.verification');
+        return view('frontend.verification');
     }
     public function otpVerification(Request $request)
 
     {
 
         $data = session()->get('data');
-        return view('frontend.users.otpValidate', compact('data'));
+        return view('frontend.otpValidate', compact('data'));
     }
     public function otpValidate(Request $request)
     {
@@ -74,7 +74,7 @@ class MemberOtpController
     }
     public function loginWithOtp()
     {
-        return view('frontend.users.loginWithOtp');
+        return view('frontend.loginWithOtp');
     }
     public function forgotPasswordForm()
     {
@@ -244,10 +244,10 @@ class MemberOtpController
             return redirect('dashboard')->with('success', 'LoggedIn successfully!');
         }
 
-        return view('frontend.users.changePasswordForm', compact('data'))->withErrors(['success' => 'OTP verified, Now Set the new password!']);
+        return view('frontend.changePasswordForm', compact('data'))->withErrors(['success' => 'OTP verified, Now Set the new password!']);
     }
     public function userForgotPassword()
     {
-        return view('frontend.users.forgotPassword');
+        return view('frontend.forgotPassword');
     }
 }

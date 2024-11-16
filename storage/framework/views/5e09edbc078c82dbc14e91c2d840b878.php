@@ -1,35 +1,40 @@
 <?php
-    $profileFors = \App\Models\ProfileFor::where('status', 1)->get();
-    $heights = \App\Models\Height::where('status', 1)->get();
-    $motherTongues = \App\Models\MotherTongue::where('status', 1)->get();
-    $religions = \App\Models\Religion::with('castes')->where('status', 1)->get();
-    $maritalStatuses = \App\Models\MaritalStatus::where('status', 1)->get();
-    $rashies = \App\Models\Rashi::where('status', 1)->get();
-    $countries = \App\Models\Country::where('status', 1)->get();
-    $educations = \App\Models\Education::where('status', 1)->get();
-    $employees = \App\Models\Employee::where('status', 1)->get();
-    $occupations = \App\Models\Occupation::where('status', 1)->get();
-    $incomes = \App\Models\Income::where('status', 1)->get();
-    $fatherOccupations = \App\Models\FatherOccupation::where('status', 1)->get();
-    $motherOccupations = \App\Models\MotherOccupation::where('status', 1)->get();
-    $bodyTypes = \App\Models\BodyType::where('status', 1)->get();
-    $complexions = \App\Models\Complextion::where('status', 1)->get();
-    $bloodGroups = \App\Models\BloodGroup::where('status', 1)->get();
-    $habits = \App\Models\Habit::where('status', 1)->get();
-    $physicalStatuses = \App\Models\Challenge::where('status', 1)->get();
-    $hobbies = \App\Models\Hobby::where('status', 1)->get();
-    $interests = \App\Models\Interest::where('status', 1)->get();
-    $musics = \App\Models\Music::where('status', 1)->get();
-    $dresses = \App\Models\Dress::where('status', 1)->get();
-    $movies = \App\Models\Movie::where('status', 1)->get();
-    $sports = \App\Models\Sport::where('status', 1)->get();
+    $optionKeys = [
+        'profileFors',
+        'heights',
+        'motherTongues',
+        'religions',
+        'maritalStatuses',
+        'rashies',
+        'countries',
+        'educations',
+        'employees',
+        'occupations',
+        'incomes',
+        'fatherOccupations',
+        'motherOccupations',
+        'bodyTypes',
+        'complexions',
+        'bloodGroups',
+        'habits',
+        'physicalStatuses',
+        'hobbies',
+        'interests',
+        'musics',
+        'dresses',
+        'movies',
+        'sports',
+    ];
 
+    $optionData = [];
+    foreach ($optionKeys as $key) {
+        $optionData[$key] = Cache::get($key);
+    }
+    extract($optionData);
 ?>
-
-
 <div class="form-group ">
     <?php switch($name):
-        case ('profileFor'): ?>
+        case ('profile_for'): ?>
             <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
                 <option value="">Select <?php echo e($label); ?></option>
@@ -235,7 +240,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
             <div class="form-group" id="hiddenChildren" style="display: none">
                 <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
-                <select id="children" name="children" class="form-control"  >
+                <select id="children" name="children" class="form-control">
                     <option value="">Select</option>
                     <option value="0">None</option>
                     <option value="1">One</option>
@@ -548,6 +553,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         <?php break; ?>
+
         <?php case ('physical_status'): ?>
             <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control" required>
@@ -574,8 +580,8 @@ unset($__errorArgs, $__bag); ?>
         <?php case ('hobby'): ?>
             <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-                
+                multiselect-search="true" multiselect-select-all="true">
+
                 <?php $__currentLoopData = $hobbies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hobby): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($hobby->id); ?>" <?php echo e(old($name) == $hobby->id ? 'selected' : ''); ?>>
                         <?php echo e($hobby->name); ?>
@@ -598,8 +604,8 @@ unset($__errorArgs, $__bag); ?>
         <?php case ('interest'): ?>
             <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-                
+                multiselect-search="true" multiselect-select-all="true">
+
                 <?php $__currentLoopData = $interests; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $interest): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($interest->id); ?>" <?php echo e(old($name) == $interest->id ? 'selected' : ''); ?>>
                         <?php echo e($interest->name); ?>
@@ -622,8 +628,8 @@ unset($__errorArgs, $__bag); ?>
         <?php case ('music'): ?>
             <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-                
+                multiselect-search="true" multiselect-select-all="true">
+
                 <?php $__currentLoopData = $musics; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $music): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($music->id); ?>" <?php echo e(old($name) == $music->id ? 'selected' : ''); ?>>
                         <?php echo e($music->name); ?>
@@ -646,8 +652,8 @@ unset($__errorArgs, $__bag); ?>
         <?php case ('dress'): ?>
             <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-               
+                multiselect-search="true" multiselect-select-all="true">
+
                 <?php $__currentLoopData = $dresses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dresse): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($dresse->id); ?>" <?php echo e(old($name) == $dresse->id ? 'selected' : ''); ?>>
                         <?php echo e($dresse->name); ?>
@@ -669,9 +675,9 @@ unset($__errorArgs, $__bag); ?>
 
         <?php case ('movie'): ?>
             <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
-            <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control"  multiple
-            multiselect-search="true" multiselect-select-all="true" >
-              
+            <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control" multiple
+                multiselect-search="true" multiselect-select-all="true">
+
                 <?php $__currentLoopData = $movies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $movie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($movie->id); ?>" <?php echo e(old($name) == $movie->id ? 'selected' : ''); ?>>
                         <?php echo e($movie->name); ?>
@@ -694,8 +700,8 @@ unset($__errorArgs, $__bag); ?>
         <?php case ('sport'): ?>
             <label for="<?php echo e($name); ?>"><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>[]" class="form-control" multiple
-                multiselect-search="true" multiselect-select-all="true" >
-              
+                multiselect-search="true" multiselect-select-all="true">
+
                 <?php $__currentLoopData = $sports; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sport): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <option value="<?php echo e($sport->id); ?>" <?php echo e(old($name) == $sport->id ? 'selected' : ''); ?>>
                         <?php echo e($sport->name); ?>
@@ -703,7 +709,7 @@ unset($__errorArgs, $__bag); ?>
                     </option>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
-           
+
             <?php $__errorArgs = [$name];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

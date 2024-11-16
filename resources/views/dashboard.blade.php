@@ -13,6 +13,11 @@
                     <i class="fa fa-camera gt-margin-right-10"></i><span class="">Change Profile Picture</span>
                     </a>
                 </div>
+                {{-- @dump($user = Auth::user())
+
+                @foreach ($user->test as $test)
+                    @dd($test)
+                @endforeach --}}
              {{-- @dump(session('login')) --}}
                 <div id="loaderID"></div>
             </div>

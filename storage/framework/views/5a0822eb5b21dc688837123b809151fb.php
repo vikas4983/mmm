@@ -24,7 +24,7 @@
                                 <?php
                                     session()->forget('registration_step');
                                 ?>
-                                <?php dump(session()->all()); ?>
+                                
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
                                     <?php echo e(trans('auth.login')); ?>
 

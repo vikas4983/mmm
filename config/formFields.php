@@ -46,10 +46,10 @@ return [
             'placeholder' => 'Enter Mobile Number',
             'rules' =>   'required|numeric|regex:/^[0-9]{10,12}$/',
         ],
-        'profileFor' => [
+        'profile_for' => [
             'type' => 'select',
             'label' => 'Profile For',
-            'name' => 'profileFor',
+            'name' => 'profile_for',
             'options' => [],
             'rules' => 'required',
         ],
@@ -64,6 +64,31 @@ return [
 
 
     ],
+
+     'accountDetails' => [
+        'name' =>[
+            'type' => 'text',
+            'name' => 'name',
+            'label' => 'Full Name',
+            'placeholder' => 'Enter Full Name',
+            'rules' => 'required|string|regex:/^[\pL\s]+$/u|max:30',
+        ],
+        'email' => [
+            'type' => 'email',
+            'name' => 'email',
+            'label' => 'Email',
+            'placeholder' => 'Enter Email',
+            'rules' => 'required|email|max:30',
+        ],
+        'profile_for' => [
+            'type' => 'select',
+            'label' => 'Profile For',
+            'name' => 'profile_for',
+            'options' => [],
+            'rules' => 'required',
+        ],
+    ],
+
 
     'login' => [
         'email' => [
@@ -120,7 +145,69 @@ return [
         ],
 
     ],
+    
     'horoscopeDetails' => [
+
+        'country_of_birth' => [
+            'type' => 'select',
+            'label' => 'Country of birth',
+            'name' => 'country',
+            'options' => [],
+            'rules' => 'nullable|numeric',
+        ],
+
+        'time_of_birth' => [
+            'type' => 'time',
+            'name' => 'time_of_birth',
+            'label' => 'Time of Birth',
+            'rules' => 'max:255',
+        ],
+        'rashi' => [
+            'type' => 'select',
+            'name' => 'rashi',
+            'label' => 'Rashi',
+            'options' => [],
+            'rules' => 'nullable|numeric',
+        ],
+        'manglik' => [
+            'type' => 'radio',
+            'label' => 'Manglik',
+            'name' => 'manglik',
+            'options' => [
+                'yes' => 'Yes',
+                'no' => 'No',
+                "don't know" => "Don't Know"
+            ],
+            'rules' => 'string',
+        ],
+
+
+        'horoscope_match' => [
+            'type' => 'radio',
+            'name' => 'horoscope_match',
+            'label' => 'Horoscope Match',
+            'options' => [
+                'yes' => 'Yes',
+                'no' => 'No',
+                "doesn't matter" => "Does't Matter"
+            ],
+            'rules' => 'string',
+        ],
+        'horoscope_show' => [
+            'type' => 'radio',
+            'name' => 'horoscope_show',
+            'label' => 'Horoscope Show',
+            'options' => [
+                'yes' => 'Yes',
+                "only accept member" => "Only Accept Member",
+                'no' => 'No',
+
+            ],
+            'rules' => 'string',
+        ],
+
+    ],
+    'editHoroscopeDetails' => [
 
         'country_of_birth' => [
             'type' => 'select',

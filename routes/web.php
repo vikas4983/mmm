@@ -54,11 +54,13 @@ use App\Http\Controllers\LifeStyleController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LikeDetailController;
 use App\Http\Controllers\ModelCountController;
+use App\Http\Controllers\RedisController;
 use App\Models\CarrierDetail;
 use App\Models\City;
 use App\Models\Email;
 use App\Models\Payment;
 use Aws\Middleware;
+use Laravel\Telescope\Http\Controllers\RedisController as ControllersRedisController;
 
 // User Routes
 Route::get('/', function () {
@@ -66,7 +68,7 @@ Route::get('/', function () {
         return redirect()->route('verification');
     }
     return view('index');
-});
+})->middleware('mobileNumberUpdated');
 Route::get('login', function () {
     if (session()->get('registration_step') === '2') {
         return redirect()->route('verification');
@@ -75,7 +77,7 @@ Route::get('login', function () {
         session()->forget('registration_step');
         return view('auth.login');
     }
-})->name('login')->middleware('checkRegistrationStep');;
+})->name('login')->middleware(['checkRegistrationStep','mobileNumberUpdated']);;
 Route::post('logout', function () {
     session()->flush();
     return redirect('/');
@@ -90,28 +92,41 @@ Route::get('/get-state/{countryId}', [AjaxRequestController::class, 'getState'])
 Route::get('/get-city/{stateId}', [AjaxRequestController::class, 'getCity']);
 Route::get('/get-occupation/{employeeId}', [AjaxRequestController::class, 'getOccupation']);
 
-Route::get('/localization/{locale}', function (string $locale) {
-    if (!in_array($locale, ['en', 'hi', 'fr'])) {
-        abort(400);
-    }
+// Route::get('/localization/{locale}', function (string $locale) {
+//     if (!in_array($locale, ['en', 'hi', 'fr'])) {
+//         abort(400);
+//     }
 
-    App::setLocale($locale);
-    Session::put('locale', $locale);
-    //Gets the translated message and displays it
-    echo trans('auth.msg');
-    // ...
-});
+//     App::setLocale($locale);
+//     Session::put('locale', $locale);
+//     //Gets the translated message and displays it
+//     echo trans('auth.msg');
+//     // ...
+// });
 
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'authUser',
+    
 
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        session(['login' => 'yes']);
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard')->middleware('mobileNumberUpdated');
+    Route::resource('users', UserController::class)->middleware('mobileNumberUpdated');
+    Route::post('users/userUpdate/{id}', [UserController::class, 'userUpdate'])->name('userUpdate')->middleware('mobileNumberUpdated');
+    Route::get('my-profile', [UserController::class, 'myProfile'])->name('my.profile')->middleware('mobileNumberUpdated');
+    Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
+    Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])->name('mobile.update')->middleware('mobileNumberUpdated');
+    Route::post('request-otp', [UserController::class, 'requestOtpForMobileChange'])->name('request.otp')->middleware('mobileNumberUpdated');
+    Route::get('mobile-verification', [UserController::class, 'showMobileVerificationPage'])->name('mobile.verification');
+    Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
+    Route::post('request-otp-again', [UserController::class, 'requestOtpForMobileChangeAgain'])->name('request.otp.again');
+    
+    Route::get('test', function(){
+        return 'Y-m-d H:i:s';
+    })->name('test');
+
     Route::prefix('frontend/registration')->group(function () {
         Route::resource('basicDetails', BasicDetailController::class)->middleware('checkRegistrationStep');
         Route::resource('horoscopes', HoroscopeDetailController::class)->middleware('checkRegistrationStep');
@@ -156,16 +171,31 @@ Route::view('frontend.settings.changePassword', 'frontend.settings.changePasswor
 Route::post('changePassword', [MemberController::class, 'changePassword']);
 Route::view('frontend.users.myProfile', 'frontend.users.myProfile')->name('myProfile');
 
-//
+//Settings
 Route::resource('logos', LogoFaviconController::class);
 Route::resource('favicons', FaviconController::class);
 Route::resource('emailTemplates', EmailTemplateController::class);
 Route::resource('menus', MenuController::class);
 // User Update
 //Route::post('userUpdate/{id}', [UserController::class, 'userUpdate']);
-Route::post('userUpdate/{id}', [UserController::class, 'userUpdate'])->name('userUpdate');
+
 //Search
 Route::view('frontend.search.quick', 'frontend.search.quick')->name('quickSearch');
+
+
+//Redis
+Route::get('test-redis', [RedisController::class, 'testRedis'])->name('test.redis');
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -213,9 +243,6 @@ Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
     Route::get('/api-tokens', [AdminApiTokenController::class, 'index']);
     // Other admin routes...
 });
-
-
-
 Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index']);
     Route::post('logout', [AdminController::class, 'logout'])->name('admins.logout');
@@ -241,7 +268,7 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::resource('siteConfigs', SiteConfigController::class);
     Route::resource('approvals', ApprovalController::class);
     Route::resource('successStories', SuccessStoryController::class);
-    Route::resource('users', UserController::class);
+    // Route::resource('users', UserController::class);
     Route::resource('payments', PaymentController::class);
     Route::resource('spotelights', SpoteLightController::class);
     Route::get('user-orders', [UserController::class, 'paidusersorders']);
@@ -328,8 +355,6 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
 // });
 Route::get('create', [AdminController::class, 'create']);
 Route::get('profile', [AdminController::class, 'twoFactor']);
-
-
 route::middleware('auth')->group(function () {});
 Route::get('home', function () {
     return view('index');
