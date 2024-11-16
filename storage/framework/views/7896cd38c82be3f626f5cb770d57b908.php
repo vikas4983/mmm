@@ -216,31 +216,27 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li
                                     class="active ripplelink gt-border-right-green gt-border-left-green gtBorderRightSMXS0 gtBorderLeftSMXS0">
-                                    <a href="<?php echo e(route('login')); ?>"><i
-                                            class="fas fa-sign-in-alt mr-10 fa-lg"></i>Login</a>
+                                    <a href="<?php echo e(route('login')); ?>"><i class="fas fa-sign-in-alt mr-10 fa-lg"></i>
+                                        Login</a>
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="<?php echo e(url('/')); ?>"><i
-                                            class="fas fa-pen-square mr-10 fa-lg"></i>Signup</a>
+                                    <a href="<?php echo e(url('/')); ?>"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                        Signup</a>
                                 </li>
                                 <?php if(session()->get('registration_step') != '1'): ?>
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
                                         <form action="<?php echo e(url('logout')); ?>" method="post" style="display: inline;">
                                             <?php echo csrf_field(); ?>
-                                            <button type="submit">
-                                                <i class="fas fa-pen-square mr-10 fa-lg"></i>logout
+                                            <button type="submit"
+                                                class="ripplelink gt-border-right-green gtBorderRightSMXS0"
+                                                style="background: none; border: none; color: #ffffff; padding: 15px 13px; font: inherit; cursor: pointer; display: inline-flex; align-items: center;">
+                                                <i class="fas fa-sign-out-alt mr-10 fa-lg"></i> Logout
                                             </button>
                                         </form>
                                     </li>
                                 <?php endif; ?>
-                               
-
-                                
-
-
                             </ul>
-
                         </div>
                         <!-- /.Menu tabs -->
                     </div>

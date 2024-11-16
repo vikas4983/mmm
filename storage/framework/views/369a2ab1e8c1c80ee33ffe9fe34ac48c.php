@@ -12,7 +12,8 @@
                     <i class="fa fa-camera gt-margin-right-10"></i><span class="">Change Profile Picture</span>
                     </a>
                 </div>
-             <?php dump(session('login')); ?>
+                
+             
                 <div id="loaderID"></div>
             </div>
             <div class="clearfix visible-xs visible-sm mb-10"></div>

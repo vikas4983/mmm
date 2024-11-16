@@ -7,7 +7,7 @@
     'url' => 'http://localhost',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Kolkata',
     'locale' => 'en',
     'fallback_locale' => 'en',
     'faker_locale' => 'en_US',
@@ -23,37 +23,38 @@
     ),
     'providers' => 
     array (
-      0 => 'App\\Providers\\FrontendUserServiceProvider',
-      1 => 'App\\Providers\\CountServiceProvider',
-      2 => 'App\\Providers\\LogoFaviconServiceProvider',
-      3 => 'App\\Providers\\PaidPlanServiceProvider',
-      4 => 'App\\Providers\\PaymentServiceProvider',
-      5 => 'Illuminate\\Auth\\AuthServiceProvider',
-      6 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
-      7 => 'Illuminate\\Bus\\BusServiceProvider',
-      8 => 'Illuminate\\Cache\\CacheServiceProvider',
-      9 => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
-      10 => 'Illuminate\\Database\\DatabaseServiceProvider',
-      11 => 'Illuminate\\Encryption\\EncryptionServiceProvider',
-      12 => 'Illuminate\\Filesystem\\FilesystemServiceProvider',
-      13 => 'Illuminate\\Foundation\\Providers\\FoundationServiceProvider',
-      14 => 'Illuminate\\Hashing\\HashServiceProvider',
-      15 => 'Illuminate\\Mail\\MailServiceProvider',
-      16 => 'Illuminate\\Notifications\\NotificationServiceProvider',
-      17 => 'Illuminate\\Pagination\\PaginationServiceProvider',
-      18 => 'Illuminate\\Pipeline\\PipelineServiceProvider',
-      19 => 'Illuminate\\Queue\\QueueServiceProvider',
-      20 => 'Illuminate\\Redis\\RedisServiceProvider',
-      21 => 'Illuminate\\Session\\SessionServiceProvider',
-      22 => 'Illuminate\\Translation\\TranslationServiceProvider',
-      23 => 'Illuminate\\Validation\\ValidationServiceProvider',
-      24 => 'Illuminate\\View\\ViewServiceProvider',
-      25 => 'Illuminate\\Cookie\\CookieServiceProvider',
-      26 => 'App\\Providers\\AppServiceProvider',
-      27 => 'App\\Providers\\FortifyServiceProvider',
-      28 => 'App\\Providers\\FrontendUserServiceProvider',
-      29 => 'App\\Providers\\JetstreamServiceProvider',
-      30 => 'App\\Providers\\TelescopeServiceProvider',
+      0 => 'App\\Providers\\OptionServiceProvider',
+      1 => 'App\\Providers\\FrontendUserServiceProvider',
+      2 => 'App\\Providers\\CountServiceProvider',
+      3 => 'App\\Providers\\LogoFaviconServiceProvider',
+      4 => 'App\\Providers\\PaidPlanServiceProvider',
+      5 => 'App\\Providers\\PaymentServiceProvider',
+      6 => 'Illuminate\\Auth\\AuthServiceProvider',
+      7 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
+      8 => 'Illuminate\\Bus\\BusServiceProvider',
+      9 => 'Illuminate\\Cache\\CacheServiceProvider',
+      10 => 'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider',
+      11 => 'Illuminate\\Database\\DatabaseServiceProvider',
+      12 => 'Illuminate\\Encryption\\EncryptionServiceProvider',
+      13 => 'Illuminate\\Filesystem\\FilesystemServiceProvider',
+      14 => 'Illuminate\\Foundation\\Providers\\FoundationServiceProvider',
+      15 => 'Illuminate\\Hashing\\HashServiceProvider',
+      16 => 'Illuminate\\Mail\\MailServiceProvider',
+      17 => 'Illuminate\\Notifications\\NotificationServiceProvider',
+      18 => 'Illuminate\\Pagination\\PaginationServiceProvider',
+      19 => 'Illuminate\\Pipeline\\PipelineServiceProvider',
+      20 => 'Illuminate\\Queue\\QueueServiceProvider',
+      21 => 'Illuminate\\Redis\\RedisServiceProvider',
+      22 => 'Illuminate\\Session\\SessionServiceProvider',
+      23 => 'Illuminate\\Translation\\TranslationServiceProvider',
+      24 => 'Illuminate\\Validation\\ValidationServiceProvider',
+      25 => 'Illuminate\\View\\ViewServiceProvider',
+      26 => 'Illuminate\\Cookie\\CookieServiceProvider',
+      27 => 'App\\Providers\\AppServiceProvider',
+      28 => 'App\\Providers\\FortifyServiceProvider',
+      29 => 'App\\Providers\\FrontendUserServiceProvider',
+      30 => 'App\\Providers\\JetstreamServiceProvider',
+      31 => 'App\\Providers\\TelescopeServiceProvider',
     ),
     'aliases' => 
     array (
@@ -402,7 +403,7 @@
     ),
     'redis' => 
     array (
-      'client' => 'phpredis',
+      'client' => 'predis',
       'options' => 
       array (
         'cluster' => 'redis',
@@ -509,11 +510,11 @@
         'placeholder' => 'Enter Mobile Number',
         'rules' => 'required|numeric|regex:/^[0-9]{10,12}$/',
       ),
-      'profileFor' => 
+      'profile_for' => 
       array (
         'type' => 'select',
         'label' => 'Profile For',
-        'name' => 'profileFor',
+        'name' => 'profile_for',
         'options' => 
         array (
         ),
@@ -528,6 +529,35 @@
         array (
           'male' => 'male',
           'female' => 'female',
+        ),
+        'rules' => 'required',
+      ),
+    ),
+    'accountDetails' => 
+    array (
+      'name' => 
+      array (
+        'type' => 'text',
+        'name' => 'name',
+        'label' => 'Full Name',
+        'placeholder' => 'Enter Full Name',
+        'rules' => 'required|string|regex:/^[\\pL\\s]+$/u|max:30',
+      ),
+      'email' => 
+      array (
+        'type' => 'email',
+        'name' => 'email',
+        'label' => 'Email',
+        'placeholder' => 'Enter Email',
+        'rules' => 'required|email|max:30',
+      ),
+      'profile_for' => 
+      array (
+        'type' => 'select',
+        'label' => 'Profile For',
+        'name' => 'profile_for',
+        'options' => 
+        array (
         ),
         'rules' => 'required',
       ),
@@ -558,7 +588,7 @@
         'type' => 'date',
         'name' => 'dob',
         'label' => 'Date of Birth',
-        'rules' => 'required|date|max:15',
+        'rules' => 'required|date|before:2006-11-15',
       ),
       'height' => 
       array (
@@ -602,6 +632,75 @@
       ),
     ),
     'horoscopeDetails' => 
+    array (
+      'country_of_birth' => 
+      array (
+        'type' => 'select',
+        'label' => 'Country of birth',
+        'name' => 'country',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'time_of_birth' => 
+      array (
+        'type' => 'time',
+        'name' => 'time_of_birth',
+        'label' => 'Time of Birth',
+        'rules' => 'max:255',
+      ),
+      'rashi' => 
+      array (
+        'type' => 'select',
+        'name' => 'rashi',
+        'label' => 'Rashi',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
+      ),
+      'manglik' => 
+      array (
+        'type' => 'radio',
+        'label' => 'Manglik',
+        'name' => 'manglik',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+          'don\'t know' => 'Don\'t Know',
+        ),
+        'rules' => 'string',
+      ),
+      'horoscope_match' => 
+      array (
+        'type' => 'radio',
+        'name' => 'horoscope_match',
+        'label' => 'Horoscope Match',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'no' => 'No',
+          'doesn\'t matter' => 'Does\'t Matter',
+        ),
+        'rules' => 'string',
+      ),
+      'horoscope_show' => 
+      array (
+        'type' => 'radio',
+        'name' => 'horoscope_show',
+        'label' => 'Horoscope Show',
+        'options' => 
+        array (
+          'yes' => 'Yes',
+          'only accept member' => 'Only Accept Member',
+          'no' => 'No',
+        ),
+        'rules' => 'string',
+      ),
+    ),
+    'editHoroscopeDetails' => 
     array (
       'country_of_birth' => 
       array (

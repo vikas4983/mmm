@@ -1,35 +1,40 @@
 @php
-    $profileFors = \App\Models\ProfileFor::where('status', 1)->get();
-    $heights = \App\Models\Height::where('status', 1)->get();
-    $motherTongues = \App\Models\MotherTongue::where('status', 1)->get();
-    $religions = \App\Models\Religion::with('castes')->where('status', 1)->get();
-    $maritalStatuses = \App\Models\MaritalStatus::where('status', 1)->get();
-    $rashies = \App\Models\Rashi::where('status', 1)->get();
-    $countries = \App\Models\Country::where('status', 1)->get();
-    $educations = \App\Models\Education::where('status', 1)->get();
-    $employees = \App\Models\Employee::where('status', 1)->get();
-    $occupations = \App\Models\Occupation::where('status', 1)->get();
-    $incomes = \App\Models\Income::where('status', 1)->get();
-    $fatherOccupations = \App\Models\FatherOccupation::where('status', 1)->get();
-    $motherOccupations = \App\Models\MotherOccupation::where('status', 1)->get();
-    $bodyTypes = \App\Models\BodyType::where('status', 1)->get();
-    $complexions = \App\Models\Complextion::where('status', 1)->get();
-    $bloodGroups = \App\Models\BloodGroup::where('status', 1)->get();
-    $habits = \App\Models\Habit::where('status', 1)->get();
-    $physicalStatuses = \App\Models\Challenge::where('status', 1)->get();
-    $hobbies = \App\Models\Hobby::where('status', 1)->get();
-    $interests = \App\Models\Interest::where('status', 1)->get();
-    $musics = \App\Models\Music::where('status', 1)->get();
-    $dresses = \App\Models\Dress::where('status', 1)->get();
-    $movies = \App\Models\Movie::where('status', 1)->get();
-    $sports = \App\Models\Sport::where('status', 1)->get();
+    $optionKeys = [
+        'profileFors',
+        'heights',
+        'motherTongues',
+        'religions',
+        'maritalStatuses',
+        'rashies',
+        'countries',
+        'educations',
+        'employees',
+        'occupations',
+        'incomes',
+        'fatherOccupations',
+        'motherOccupations',
+        'bodyTypes',
+        'complexions',
+        'bloodGroups',
+        'habits',
+        'physicalStatuses',
+        'hobbies',
+        'interests',
+        'musics',
+        'dresses',
+        'movies',
+        'sports',
+    ];
 
+    $optionData = [];
+    foreach ($optionKeys as $key) {
+        $optionData[$key] = Cache::get($key);
+    }
+    extract($optionData);
 @endphp
-
-
 <div class="form-group ">
     @switch($name)
-        @case('profileFor')
+        @case('profile_for')
             <label for="{{ $name }}"><b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}" class="form-control">
                 <option value="">Select {{ $label }}</option>
@@ -158,7 +163,7 @@
             @enderror
             <div class="form-group" id="hiddenChildren" style="display: none">
                 <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
-                <select id="children" name="children" class="form-control"  >
+                <select id="children" name="children" class="form-control">
                     <option value="">Select</option>
                     <option value="0">None</option>
                     <option value="1">One</option>
@@ -361,6 +366,7 @@
                 <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>
             @enderror
         @break
+
         @case('physical_status')
             <label for="{{ $name }}"><b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}" class="form-control" required>
@@ -379,8 +385,8 @@
         @case('hobby')
             <label for="{{ $name }}">{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-                
+                multiselect-search="true" multiselect-select-all="true">
+
                 @foreach ($hobbies as $hobby)
                     <option value="{{ $hobby->id }}" {{ old($name) == $hobby->id ? 'selected' : '' }}>
                         {{ $hobby->name }}
@@ -395,8 +401,8 @@
         @case('interest')
             <label for="{{ $name }}">{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-                
+                multiselect-search="true" multiselect-select-all="true">
+
                 @foreach ($interests as $interest)
                     <option value="{{ $interest->id }}" {{ old($name) == $interest->id ? 'selected' : '' }}>
                         {{ $interest->name }}
@@ -411,8 +417,8 @@
         @case('music')
             <label for="{{ $name }}">{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-                
+                multiselect-search="true" multiselect-select-all="true">
+
                 @foreach ($musics as $music)
                     <option value="{{ $music->id }}" {{ old($name) == $music->id ? 'selected' : '' }}>
                         {{ $music->name }}
@@ -427,8 +433,8 @@
         @case('dress')
             <label for="{{ $name }}">{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}[]" class="form-control" multiple
-            multiselect-search="true" multiselect-select-all="true" >
-               
+                multiselect-search="true" multiselect-select-all="true">
+
                 @foreach ($dresses as $dresse)
                     <option value="{{ $dresse->id }}" {{ old($name) == $dresse->id ? 'selected' : '' }}>
                         {{ $dresse->name }}
@@ -442,9 +448,9 @@
 
         @case('movie')
             <label for="{{ $name }}">{{ $label }}</label>
-            <select id="{{ $name }}" name="{{ $name }}[]" class="form-control"  multiple
-            multiselect-search="true" multiselect-select-all="true" >
-              
+            <select id="{{ $name }}" name="{{ $name }}[]" class="form-control" multiple
+                multiselect-search="true" multiselect-select-all="true">
+
                 @foreach ($movies as $movie)
                     <option value="{{ $movie->id }}" {{ old($name) == $movie->id ? 'selected' : '' }}>
                         {{ $movie->name }}
@@ -459,15 +465,15 @@
         @case('sport')
             <label for="{{ $name }}">{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}[]" class="form-control" multiple
-                multiselect-search="true" multiselect-select-all="true" >
-              
+                multiselect-search="true" multiselect-select-all="true">
+
                 @foreach ($sports as $sport)
                     <option value="{{ $sport->id }}" {{ old($name) == $sport->id ? 'selected' : '' }}>
                         {{ $sport->name }}
                     </option>
                 @endforeach
             </select>
-           
+
             @error($name)
                 <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>
             @enderror

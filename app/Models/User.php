@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -35,11 +36,21 @@ class User extends Authenticatable
         'password',
         'gender',
         'mobile',
+        'profile_for',
         'status'
     ];
     public function getStatusAttribute($value)
     {
-        return $value == 1 ? 'Active' : 'Inactive';
+        return $value == 1 ? 'Self' : 'Inactive';
+    }
+    public function getProfileForAttribute($value)
+    {
+        return $value == 1 ? 'Self' :
+           ($value == 2 ? 'Son' :
+           ($value == 3 ? 'Daughter' :
+           ($value == 4 ? 'Sister' :
+           ($value == 5 ? 'Brother' :
+           ($value == 6 ? 'Relative/Friend' : 'NA')))));
     }
 
     /**
@@ -71,10 +82,47 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function basicDetails()
+    {
+        return $this->hasOne(basicDetails::class);
+    }
+    public function horoscopeDetails()
+    {
+        return $this->hasOne(HoroscopeDetail::class);
+    }
+    public function carrierDetails()
+    {
+        return $this->hasOne(CarrierDetail::class);
+    }
+    public function familyDetails()
+    {
+        return $this->hasOne(FamilyDetail::class);
+    }
+    public function lifestyleDetails()
+    {
+        return $this->hasOne(LifeStyle::class);
+    }
+    public function likeDetails()
+    {
+        return $this->hasOne(LikeDetail::class);
+    }
+    public function contactDetail()
+    {
+        return $this->hasOne(ContactDetail::class);
+    }
+
+
+    public function getImageUrlAttribute()
+    {
+
+        return Storage::url($this->image);
+    }
     public function images()
     {
         return $this->hasMany(Image::class);
     }
+
     public function approvals()
     {
         return $this->hasMany(Approval::class);
