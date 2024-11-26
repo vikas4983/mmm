@@ -85,7 +85,7 @@ class User extends Authenticatable
 
     public function basicDetails()
     {
-        return $this->hasOne(basicDetails::class);
+        return $this->hasOne(basicDetail::class);
     }
     public function horoscopeDetails()
     {
@@ -111,6 +111,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(ContactDetail::class);
     }
+    
 
 
     public function getImageUrlAttribute()

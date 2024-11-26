@@ -10,11 +10,19 @@ class Country extends Model
     use HasFactory;
     public const ACTIVE = 1;
     public $fillable = ['country', 'status'];
+    
     public function state()
     {
 
-        return $this->hasMany(State::class);
+        return $this->hasMany(State::class,'country_id', 'id');
     }
+    
+    public function states()
+    {
+
+        return $this->hasMany(State::class, 'country_id', 'id');
+    }
+    
     public function getStatusAttribute($value)
     {
         return $value == 1 ? 'Active' : 'Inactive';

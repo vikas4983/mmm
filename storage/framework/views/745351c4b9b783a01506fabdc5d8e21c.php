@@ -1,7 +1,6 @@
-
 <?php $__env->startSection('title', 'My Profile - Mangal mandap'); ?>
 <?php $__env->startSection('content'); ?>
-    < <script>
+    <script>
         function notification(noti_id) {
             $.ajax({
                 url: "web-services/notification",
@@ -14,11 +13,10 @@
             });
             return true;
         }
-        
-    </script> <!-- /. Header & Menu -->
+    </script>
     <div class="container">
+        <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
         <div class="row">
-          
             <div class="col-xs-16 col-lg-16 col-xxl-16 col-xl-16 mb-20 text-center">
                 <h2 class="inPageTitle fontMerriWeather inThemeOrange">My Profile</h2>
                 <p class="inPageSubTitle">This is your all profile detail which you added.You can view your
@@ -45,8 +43,6 @@
                         <img src="<?php echo e(isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
                             class="img-responsive gtFullWidth" alt="User Image">
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-
                     
                     
                     <a href="https://matrimonialphpscript.com/premium-demo-2/my-photo" class="gt-view-caption">
@@ -80,8 +76,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                             <div class="owl-controls clickable" style="display: none;">
                                                 <div class="owl-buttons">
                                                     <div class="owl-prev">PREV</div>
@@ -165,7 +159,6 @@
                             </ul>
                         </div>
                         <div class="clearfix"></div>
-
                         <a href="https://www.facebook.com/" class="col-xs-16" target="_blank">
                             <div class="row" style="max-width:160px !important;">
                                 <img src="./Matrimonywebsite123_files/1626606199.jpg" class="img-responsive"
@@ -177,9 +170,7 @@
                 </div>
                 <!-- /. Left Panel Mobile Only -->
             </div>
-
             <div id="alert-container-acoountDetails">
-
             </div>
             <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16">
                 <!-- Basic Details -->
@@ -193,9 +184,8 @@
                         </a>
                         <?php
                             $fields = config('formFields.accountDetails');
-                            //$fields = config('formFields.horoscopeDetails');
-                        ?>
 
+                        ?>
                         <?php if (isset($component)) { $__componentOriginalfc35222c378ee3f03703efab785aaf6e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalfc35222c378ee3f03703efab785aaf6e = $attributes; } ?>
 <?php $component = App\View\Components\EditFormFieldComponent::resolve(['user' => $user,'fields' => $fields,'actionUrl' => route('profile.update'),'id' => $user->id] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -241,7 +231,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div
                                 class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
                                 <div class="row">
@@ -276,7 +265,6 @@
 <?php $component = $__componentOriginal2d8ab24393e52c6ef56270234f50ad97; ?>
 <?php unset($__componentOriginal2d8ab24393e52c6ef56270234f50ad97); ?>
 <?php endif; ?>
-
                                 </div>
                             </div>
                             <div
@@ -309,7 +297,6 @@
             </div>
         </div>
     </div>
-
     <div class="container gt-view-profile">
         <div class="row">
             <!-- Left Panel Desktop Only -->
@@ -372,17 +359,14 @@
                     </ul>
                 </div>
                 <div class="clearfix"></div>
-
                 <a href="https://www.facebook.com/" class="col-xs-16" target="_blank">
                     <div class="row" style="max-width:160px !important;">
                         <img src="./Matrimonywebsite123_files/1626606199.jpg" class="img-responsive"
                             style="width:100%;max-height:600px !important;">
                     </div>
                 </a>
-
             </div>
             <!-- /. Left Panel Desktop Only -->
-
             <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2"
                 style="position: fixed; left: 43%; top: 20%; z-index: -1; opacity: 0;" id="loaderID">
                 <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16 btn gt-btn-orange">
@@ -396,861 +380,720 @@
                     <font class="gt-margin-left-5">Your Profile Edit Successfully.&nbsp;&nbsp;</font>
                 </div>
             </div>
+
             <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16">
-                <div class="gt-panel gt-panel-default" id="edit2">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-star"></i>About Me</span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit2();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <article>
-                                    <p class="gt-word-wrap">
-                                        Billava...Thili language test 222 jhmvjv
-                                    </p>
-                                </article>
-                            </div>
-                            <div
-                                class="col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <h5 class="text-center inViewApproveStripe">
-                                    Approval Status:&nbsp;Pending </h5>
-                            </div>
-                        </div>
-                    </div>
+                <!-- About Me Section -->
+                <div id="aboutMeAlert">
+                    <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 </div>
-                <div id="alert-container-religion"></div>
-                <div class="gt-panel gt-panel-default" id="edit3">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-book"></i>Religion Information</span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit3();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Religion :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>Hindu</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Caste :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b> Billava </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Sub Caste :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>Not Available</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-10">
-                                        Willing To marry in other caste? :
-                                    </div>
-                                    <div class="col-xs-5">
-                                        <b>No</b>
-                                    </div>
-                                </div>
-                            </div>
+                
+                    
+                    <?php if (isset($component)) { $__componentOriginalf435682ed168c90c1b0690ff2d505b58 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalf435682ed168c90c1b0690ff2d505b58 = $attributes; } ?>
+<?php $component = App\View\Components\ViewAboutMeComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-about-me-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewAboutMeComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalf435682ed168c90c1b0690ff2d505b58)): ?>
+<?php $attributes = $__attributesOriginalf435682ed168c90c1b0690ff2d505b58; ?>
+<?php unset($__attributesOriginalf435682ed168c90c1b0690ff2d505b58); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalf435682ed168c90c1b0690ff2d505b58)): ?>
+<?php $component = $__componentOriginalf435682ed168c90c1b0690ff2d505b58; ?>
+<?php unset($__componentOriginalf435682ed168c90c1b0690ff2d505b58); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginaledc00850ef6470a17e73b41c1fcb31a0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginaledc00850ef6470a17e73b41c1fcb31a0 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateAboutMeComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-about-me-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateAboutMeComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginaledc00850ef6470a17e73b41c1fcb31a0)): ?>
+<?php $attributes = $__attributesOriginaledc00850ef6470a17e73b41c1fcb31a0; ?>
+<?php unset($__attributesOriginaledc00850ef6470a17e73b41c1fcb31a0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginaledc00850ef6470a17e73b41c1fcb31a0)): ?>
+<?php $component = $__componentOriginaledc00850ef6470a17e73b41c1fcb31a0; ?>
+<?php unset($__componentOriginaledc00850ef6470a17e73b41c1fcb31a0); ?>
+<?php endif; ?>
+                    
+                    <div id="basicDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginal49afcd653de56e01fcea03b3ec99b49d = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal49afcd653de56e01fcea03b3ec99b49d = $attributes; } ?>
+<?php $component = App\View\Components\ViewBasicDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-basic-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewBasicDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal49afcd653de56e01fcea03b3ec99b49d)): ?>
+<?php $attributes = $__attributesOriginal49afcd653de56e01fcea03b3ec99b49d; ?>
+<?php unset($__attributesOriginal49afcd653de56e01fcea03b3ec99b49d); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal49afcd653de56e01fcea03b3ec99b49d)): ?>
+<?php $component = $__componentOriginal49afcd653de56e01fcea03b3ec99b49d; ?>
+<?php unset($__componentOriginal49afcd653de56e01fcea03b3ec99b49d); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal16545f65a80262a387d3d932ec19aab5 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal16545f65a80262a387d3d932ec19aab5 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateBasicDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-basic-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateBasicDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal16545f65a80262a387d3d932ec19aab5)): ?>
+<?php $attributes = $__attributesOriginal16545f65a80262a387d3d932ec19aab5; ?>
+<?php unset($__attributesOriginal16545f65a80262a387d3d932ec19aab5); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal16545f65a80262a387d3d932ec19aab5)): ?>
+<?php $component = $__componentOriginal16545f65a80262a387d3d932ec19aab5; ?>
+<?php unset($__componentOriginal16545f65a80262a387d3d932ec19aab5); ?>
+<?php endif; ?>
+
+                    <div id="horoscopeDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginal7cea83cec912e87542c50595182c0452 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal7cea83cec912e87542c50595182c0452 = $attributes; } ?>
+<?php $component = App\View\Components\ViewHoroscopeDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-horoscope-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewHoroscopeDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal7cea83cec912e87542c50595182c0452)): ?>
+<?php $attributes = $__attributesOriginal7cea83cec912e87542c50595182c0452; ?>
+<?php unset($__attributesOriginal7cea83cec912e87542c50595182c0452); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal7cea83cec912e87542c50595182c0452)): ?>
+<?php $component = $__componentOriginal7cea83cec912e87542c50595182c0452; ?>
+<?php unset($__componentOriginal7cea83cec912e87542c50595182c0452); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal64e71e731725413d927db76f3c1beedb = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal64e71e731725413d927db76f3c1beedb = $attributes; } ?>
+<?php $component = App\View\Components\UpdateHoroscopeDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-horoscope-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateHoroscopeDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal64e71e731725413d927db76f3c1beedb)): ?>
+<?php $attributes = $__attributesOriginal64e71e731725413d927db76f3c1beedb; ?>
+<?php unset($__attributesOriginal64e71e731725413d927db76f3c1beedb); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal64e71e731725413d927db76f3c1beedb)): ?>
+<?php $component = $__componentOriginal64e71e731725413d927db76f3c1beedb; ?>
+<?php unset($__componentOriginal64e71e731725413d927db76f3c1beedb); ?>
+<?php endif; ?>
+
+                    <div class="gt-panel gt-panel-default" id="edit5">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-users"></i>Family Details </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return edit5();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5 ">EDIT</font>
+                            </a>
                         </div>
-                    </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="edit4">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-university"></i>Education / Profession
-                            Information</span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit4();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Highest Education :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            B Tech
-                                        </b>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Family Type :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Nuclear </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Additional Degree :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            BHMS
-                                        </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Family Status :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Middle class </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Employed in :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>Business</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Occupation :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>Cost Accountant</b>
+
+
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Family Value :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Traditional </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Annual Income :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            7,00,000
-                                        </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Father Occupation :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="edit5">
-
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-users"></i>Family Details </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit5();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5 ">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Family Type :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Nuclear </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Mother Occupation :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Family Status :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Middle class </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">No. of Brothers :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No brother </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Family Value :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Traditional </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Married Brothers :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No brother </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Father Occupation :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">No. of Sisters :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                1 Sister </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Mother Occupation :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No </b>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">No. of Brothers :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No brother </b>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Married Brothers :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No brother </b>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">No. of Sisters :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            1 Sister </b>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Married Sisters :</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            1 married sister </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Married Sisters :</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                1 married sister </b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="edit6">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-map-marker"></i>Location Information</span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit6();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Country Living In :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>India</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        State Living In :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>Andhra Pradesh</b>
+                    <div class="gt-panel gt-panel-default" id="edit6">
+                        <div class="gt-panel-head">
+                            <span class="pull-left"><i class="fa fa-map-marker"></i>Location Information</span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return edit6();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Country Living In :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>India</b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        City Living In :
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            State Living In :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>Andhra Pradesh</b>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-10">
-                                        <b>Achhayyapalli</b>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            City Living In :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>Achhayyapalli</b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="edit7">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-users"></i>Habits And Hobbies </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit7();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Eating Habits :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Non Vegetarian </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Drinking Habits :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No </b>
+                    <div class="gt-panel gt-panel-default" id="edit7">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-users"></i>Habits And Hobbies </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return edit7();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Eating Habits :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Non Vegetarian </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Smoking Habits :
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Drinking Habits :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No </b>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No </b>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Smoking Habits :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No </b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="edit9">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-star"></i>Physical Attributes </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit9();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Height:</div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            5ft - 152cm
-                                        </b>
+                    <div class="gt-panel gt-panel-default" id="edit9">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-star"></i>Physical Attributes </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return edit9();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Height:</div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                5ft - 152cm
+                                            </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Weight :</div>
-                                    <div class="col-xs-10">
-                                        <b> 48 Kg </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Weight :</div>
+                                        <div class="col-xs-10">
+                                            <b> 48 Kg </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Body type:</div>
-                                    <div class="col-xs-10">
-                                        <b>Slim</b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Body type:</div>
+                                        <div class="col-xs-10">
+                                            <b>Slim</b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Complexion:</div>
-                                    <div class="col-xs-10">
-                                        <b>Fair</b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Complexion:</div>
+                                        <div class="col-xs-10">
+                                            <b>Fair</b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">Physical Status:</div>
-                                    <div class="col-xs-10">
-                                        <b>Normal</b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">Physical Status:</div>
+                                        <div class="col-xs-10">
+                                            <b>Normal</b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="edit10">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-book"></i>Horoscope Information </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return edit10();">
-                            <i class="fa fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
+
+                    <div class="col-xs-16">
                         <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Have Dosh?:
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No
-                                        </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Dosh Type:
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Not Available </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Raasi/Moonsign :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Gemini
-                                        </b>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Star :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Ashwini
-                                        </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Birth Time :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Not Available </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Birth Place :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Rajkot </b>
-                                    </div>
-
-                                </div>
-                            </div>
+                            <h4 class="text-center gt-bg-green pt-15 pb-15 inViewProSection">
+                                <i class="fa fa-heart gt-margin-right-10"></i>Partner Preference
+                            </h4>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-16">
-                    <div class="row">
-                        <h4 class="text-center gt-bg-green pt-15 pb-15 inViewProSection">
-                            <i class="fa fa-heart gt-margin-right-10"></i>Partner Preference
-                        </h4>
-                    </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="editpref1">
-
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-file"></i>Basic Preferences </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return part_edit_1();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Marital Status :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Never Married </b>
+                    <div class="gt-panel gt-panel-default" id="editpref1">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-file"></i>Basic Preferences </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return part_edit_1();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Marital Status :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Never Married </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Age :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            18&nbsp;&nbsp;Years &nbsp;&nbsp;&nbsp;&nbsp;To
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                            30&nbsp;&nbsp;Years </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Height :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            5ft 1in - 154cm &nbsp;&nbsp;&nbsp;&nbsp;To
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                            5ft 3in - 160cm </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Age :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                18&nbsp;&nbsp;Years &nbsp;&nbsp;&nbsp;&nbsp;To
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                30&nbsp;&nbsp;Years </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Eating Habits :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Vegetarian </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Smoking Habits :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Height :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                5ft 1in - 154cm &nbsp;&nbsp;&nbsp;&nbsp;To
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                5ft 3in - 160cm </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Drinking Habits :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            No </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Eating Habits :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Vegetarian </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Physical status :
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Smoking Habits :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No </b>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Normal </b>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Drinking Habits :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                No </b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Physical status :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Normal </b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="editpref2">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-university"></i>Education / Professional Preference </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return part_edit_2();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Education :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            B Arch, B.Pharm </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Occupation :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Civil Engineer , Cost Accountant ,
-                                        </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Employed in :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Private </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Annual Income:
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Rs.2,00,000,&nbsp;Rs.4,00,000,&nbsp; </b>
-                                    </div>
-                                </div>
-                            </div>
-
-
+                    <div class="gt-panel gt-panel-default" id="editpref2">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-university"></i>Education / Professional Preference </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return part_edit_2();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
                         </div>
-                    </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="editpref3">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-book"></i>Religion Preference</span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return part_edit_3();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Religion :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Christian, Hindu </b>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Education :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                B Arch, B.Pharm </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Caste :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Ad Dharmi
-                                        </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Mother Tongue :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Angika, English, Hindi </b>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Occupation :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Civil Engineer , Cost Accountant ,
+                                            </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Star :
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Employed in :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Private </b>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-10">
-                                        <b> Ardra </b>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Annual Income:
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Rs.2,00,000,&nbsp;Rs.4,00,000,&nbsp; </b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="editpref4">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-map-marker"></i>Location Preference </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return part_edit_4();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Country :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Antigua And Barbuda, India </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        State :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Parish of Saint Paul </b>
+                    <div class="gt-panel gt-panel-default" id="editpref3">
+                        <div class="gt-panel-head">
+                            <span class="pull-left"><i class="fa fa-book"></i>Religion Preference</span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return part_edit_3();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Religion :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Christian, Hindu </b>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        City :
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Caste :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Ad Dharmi
+                                            </b>
+                                        </div>
                                     </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            Bedpa </b>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Mother Tongue :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Angika, English, Hindi </b>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Star :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b> Ardra </b>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="gt-panel gt-panel-default" id="editpref5">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fa fa-star"></i>Partner Expectation </span>
-                        <a class="pull-right btn gt-btn-orange" onclick="return part_edit_5();">
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-16">
-                                        <b>
-                                            Write some of about you.for example which kind of person you are
-                                            ,about your Personality,Hobbies,About your family ect.
-
-                                            jhcjhchgc </b>
+                    <div class="gt-panel gt-panel-default" id="editpref4">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-map-marker"></i>Location Preference </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return part_edit_4();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            Country :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Antigua And Barbuda, India </b>
+                                        </div>
                                     </div>
-                                    <div
-                                        class="col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                        <h5 class="text-center inViewApproveStripe">
-                                            Approval Status:&nbsp;Pending </h5>
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            State :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Parish of Saint Paul </b>
+                                        </div>
                                     </div>
-
+                                </div>
+                                <div
+                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            City :
+                                        </div>
+                                        <div class="col-xs-10">
+                                            <b>
+                                                Bedpa </b>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                    <div class="gt-panel gt-panel-default" id="editpref5">
+                        <div class="gt-panel-head">
+                            <span class="pull-left">
+                                <i class="fa fa-star"></i>Partner Expectation </span>
+                            <a class="pull-right btn gt-btn-orange" onclick="return part_edit_5();">
+                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                <font class="gt-margin-left-5">EDIT</font>
+                            </a>
+                        </div>
+                        <div class="gt-panel-body">
+                            <div class="row">
+                                <div
+                                    class="col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                    <div class="row">
+                                        <div class="col-xs-16">
+                                            <b>
+                                                Write some of about you.for example which kind of person you are
+                                                ,about your Personality,Hobbies,About your family ect.
+
+                                                jhcjhchgc </b>
+                                        </div>
+                                        <div
+                                            class="col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                            <h5 class="text-center inViewApproveStripe">
+                                                Approval Status:&nbsp;Pending </h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
             </div>
         </div>
-    </div>
     </div>
     </div>
     <div class="container gt-margin-top-10">
@@ -1279,12 +1122,10 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
     <script>
         $(document).ready(function() {
             $('#accountDetailsForm').on('submit', function(e) {
@@ -1309,7 +1150,6 @@
                         profile_for: profile_for,
                     },
                     success: function(response) {
-
                         console.log(response);
                         $('#userName').text(response.user.name);
                         $('#userEmail').text(response.user.email);
@@ -1338,56 +1178,8 @@
             });
         });
     </script>
-   
-    <script>
-        //     $(document).ready(function() {
-        //         $('#changeMobileForm').on('submit', function(e) {
 
-        //             e.preventDefault();
-        //             $('#changeMobileBtn').prop('disabled',
-        //                 true);
-        //             const mobile = $('#mobile').val();
-        //             if (!mobile) {
-        //                 alert('All fields are required.');
-        //                 $('#changeMobileBtn').prop('disabled', false);
-        //                 return;
-        //             }
-        //             $.ajax({
-        //                 url: "<?php echo e(route('mobile.update')); ?>",
-        //                 method: "PATCH",
-        //                 data: {
-        //                     _token: "<?php echo e(csrf_token()); ?>",
-        //                     mobile: mobile,
 
-        //                 },
-        //                 success: function(response) {
-
-        //                     $('#userMobile').text(response.user.mobile);
-        //                     $('#changeMobileModal').modal('hide');
-        //                     $('#changeMobileBtn').prop('disabled', false);
-        //                     $('#alert-container-acoountDetails').get(0).scrollIntoView({
-        //                         behavior: 'smooth',
-        //                         block: 'start'
-        //                     });
-
-        //                     $('#alert-container-acoountDetails').html(`
-    //     <div class="alert alert-success col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16 role="alert">
-    //         ${response.success}
-    //         <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">x</button>
-    //     </div>
-    // `);
-
-        //                 },
-        //                 error: function(error) {
-        //                     console.log(error);
-        //                     alert('Error updating data');
-        //                     $('#changeMobileBtn').prop('disabled',
-        //                         false);
-        //                 }
-        //             });
-        //         });
-        //     });
-    </script>
 
 <?php $__env->stopSection(); ?>
 

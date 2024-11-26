@@ -588,7 +588,7 @@
         'type' => 'date',
         'name' => 'dob',
         'label' => 'Date of Birth',
-        'rules' => 'required|date|before:2006-11-15',
+        'rules' => 'required|date|before:2006-11-22',
       ),
       'height' => 
       array (
@@ -631,6 +631,29 @@
         'rules' => 'required|string',
       ),
     ),
+    'editBasicDetails' => 
+    array (
+      'height' => 
+      array (
+        'type' => 'select',
+        'label' => 'Height',
+        'name' => 'height',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|string',
+      ),
+      'mother_tongue' => 
+      array (
+        'type' => 'select',
+        'label' => 'Mother Tongue',
+        'name' => 'mother_tongue',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|string',
+      ),
+    ),
     'horoscopeDetails' => 
     array (
       'country_of_birth' => 
@@ -648,7 +671,7 @@
         'type' => 'time',
         'name' => 'time_of_birth',
         'label' => 'Time of Birth',
-        'rules' => 'max:255',
+        'rules' => 'nullable|string|max:255',
       ),
       'rashi' => 
       array (
@@ -671,7 +694,7 @@
           'no' => 'No',
           'don\'t know' => 'Don\'t Know',
         ),
-        'rules' => 'string',
+        'rules' => 'required|string',
       ),
       'horoscope_match' => 
       array (
@@ -684,7 +707,7 @@
           'no' => 'No',
           'doesn\'t matter' => 'Does\'t Matter',
         ),
-        'rules' => 'string',
+        'rules' => 'nullable|string',
       ),
       'horoscope_show' => 
       array (
@@ -697,27 +720,34 @@
           'only accept member' => 'Only Accept Member',
           'no' => 'No',
         ),
-        'rules' => 'string',
+        'rules' => 'nullable|string',
       ),
     ),
     'editHoroscopeDetails' => 
     array (
-      'country_of_birth' => 
+      'date_of_birth' => 
       array (
-        'type' => 'select',
-        'label' => 'Country of birth',
-        'name' => 'country',
-        'options' => 
-        array (
-        ),
-        'rules' => 'nullable|numeric',
+        'type' => 'date',
+        'name' => 'date_of_birth',
+        'label' => 'DOB',
+        'rules' => 'nullable|date|max:255',
       ),
       'time_of_birth' => 
       array (
         'type' => 'time',
         'name' => 'time_of_birth',
         'label' => 'Time of Birth',
-        'rules' => 'max:255',
+        'rules' => 'nullable|string|max:255',
+      ),
+      'country' => 
+      array (
+        'type' => 'select',
+        'label' => 'country of birth',
+        'name' => 'country',
+        'options' => 
+        array (
+        ),
+        'rules' => 'nullable|numeric',
       ),
       'rashi' => 
       array (
@@ -731,7 +761,7 @@
       ),
       'manglik' => 
       array (
-        'type' => 'radio',
+        'type' => 'select',
         'label' => 'Manglik',
         'name' => 'manglik',
         'options' => 
@@ -740,11 +770,11 @@
           'no' => 'No',
           'don\'t know' => 'Don\'t Know',
         ),
-        'rules' => 'string',
+        'rules' => 'required|string',
       ),
       'horoscope_match' => 
       array (
-        'type' => 'radio',
+        'type' => 'select',
         'name' => 'horoscope_match',
         'label' => 'Horoscope Match',
         'options' => 
@@ -753,11 +783,11 @@
           'no' => 'No',
           'doesn\'t matter' => 'Does\'t Matter',
         ),
-        'rules' => 'string',
+        'rules' => 'nullable|string',
       ),
       'horoscope_show' => 
       array (
-        'type' => 'radio',
+        'type' => 'select',
         'name' => 'horoscope_show',
         'label' => 'Horoscope Show',
         'options' => 
@@ -766,7 +796,7 @@
           'only accept member' => 'Only Accept Member',
           'no' => 'No',
         ),
-        'rules' => 'string',
+        'rules' => 'nullable|string',
       ),
     ),
     'carrierDetails' => 

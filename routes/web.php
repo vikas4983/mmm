@@ -77,7 +77,7 @@ Route::get('login', function () {
         session()->forget('registration_step');
         return view('auth.login');
     }
-})->name('login')->middleware(['checkRegistrationStep','mobileNumberUpdated']);;
+})->name('login')->middleware(['checkRegistrationStep', 'mobileNumberUpdated']);
 Route::post('logout', function () {
     session()->flush();
     return redirect('/');
@@ -85,12 +85,7 @@ Route::post('logout', function () {
 
 
 
-Route::get('/get-view', [DemoController::class, 'getView']);
-Route::get('signUp', [AjaxRequestController::class, 'signUp'])->name('sign.up');
-Route::get('/get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
-Route::get('/get-state/{countryId}', [AjaxRequestController::class, 'getState']);
-Route::get('/get-city/{stateId}', [AjaxRequestController::class, 'getCity']);
-Route::get('/get-occupation/{employeeId}', [AjaxRequestController::class, 'getOccupation']);
+
 
 // Route::get('/localization/{locale}', function (string $locale) {
 //     if (!in_array($locale, ['en', 'hi', 'fr'])) {
@@ -109,21 +104,33 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
     'authUser',
-    
-
 ])->group(function () {
+    Route::get('/get-view', [DemoController::class, 'getView']);
+    Route::get('signUp', [AjaxRequestController::class, 'signUp'])->name('sign.up');
+    Route::get('/get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
+    Route::get('/get-state/{countryId}', [AjaxRequestController::class, 'getState']);
+    Route::get('/get-city/{stateId}', [AjaxRequestController::class, 'getCity']);
+    Route::get('/get-occupation/{employeeId}', [AjaxRequestController::class, 'getOccupation']);
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard')->middleware('mobileNumberUpdated');
     Route::resource('users', UserController::class)->middleware('mobileNumberUpdated');
     Route::post('users/userUpdate/{id}', [UserController::class, 'userUpdate'])->name('userUpdate')->middleware('mobileNumberUpdated');
     Route::get('my-profile', [UserController::class, 'myProfile'])->name('my.profile')->middleware('mobileNumberUpdated');
-    Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
+
     Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])->name('mobile.update')->middleware('mobileNumberUpdated');
     Route::post('request-otp', [UserController::class, 'requestOtpForMobileChange'])->name('request.otp')->middleware('mobileNumberUpdated');
     Route::get('mobile-verification', [UserController::class, 'showMobileVerificationPage'])->name('mobile.verification');
     Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
     Route::post('request-otp-again', [UserController::class, 'requestOtpForMobileChangeAgain'])->name('request.otp.again');
-    
-    Route::get('test', function(){
+    //Update Account Details
+    Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
+    //Update About Me Details
+    Route::patch('about-me-update', [UserController::class, 'updateAboutMe'])->name('about.me.update')->middleware('mobileNumberUpdated');
+    //Update Basic Details
+    Route::patch('basic-details-update', [UserController::class, 'updateBasicDetails'])->name('update.basic.details')->middleware('mobileNumberUpdated');
+    //Update Basic Details
+    Route::patch('horoscope-details-update', [UserController::class, 'updateHoroscopeDetails'])->name('update.horoscope.details')->middleware('mobileNumberUpdated');
+
+    Route::get('test', function () {
         return 'Y-m-d H:i:s';
     })->name('test');
 

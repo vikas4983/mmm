@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title', 'Change Password'); ?>
 <?php $__env->startSection('styles'); ?>
     <script src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>

@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title', 'Mobile-Verification'); ?>
 <?php $__env->startSection('styles'); ?>
     <script src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>
@@ -19,7 +18,7 @@
                         <article class="text-center text-danger">
                             Verify OTP with mobile number.
                         </article>
-                        <?php dump(session()->all()); ?>
+                       
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
                             <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <div id="alert-container-resend" class="mt-3"></div>

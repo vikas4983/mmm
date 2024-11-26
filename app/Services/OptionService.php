@@ -16,6 +16,8 @@ class OptionService
             'maritalStatuses' => \App\Models\MaritalStatus::class,
             'rashies' => \App\Models\Rashi::class,
             'countries' => \App\Models\Country::class,
+            'states' => \App\Models\State::class,
+            'cities' => \App\Models\City::class,
             'educations' => \App\Models\Education::class,
             'employees' => \App\Models\Employee::class,
             'occupations' => \App\Models\Occupation::class,

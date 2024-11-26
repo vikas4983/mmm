@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminUpdateRequest;
 use App\Jobs\UserSendEmailJob;
+use App\Models\Caste;
+use App\Models\City;
+use App\Models\Height;
 use App\Models\MemberOtp;
+use App\Models\MotherTongue;
 use App\Models\Payment;
 use App\Models\ProfileId;
+use App\Models\Rashi;
+use App\Models\Religion;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -139,17 +145,22 @@ class UserController extends Controller
             if (!$user = auth()->user()) {
                 return redirect()->route('login');
             }
-            $user = User::with(
-                'basicDetails',
-                'horoscopeDetails',
+
+
+            $user = User::with([
+                'basicDetails.heights',
+                'basicDetails.motherTongues',
+                'basicDetails.religions',
+                'basicDetails.religions.castes',
+                'basicDetails.maritalStatus',
+                'horoscopeDetails.rashies',
                 'carrierDetails',
                 'familyDetails',
                 'lifestyleDetails',
                 'likeDetails',
                 'contactDetail',
                 'images'
-            )->where('id', $user->id)->first();
-
+            ])->where('id', $user->id)->where('status', 1)->first();
             return view('frontend.users.show', compact('user'));
         } catch (\Exception $e) {
             Log::error('Error fetching user data: ' . $e->getMessage());
@@ -198,6 +209,11 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+
+
+
+
 
     public function mobileUpdate(Request $request)
     {
@@ -381,10 +397,86 @@ class UserController extends Controller
         }
     }
 
+    public function updateAboutMe(Request $request)
+    {
 
+        $user = Auth::user();
 
+        $user->carrierDetails->update([
+            'about_me' => $request->about_me
+        ]);
+        return redirect()->back()->with('success', 'About me has been updated successfully!');
+    }
 
+    public function updateBasicDetails(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $fields = config('formFields.editBasicDetails');
+            $validationRules = [];
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+            $validationRules['caste'] = ['required', 'integer', 'exists:castes,id'];
+            $validationRules['children'] = ['required', 'integer', 'min:0'];
+            $validationRules['other_caste_marriage'] = ['nullable', 'integer', 'min:0', 'max:1'];
+            $validateData = $request->validate($validationRules);
 
+            $user->basicDetails->update($validateData);
+
+            $heightName = Height::find($request->height)->name ?? 'Not provided';
+            $motherTongueName = MotherTongue::find($request->mother_tongue)->name ?? 'Not provided';
+            $casteName = Caste::find($request->caste)->name ?? 'Not provided';
+
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User basic details updated successfully!',
+                'user' => [
+                    'height' => $heightName,
+                    'mother_tongue' => $motherTongueName,
+                    'caste' => $casteName,
+                    'children' => $user->basicDetails->children,
+                    'otherCasteMarriage' => $user->basicDetails->other_caste_marriage,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'An error occurred while updating user basic details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updateHoroscopeDetails(Request $request)
+    {
+        //dd($request->all());
+
+        $user = auth()->user();
+        $fields = config('formFields.editHoroscopeDetails');
+        $validationRules = [];
+        foreach ($fields as $key => $field) {
+            $validationRules[$field['name']] = $field['rules'];
+        }
+        $validationRules['place_of_birth'] = ['nullable', 'integer',];
+        $validateData = $request->validate($validationRules);
+        $user->horoscopeDetails->update($validateData);
+        $city = City::find($validateData['place_of_birth']) ?? 'Not provided';
+        $placeOfBirth = $city->city;
+        $rashi = Rashi::find($request->rashi) ?? 'Not provided';
+        $updatedRashi = $rashi->name;
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User Horoscope details updated successfully!',
+            'user' => [
+                'time_of_birth' => $user->horoscopeDetails->time_of_birth,
+                'manglik' => $user->horoscopeDetails->manglik,
+                'place_of_birth' =>  $placeOfBirth,
+                'rashi' =>  $updatedRashi,
+                'horoscope_match' => $user->horoscopeDetails->horoscope_match,
+                'horoscope_show' => $user->horoscopeDetails->horoscope_show,
+            ],
+        ]);
+    }
 
     /**
      * Remove the specified resource from storage.

@@ -17,8 +17,11 @@ class State extends Model
 
     public function cities()
     {
-
-        return $this->hasMany(City::class);
+       return $this->hasMany(City::class, 'state_id', 'id');
+    }
+    public function city()
+    {
+       return $this->hasMany(City::class, 'state_id', 'id');
     }
     public function getStatusAttribute($value)
     {

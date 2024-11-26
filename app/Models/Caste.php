@@ -10,9 +10,9 @@ class Caste extends Model
     use HasFactory;
     public $fillable = ['religion_id', 'caste', 'status'];
     
-    public function religion()
+    public function religions()
     {
-        return $this->belongsTo(Religion::class);
+        return $this->belongsTo(Religion::class, 'religion_id');
     }
     public function getStatusAttribute($value)
     {

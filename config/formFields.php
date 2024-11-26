@@ -65,8 +65,8 @@ return [
 
     ],
 
-     'accountDetails' => [
-        'name' =>[
+    'accountDetails' => [
+        'name' => [
             'type' => 'text',
             'name' => 'name',
             'label' => 'Full Name',
@@ -112,7 +112,7 @@ return [
             'type' => 'date',
             'name' => 'dob',
             'label' => 'Date of Birth',
-           'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
+            'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
         ],
         'height' => [
             'type' => 'select',
@@ -145,7 +145,46 @@ return [
         ],
 
     ],
-    
+    'editBasicDetails' => [
+        // 'dob' => [
+        //     'type' => 'date',
+        //     'name' => 'dob',
+        //     'label' => 'Date of Birth',
+        //    'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
+        // ],
+        'height' => [
+            'type' => 'select',
+            'label' => 'Height',
+            'name' => 'height',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        'mother_tongue' => [
+            'type' => 'select',
+            'label' => 'Mother Tongue',
+            'name' => 'mother_tongue',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        
+        // 'religion' => [
+        //     'type' => 'select',
+        //     'name' => 'religion',
+        //     'label' => 'Religion',
+        //     'options' => [],
+        //     'rules' => 'required|string',
+        // ],
+
+        // 'marital_status' => [
+        //     'type' => 'select',
+        //     'name' => 'marital_status',
+        //     'label' => 'Marital Status',
+        //     'options' => [],
+        //     'rules' => 'required|string',
+        // ],
+
+    ],
+
     'horoscopeDetails' => [
 
         'country_of_birth' => [
@@ -160,7 +199,7 @@ return [
             'type' => 'time',
             'name' => 'time_of_birth',
             'label' => 'Time of Birth',
-            'rules' => 'max:255',
+            'rules' => 'nullable|string|max:255',
         ],
         'rashi' => [
             'type' => 'select',
@@ -178,7 +217,7 @@ return [
                 'no' => 'No',
                 "don't know" => "Don't Know"
             ],
-            'rules' => 'string',
+            'rules' => 'required|string',
         ],
 
 
@@ -191,7 +230,7 @@ return [
                 'no' => 'No',
                 "doesn't matter" => "Does't Matter"
             ],
-            'rules' => 'string',
+            'rules' => 'nullable|string',
         ],
         'horoscope_show' => [
             'type' => 'radio',
@@ -203,25 +242,30 @@ return [
                 'no' => 'No',
 
             ],
-            'rules' => 'string',
+            'rules' => 'nullable|string',
         ],
 
     ],
     'editHoroscopeDetails' => [
 
-        'country_of_birth' => [
-            'type' => 'select',
-            'label' => 'Country of birth',
-            'name' => 'country',
-            'options' => [],
-            'rules' => 'nullable|numeric',
+        'date_of_birth' => [
+            'type' => 'date',
+            'name' => 'date_of_birth',
+            'label' => 'DOB',
+            'rules' => 'nullable|date|max:255',
         ],
-
         'time_of_birth' => [
             'type' => 'time',
             'name' => 'time_of_birth',
             'label' => 'Time of Birth',
-            'rules' => 'max:255',
+            'rules' => 'nullable|string|max:255',
+        ],
+        'country' => [
+            'type' => 'select',
+            'label' => 'country of birth',
+            'name' => 'country',
+            'options' => [],
+            'rules' => 'nullable|numeric',
         ],
         'rashi' => [
             'type' => 'select',
@@ -231,7 +275,7 @@ return [
             'rules' => 'nullable|numeric',
         ],
         'manglik' => [
-            'type' => 'radio',
+            'type' => 'select',
             'label' => 'Manglik',
             'name' => 'manglik',
             'options' => [
@@ -239,12 +283,12 @@ return [
                 'no' => 'No',
                 "don't know" => "Don't Know"
             ],
-            'rules' => 'string',
+            'rules' => 'required|string',
         ],
 
 
         'horoscope_match' => [
-            'type' => 'radio',
+            'type' => 'select',
             'name' => 'horoscope_match',
             'label' => 'Horoscope Match',
             'options' => [
@@ -252,10 +296,10 @@ return [
                 'no' => 'No',
                 "doesn't matter" => "Does't Matter"
             ],
-            'rules' => 'string',
+            'rules' => 'nullable|string',
         ],
         'horoscope_show' => [
-            'type' => 'radio',
+            'type' => 'select',
             'name' => 'horoscope_show',
             'label' => 'Horoscope Show',
             'options' => [
@@ -264,10 +308,12 @@ return [
                 'no' => 'No',
 
             ],
-            'rules' => 'string',
+            'rules' => 'nullable|string',
         ],
 
     ],
+
+
     'carrierDetails' => [
 
         'country' => [
@@ -288,10 +334,10 @@ return [
             'type' => 'text',
             'name' => 'education_detail',
             'label' => 'Education Detail',
-           'placeholder' => 'Enter Education Details',
-           'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
+            'placeholder' => 'Enter Education Details',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
         ],
-        
+
         'employee' => [
             'type' => 'select',
             'name' => 'employee',
