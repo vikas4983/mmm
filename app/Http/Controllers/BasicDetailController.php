@@ -21,6 +21,7 @@ class BasicDetailController extends Controller
      */
     public function create()
     {
+        
         return view('frontend.registration.basicDetails.create');
     }
 

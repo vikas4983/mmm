@@ -4,7 +4,7 @@
 <head>
     <!-- Required Meta -->
     <meta charset="utf-8">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
@@ -161,7 +161,8 @@
                                         <span class="mr-5">My Profile</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ route('myProfile') }}">View Profile</a></li>
+                                        <li><a href="{{ route('my.profile') }}">View Profile</a>
+                                        </li>
                                         {{-- <li><a href="#">Edit Profile</a></li> --}}
                                         <li><a href="{{ url('saved-search') }}">My Saved Searches</a></li>
                                         <li><a href="{{ url('messages') }}">My Messages</a></li>

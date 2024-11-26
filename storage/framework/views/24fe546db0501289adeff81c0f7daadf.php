@@ -126,7 +126,7 @@
             <div id="sidebar" class="sidebar sidebar-with-footer">
                 <!-- Aplication Brand -->
                 <div class="app-brand">
-                  
+
                     <a href="<?php echo e(url('dashboard')); ?>">
                         <img src="<?php echo e($logos && $logos->name
                             ? asset('storage/admin/logo-favicon/logos/' . $logos->name)
@@ -194,7 +194,8 @@
 
                                         <?php if($sub->count == 0): ?>
                                         <?php else: ?>
-                                            <span class="badge badge-primary badge-pill"><?php echo e($sub->count ?? ''); ?></span>
+                                            <span
+                                                class="badge badge-primary badge-pill"><?php echo e($sub->count ?? ''); ?></span>
                                         <?php endif; ?>
                                     </span>
                                     <b class="caret"></b>
@@ -562,109 +563,58 @@
                             </li>
 
                             <!-- User Account -->
+                            
+
                             <li class="dropdown user-menu">
                                 <button class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                    <?php
+                                        $admin = Auth::guard('admin')->user();
 
-                                    <?php if($activePlan ?? ''): ?>
-                                        
-                                        <span
-                                            style="color: rgb(5, 5, 5); text-decoration: none; font-family:'Karla', 'sans-serif'"
-                                            onmouseover="this.style.color='rgb(137,77,217)';"
-                                            onmouseout="this.style.color='black';"><i class="mdi mdi-chess-queen mr-1"
-                                                style="color: rgb(5, 5, 5); text-decoration: none;"
-                                                onmouseover="this.style.color='rgb(137,77,217)';"
-                                                onmouseout="this.style.color='black';"></i>Premium</span>
+                                    ?>
+                                    <?php if($admin->image ?? ''): ?>
+                                        <img src="<?php echo e(asset('storage/admin/admin-images/' . $admin->image ?? '')); ?>"
+                                            class="user-image rounded-circle" alt="image"
+                                            style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
+                                    <?php else: ?>
+                                        <img src="<?php echo e(asset('storage/admin/image/default.jpg')); ?>"
+                                            class="user-image rounded-circle" alt="image"
+                                            style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
                                     <?php endif; ?>
-                                    <?php if($free ?? ''): ?>
-                                        <span
-                                            style="color: rgb(5, 5, 5); text-decoration: none; font-family:'Karla', 'sans-serif'"
-                                            onmouseover="this.style.color='rgb(137,77,217)';"
-                                            onmouseout="this.style.color='black';"><i class="mdi mdi-chess-queen mr-1"
-                                                style="color: rgb(5, 5, 5); text-decoration: none;"
-                                                onmouseover="this.style.color='rgb(137,77,217)';"
-                                                onmouseout="this.style.color='black';"></i>Free</span>
+                                    <?php if($admin = $admin ?? ''): ?>
+                                        <span class="d-none d-lg-inline-block"
+                                            style = "color:#976AD8;"><?php echo e($admin->name = $admin->name ?? ''); ?></span>
+                                    <?php else: ?>
+                                        <h5>Gaust</h5>
                                     <?php endif; ?>
-
-
                                 </button>
-
-
-
                                 <ul class="dropdown-menu dropdown-menu-right">
-                                    <?php if($activePlan ?? ''): ?>
-                                        <li>
-                                            <div class="container">
-                                                <div>
-                                                    <span style="color: #976AD8">Plan Name:</span> <span
-                                                        style="color: #0ACB8E; font-size:15px; "><?php echo e($activePlan->plan->name ?? ''); ?></span>
-                                                </div>
-                                                <hr>
-                                                <div>
-                                                    <span style="color: #976AD8">Contact Left: </span>
-                                                    <span style="color: #0ACB8E; font-size:15px">
-                                                        <?php echo e($activePlan->contact); ?></span>
-                                                </div>
-                                                <hr>
-                                                <div>
-                                                    <span style="color: #976AD8">Plan Expire:</span>
-                                                    <span style="color: #0ACB8E; font-size:15px">
-                                                        <?php echo e(\Carbon\Carbon::parse($activePlan->expiry_date)->format('d-M-Y')); ?></span>
-                                                </div>
-                                            </div>
-                                    <?php endif; ?>
-                            </li>
-                        </ul>
-                        </li>
-
-                        <li class="dropdown user-menu">
-                            <button class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                <?php
-                                    $admin = Auth::guard('admin')->user();
-
-                                ?>
-                                <?php if($admin->image ?? ''): ?>
-                                    <img src="<?php echo e(asset('storage/admin/admin-images/' . $admin->image ?? '')); ?>"
-                                        class="user-image rounded-circle" alt="image"
-                                        style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
-                                <?php else: ?>
-                                    <img src="<?php echo e(asset('storage/admin/image/default.jpg')); ?>"
-                                        class="user-image rounded-circle" alt="image"
-                                        style="width: 50px; height: 50px; overflow: hidden; border-radius: 50%;" />
-                                <?php endif; ?>
-                                <?php if($admin = $admin ?? ''): ?>
-                                    <span class="d-none d-lg-inline-block"
-                                        style = "color:#976AD8;"><?php echo e($admin->name = $admin->name ?? ''); ?></span>
-                                <?php else: ?>
-                                    <h5>Gaust</h5>
-                                <?php endif; ?>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li>
-                                    <a class="dropdown-link-item" href="<?php echo e(route('admins.show', $admin->id)); ?>">
-                                        <i class="mdi mdi-account-outline"></i>
-                                        <span class="nav-text">My Profile</span>
-                                    </a>
-                                    
-                                </li>
-                                <li>
-                                    <a class="dropdown-link-item" href="http://localhost:8000/user/api-tokens">
-                                        <i class="mdi mdi-database-plus"></i>
-                                        <span class="nav-text">API Tokens</span>
+                                    <li>
+                                        <a class="dropdown-link-item" href="<?php echo e(route('admins.show', $admin->id)); ?>">
+                                            <i class="mdi mdi-account-outline"></i>
+                                            <span class="nav-text">My Profile</span>
+                                        </a>
                                         
-                                    </a>
-                                </li>
-                                
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-link-item" href="http://localhost:8000/user/api-tokens">
+                                            <i class="mdi mdi-database-plus"></i>
+                                            <span class="nav-text">API Tokens</span>
+                                            
+                                        </a>
+                                    </li>
+                                    
 
-                                <li class="dropdown-footer">
-                                    <form id="admin_logout-form" action="<?php echo e(url('admin-logout')); ?>" method="post">
-                                        <?php echo csrf_field(); ?>
-                                        <a id="admin_logout-button" class="dropdown-link-item"
-                                            href="javascript:void(0)">
-                                            Log Out <i class="mdi mdi-logout" style="color: #976AD8"></i></a>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
+                                    <li class="dropdown-footer">
+                                        <form id="admin_logout-form" action="<?php echo e(url('admin-logout')); ?>"
+                                            method="post">
+                                            <?php echo csrf_field(); ?>
+                                            <a id="admin_logout-button" class="dropdown-link-item"
+                                                href="javascript:void(0)">
+                                                Log Out <i class="mdi mdi-logout" style="color: #976AD8"></i></a>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </nav>

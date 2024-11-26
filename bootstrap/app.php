@@ -5,6 +5,7 @@ use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CheckOTPSession;
 use App\Http\Middleware\CheckRegistrationStep;
 use App\Http\Middleware\RedirectIfAdminAuthenticatedMiddleware;
+use App\Http\Middleware\CheckMobileNumberUpdatedMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Register middlewares with aliases
         $middleware->alias([
+            'mobileNumberUpdated' => CheckMobileNumberUpdatedMiddleware::class,
+            'authUser' => AuthUserMiddleware::class,
             'checkRegistrationStep' => CheckRegistrationStep::class,
             'admin' => AdminMiddleware::class,
             'CheckOTPSession' => CheckOTPSession::class,

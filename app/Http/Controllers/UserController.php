@@ -3,8 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminUpdateRequest;
+use App\Jobs\UserSendEmailJob;
+use App\Models\Caste;
+use App\Models\City;
+use App\Models\Height;
+use App\Models\MemberOtp;
+use App\Models\MotherTongue;
 use App\Models\Payment;
 use App\Models\ProfileId;
+use App\Models\Rashi;
+use App\Models\Religion;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,9 +23,13 @@ use app\Services\UserService;
 use App\Traits\PaidUsersTrait;
 use App\Traits\ActiveUsersTrait;
 use App\Traits\InActiveUsersTrait;
+use App\Traits\MemberOtpTrait;
 use App\Traits\profileTrait;
 use App\Traits\SpoteLightUsersTrait;
 use App\Traits\ModelCountsTrait;
+use App\Traits\UserEmailTemplateTrait;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class UserController extends Controller
@@ -31,8 +43,13 @@ class UserController extends Controller
     use ActiveUsersTrait;
     use InActiveUsersTrait;
     use SpoteLightUsersTrait;
-
-
+    use UserEmailTemplateTrait;
+    use MemberOtpTrait;
+    public function dashboard()
+    {
+        session(['login' => 'yes']);
+        return view('dashboard');
+    }
     public function index(Request $request)
     {
         $fullUrl = $request->fullUrl();
@@ -48,9 +65,8 @@ class UserController extends Controller
         $spotlightUsers = $this->spotlightUsers();
 
         $users = User::with(['payments' => function ($query) {
-            $query->orderBy('created_at', 'desc'); 
+            $query->orderBy('created_at', 'desc');
         }])->where('status', 1)->orderBy('created_at', 'desc')->get();
-
         if ($request->paidUsers) {
             $this->paidUsersCount(User::class, $urlName, $premiumUsersCount);
             return view('admin.users.index', compact('paidUsers', 'premiumUsersCount', 'profilePrefixs', 'active', 'inActive', 'countAll'));
@@ -86,167 +102,410 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            'name' => 'required',
-            'string',
-            'max:255',
-            'email' => 'required',
-            'email',
-            'max:255',
-            'password' => 'required',
-            'string|min:8|confirmed',
-        ]);
-
-        $file = $request->file('image');
-        if ($request->hasFile('image')) {
-
-            // Check if the file is valid
-            if ($file) {
-                $fileName = rand(100, 1000) . time() . $file->getClientOriginalName();
-                $filePath = public_path('storage/admin/image/');
-                $file->move($filePath, $fileName);
-                User::create([
-                    'image' => $fileName,
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' =>  Hash::make($request->input('password'))
-                ]);
-            } else {
-                User::create([
-                    'image' => null,
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'password' =>  Hash::make($request->input('password'))
-                ]);
-                return redirect()->back()->with('error,', 'Please Upload Valid File.');
-            }
-        }
-        return redirect('admin/admins')->with('success', 'Admin Created Successfully.');
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
      */
     public function show(User $user)
     {
-        //
+        try {
+            $user = auth()->user();
+            if (!$user) {
+                return redirect()->route('login')->with('error', 'Please log in to continue.');
+            }
+
+            $user = User::with(
+                'basicDetails',
+                'horoscopeDetails',
+                'carrierDetails',
+                'familyDetails',
+                'lifestyleDetails',
+                'likeDetails',
+                'contactDetail',
+                'images'
+            )->where('id', $user->id)->first();
+
+            if (!$user) {
+                return redirect()->route('login')->with('error', 'User not found.');
+            }
+
+            return view('frontend.users.show', compact('user'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching user data: ' . $e->getMessage());
+            return redirect()->route('error')->with('error', 'An unexpected error occurred. Please try again later.');
+        }
+    }
+
+
+    public function myProfile()
+    {
+
+        try {
+            if (!$user = auth()->user()) {
+                return redirect()->route('login');
+            }
+
+
+            $user = User::with([
+                'basicDetails.heights',
+                'basicDetails.motherTongues',
+                'basicDetails.religions',
+                'basicDetails.religions.castes',
+                'basicDetails.maritalStatus',
+                'horoscopeDetails.rashies',
+                'carrierDetails',
+                'familyDetails',
+                'lifestyleDetails',
+                'likeDetails',
+                'contactDetail',
+                'images'
+            ])->where('id', $user->id)->where('status', 1)->first();
+            return view('frontend.users.show', compact('user'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching user data: ' . $e->getMessage());
+            return redirect()->route('error')->with('error', 'An unexpected error occurred. Please try again later.');
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
-    {
-        $admin = User::find($id);
-        return view('admin.admins.edit', compact('admin'));
-    }
+    public function edit(User $user) {}
 
     /**
      * Update the specified resource in storage.
      */
 
 
-     public function userUpdate(Request $request, $id){
-       
-        $user = User::find($id);
-       $user->update([
-        'name' => $request->name,
-        'email' => $request->email,
-        'mobile' => $request->mobile,
-        'gender' => $request->gender,
-       ]);
-       return response()->json([
-        'success' => 'User information updated successfully!',
-        'user' => $user,
-        
-      
-    ]);
-        //return redirect()->back()->with('success', 'User Profile Updated Successfully!');
-     }
-
-     
-    public function update(AdminUpdateRequest $request, $id)
+    public function updateProfile(Request $request)
     {
-        $admin = USer::find($id);
+        $user = auth()->user();
 
-        if ($file = $request->file('image')) {
-            $fileName = rand(100, 1000) . time() . $file->getClientOriginalName();
-            $filePath = public_path('storage/admin/image/');
-            $file->move($filePath, $fileName);
-            $previousFilePath = $filePath . $admin->image;
+        if (!$user) {
+            return redirect()->route('login');
+        }
 
-            if (File::exists($previousFilePath)) {
-                File::delete($previousFilePath);
+        try {
+            $fields = config('formFields.accountDetails');
+
+            $validationRules = [];
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
             }
-            $admin->update([
-                'image' => $fileName,
-                'name' => $request->name,
-                'email' => $request->email,
-                'status' => $request->status,
-                'password' => Hash::make($request->input('password'))
+            $validateData = $request->validate($validationRules);
+            $user->update([
+                'name' => $validateData['name'],
+                'email' => $validateData['email'],
+                'profile_for' => $validateData['profile_for'],
             ]);
-            return redirect('admin/admins')->with('success', 'Admin Updated Successfully!');
-        } else {
-            $admin->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'status' => $request->status,
-                'password' => Hash::make($request->input('password'))
+            return response()->json([
+                'success' => 'User information updated successfully!',
+                'user' => $user,
             ]);
-            return redirect('admin/admins')->with('success', 'Admin Updated Successfully!');
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'There was an error updating the user information. Please try again later.',
+            ], 500);
         }
     }
+
+
+
+
+
+
+    public function mobileUpdate(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        try {
+
+            $validateData = $request->validate([
+                'mobile' => 'required|numeric|digits:10'
+            ]);
+            // $name='mobileVerification';
+            // $emailTemplate = $this->userEmailTemplate($name);
+            // UserSendEmailJob::dispatch($user, $emailTemplate);
+            // return redirect('verification')->with(['success' =>  'OTP has been sent to your email & mobile number!']);
+            $user->update([
+                'mobile' => $validateData['mobile'],
+
+            ]);
+
+            return response()->json([
+                'success' => 'User mobile number updated successfully!',
+                'user' => $user,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'There was an error updating the user information. Please try again later.',
+            ], 500);
+        }
+    }
+
+
+
+    public function requestOtpForMobileChange(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'mobile' => 'required|numeric|digits:10',
+                'action' => 'required|string',
+            ]);
+
+            $mobile = $validatedData['mobile'];
+            $user = Auth::user();
+
+            if (!$user) {
+                return response()->json([
+                    'error' => 'Login First!'
+                ], 401);
+            }
+
+            $user = User::where('id', $user->id)->first();
+            MemberOtp::where('user_id', $user->id)->delete();
+            $name = $request->action;
+            $emailTemplate = $this->userEmailTemplate($name);
+            UserSendEmailJob::dispatch($user, $emailTemplate);
+
+            $data = [
+                'mobile' => $validatedData['mobile'],
+                'email' => $user['email'],
+                'action' => $validatedData['action'],
+
+            ];
+
+            session(['mobileVerification' => 'pending']);
+            session()->put('data', $data);
+
+            return redirect()->route('mobile.verification')->with('success', 'OTP has been sent to your mobile number!');
+        } catch (\Exception $e) {
+            Log::error('Error during OTP resend: ' . $e->getMessage());
+            return redirect()->route('mobile.verification')->with('error', 'An error occurred while processing your request. Please try again.');
+        }
+    }
+
+
+    public function showMobileVerificationPage()
+    {
+        $data = session()->get('data');
+        return view('frontend.users.mobile-verification', compact('data'));
+    }
+
+    public function verifyOtpForMobile(Request $request)
+    {
+
+        try {
+            $validatedData = $request->validate([
+                'otp' => 'required|numeric|digits:6',
+                'mobile' => 'required|numeric|digits:10',
+                'email' => 'required|email',
+                'action' => 'required|string',
+            ]);
+
+            $otp = $validatedData['otp'];
+            $mobile = $validatedData['mobile'] ?? null;
+
+            $user = Auth::user();
+            if (!$user) {
+                return redirect()->route('login');
+            }
+
+            $user = User::where('id', $user->id)->first();
+            $otps = MemberOtp::where('otp', $otp)
+                ->where('user_id', $user->id)
+                ->latest('id')
+                ->first();
+
+            $data = $validatedData;
+
+            if (!$otps) {
+                $data = [
+                    'mobile' => $user['mobile'],
+                    'email' => $user['email'],
+                    'action' => $request->action,
+                    'error' => 'Oops! Incorrect OTP.'
+                ];
+                session()->put('data', $data);
+                return redirect()->route('mobile.verification')->with('error', 'Oops! Incorrect OTP.');
+            }
+
+            if (now()->greaterThan($otps->expires_at)) {
+                $data = [
+                    'mobile' => $user['mobile'],
+                    'email' => $user['email'],
+                    'action' => $request->action,
+                    'error' => 'Oops! OTP has expired.'
+                ];
+                session()->put('data', $data);
+                return redirect()->route('mobile.verification')->with('error', 'Oops! OTP has expired.');
+            }
+
+            $otps->delete();
+            $user->update([
+                'mobile' => $mobile,
+                'status' => 1
+            ]);
+
+            session()->forget('mobileVerification');
+            return redirect()->route('my.profile')->with('success', 'Mobile number has been updated successfully!!');
+        } catch (\Exception $e) {
+            Log::error('Error during OTP validation: ' . $e->getMessage());
+            return redirect()->route('mobile.verification')->with('error', 'An unexpected error occurred. Please try again.');
+        }
+    }
+
+    public function requestOtpForMobileChangeAgain(Request $request)
+    {
+
+        try {
+            $validatedData = $request->validate([
+                'mobile' => 'required|digits:10',
+                'email' => 'required|email',
+                'action' => 'required|string',
+            ]);
+
+            $email = $validatedData['email'] ?? null;
+            $mobile = $validatedData['mobile'] ?? null;
+            $name = $validatedData['action'] ?? null;
+
+            $user = User::where('email', $email)->orWhere('mobile', $mobile)->first();
+            if (!$user) {
+                return redirect()->back()->with('error', 'Something went wrong, please try again!');
+            }
+
+            MemberOtp::where('user_id', $user->id)->delete();
+            $emailTemplate = $this->userEmailTemplate($name);
+            UserSendEmailJob::dispatch($user, $emailTemplate);
+
+            $data = [
+                'mobile' => $user['mobile'],
+                'email' => $user['email'],
+                'action' => $name,
+            ];
+
+            session()->put('data', $data);
+            return redirect()->route('mobile.verification')->with('success', 'OTP Resend sent successfully!');
+        } catch (\Exception $e) {
+            Log::error('Error during OTP resend: ' . $e->getMessage());
+            return redirect()->route('mobile.verification')->with('error', 'An unexpected error occurred. Please try again.');
+        }
+    }
+
+    public function updateAboutMe(Request $request)
+    {
+
+        $user = Auth::user();
+
+        $user->carrierDetails->update([
+            'about_me' => $request->about_me
+        ]);
+        return redirect()->back()->with('success', 'About me has been updated successfully!');
+    }
+
+    public function updateBasicDetails(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            $fields = config('formFields.editBasicDetails');
+            $validationRules = [];
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+            $validationRules['caste'] = ['required', 'integer', 'exists:castes,id'];
+            $validationRules['children'] = ['required', 'integer', 'min:0'];
+            $validationRules['other_caste_marriage'] = ['nullable', 'integer', 'min:0', 'max:1'];
+            $validateData = $request->validate($validationRules);
+
+            $user->basicDetails->update($validateData);
+
+            $heightName = Height::find($request->height)->name ?? 'Not provided';
+            $motherTongueName = MotherTongue::find($request->mother_tongue)->name ?? 'Not provided';
+            $casteName = Caste::find($request->caste)->name ?? 'Not provided';
+
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User basic details updated successfully!',
+                'user' => [
+                    'height' => $heightName,
+                    'mother_tongue' => $motherTongueName,
+                    'caste' => $casteName,
+                    'children' => $user->basicDetails->children,
+                    'otherCasteMarriage' => $user->basicDetails->other_caste_marriage,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'An error occurred while updating user basic details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updateHoroscopeDetails(Request $request)
+    {
+        //dd($request->all());
+
+        $user = auth()->user();
+        $fields = config('formFields.editHoroscopeDetails');
+        $validationRules = [];
+        foreach ($fields as $key => $field) {
+            $validationRules[$field['name']] = $field['rules'];
+        }
+        $validationRules['place_of_birth'] = ['nullable', 'integer',];
+        $validateData = $request->validate($validationRules);
+        $user->horoscopeDetails->update($validateData);
+        $city = City::find($validateData['place_of_birth']) ?? 'Not provided';
+        $placeOfBirth = $city->city;
+        $rashi = Rashi::find($request->rashi) ?? 'Not provided';
+        $updatedRashi = $rashi->name;
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User Horoscope details updated successfully!',
+            'user' => [
+                'time_of_birth' => $user->horoscopeDetails->time_of_birth,
+                'manglik' => $user->horoscopeDetails->manglik,
+                'place_of_birth' =>  $placeOfBirth,
+                'rashi' =>  $updatedRashi,
+                'horoscope_match' => $user->horoscopeDetails->horoscope_match,
+                'horoscope_show' => $user->horoscopeDetails->horoscope_show,
+            ],
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
-    {
-
-        $admin = User::find($id);
-        if ($admin) {
-            $admin->destroy($id);
-            return redirect()->back()->with('error', 'Admin Deleted Successfully');
-        } else {
-            return redirect()->back()->with('error', 'Something Went Wrong!');
-        }
-    }
-
+    public function destroy($id) {}
 
     public function checkBoxDelete(Request $request)
     {
-        //dd($request->all());
         $selectedDeleteAdminIds = $request->input('selectedDeleteAdminIds');
         if (!empty($selectedDeleteAdminIds)) {
             $ids = explode(',', $selectedDeleteAdminIds[0]);
-
-            // Check if you're receiving an array of selected IDs
             foreach ($ids as $id) {
-                //dd($id); // Check if each ID is being processed correctly
                 $User = User::find($id);
                 if ($User) {
-                    $User->delete(); // Use delete() method to delete a single record
+                    $User->delete();
                 }
             }
-
             return redirect()->back()->with('error', 'Admin Deleted Successfully');
         } else {
             return redirect()->back()->with('error', 'No items selected.');
         }
     }
-
     public function activeItem(Request $request)
     {
-        //dd($request->all());
         $selectedActiveAdminIds = $request->input('selectedActiveAdminIds');
         if (!empty($selectedActiveAdminIds)) {
             $ids = explode(',', $selectedActiveAdminIds[0]);
 
-            // Check if you're receiving an array of selected IDs
             foreach ($ids as $id) {
-                //dd($id); // Check if each ID is being processed correctly
                 $User = User::find($id);
                 if ($User) {
                     $User->update([

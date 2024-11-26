@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('caste');
             $table->string('marital_status');
             $table->string('children')->nullable();
+            $table->integer('other_caste_marriage')->default(0);
             $table->string('status')->default(1);
             $table->timestamps();
         });

@@ -27,7 +27,7 @@ class AjaxRequestController extends Controller
         return response()->json($states);
     }
     public function getCity(Request $request, $stateId){
-     
+      
       $cities = City::where('state_id', $stateId)->get();
        return response()->json($cities);
     }

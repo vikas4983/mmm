@@ -20,7 +20,10 @@ class MemberController extends Controller
 
     public function index()
     {
-        //
+        
+        // $members = User::where('status', 1)->get();
+        // dd(  $members);
+        // return view('dashboard', compact('members'));
     }
 
     /**
@@ -35,6 +38,7 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         $fields = config('formFields.register');
+       // dd($fields);
         $validationRules = [];
         foreach ($fields as $key => $field) {
             $validationRules[$field['name']] = $field['rules'];
@@ -55,7 +59,7 @@ class MemberController extends Controller
 
             $emailTemplate = $this->userEmailTemplate($name);
             UserSendEmailJob::dispatch($user, $emailTemplate);
-           
+
             return redirect('verification')->with(['success' =>  'OTP has been sent to your email & mobile number!']);
         } else {
             return redirect()
@@ -166,7 +170,9 @@ class MemberController extends Controller
         if (now()->greaterThan($otp->expires_at)) {
             return redirect()->back()->with('error', 'OTP has expired');
         }
-
+        $user->update([
+            'status' => 1
+        ]);
         Auth::login($user);
         session(['registration_step' => '4']);
         return redirect()->route('basicDetails.create')->with('success', 'Congratulations! Your account has been verified. Please complete the form.');
