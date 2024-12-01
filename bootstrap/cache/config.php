@@ -588,7 +588,7 @@
         'type' => 'date',
         'name' => 'dob',
         'label' => 'Date of Birth',
-        'rules' => 'required|date|before:2006-11-22',
+        'rules' => 'required|date|before:2006-12-01',
       ),
       'height' => 
       array (
@@ -742,7 +742,7 @@
       'country' => 
       array (
         'type' => 'select',
-        'label' => 'country of birth',
+        'label' => 'Country of birth',
         'name' => 'country',
         'options' => 
         array (
@@ -800,6 +800,76 @@
       ),
     ),
     'carrierDetails' => 
+    array (
+      'country' => 
+      array (
+        'type' => 'select',
+        'label' => 'Country',
+        'name' => 'country',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'education' => 
+      array (
+        'type' => 'select',
+        'name' => 'education',
+        'label' => 'Highest Degree',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'education_detail' => 
+      array (
+        'type' => 'text',
+        'name' => 'education_detail',
+        'label' => 'Education Detail',
+        'placeholder' => 'Enter Education Details',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:100',
+      ),
+      'employee' => 
+      array (
+        'type' => 'select',
+        'name' => 'employee',
+        'label' => 'Employed In',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'occupation_detail' => 
+      array (
+        'type' => 'text',
+        'name' => 'occupation_detail',
+        'label' => 'Occupation Detail',
+        'placeholder' => 'Enter Occupation Details',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:100',
+      ),
+      'income' => 
+      array (
+        'type' => 'select',
+        'name' => 'income',
+        'label' => 'Income',
+        'options' => 
+        array (
+        ),
+        'rules' => 'required|numeric',
+      ),
+      'about_me' => 
+      array (
+        'type' => 'textarea',
+        'name' => 'about_me',
+        'label' => 'About you',
+        'options' => 
+        array (
+        ),
+        'placeholder' => 'Enter about  you',
+        'rules' => 'nullable|string|regex:/^[\\pL\\s]+$/u|max:300',
+      ),
+    ),
+    'editCarrierDetails' => 
     array (
       'country' => 
       array (

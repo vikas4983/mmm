@@ -12,17 +12,19 @@ class State extends Model
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 
     public function cities()
     {
        return $this->hasMany(City::class, 'state_id', 'id');
     }
+
     public function city()
     {
        return $this->hasMany(City::class, 'state_id', 'id');
     }
+
     public function getStatusAttribute($value)
     {
         return $value == 1 ? 'Active' : 'Inactive';

@@ -13,13 +13,11 @@ class Country extends Model
     
     public function state()
     {
-
         return $this->hasMany(State::class,'country_id', 'id');
     }
     
-    public function states()
+    public function abce()
     {
-
         return $this->hasMany(State::class, 'country_id', 'id');
     }
     

@@ -34,14 +34,20 @@
     }
     extract($optionData);
 @endphp
-
+@php
+    use App\Models\State;
+    use App\Models\City;
+    $states = State::all();
+    $cities = City::all();
+@endphp
 @switch($name)
     @case('country')
         <div class="col-md-6">
             <div class="form-group">
                 <label for="{{ $name }}">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}
+                    {{ $label }}
                 </label>
+               
                 <select id="country" name="{{ $name }}" class="form-control">
                     <option value="">Select Country</option>
                     @foreach ($countries as $country)
@@ -59,15 +65,18 @@
         <div class="col-md-1 d-flex align-items-center justify-content-center">
         </div>
         <div class="col-md-6" id="hState">
+           
             <div class="form-group">
                 <label for="state">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>State of Birth
+                   State of Birth
                 </label>
                 <select id="state" name="state" class="form-control">
-                    <option value="{{ $user->carrierDetails->states->id }}"
-                        {{ old($name, $user->carrierDetails->states->id) == $user->carrierDetails->states->id ? 'selected' : '' }}>
-                        {{ $user->carrierDetails->states->state }}
-                    </option>
+                    @foreach ($states as $state)
+                        <option value="{{ $state->id }}"
+                            {{ old($name, $user->carrierDetails->states->id) == $state->id ? 'selected' : '' }}>
+                            {{ $state->state }}
+                        </option>
+                    @endforeach
 
                 </select>
                 @error('state')
@@ -80,15 +89,19 @@
 
         <div class="col-md-6" id="hCity">
             <div class="form-group">
+               
                 <label for="city">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>City of Birth
+                   City of Birth
                 </label>
+                
                 <select id="city" name="city" class="form-control">
                     <option value="">Select City</option>
-                    <option value="{{ $user->horoscopeDetails->cities->id }}"
-                        {{ old($name, $user->horoscopeDetails->cities->id) == $user->horoscopeDetails->cities->id ? 'selected' : '' }}>
-                        {{ $user->horoscopeDetails->cities->city }}
-                    </option>
+                    @foreach ($cities as $city)
+                        <option value="{{ $city->id }}"
+                            {{ old($name, $user->horoscopeDetails->cities->id) == $city->id ? 'selected' : '' }}>
+                            {{ $city->city }}
+                        </option>
+                    @endforeach
                 </select>
                 @error('city')
                     <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>
@@ -103,7 +116,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="{{ $name }}">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}
+                   {{ $label }}
                 </label>
                 <select id="{{ $name }}" name="{{ $name }}" class="form-control" required>
                     <option value="">Select {{ $label }}</option>

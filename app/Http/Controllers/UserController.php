@@ -154,7 +154,10 @@ class UserController extends Controller
                 'basicDetails.religions.castes',
                 'basicDetails.maritalStatus',
                 'horoscopeDetails.rashies',
-                'carrierDetails',
+                'carrierDetails.educations',
+                'carrierDetails.occupations',
+                'carrierDetails.employees',
+                'carrierDetails.incomes',
                 'familyDetails',
                 'lifestyleDetails',
                 'likeDetails',
@@ -399,13 +402,83 @@ class UserController extends Controller
 
     public function updateAboutMe(Request $request)
     {
-
+        $validatedData = $request->validate([
+            'about_me' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+        ], [
+            'about_me.required' => 'The education details field is required.',
+            'about_me.regex' => 'The education details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+            'about_me.max' => 'The education details must not exceed 1000 characters.',
+        ]);
         $user = Auth::user();
 
-        $user->carrierDetails->update([
-            'about_me' => $request->about_me
+        $user->carrierDetails->update($validatedData);
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User about me details updated successfully!',
+            'user' => [
+                'about_me' => $user->carrierDetails->about_me
+            ],
         ]);
-        return redirect()->back()->with('success', 'About me has been updated successfully!');
+    }
+    public function educationDetail(Request $request)
+    {
+        $user = Auth::user();
+        $validatedData = $request->validate([
+            'education_detail' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+        ], [
+            'education_detail.required' => 'The education details field is required.',
+            'education_detail.regex' => 'The education details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+            'education_detail.max' => 'The education details must not exceed 1000 characters.',
+        ]);
+
+        $user->carrierDetails->update($validatedData);
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User about education details updated successfully!',
+            'user' => [
+                'education_detail' => $user->carrierDetails->education_detail
+            ],
+        ]);
+    }
+    public function occupationDetail(Request $request)
+    {
+        $user = Auth::user();
+        $validatedData = $request->validate([
+            'occupation_detail' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+        ], [
+            'occupation_detail.required' => 'The occupation details field is required.',
+            'occupation_detail.regex' => 'The occupation details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+            'occupation_detail.max' => 'The occupation details must not exceed 1000 characters.',
+        ]);
+
+        $user->carrierDetails->update($validatedData);
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User about occupation details updated successfully!',
+            'user' => [
+                'about_family' => $user->carrierDetails->about_family
+            ],
+        ]);
+    }
+    public function familyDetail(Request $request)
+    {
+        $user = Auth::user();
+        $validatedData = $request->validate([
+            'about_family' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+        ], [
+            'about_family.required' => 'The family details field is required.',
+            'about_family.regex' => 'The family details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+            'about_family.max' => 'The family details must not exceed 1000 characters.',
+        ]);
+
+        $user->carrierDetails->update($validatedData);
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User about family details updated successfully!',
+            'user' => [
+                'about_family' => $user->familyDetails->about_family
+            ],
+        ]);
     }
 
     public function updateBasicDetails(Request $request)
@@ -448,6 +521,36 @@ class UserController extends Controller
         }
     }
     public function updateHoroscopeDetails(Request $request)
+    {
+
+
+        $user = auth()->user();
+        $fields = config('formFields.editHoroscopeDetails');
+        $validationRules = [];
+        foreach ($fields as $key => $field) {
+            $validationRules[$field['name']] = $field['rules'];
+        }
+        $validationRules['place_of_birth'] = ['nullable', 'integer',];
+        $validateData = $request->validate($validationRules);
+        $user->horoscopeDetails->update($validateData);
+        $city = City::find($validateData['place_of_birth']) ?? 'Not provided';
+        $placeOfBirth = $city->city;
+        $rashi = Rashi::find($request->rashi) ?? 'Not provided';
+        $updatedRashi = $rashi->name;
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User Horoscope details updated successfully!',
+            'user' => [
+                'time_of_birth' => $user->horoscopeDetails->time_of_birth,
+                'manglik' => $user->horoscopeDetails->manglik,
+                'place_of_birth' =>  $placeOfBirth,
+                'rashi' =>  $updatedRashi,
+                'horoscope_match' => $user->horoscopeDetails->horoscope_match,
+                'horoscope_show' => $user->horoscopeDetails->horoscope_show,
+            ],
+        ]);
+    }
+    public function updateCarrierDetails(Request $request)
     {
         //dd($request->all());
 

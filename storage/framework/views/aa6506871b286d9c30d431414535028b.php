@@ -3,7 +3,7 @@
         <span class="pull-left">
             <?php
                 $fields = config('formFields.editHoroscopeDetails');
-              
+
             ?>
             <i class="fa fa-book"></i>Horoscope Information </span>
         <a class="pull-right btn gt-btn-orange" id="updateHoroscopeBtn">
@@ -38,11 +38,11 @@
 <?php unset($__componentOriginalf8e2d4a3eae46c0bb5ec467ab9bef0cb); ?>
 <?php endif; ?>
                         <?php break; ?>
-                       
+
                         
 
                         <?php default: ?>
-                             <?php if (isset($component)) { $__componentOriginal8f7e6025eb2c56b8cc3e102acac9cb35 = $component; } ?>
+                            <?php if (isset($component)) { $__componentOriginal8f7e6025eb2c56b8cc3e102acac9cb35 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8f7e6025eb2c56b8cc3e102acac9cb35 = $attributes; } ?>
 <?php $component = App\View\Components\InputProfileUpdateComponent::resolve(['user' => $user,'name' => $field['name'],'label' => $field['label'],'type' => 'text'] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('input-profile-update-component'); ?>
@@ -64,7 +64,7 @@
 <?php endif; ?>
                     <?php endswitch; ?>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-               
+
 
             </div>
         </div>
@@ -72,7 +72,7 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Handle "Edit Horoscope" button click
+
         document.getElementById("editHoroscopeBtn").addEventListener("click", function() {
             console.log('vikas');
             document.getElementById("editHoroscopeSection").style.display = 'none';
@@ -82,14 +82,14 @@
         let form = document.getElementById("updateHoroscopeBtn");
         if (updateHoroscopeBtn) {
             updateHoroscopeBtn.addEventListener("click", function() {
-               
+
                 const timeOfBirth = document.getElementById('time_of_birth')?.value;
                 const manglik = document.getElementById('manglik')?.value;
                 const placeOfBirth = document.getElementById('city')?.value;
                 const rashi = document.getElementById('rashi')?.value;
                 const horoscopeMatch = document.getElementById('horoscope_match')?.value;
                 const horoscopeShow = document.getElementById('horoscope_show')?.value;
-                 console.log(placeOfBirth);
+                console.log(placeOfBirth);
                 $.ajax({
                     url: "<?php echo e(route('update.horoscope.details')); ?>",
                     method: "PATCH",
@@ -105,27 +105,38 @@
                     success: function(response) {
                         $('#updateBasicBtn').prop('disabled', false);
                         if (response.success) {
-                            updateBasicSection.style.display = "none";
-                            editBasicSection.style.display = "block";
-                            $('#userHeight').text(response.user.height);
-                            $('#userMotherTongue').text(response.user.mother_tongue);
-                            $('#userCaste').text(response.user.caste);
-                            $('#userChildren').text(response.user.children);
-                            $('#alert-container-basicDetails').get(0).scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                            $('#basicDetails').html(`
-                         <div class="alert alert-success col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 role="alert">
-                             ${response.message}
-                          <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">x</button>
-                              `);
+                            document.getElementById("updateHoroscopeSection").style
+                                .display = 'none';
+                            document.getElementById("editHoroscopeSection").style.display =
+                                'block';
+
+                            $('#userBirthTime').text(response.user.time_of_birth);
+                            $('#userManglik').text(response.user.manglik);
+                            $('#userPlaceOfBirth').text(response.user.place_of_birth);
+                            $('#userRashi').text(response.user.rashi);
+                            $('#userHoroscopeMatch').text(response.user.horoscope_match);
+                            $('#userHoroscopeShow').text(response.user.horoscope_show);
+                            // $('#horoscopeDetailsAlert').get(0).scrollIntoView({
+                            //     behavior: 'smooth',
+                            //     block: 'center',
+                            //     inline: 'nearest' // Ensures the alert is visible at the center of the viewport
+                            // });
+                            $('#horoscopeDetailsAlert').focus();
+
+                            // Dynamically update the alert content
+                            $('#horoscopeDetailsAlert').html(`
+    <div class="alert alert-success col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16" role="alert">
+        ${response.message}
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">x</button>
+    </div>
+`);
+
+                            // Automatically fade out the alert after 1.5 seconds
                             setTimeout(function() {
                                 $('.alert').fadeOut('slow', function() {
-                                    $(this)
-                                        .remove();
+                                    $(this).remove();
                                 });
-                            }, 1500);
+                            }, 2000);
 
                         } else {
                             alert('Failed to update details. Please try again.');
@@ -138,4 +149,5 @@
             console.error("Update Horoscope button not found!");
         }
     });
-</script><?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\update-horoscope-details-component.blade.php ENDPATH**/ ?>
+</script>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\update-horoscope-details-component.blade.php ENDPATH**/ ?>

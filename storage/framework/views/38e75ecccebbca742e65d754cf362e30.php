@@ -1,12 +1,12 @@
-<div class="gt-panel gt-panel-default" id="updateHoroscopeSection" style="display: none;">
+<div class="gt-panel gt-panel-default" id="updateCarrierSection" style="display: none;">
     <div class="gt-panel-head">
         <span class="pull-left">
             <?php
-                $fields = config('formFields.editHoroscopeDetails');
+                $fields = config('formFields.editCarrierDetails');
 
             ?>
-            <i class="fa fa-book"></i>Horoscope Information </span>
-        <a class="pull-right btn gt-btn-orange" id="updateHoroscopeBtn">
+            <i class="fa fa-book"></i>Carrier Information </span>
+        <a class="pull-right btn gt-btn-orange" id="updateCarrierBtn">
             <i class="fa fa-pencil-alt fa-fw"></i>
             <font class="gt-margin-left-5">Update</font>
         </a>
@@ -73,15 +73,15 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
 
-        document.getElementById("editHoroscopeBtn").addEventListener("click", function() {
+        document.getElementById("editCarrierBtn").addEventListener("click", function() {
             console.log('vikas');
-            document.getElementById("editHoroscopeSection").style.display = 'none';
-            document.getElementById("updateHoroscopeSection").style.display = 'block';
+            document.getElementById("editCarrierSection").style.display = 'none';
+            document.getElementById("updateCarrierSection").style.display = 'block';
         });
-        let updateHoroscopeBtn = document.getElementById("updateHoroscopeBtn");
-        let form = document.getElementById("updateHoroscopeBtn");
-        if (updateHoroscopeBtn) {
-            updateHoroscopeBtn.addEventListener("click", function() {
+        let updateHoroscopeBtn = document.getElementById("updateCarrierBtn");
+        let form = document.getElementById("updateCarrierBtn");
+        if (updateCarrierBtn) {
+            updateCarrierBtn.addEventListener("click", function() {
 
                 const timeOfBirth = document.getElementById('time_of_birth')?.value;
                 const manglik = document.getElementById('manglik')?.value;
@@ -103,11 +103,11 @@
                         horoscope_show: horoscopeShow,
                     },
                     success: function(response) {
-                        $('#updateBasicBtn').prop('disabled', false);
+                        $('#updateCarrierBtn').prop('disabled', false);
                         if (response.success) {
-                            document.getElementById("updateHoroscopeSection").style
+                            document.getElementById("updateCarrierSection").style
                                 .display = 'none';
-                            document.getElementById("editHoroscopeSection").style.display =
+                            document.getElementById("editCarrierSection").style.display =
                                 'block';
 
                             $('#userBirthTime').text(response.user.time_of_birth);
@@ -116,15 +116,14 @@
                             $('#userRashi').text(response.user.rashi);
                             $('#userHoroscopeMatch').text(response.user.horoscope_match);
                             $('#userHoroscopeShow').text(response.user.horoscope_show);
-                            // $('#horoscopeDetailsAlert').get(0).scrollIntoView({
-                            //     behavior: 'smooth',
-                            //     block: 'center',
-                            //     inline: 'nearest' // Ensures the alert is visible at the center of the viewport
-                            // });
-                            $('#horoscopeDetailsAlert').focus();
+                            $('#horoscopeDetailsAlert').get(0).scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center',
+                                inline: 'nearest' // Ensures the alert is visible at the center of the viewport
+                            });
 
                             // Dynamically update the alert content
-                            $('#horoscopeDetailsAlert').html(`
+                            $('#carrierDetailsAlert').html(`
     <div class="alert alert-success col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16" role="alert">
         ${response.message}
         <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">x</button>
@@ -136,7 +135,7 @@
                                 $('.alert').fadeOut('slow', function() {
                                     $(this).remove();
                                 });
-                            }, 2000);
+                            }, 1500);
 
                         } else {
                             alert('Failed to update details. Please try again.');
@@ -146,8 +145,8 @@
                 });
             });
         } else {
-            console.error("Update Horoscope button not found!");
+            console.error("Update Carrier button not found!");
         }
     });
 </script>
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/update-horoscope-details-component.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\update-carrier-details-component.blade.php ENDPATH**/ ?>

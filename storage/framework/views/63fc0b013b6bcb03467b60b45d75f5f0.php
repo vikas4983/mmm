@@ -34,15 +34,21 @@
     }
     extract($optionData);
 ?>
-
+<?php
+    use App\Models\State;
+    use App\Models\City;
+    $states = State::all();
+    $cities = City::all();
+?>
 <?php switch($name):
     case ('country'): ?>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="<?php echo e($name); ?>">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?>
+                    <?php echo e($label); ?>
 
                 </label>
+               
                 <select id="country" name="<?php echo e($name); ?>" class="form-control">
                     <option value="">Select Country</option>
                     <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -68,16 +74,19 @@ unset($__errorArgs, $__bag); ?>
         <div class="col-md-1 d-flex align-items-center justify-content-center">
         </div>
         <div class="col-md-6" id="hState">
+           
             <div class="form-group">
                 <label for="state">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>State of Birth
+                   State of Birth
                 </label>
                 <select id="state" name="state" class="form-control">
-                    <option value="<?php echo e($user->carrierDetails->states->id); ?>"
-                        <?php echo e(old($name, $user->carrierDetails->states->id) == $user->carrierDetails->states->id ? 'selected' : ''); ?>>
-                        <?php echo e($user->carrierDetails->states->state); ?>
+                    <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($state->id); ?>"
+                            <?php echo e(old($name, $user->carrierDetails->states->id) == $state->id ? 'selected' : ''); ?>>
+                            <?php echo e($state->state); ?>
 
-                    </option>
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 </select>
                 <?php $__errorArgs = ['state'];
@@ -97,16 +106,20 @@ unset($__errorArgs, $__bag); ?>
 
         <div class="col-md-6" id="hCity">
             <div class="form-group">
+               
                 <label for="city">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>City of Birth
+                   City of Birth
                 </label>
+                
                 <select id="city" name="city" class="form-control">
                     <option value="">Select City</option>
-                    <option value="<?php echo e($user->horoscopeDetails->cities->id); ?>"
-                        <?php echo e(old($name, $user->horoscopeDetails->cities->id) == $user->horoscopeDetails->cities->id ? 'selected' : ''); ?>>
-                        <?php echo e($user->horoscopeDetails->cities->city); ?>
+                    <?php $__currentLoopData = $cities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($city->id); ?>"
+                            <?php echo e(old($name, $user->horoscopeDetails->cities->id) == $city->id ? 'selected' : ''); ?>>
+                            <?php echo e($city->city); ?>
 
-                    </option>
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
                 <?php $__errorArgs = ['city'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -128,7 +141,7 @@ unset($__errorArgs, $__bag); ?>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="<?php echo e($name); ?>">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?>
+                   <?php echo e($label); ?>
 
                 </label>
                 <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control" required>

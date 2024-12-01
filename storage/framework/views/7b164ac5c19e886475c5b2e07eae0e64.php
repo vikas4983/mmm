@@ -30,7 +30,7 @@ unset($__errorArgs, $__bag); ?>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="<?php echo e($name); ?>">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?>
+                   <?php echo e($label); ?>
 
                 </label>
                 <input type="time" name="<?php echo e($name); ?>" id="<?php echo e($name); ?>"

@@ -262,7 +262,7 @@ return [
         ],
         'country' => [
             'type' => 'select',
-            'label' => 'country of birth',
+            'label' => 'Country of birth',
             'name' => 'country',
             'options' => [],
             'rules' => 'nullable|numeric',
@@ -315,6 +315,61 @@ return [
 
 
     'carrierDetails' => [
+
+        'country' => [
+            'type' => 'select',
+            'label' => 'Country',
+            'name' => 'country',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'education' => [
+            'type' => 'select',
+            'name' => 'education',
+            'label' => 'Highest Degree',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'education_detail' => [
+            'type' => 'text',
+            'name' => 'education_detail',
+            'label' => 'Education Detail',
+            'placeholder' => 'Enter Education Details',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
+        ],
+
+        'employee' => [
+            'type' => 'select',
+            'name' => 'employee',
+            'label' => 'Employed In',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'occupation_detail' => [
+            'type' => 'text',
+            'name' => 'occupation_detail',
+            'label' => 'Occupation Detail',
+            'placeholder' => 'Enter Occupation Details',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
+        ],
+
+        'income' => [
+            'type' => 'select',
+            'name' => 'income',
+            'label' => 'Income',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'about_me' => [
+            'type' => 'textarea',
+            'name' => 'about_me',
+            'label' => 'About you',
+            'options' => [],
+            'placeholder' => 'Enter about  you',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:300',
+        ],
+    ],
+    'editCarrierDetails' => [
 
         'country' => [
             'type' => 'select',

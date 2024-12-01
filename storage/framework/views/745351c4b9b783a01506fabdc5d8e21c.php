@@ -388,6 +388,7 @@
                 </div>
                 
                     
+                    <div id="aboutMeDetailsAlert"></div>
                     <?php if (isset($component)) { $__componentOriginalf435682ed168c90c1b0690ff2d505b58 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf435682ed168c90c1b0690ff2d505b58 = $attributes; } ?>
 <?php $component = App\View\Components\ViewAboutMeComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -428,6 +429,138 @@
 <?php $component = $__componentOriginaledc00850ef6470a17e73b41c1fcb31a0; ?>
 <?php unset($__componentOriginaledc00850ef6470a17e73b41c1fcb31a0); ?>
 <?php endif; ?>
+                    
+                    
+                    <div id="aboutEducationDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginaled949a2946765df1c871540d78657bd0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginaled949a2946765df1c871540d78657bd0 = $attributes; } ?>
+<?php $component = App\View\Components\ViewEducationDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-education-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewEducationDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginaled949a2946765df1c871540d78657bd0)): ?>
+<?php $attributes = $__attributesOriginaled949a2946765df1c871540d78657bd0; ?>
+<?php unset($__attributesOriginaled949a2946765df1c871540d78657bd0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginaled949a2946765df1c871540d78657bd0)): ?>
+<?php $component = $__componentOriginaled949a2946765df1c871540d78657bd0; ?>
+<?php unset($__componentOriginaled949a2946765df1c871540d78657bd0); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal689b52780fbb85d4edccf2fe01ac0a68 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal689b52780fbb85d4edccf2fe01ac0a68 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateEducationDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-education-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateEducationDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal689b52780fbb85d4edccf2fe01ac0a68)): ?>
+<?php $attributes = $__attributesOriginal689b52780fbb85d4edccf2fe01ac0a68; ?>
+<?php unset($__attributesOriginal689b52780fbb85d4edccf2fe01ac0a68); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal689b52780fbb85d4edccf2fe01ac0a68)): ?>
+<?php $component = $__componentOriginal689b52780fbb85d4edccf2fe01ac0a68; ?>
+<?php unset($__componentOriginal689b52780fbb85d4edccf2fe01ac0a68); ?>
+<?php endif; ?>
+                   
+                    
+                    <div id="aboutOccupationDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginal9176e8b0d785153890e0fb35b5696504 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9176e8b0d785153890e0fb35b5696504 = $attributes; } ?>
+<?php $component = App\View\Components\ViewOccupationDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-occupation-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewOccupationDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9176e8b0d785153890e0fb35b5696504)): ?>
+<?php $attributes = $__attributesOriginal9176e8b0d785153890e0fb35b5696504; ?>
+<?php unset($__attributesOriginal9176e8b0d785153890e0fb35b5696504); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9176e8b0d785153890e0fb35b5696504)): ?>
+<?php $component = $__componentOriginal9176e8b0d785153890e0fb35b5696504; ?>
+<?php unset($__componentOriginal9176e8b0d785153890e0fb35b5696504); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal4aab825db4fe2fbdf69781d383e5e9aa = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4aab825db4fe2fbdf69781d383e5e9aa = $attributes; } ?>
+<?php $component = App\View\Components\UpdateOccupationDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-occupation-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateOccupationDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal4aab825db4fe2fbdf69781d383e5e9aa)): ?>
+<?php $attributes = $__attributesOriginal4aab825db4fe2fbdf69781d383e5e9aa; ?>
+<?php unset($__attributesOriginal4aab825db4fe2fbdf69781d383e5e9aa); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal4aab825db4fe2fbdf69781d383e5e9aa)): ?>
+<?php $component = $__componentOriginal4aab825db4fe2fbdf69781d383e5e9aa; ?>
+<?php unset($__componentOriginal4aab825db4fe2fbdf69781d383e5e9aa); ?>
+<?php endif; ?>
+                     
+                    
+                    <div id="aboutFamilyDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginalaef6d2d7887e12419b54bd32601f135c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalaef6d2d7887e12419b54bd32601f135c = $attributes; } ?>
+<?php $component = App\View\Components\ViewFamilyDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-family-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewFamilyDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalaef6d2d7887e12419b54bd32601f135c)): ?>
+<?php $attributes = $__attributesOriginalaef6d2d7887e12419b54bd32601f135c; ?>
+<?php unset($__attributesOriginalaef6d2d7887e12419b54bd32601f135c); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalaef6d2d7887e12419b54bd32601f135c)): ?>
+<?php $component = $__componentOriginalaef6d2d7887e12419b54bd32601f135c; ?>
+<?php unset($__componentOriginalaef6d2d7887e12419b54bd32601f135c); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginale57491951a7bebee93a09e31b3a43446 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginale57491951a7bebee93a09e31b3a43446 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateFamilyDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-family-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateFamilyDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginale57491951a7bebee93a09e31b3a43446)): ?>
+<?php $attributes = $__attributesOriginale57491951a7bebee93a09e31b3a43446; ?>
+<?php unset($__attributesOriginale57491951a7bebee93a09e31b3a43446); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale57491951a7bebee93a09e31b3a43446)): ?>
+<?php $component = $__componentOriginale57491951a7bebee93a09e31b3a43446; ?>
+<?php unset($__componentOriginale57491951a7bebee93a09e31b3a43446); ?>
+<?php endif; ?>
+                     
+                    
+                   
                     
                     <div id="basicDetailsAlert"></div>
                     <?php if (isset($component)) { $__componentOriginal49afcd653de56e01fcea03b3ec99b49d = $component; } ?>
@@ -470,7 +603,8 @@
 <?php $component = $__componentOriginal16545f65a80262a387d3d932ec19aab5; ?>
 <?php unset($__componentOriginal16545f65a80262a387d3d932ec19aab5); ?>
 <?php endif; ?>
-
+                  
+                    
                     <div id="horoscopeDetailsAlert"></div>
                     <?php if (isset($component)) { $__componentOriginal7cea83cec912e87542c50595182c0452 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal7cea83cec912e87542c50595182c0452 = $attributes; } ?>
@@ -511,6 +645,49 @@
 <?php if (isset($__componentOriginal64e71e731725413d927db76f3c1beedb)): ?>
 <?php $component = $__componentOriginal64e71e731725413d927db76f3c1beedb; ?>
 <?php unset($__componentOriginal64e71e731725413d927db76f3c1beedb); ?>
+<?php endif; ?>
+                   
+                    
+                    <div id="carrierDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginal43ca17b3cb5bf2dc58b0853643ad87d0 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal43ca17b3cb5bf2dc58b0853643ad87d0 = $attributes; } ?>
+<?php $component = App\View\Components\ViewCarrierDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-carrier-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewCarrierDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal43ca17b3cb5bf2dc58b0853643ad87d0)): ?>
+<?php $attributes = $__attributesOriginal43ca17b3cb5bf2dc58b0853643ad87d0; ?>
+<?php unset($__attributesOriginal43ca17b3cb5bf2dc58b0853643ad87d0); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal43ca17b3cb5bf2dc58b0853643ad87d0)): ?>
+<?php $component = $__componentOriginal43ca17b3cb5bf2dc58b0853643ad87d0; ?>
+<?php unset($__componentOriginal43ca17b3cb5bf2dc58b0853643ad87d0); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal034d26457e504563c601e168446619c4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal034d26457e504563c601e168446619c4 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateCarrierDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-carrier-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateCarrierDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal034d26457e504563c601e168446619c4)): ?>
+<?php $attributes = $__attributesOriginal034d26457e504563c601e168446619c4; ?>
+<?php unset($__attributesOriginal034d26457e504563c601e168446619c4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal034d26457e504563c601e168446619c4)): ?>
+<?php $component = $__componentOriginal034d26457e504563c601e168446619c4; ?>
+<?php unset($__componentOriginal034d26457e504563c601e168446619c4); ?>
 <?php endif; ?>
 
                     <div class="gt-panel gt-panel-default" id="edit5">

@@ -304,11 +304,11 @@ unset($__errorArgs, $__bag); ?>
                             $('#userCaste').text(response.user.caste);
                             $('#userChildren').text(response.user.children);
                             $('#userOtherCasteMarrige').text(response.user.otherCasteMarriage);
-                            $('#alert-container-basicDetails').get(0).scrollIntoView({
+                            $('#basicDetailsAlert').get(0).scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'start'
                             });
-                            $('#basicDetails').html(`
+                            $('#basicDetailsAlert').html(`
                              <div class="alert alert-success col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16 role="alert">
                                  ${response.message}
                               <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">x</button>

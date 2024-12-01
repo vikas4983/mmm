@@ -60,6 +60,7 @@ use App\Models\City;
 use App\Models\Email;
 use App\Models\Payment;
 use Aws\Middleware;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Telescope\Http\Controllers\RedisController as ControllersRedisController;
 
 // User Routes
@@ -125,6 +126,15 @@ Route::middleware([
     Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
     //Update About Me Details
     Route::patch('about-me-update', [UserController::class, 'updateAboutMe'])->name('about.me.update')->middleware('mobileNumberUpdated');
+    //Update About Education Details
+    Route::patch('education-details', [UserController::class, 'educationDetail'])->name('education.details')->middleware('mobileNumberUpdated');
+    
+    //Update About Occupation Details
+    Route::patch('occupation-details', [UserController::class, 'occupationDetail'])->name('occupation.details')->middleware('mobileNumberUpdated');
+    
+    //Update About Occupation Details
+    Route::patch('family-details', [UserController::class, 'familyDetail'])->name('family.details')->middleware('mobileNumberUpdated');
+    
     //Update Basic Details
     Route::patch('basic-details-update', [UserController::class, 'updateBasicDetails'])->name('update.basic.details')->middleware('mobileNumberUpdated');
     //Update Basic Details
@@ -192,6 +202,42 @@ Route::view('frontend.search.quick', 'frontend.search.quick')->name('quickSearch
 
 //Redis
 Route::get('test-redis', [RedisController::class, 'testRedis'])->name('test.redis');
+Route::get('clear-cache', function(){
+    $optionKeys = [
+        'profileFors',
+        'heights',
+        'motherTongues',
+        'religions',
+        'states',
+        'cities',
+        'maritalStatuses',
+        'rashies',
+        'countries',
+        'educations',
+        'employees',
+        'occupations',
+        'incomes',
+        'fatherOccupations',
+        'motherOccupations',
+        'bodyTypes',
+        'complexions',
+        'bloodGroups',
+        'habits',
+        'physicalStatuses',
+        'hobbies',
+        'interests',
+        'musics',
+        'dresses',
+        'movies',
+        'sports',
+    ];
+
+    foreach ($optionKeys as $key) {
+        Cache::forget($key);
+    }
+    Cache::flush();
+    return "Clear cache";
+});
 
 
 

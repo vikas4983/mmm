@@ -352,16 +352,41 @@
                 </div>
                 
                     {{-- About Me Details --}}
+                    <div id="aboutMeDetailsAlert"></div>
                     <x-view-about-me-component :user="$user" />
                     <x-update-about-me-component :user="$user" />
+                    
+                    {{-- About Education Details --}}
+                    <div id="aboutEducationDetailsAlert"></div>
+                    <x-view-education-details-component :user="$user" />
+                    <x-update-education-details-component :user="$user" />
+                   
+                    {{-- About Occupation Details --}}
+                    <div id="aboutOccupationDetailsAlert"></div>
+                    <x-view-occupation-details-component :user="$user" />
+                    <x-update-occupation-details-component :user="$user" />
+                     
+                    {{-- About Family Details --}}
+                    <div id="aboutFamilyDetailsAlert"></div>
+                    <x-view-family-details-component :user="$user" />
+                    <x-update-family-details-component :user="$user" />
+                     
+                    
+                   
                     {{-- Basic Details --}}
                     <div id="basicDetailsAlert"></div>
                     <x-view-basic-details-component :user="$user" />
                     <x-update-basic-details-component :user="$user" />
-
+                  
+                    {{-- Horoscope Details --}}
                     <div id="horoscopeDetailsAlert"></div>
                     <x-view-horoscope-details-component :user="$user" />
                     <x-update-horoscope-details-component :user="$user" />
+                   
+                    {{-- Family Details --}}
+                    <div id="carrierDetailsAlert"></div>
+                    <x-view-carrier-details-component :user="$user" />
+                    <x-update-carrier-details-component :user="$user" />
 
                     <div class="gt-panel gt-panel-default" id="edit5">
                         <div class="gt-panel-head">

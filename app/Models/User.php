@@ -107,6 +107,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(LikeDetail::class);
     }
+    
     public function contactDetail()
     {
         return $this->hasOne(ContactDetail::class);

@@ -22,7 +22,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="{{ $name }}">
-                    <b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}
+                   {{ $label }}
                 </label>
                 <input type="time" name="{{ $name }}" id="{{ $name }}"
                     value="{{ \Carbon\Carbon::parse($user->horoscopeDetails->time_of_birth)->format('H:i') }}">

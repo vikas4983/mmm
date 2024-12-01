@@ -15,7 +15,7 @@ class OptionService
             'religions' => fn() => \App\Models\Religion::with('castes')->where('status', 1)->get(),
             'maritalStatuses' => \App\Models\MaritalStatus::class,
             'rashies' => \App\Models\Rashi::class,
-            'countries' => \App\Models\Country::class,
+            'countries' => fn() => \App\Models\Country::with('states')->where('status', 1)->get(),
             'states' => \App\Models\State::class,
             'cities' => \App\Models\City::class,
             'educations' => \App\Models\Education::class,
@@ -35,14 +35,19 @@ class OptionService
             'dresses' => \App\Models\Dress::class,
             'movies' => \App\Models\Movie::class,
             'sports' => \App\Models\Sport::class,
+
         ];
 
+        $results = [];
+
         foreach ($options as $key => $model) {
-            cache::remember($key, 60, $model);
-            return $model::where('status', 1)->get();
-            // foreach ($this->options as $key => $model) {
-            //     Cache::remember($key, 60, is_callable($model) ? $model : fn() => $model::where('status', 1)->get());
-            // }
+            $results[$key] = Cache::remember($key, 60, function () use ($model) {
+                return is_callable($model)
+                    ? $model()
+                    : $model::where('status', 1)->get();
+            });
         }
+
+        return $results;
     }
 }
