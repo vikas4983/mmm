@@ -13,4 +13,30 @@ class CarrierDetail extends Model
     {
         return $value == 1 ? 'Approved' : 'Disapproved';
     }
+    public function countries()
+    {
+       return $this->belongsTo(Country::class, 'country', 'id');
+    }
+    
+    public function states()
+    {
+       return $this->belongsTo(State::class, 'state', 'id');
+    }
+    public function educations()
+    {
+       return $this->belongsTo(Education::class, 'education', 'id');
+    }
+    public function occupations()
+    {
+       return $this->belongsTo(Occupation::class, 'occupation', 'id');
+    }
+    public function employees()
+    {
+       return $this->belongsTo(Employee::class, 'employee', 'id');
+    }
+    public function incomes()
+    {
+       return $this->belongsTo(Income::class, 'income', 'id');
+    }
+
 }

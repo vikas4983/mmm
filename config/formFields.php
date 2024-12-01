@@ -46,10 +46,10 @@ return [
             'placeholder' => 'Enter Mobile Number',
             'rules' =>   'required|numeric|regex:/^[0-9]{10,12}$/',
         ],
-        'profileFor' => [
+        'profile_for' => [
             'type' => 'select',
             'label' => 'Profile For',
-            'name' => 'profileFor',
+            'name' => 'profile_for',
             'options' => [],
             'rules' => 'required',
         ],
@@ -64,6 +64,31 @@ return [
 
 
     ],
+
+    'accountDetails' => [
+        'name' => [
+            'type' => 'text',
+            'name' => 'name',
+            'label' => 'Full Name',
+            'placeholder' => 'Enter Full Name',
+            'rules' => 'required|string|regex:/^[\pL\s]+$/u|max:30',
+        ],
+        'email' => [
+            'type' => 'email',
+            'name' => 'email',
+            'label' => 'Email',
+            'placeholder' => 'Enter Email',
+            'rules' => 'required|email|max:30',
+        ],
+        'profile_for' => [
+            'type' => 'select',
+            'label' => 'Profile For',
+            'name' => 'profile_for',
+            'options' => [],
+            'rules' => 'required',
+        ],
+    ],
+
 
     'login' => [
         'email' => [
@@ -87,7 +112,7 @@ return [
             'type' => 'date',
             'name' => 'dob',
             'label' => 'Date of Birth',
-           'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
+            'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
         ],
         'height' => [
             'type' => 'select',
@@ -120,6 +145,46 @@ return [
         ],
 
     ],
+    'editBasicDetails' => [
+        // 'dob' => [
+        //     'type' => 'date',
+        //     'name' => 'dob',
+        //     'label' => 'Date of Birth',
+        //    'rules' => 'required|date|before:' . now()->subYears(18)->toDateString(),
+        // ],
+        'height' => [
+            'type' => 'select',
+            'label' => 'Height',
+            'name' => 'height',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        'mother_tongue' => [
+            'type' => 'select',
+            'label' => 'Mother Tongue',
+            'name' => 'mother_tongue',
+            'options' => [],
+            'rules' => 'required|string',
+        ],
+        
+        // 'religion' => [
+        //     'type' => 'select',
+        //     'name' => 'religion',
+        //     'label' => 'Religion',
+        //     'options' => [],
+        //     'rules' => 'required|string',
+        // ],
+
+        // 'marital_status' => [
+        //     'type' => 'select',
+        //     'name' => 'marital_status',
+        //     'label' => 'Marital Status',
+        //     'options' => [],
+        //     'rules' => 'required|string',
+        // ],
+
+    ],
+
     'horoscopeDetails' => [
 
         'country_of_birth' => [
@@ -134,7 +199,7 @@ return [
             'type' => 'time',
             'name' => 'time_of_birth',
             'label' => 'Time of Birth',
-            'rules' => 'max:255',
+            'rules' => 'nullable|string|max:255',
         ],
         'rashi' => [
             'type' => 'select',
@@ -152,7 +217,7 @@ return [
                 'no' => 'No',
                 "don't know" => "Don't Know"
             ],
-            'rules' => 'string',
+            'rules' => 'required|string',
         ],
 
 
@@ -165,7 +230,7 @@ return [
                 'no' => 'No',
                 "doesn't matter" => "Does't Matter"
             ],
-            'rules' => 'string',
+            'rules' => 'nullable|string',
         ],
         'horoscope_show' => [
             'type' => 'radio',
@@ -177,10 +242,78 @@ return [
                 'no' => 'No',
 
             ],
-            'rules' => 'string',
+            'rules' => 'nullable|string',
         ],
 
     ],
+    'editHoroscopeDetails' => [
+
+        'date_of_birth' => [
+            'type' => 'date',
+            'name' => 'date_of_birth',
+            'label' => 'DOB',
+            'rules' => 'nullable|date|max:255',
+        ],
+        'time_of_birth' => [
+            'type' => 'time',
+            'name' => 'time_of_birth',
+            'label' => 'Time of Birth',
+            'rules' => 'nullable|string|max:255',
+        ],
+        'country' => [
+            'type' => 'select',
+            'label' => 'Country of birth',
+            'name' => 'country',
+            'options' => [],
+            'rules' => 'nullable|numeric',
+        ],
+        'rashi' => [
+            'type' => 'select',
+            'name' => 'rashi',
+            'label' => 'Rashi',
+            'options' => [],
+            'rules' => 'nullable|numeric',
+        ],
+        'manglik' => [
+            'type' => 'select',
+            'label' => 'Manglik',
+            'name' => 'manglik',
+            'options' => [
+                'yes' => 'Yes',
+                'no' => 'No',
+                "don't know" => "Don't Know"
+            ],
+            'rules' => 'required|string',
+        ],
+
+
+        'horoscope_match' => [
+            'type' => 'select',
+            'name' => 'horoscope_match',
+            'label' => 'Horoscope Match',
+            'options' => [
+                'yes' => 'Yes',
+                'no' => 'No',
+                "doesn't matter" => "Does't Matter"
+            ],
+            'rules' => 'nullable|string',
+        ],
+        'horoscope_show' => [
+            'type' => 'select',
+            'name' => 'horoscope_show',
+            'label' => 'Horoscope Show',
+            'options' => [
+                'yes' => 'Yes',
+                "only accept member" => "Only Accept Member",
+                'no' => 'No',
+
+            ],
+            'rules' => 'nullable|string',
+        ],
+
+    ],
+
+
     'carrierDetails' => [
 
         'country' => [
@@ -201,10 +334,65 @@ return [
             'type' => 'text',
             'name' => 'education_detail',
             'label' => 'Education Detail',
-           'placeholder' => 'Enter Education Details',
-           'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
+            'placeholder' => 'Enter Education Details',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
         ],
-        
+
+        'employee' => [
+            'type' => 'select',
+            'name' => 'employee',
+            'label' => 'Employed In',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'occupation_detail' => [
+            'type' => 'text',
+            'name' => 'occupation_detail',
+            'label' => 'Occupation Detail',
+            'placeholder' => 'Enter Occupation Details',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
+        ],
+
+        'income' => [
+            'type' => 'select',
+            'name' => 'income',
+            'label' => 'Income',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'about_me' => [
+            'type' => 'textarea',
+            'name' => 'about_me',
+            'label' => 'About you',
+            'options' => [],
+            'placeholder' => 'Enter about  you',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:300',
+        ],
+    ],
+    'editCarrierDetails' => [
+
+        'country' => [
+            'type' => 'select',
+            'label' => 'Country',
+            'name' => 'country',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'education' => [
+            'type' => 'select',
+            'name' => 'education',
+            'label' => 'Highest Degree',
+            'options' => [],
+            'rules' => 'required|numeric',
+        ],
+        'education_detail' => [
+            'type' => 'text',
+            'name' => 'education_detail',
+            'label' => 'Education Detail',
+            'placeholder' => 'Enter Education Details',
+            'rules' => 'nullable|string|regex:/^[\pL\s]+$/u|max:100',
+        ],
+
         'employee' => [
             'type' => 'select',
             'name' => 'employee',

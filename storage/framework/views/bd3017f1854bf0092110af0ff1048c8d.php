@@ -2,9 +2,7 @@
 <?php $__env->startSection('title', 'Regitration'); ?>
 
 <?php $__env->startSection('content'); ?>
-
-
-    <div id="carrierDetailsPage">
+<div id="carrierDetailsPage">
         <div class="container">
             <div class="row mt-10 inRegTopTitle">
                 <div class="col-xxl-11">

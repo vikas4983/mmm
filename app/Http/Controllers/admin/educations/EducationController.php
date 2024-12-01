@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Traits\ModelCountsTrait;
 
 class EducationController extends Controller
-{  
+{
     use ModelCountsTrait;
     /**
      * Display a listing of the resource.
@@ -28,7 +28,7 @@ class EducationController extends Controller
         $segments = explode('/', $url);
         $lastSegment = end($segments);
         $urlName = '/' . $lastSegment;
-      
+
         $this->indexCount(Education::class, $urlName);
         return view('admin.educations.index', compact('educations', 'count', 'active', 'inActive', 'countAll'));
     }
@@ -95,18 +95,13 @@ class EducationController extends Controller
     }
     public function checkBoxDelete(Request $request)
     {
-        //dd('checkBoxDelete');
-        //dd($request->all());
         $selectedDeleteEducationIds = $request->input('selectedDeleteEducationIds');
         if (!empty($selectedDeleteEducationIds)) {
             $ids = explode(',', $selectedDeleteEducationIds[0]);
-
-            // Check if you're receiving an array of selected IDs
             foreach ($ids as $id) {
-                //dd($id); // Check if each ID is being processed correctly
                 $educations = Education::find($id);
                 if ($educations) {
-                    $educations->delete(); // Use delete() method to delete a single record
+                    $educations->delete();
                 }
             }
 
@@ -118,16 +113,10 @@ class EducationController extends Controller
 
     public function activeItem(Request $request)
     {
-
-        //dd('activeItem');
-        //dd($request->all());
         $selectedActiveEducationIds = $request->input('selectedActiveEducationIds');
         if (!empty($selectedActiveEducationIds)) {
             $ids = explode(',', $selectedActiveEducationIds[0]);
-
-            // Check if you're receiving an array of selected IDs
             foreach ($ids as $id) {
-                //dd($id); // Check if each ID is being processed correctly
                 $educations = Education::find($id);
                 if ($educations) {
                     $educations->update([
@@ -143,15 +132,10 @@ class EducationController extends Controller
     }
     public function inActiveItem(Request $request)
     {
-        //dd('inActiveItem');
-        // dd($request->all());
         $selectedInactiveEducationIds = $request->input('selectedInactiveEducationIds');
         if (!empty($selectedInactiveEducationIds)) {
             $ids = explode(',', $selectedInactiveEducationIds[0]);
-
-            // Check if you're receiving an array of selected IDs
             foreach ($ids as $id) {
-                //dd($id); // Check if each ID is being processed correctly
                 $educations = Education::find($id);
                 if ($educations) {
                     $educations->update([
@@ -159,7 +143,6 @@ class EducationController extends Controller
                     ]);
                 }
             }
-
             return redirect()->back()->with('success', 'Selected Education inActivated successfully.');
         } else {
             return redirect()->back()->with('error', 'No items selected.');
