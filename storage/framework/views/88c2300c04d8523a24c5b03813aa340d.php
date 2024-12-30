@@ -66,7 +66,7 @@
                 updateAboutFamilyBtn.disabled = true;
 
                 $.ajax({
-                    url: "<?php echo e(route('Family.details')); ?>",
+                    url: "<?php echo e(route('family.details')); ?>",
                     method: "PATCH",
                     data: {
                         _token: csrfToken,

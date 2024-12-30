@@ -6,6 +6,7 @@ use App\View\Components\FormFieldsComponent;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Pagination\Paginator;
+use App\Services\OptionService;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
         // Register the Blade component
         Paginator::useBootstrap();
         Blade::component('form-fields', FormFieldsComponent::class);
+       
     }
 }

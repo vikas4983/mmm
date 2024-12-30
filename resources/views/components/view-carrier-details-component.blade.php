@@ -17,33 +17,19 @@
                         Education :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userDob">
+                        <b id="userEducation">
                             {{ $user->carrierDetails->educations->education ?? 'NA' }}
                         </b>
                     </div>
                 </div>
             </div>
-
-            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                <div class="row">
-                    <div class="col-xs-6">
-                        Occupation :
-                    </div>
-                    <div class="col-xs-10">
-                        <b id="userManglik">
-                            {{ $user->carrierDetails->occupations->occupation ?? 'NA' }}
-                        </b>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
                 <div class="row">
                     <div class="col-xs-6">
                         Employed in :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userRashi">
+                        <b id="userEmployee">
                             {{ $user->carrierDetails->employees->employee ?? '' }}
                         </b>
                     </div>
@@ -52,10 +38,24 @@
             <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
                 <div class="row">
                     <div class="col-xs-6">
+                        Occupation :
+                    </div>
+                    <div class="col-xs-10">
+                        <b id="userOccupation">
+                            {{ $user->carrierDetails->occupations->occupation ?? 'NA' }}
+                        </b>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                <div class="row">
+                    <div class="col-xs-6">
                         Annual Income :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userBirthTime">
+                        <b id="userIncome">
                             {{ $user->carrierDetails->incomes->income ?? '' }} </b>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         Orgnaization Name :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userBirthTime">
+                        <b id="userOrganizationName">
                             {{ $user->carrierDetails->organization_name ?? '' }} </b>
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                         School Name :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userHoroscopeShow">
+                        <b id="userSchoolName">
 
                             {{ $user->carrierDetails->school_name ?? '' }} </b>
                     </div>
@@ -91,7 +91,7 @@
                         Collage Name :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userHoroscopeShow">
+                        <b id="userCollegeName">
 
                             {{ $user->carrierDetails->college_name ?? '' }} </b>
                     </div>
@@ -103,9 +103,9 @@
                         Interested In Abroad :
                     </div>
                     <div class="col-xs-10">
-                        <b id="userHoroscopeShow">
+                        <b id="userInterestedAbroad">
 
-                            {{ $user->carrierDetails->college_name ?? '' }} </b>
+                            {{ $user->carrierDetails->interested_abroad ?? '' }} </b>
                     </div>
                 </div>
             </div>

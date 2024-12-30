@@ -40,7 +40,7 @@
                                         </ul>
                                     </div>
                                 @endif
-                                @include('partials.alerts')
+                                @include('alerts.alert')
                                 @php
                                     $fields = config('formFields.login');
                                 @endphp

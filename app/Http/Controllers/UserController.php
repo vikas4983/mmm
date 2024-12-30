@@ -4,15 +4,34 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminUpdateRequest;
 use App\Jobs\UserSendEmailJob;
+use App\Models\BloodGroup;
+use App\Models\BodyType;
 use App\Models\Caste;
+use App\Models\Challenge;
 use App\Models\City;
+use App\Models\Complextion;
+use App\Models\Country;
+use App\Models\DietaryHabit;
+use App\Models\Education;
+use App\Models\Employee;
+use App\Models\FamilyStatus;
+use App\Models\FamilyType;
+use App\Models\FamilyValue;
+use App\Models\FatherOccupation;
+use App\Models\Habit;
 use App\Models\Height;
+use App\Models\Image;
+use App\Models\Income;
+use App\Models\LanguageSpeak;
 use App\Models\MemberOtp;
+use App\Models\MotherOccupation;
 use App\Models\MotherTongue;
+use App\Models\Occupation;
 use App\Models\Payment;
 use App\Models\ProfileId;
 use App\Models\Rashi;
 use App\Models\Religion;
+use App\Models\State;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,7 +48,10 @@ use App\Traits\SpoteLightUsersTrait;
 use App\Traits\ModelCountsTrait;
 use App\Traits\UserEmailTemplateTrait;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use App\Services\OptionService;
+
 
 
 class UserController extends Controller
@@ -45,10 +67,13 @@ class UserController extends Controller
     use SpoteLightUsersTrait;
     use UserEmailTemplateTrait;
     use MemberOtpTrait;
+  
     public function dashboard()
     {
         session(['login' => 'yes']);
-        return view('dashboard');
+        $dashboardConstacts = config('constants.dashboard');
+        //dump( $dashboardConstacts );
+        return view('dashboard', compact('dashboardConstacts'));
     }
     public function index(Request $request)
     {
@@ -122,15 +147,17 @@ class UserController extends Controller
                 'familyDetails',
                 'lifestyleDetails',
                 'likeDetails',
-                'contactDetail',
+                'contactDetails',
                 'images'
             )->where('id', $user->id)->first();
+
+           
 
             if (!$user) {
                 return redirect()->route('login')->with('error', 'User not found.');
             }
 
-            return view('frontend.users.show', compact('user'));
+            return view('frontend.users.show', compact('user' ));
         } catch (\Exception $e) {
             Log::error('Error fetching user data: ' . $e->getMessage());
             return redirect()->route('error')->with('error', 'An unexpected error occurred. Please try again later.');
@@ -140,7 +167,7 @@ class UserController extends Controller
 
     public function myProfile()
     {
-
+       
         try {
             if (!$user = auth()->user()) {
                 return redirect()->route('login');
@@ -158,12 +185,18 @@ class UserController extends Controller
                 'carrierDetails.occupations',
                 'carrierDetails.employees',
                 'carrierDetails.incomes',
+                'carrierDetails.countries',
+                'carrierDetails.states',
+                'carrierDetails.cities',
                 'familyDetails',
+                'familyDetails.familyCity',
                 'lifestyleDetails',
                 'likeDetails',
-                'contactDetail',
+                'contactDetails',
                 'images'
             ])->where('id', $user->id)->where('status', 1)->first();
+          
+           
             return view('frontend.users.show', compact('user'));
         } catch (\Exception $e) {
             Log::error('Error fetching user data: ' . $e->getMessage());
@@ -211,6 +244,64 @@ class UserController extends Controller
                 'error' => 'There was an error updating the user information. Please try again later.',
             ], 500);
         }
+    }
+    public function updateAccountDetail(Request $request)
+    {
+        //dd( $request->all());
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        // try {
+            $fields = config('formFields.editAccountDetails');
+
+            $validationRules = [];
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+            $validationRules['state'] = ['required', 'integer'];
+            $validationRules['city'] = ['required', 'integer'];
+            $validateData = $request->validate($validationRules);
+           
+            $user->update(
+                [
+                    'name' => $validateData['name'],
+                    'email' => $validateData['user_email'],
+                    'profile_for' => $validateData['profile_for'],
+                   
+                ]
+            );
+            $user->carrierDetails->update(
+                [
+                    'country' => $validateData['country'],
+                    'state' => $validateData['state'],
+                    'city' => $validateData['city'],
+                   
+                ]
+            );
+            $country = Country::find($request->country)->country;
+            $state = State::find($request->state)->state;
+            $city = City::find($request->city)->city;
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User account deatils updated successfully!',
+                'user' => 
+                [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'profile_for' => $user->profile_for,
+                    'country' => $country,
+                    'state' => $state,
+                    'city' => $city,
+                ],
+            ]);
+        // } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'There was an error updating the user information. Please try again later.',
+            ], 500);
+        // }
     }
 
 
@@ -462,6 +553,7 @@ class UserController extends Controller
     }
     public function familyDetail(Request $request)
     {
+
         $user = Auth::user();
         $validatedData = $request->validate([
             'about_family' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
@@ -471,7 +563,7 @@ class UserController extends Controller
             'about_family.max' => 'The family details must not exceed 1000 characters.',
         ]);
 
-        $user->carrierDetails->update($validatedData);
+        $user->familyDetails->update($validatedData);
         return response()->json([
             'success' => 'true',
             'message' => 'User about family details updated successfully!',
@@ -491,7 +583,7 @@ class UserController extends Controller
                 $validationRules[$field['name']] = $field['rules'];
             }
             $validationRules['caste'] = ['required', 'integer', 'exists:castes,id'];
-            $validationRules['children'] = ['required', 'integer', 'min:0'];
+            $validationRules['children'] = ['nullable', 'integer', 'min:0'];
             $validationRules['other_caste_marriage'] = ['nullable', 'integer', 'min:0', 'max:1'];
             $validateData = $request->validate($validationRules);
 
@@ -522,7 +614,7 @@ class UserController extends Controller
     }
     public function updateHoroscopeDetails(Request $request)
     {
-
+        // dd($request->all());
 
         $user = auth()->user();
         $fields = config('formFields.editHoroscopeDetails');
@@ -552,34 +644,259 @@ class UserController extends Controller
     }
     public function updateCarrierDetails(Request $request)
     {
-        //dd($request->all());
+        try {
+            $user = auth()->user();
+            $fields = config('formFields.editCarrierDetails');
+            $validationRules = [];
 
-        $user = auth()->user();
-        $fields = config('formFields.editHoroscopeDetails');
-        $validationRules = [];
-        foreach ($fields as $key => $field) {
-            $validationRules[$field['name']] = $field['rules'];
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+
+            $validateData = $request->validate($validationRules);
+            $user->carrierDetails->update($validateData);
+            $education = Education::find($validateData['education'])->education ?? 'NA';
+            $employee = Employee::find($validateData['employee'])->employee ?? 'NA';
+            $occupation = Occupation::find($validateData['occupation'])->occupation ?? 'NA';
+            $income = Income::find($validateData['income'])->income ?? 'NA';
+
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User Carrier details updated successfully!',
+                'user' => [
+                    'education' => $education,
+                    'employee' =>  $employee,
+                    'occupation' => $occupation,
+                    'income' => $income,
+                    'organization_name' => $user->carrierDetails->organization_name,
+                    'school_name' => $user->carrierDetails->school_name,
+                    'college_name' => $user->carrierDetails->college_name,
+                    'interested_abroad' => $user->carrierDetails->interested_abroad,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'An error occurred while updating user carrier details.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-        $validationRules['place_of_birth'] = ['nullable', 'integer',];
-        $validateData = $request->validate($validationRules);
-        $user->horoscopeDetails->update($validateData);
-        $city = City::find($validateData['place_of_birth']) ?? 'Not provided';
-        $placeOfBirth = $city->city;
-        $rashi = Rashi::find($request->rashi) ?? 'Not provided';
-        $updatedRashi = $rashi->name;
-        return response()->json([
-            'success' => 'true',
-            'message' => 'User Horoscope details updated successfully!',
-            'user' => [
-                'time_of_birth' => $user->horoscopeDetails->time_of_birth,
-                'manglik' => $user->horoscopeDetails->manglik,
-                'place_of_birth' =>  $placeOfBirth,
-                'rashi' =>  $updatedRashi,
-                'horoscope_match' => $user->horoscopeDetails->horoscope_match,
-                'horoscope_show' => $user->horoscopeDetails->horoscope_show,
-            ],
+    }
+    public function updateUserFamilyDetails(Request $request)
+    {
+        //dd($request->all());
+        try {
+            $user = auth()->user();
+            $fields = config('formFields.editUserFamilyDetails');
+            $validationRules = [];
+
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+            $validationRules['family_state'] = ['nullable', 'integer',];
+            $validationRules['family_city'] = ['nullable', 'integer',];
+            $validateData = $request->validate($validationRules);
+            $user->familyDetails->update($validateData);
+            $fatherOccupation = FatherOccupation::find($validateData['father_occupation'])->name ?? 'NA';
+            $motherOccupation = MotherOccupation::find($validateData['mother_occupation'])->name ?? 'NA';
+            $familyType = FamilyType::find($validateData['family_type'])->name ?? 'NA';
+            $familyValue = FamilyValue::find($validateData['family_value'])->name ?? 'NA';
+            $familyStatus = FamilyStatus::find($validateData['family_status'])->name ?? 'NA';
+            $familyState = State::find($validateData['family_state'])->state ?? 'NA';
+            $familyCity = City::find($validateData['family_city'])->city ?? 'NA';
+
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User Family details updated successfully!',
+                'user' => [
+                    'father_occupation' => $fatherOccupation,
+                    'mother_occupation' =>  $motherOccupation,
+                    'brother' => $user->familyDetails->brother,
+                    'brother_married' => $user->familyDetails->brother_married,
+                    'sister' => $user->familyDetails->sister,
+                    'sister_married' => $user->familyDetails->sister_married,
+                    'family_type' => $familyType,
+                    'family_value' => $familyValue,
+                    'family_status' => $familyStatus,
+                    'father_gotra' => $user->familyDetails->father_gotra,
+                    'mother_gotra' => $user->familyDetails->mother_gotra,
+                    'family_state' => $familyState,
+                    'family_city' => $familyCity,
+                    'contact_address' => $user->familyDetails->contact_address,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'An error occurred while updating user carrier details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updateLifestyleDetails(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $user = auth()->user();
+            $fields = config('formFields.editLifestyleDetails');
+            $validationRules = [];
+
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+
+            $validateData = $request->validate($validationRules);
+            $user->lifestyleDetails->update($validateData);
+            $bodyType = BodyType::find($validateData['body_type'])->name ?? 'NA';
+            $complextion = Complextion::find($validateData['complextion'])->name ?? 'NA';
+            $dietaryHabit = DietaryHabit::find($validateData['dietary_habit'])->name ?? 'NA';
+            $habit = Habit::find($validateData['drinking_habit'])->name ?? 'NA';
+            $habit = Habit::find($validateData['smoking_habit'])->name ?? 'NA';
+            $physicalStatus = Challenge::find($validateData['physical_status'])->name ?? 'NA';
+            $bloodGroup = BloodGroup::find($validateData['blood_group'])->name ?? 'NA';
+            $languageSpeak = LanguageSpeak::find($validateData['language_speak'])->name ?? 'NA';
+
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User Lifestyles details updated successfully!',
+                'user' => [
+                    'body_type' => $bodyType,
+                    'complextion' =>  $complextion,
+                    'dietary_habit' => $dietaryHabit,
+                    'drinking_habit' => $habit,
+                    'smoking_habit' => $habit,
+                    'physical_status' => $physicalStatus,
+                    'weight' => $user->lifestyleDetails->weight,
+                    'blood_group' => $bloodGroup,
+                    'open_to_pet' => $user->lifestyleDetails->open_to_pet,
+                    'own_house' => $user->lifestyleDetails->own_house,
+                    'own_car' => $user->lifestyleDetails->own_car,
+                    'language_speak' => $languageSpeak,
+                    'hiv' => $user->lifestyleDetails->hiv,
+                    'thalassemia' => $user->lifestyleDetails->thalassemia,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'An error occurred while updating user lifestyle details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function updateContactDetails(Request $request)
+    {
+       
+        try {
+            $user = auth()->user();
+            $fields = config('formFields.editContactDetails');
+            $validationRules = [];
+
+            foreach ($fields as $key => $field) {
+                $validationRules[$field['name']] = $field['rules'];
+            }
+
+            $validateData = $request->validate($validationRules);
+            $user->contactDetails->update($validateData);
+           
+
+            return response()->json([
+                'success' => 'true',
+                'message' => 'User Contact details updated successfully!',
+                'user' => [
+                    'alternate_mobile' =>  $user->contactDetails->alternate_mobile,
+                    'alternate_owned_by' =>   $user->contactDetails->alternate_owned_by,
+                    'landline_number' =>  $user->contactDetails->landline_number,
+                    'landline_owned_by' =>  $user->contactDetails->landline_owned_by,
+                    'address' => $user->contactDetails->address,
+                    
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => 'false',
+                'message' => 'An error occurred while updating user lifestyle details.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function myPhotos(Request $request)
+    {
+        return view('frontend.users.photo');
+    }
+
+    public function uploadImages(Request $request)
+    {
+        $validateData = $request->validate([
+            'photo1' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        $user = Auth::user();
+        if (!$user) {
+            return redirect('error', 'Please Login your account!');
+        }
+        // $image = Image::where('user_id', $user->id)->first();
+        if ($request->hasFile('photo1')) {
+            $file = $request->file('photo1');
+            $fileName = rand(100, 1000) . time() . '.' . $file->getClientOriginalExtension();
+            $filePath = public_path('storage/users/images/');
+            $file->move($filePath, $fileName);
+            Image::create([
+                'user_id' => $user->id,
+                'name' => $fileName,
+            ]);
+
+            return redirect()->back()->with('success', 'Display Picture has been uploaded successfully!');
+        }
+    }
+
+
+    private function createImage($image, $fileName, $filePath)
+    {
+        if (is_null($image->display_picture)) {
+            $image->update([
+                'display_picture' => $fileName,
+                'status' => 1,
+            ]);
+        }
+    }
+
+    private function updateImage($image, $fileName, $filePath)
+    {
+
+        if (!is_null($image->display_picture)) {
+            $previousFilePath = $filePath . $image->display_picture;
+            if (File::exists($previousFilePath)) {
+                File::delete($previousFilePath);
+            }
+        }
+
+
+        $image->update([
+            'display_picture' => $fileName,
+            'status' => 1,
         ]);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

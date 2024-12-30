@@ -3,16 +3,18 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class OptionService
 {
-    public function getOption()
+    public function getOptions()
     {
         $options = [
             'profileFors' => \App\Models\ProfileFor::class,
             'heights' => \App\Models\Height::class,
             'motherTongues' => \App\Models\MotherTongue::class,
             'religions' => fn() => \App\Models\Religion::with('castes')->where('status', 1)->get(),
+            'castes' => \App\Models\Caste::class,
             'maritalStatuses' => \App\Models\MaritalStatus::class,
             'rashies' => \App\Models\Rashi::class,
             'countries' => fn() => \App\Models\Country::with('states')->where('status', 1)->get(),
@@ -25,7 +27,7 @@ class OptionService
             'fatherOccupations' => \App\Models\FatherOccupation::class,
             'motherOccupations' => \App\Models\MotherOccupation::class,
             'bodyTypes' => \App\Models\BodyType::class,
-            'complexions' => \App\Models\Complextion::class,
+            'complextions' => \App\Models\Complextion::class,
             'bloodGroups' => \App\Models\BloodGroup::class,
             'habits' => \App\Models\Habit::class,
             'physicalStatuses' => \App\Models\Challenge::class,
@@ -35,17 +37,30 @@ class OptionService
             'dresses' => \App\Models\Dress::class,
             'movies' => \App\Models\Movie::class,
             'sports' => \App\Models\Sport::class,
-
+            'familyTypes' => \App\Models\FamilyType::class,
+            'familyValues' => \App\Models\FamilyValue::class,
+            'familyStatus' => \App\Models\FamilyStatus::class,
+            'relationships' => \App\Models\Relationship::class,
+            'dietaryHabits' => \App\Models\DietaryHabit::class,
+            'languageSpeaks' => \App\Models\LanguageSpeak::class,
         ];
-
+     
         $results = [];
 
         foreach ($options as $key => $model) {
-            $results[$key] = Cache::remember($key, 60, function () use ($model) {
-                return is_callable($model)
-                    ? $model()
-                    : $model::where('status', 1)->get();
-            });
+            try {
+                $results[$key] = Cache::rememberForever($key, function () use ($model) {
+                    if (is_callable($model)) {
+                        $data = $model();
+                    } else {
+                        $data = $model::where('status', 1)->get() ?? collect(); // Fallback to empty collection
+                    }
+                    return $data;
+                });
+            } catch (\Exception $e) {
+                Log::error("Failed to fetch options for key: $key", ['error' => $e->getMessage()]);
+                $results[$key] = collect(); // Return an empty collection on failure
+            }
         }
 
         return $results;

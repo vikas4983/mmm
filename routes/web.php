@@ -55,6 +55,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LikeDetailController;
 use App\Http\Controllers\ModelCountController;
 use App\Http\Controllers\RedisController;
+use App\Http\Controllers\SearchController;
 use App\Models\CarrierDetail;
 use App\Models\City;
 use App\Models\Email;
@@ -62,6 +63,7 @@ use App\Models\Payment;
 use Aws\Middleware;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Telescope\Http\Controllers\RedisController as ControllersRedisController;
+use App\Services\OptionService;
 
 // User Routes
 Route::get('/', function () {
@@ -106,6 +108,12 @@ Route::middleware([
     'verified',
     'authUser',
 ])->group(function () {
+
+    Route::get('/refresh-cache', function () {
+        $optionService = new OptionService();
+        $optionService->getOption();
+        return 'Cache repopulated!';
+    });
     Route::get('/get-view', [DemoController::class, 'getView']);
     Route::get('signUp', [AjaxRequestController::class, 'signUp'])->name('sign.up');
     Route::get('/get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
@@ -122,28 +130,8 @@ Route::middleware([
     Route::get('mobile-verification', [UserController::class, 'showMobileVerificationPage'])->name('mobile.verification');
     Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
     Route::post('request-otp-again', [UserController::class, 'requestOtpForMobileChangeAgain'])->name('request.otp.again');
-    //Update Account Details
-    Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
-    //Update About Me Details
-    Route::patch('about-me-update', [UserController::class, 'updateAboutMe'])->name('about.me.update')->middleware('mobileNumberUpdated');
-    //Update About Education Details
-    Route::patch('education-details', [UserController::class, 'educationDetail'])->name('education.details')->middleware('mobileNumberUpdated');
-    
-    //Update About Occupation Details
-    Route::patch('occupation-details', [UserController::class, 'occupationDetail'])->name('occupation.details')->middleware('mobileNumberUpdated');
-    
-    //Update About Occupation Details
-    Route::patch('family-details', [UserController::class, 'familyDetail'])->name('family.details')->middleware('mobileNumberUpdated');
-    
-    //Update Basic Details
-    Route::patch('basic-details-update', [UserController::class, 'updateBasicDetails'])->name('update.basic.details')->middleware('mobileNumberUpdated');
-    //Update Basic Details
-    Route::patch('horoscope-details-update', [UserController::class, 'updateHoroscopeDetails'])->name('update.horoscope.details')->middleware('mobileNumberUpdated');
 
-    Route::get('test', function () {
-        return 'Y-m-d H:i:s';
-    })->name('test');
-
+    //Store
     Route::prefix('frontend/registration')->group(function () {
         Route::resource('basicDetails', BasicDetailController::class)->middleware('checkRegistrationStep');
         Route::resource('horoscopes', HoroscopeDetailController::class)->middleware('checkRegistrationStep');
@@ -154,6 +142,49 @@ Route::middleware([
         Route::resource('contactDetails', ContactDetailController::class)->middleware('checkRegistrationStep');
         Route::resource('images', ImageController::class)->middleware('checkRegistrationStep');
     });
+
+    //Update 
+    Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
+    //Update About Me Details
+    Route::patch('account-details-update', [UserController::class, 'updateAccountDetail'])->name('account.details.update')->middleware('mobileNumberUpdated');
+    //Update About Me Details
+    Route::patch('about-me-update', [UserController::class, 'updateAboutMe'])->name('about.me.update')->middleware('mobileNumberUpdated');
+    //Update About Education Details
+    Route::patch('education-details', [UserController::class, 'educationDetail'])->name('education.details')->middleware('mobileNumberUpdated');
+    //Update About Occupation Details
+    Route::patch('occupation-details', [UserController::class, 'occupationDetail'])->name('occupation.details')->middleware('mobileNumberUpdated');
+    //Update About Occupation Details
+    Route::patch('family-details', [UserController::class, 'familyDetail'])->name('family.details')->middleware('mobileNumberUpdated');
+    //Update Basic Details
+    Route::patch('basic-details-update', [UserController::class, 'updateBasicDetails'])->name('update.basic.details')->middleware('mobileNumberUpdated');
+    //Update Horoscope Details
+    Route::patch('horoscope-details-update', [UserController::class, 'updateHoroscopeDetails'])->name('update.horoscope.details')->middleware('mobileNumberUpdated');
+    //Update Carrier Details
+    Route::patch('carrier-details-update', [UserController::class, 'updateCarrierDetails'])->name('update.carrier.details')->middleware('mobileNumberUpdated');
+    //Update Family Details
+    Route::patch('user-family-details-update', [UserController::class, 'updateUserFamilyDetails'])->name('update.user.family.details')->middleware('mobileNumberUpdated');
+    //Update Lifestyle Details
+    Route::patch('user-lifestyle-details-update', [UserController::class, 'updateLifestyleDetails'])->name('update.lifestyle.details')->middleware('mobileNumberUpdated');
+    //Update Contact Details
+    Route::patch('user-contact-details-update', [UserController::class, 'updateContactDetails'])->name('update.contact.details')->middleware('mobileNumberUpdated');
+    //Update Images
+    Route::get('my-photos', [UserController::class, 'myPhotos'])->name('my.photos')->middleware('mobileNumberUpdated');
+    Route::post('upload-image', [UserController::class, 'uploadImages'])->name('upload.image')->middleware('mobileNumberUpdated');
+    Route::post('add-image', [ImageController::class, 'addImage'])->name('add.image')->middleware('mobileNumberUpdated');
+    Route::post('dp-image', [ImageController::class, 'dpImage'])->name('dp.image')->middleware('mobileNumberUpdated');
+    Route::post('change-profile-image', [ImageController::class, 'changeProfileImage'])->name('change.profile.image')->middleware('mobileNumberUpdated');
+    Route::post('change-image', [ImageController::class, 'changeImage'])->name('change.image')->middleware('mobileNumberUpdated');
+    Route::post('delete-image', [ImageController::class, 'deleteImage'])->name('delete.image')->middleware('mobileNumberUpdated');
+
+    //Search
+   Route::get('search',[SearchController::class, 'search'])->name('search')->middleware('mobileNumberUpdated');
+   Route::post('search-result', [SearchController::class, 'searchById'])->name('search.by.id')->middleware('mobileNumberUpdated');
+   Route::post('quick-search', [SearchController::class, 'quickSearch'])->name('quick.search')->middleware('mobileNumberUpdated');
+
+
+
+
+
 });
 Route::resource('members', MemberController::class)->middleware('checkRegistrationStep');
 Route::get('verification', [MemberOtpController::class, 'verification'])->name('verification')->middleware('checkRegistrationStep');
@@ -174,6 +205,7 @@ Route::get('otp-verification', [MemberOtpController::class, 'otpVerification'])-
 Route::post('login-otp', [MemberOtpController::class, 'loginOtp'])->name('login.otp');
 Route::post('login-otp-validate', [MemberOtpController::class, 'loginOtpValidate'])->name('login.otp.validate');
 Route::post('otp-resend', [MemberOtpController::class, 'otpResend'])->name('otp.resend');
+
 //Footer
 Route::view('aboutUs', 'aboutUs');
 Route::view('faq', 'faq');
@@ -193,16 +225,17 @@ Route::resource('logos', LogoFaviconController::class);
 Route::resource('favicons', FaviconController::class);
 Route::resource('emailTemplates', EmailTemplateController::class);
 Route::resource('menus', MenuController::class);
+
 // User Update
 //Route::post('userUpdate/{id}', [UserController::class, 'userUpdate']);
 
 //Search
-Route::view('frontend.search.quick', 'frontend.search.quick')->name('quickSearch');
+//Route::view('frontend.search.quick', 'frontend.search.quick')->name('quick.search');
 
 
 //Redis
 Route::get('test-redis', [RedisController::class, 'testRedis'])->name('test.redis');
-Route::get('clear-cache', function(){
+Route::get('clear-cache', function () {
     $optionKeys = [
         'profileFors',
         'heights',

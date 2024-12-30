@@ -85,7 +85,7 @@
 
                 const timeOfBirth = document.getElementById('time_of_birth')?.value;
                 const manglik = document.getElementById('manglik')?.value;
-                const placeOfBirth = document.getElementById('city')?.value;
+                const placeOfBirth = document.getElementById('hcity')?.value;
                 const rashi = document.getElementById('rashi')?.value;
                 const horoscopeMatch = document.getElementById('horoscope_match')?.value;
                 const horoscopeShow = document.getElementById('horoscope_show')?.value;
@@ -150,4 +150,5 @@
         }
     });
 </script>
+
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\update-horoscope-details-component.blade.php ENDPATH**/ ?>

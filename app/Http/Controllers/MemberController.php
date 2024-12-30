@@ -38,13 +38,16 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         $fields = config('formFields.register');
-       // dd($fields);
+       
         $validationRules = [];
         foreach ($fields as $key => $field) {
             $validationRules[$field['name']] = $field['rules'];
         }
+        $validationRules['matrimony_id'] = 'required'|'integer';
+        $matrimonyId = rand('000000', '999999');
         $validateData = $request->validate($validationRules);
         $validateData['password'] = Hash::make($validateData['password']);
+        $validateData['matrimony_id'] = $matrimonyId;
         if ($validateData) {
             $user = User::create($validateData);
             session(['registration_step' => '2']);

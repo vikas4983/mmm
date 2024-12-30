@@ -150,7 +150,9 @@
                 <div class="col-md-1 d-flex align-items-center justify-content-center">
                     <!-- Spacer column -->
                 </div>
-                <div class="col-md-6" id="editCaste">
+               
+                @if(isset($user) && ($user->basicDetails->marital_status !='1'))
+                <div class="col-md-6">
                     <div class="form-group">
                         <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
                         <select id="children" name="children" class="form-control">
@@ -180,6 +182,7 @@
                         @enderror
                     </div>
                 </div>
+                @endif
                 <div class="col-md-6" id="editCaste">
                     <div class="form-group">
                         <label for="other_caste_marriage"><b class="text-danger mr-5 gtRegMandatory">*</b>Willing To marry in other caste?</label>

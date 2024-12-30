@@ -41,12 +41,19 @@
             <div class="col-xxl-3 col-xl-4 col-xs-16 col-sm-16">
                 <div class="thumbnail gt-margin-bottom-0">
                     @foreach ($user->images as $image)
-                        <img src="{{ isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg')) }}"
+                   
+                        @if($image->dp_image === '1' )
+                        <img src="{{ isset($image->name) && $image->name ? asset('storage/users/images/' . $image->name) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg')) }}"
                             class="img-responsive gtFullWidth" alt="User Image">
+                        @endif
                     @endforeach
-                    {{-- <img src="{{ asset('storage/users/images/' . ($user->image ?? 'male-default.jpg')) }}" alt="User Image" --}}
-                    {{-- class="img-responsive gtFullWidth"> --}}
-                    <a href="https://matrimonialphpscript.com/premium-demo-2/my-photo" class="gt-view-caption">
+                    @if ($user->images->isEmpty())
+                        <img src="{{ $user->gender == 'male'
+                            ? asset('storage/users/images/male-default.jpg')
+                            : asset('storage/users/images/female-default.jpg') }}"
+                            class="img-responsive gtFullWidth" alt="User Image">
+                    @endif
+                    <a href="{{route('my.photos')}}" class="gt-view-caption">
                         Edit Profile Picture </a>
                 </div>
                 <!-- Modal more photos -->
@@ -171,94 +178,16 @@
                 </div>
                 <!-- /. Left Panel Mobile Only -->
             </div>
-            <div id="alert-container-acoountDetails">
-            </div>
-            <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16">
-                <!-- Basic Details -->
-                <div class="gt-panel gt-panel-default inViewProfile" id="edit1">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-file"></i>Account Details</span>
-                        <a class="pull-right btn gt-btn-orange" data-toggle="modal" data-backdrop ="static"
-                            data-keyboard="false" data-target="#dynamicUpdateModal" data-info={{ $user->id }}>
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                        @php
-                            $fields = config('formFields.accountDetails');
-
-                        @endphp
-                        <x-edit-form-field-component :user="$user" :fields="$fields" :actionUrl="route('profile.update')"
-                            :id="$user->id" />
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Name :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userName">{{ $user->name ?? 'NA' }}</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Email :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userEmail">{{ $user->email ?? 'NA' }}</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Mobile No :
-                                    </div>
-
-                                    <div class="col-xs-10">
-                                        <b id="userMobile">{{ $user->mobile ?? 'NA' }}</b>
-                                        <a data-toggle="modal" data-backdrop="static" data-keyboard="false"
-                                            data-target="#changeMobileModal" data-info="{{ $user->id }}">
-                                            <i class="fa fa-edit" style="color: #E47203;"></i>
-                                        </a>
-                                    </div>
-                                    <x-change-mobile-verification :user="$user" />
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Gender :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userGender">{{ $user->gender ?? 'NA' }}</b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Profile Created By :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userProfileFor">
-                                            {{ $user->profile_for ?? 'NA' }} </b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /. Basic Details -->
-            </div>
+         
+             {{-- About Me Details --}}
+             @php
+                $fields = config('formFields.accountDetails');
+             @endphp
+            
+             
+             <x-view-account-details-component :user="$user" :fields="$fields" :prefix="$prefix" />
+             <x-update-account-details-component :user="$user" :prefix="$prefix"/>
+           
         </div>
     </div>
     <div class="container gt-view-profile">
@@ -348,9 +277,9 @@
             <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16">
                 <!-- About Me Section -->
                 <div id="aboutMeAlert">
-                    @include('partials.alerts')
+                    @include('alerts.alert')
                 </div>
-                
+               
                     {{-- About Me Details --}}
                     <div id="aboutMeDetailsAlert"></div>
                     <x-view-about-me-component :user="$user" />
@@ -383,117 +312,27 @@
                     <x-view-horoscope-details-component :user="$user" />
                     <x-update-horoscope-details-component :user="$user" />
                    
-                    {{-- Family Details --}}
+                    {{-- Carrier Details --}}
                     <div id="carrierDetailsAlert"></div>
                     <x-view-carrier-details-component :user="$user" />
                     <x-update-carrier-details-component :user="$user" />
-
-                    <div class="gt-panel gt-panel-default" id="edit5">
-                        <div class="gt-panel-head">
-                            <span class="pull-left">
-                                <i class="fa fa-users"></i>Family Details </span>
-                            <a class="pull-right btn gt-btn-orange" onclick="return edit5();">
-                                <i class="fas fa-pencil-alt fa-fw"></i>
-                                <font class="gt-margin-left-5 ">EDIT</font>
-                            </a>
-                        </div>
-                        <div class="gt-panel-body">
-                            <div class="row">
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Family Type :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                Nuclear </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Family Status :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                Middle class </b>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Family Value :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                Traditional </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Father Occupation :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Mother Occupation :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">No. of Brothers :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No brother </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Married Brothers :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No brother </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">No. of Sisters :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                1 Sister </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Married Sisters :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                1 married sister </b>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
+                    {{-- Family Details --}}
+                    <div id="userFamilyDetailsAlert"></div>
+                    <x-view-user-family-details-component :user="$user" />
+                    <x-update-user-family-details-component :user="$user" />
+                    
+                    {{-- Lifestyle Details --}}
+                    <div id="userLifestyleDetailsAlert"></div>
+                    <x-view-lifestyle-details-component :user="$user" />
+                    <x-update-lifestyle-details-component :user="$user" />
+                   
+                    {{-- Contact Details --}}
+                    <div id="userContactDetailsAlert"></div>
+                    <x-view-contact-details-component :user="$user" />
+                    <x-update-contact-details-component :user="$user" />
+                   
+                    
                     <div class="gt-panel gt-panel-default" id="edit6">
                         <div class="gt-panel-head">
                             <span class="pull-left"><i class="fa fa-map-marker"></i>Location Information</span>
@@ -1054,7 +893,7 @@
         });
     </script>
 
-{{-- <script>
+ {{-- <script>
     const country = document.getElementById("country");
     const state = document.getElementById("hiddenState");
     state.style.display = 'none';
@@ -1131,6 +970,138 @@
             $('#city').append('<option value="">Select City</option>');
         }
     });
-</script> --}}
+</script>  --}}
+<script>
+    const birthCountry = document.getElementById("country");
+    const birthState = document.getElementById("hstate");
+    const birthCity = document.getElementById("hcity");
+
+    birthCountry.addEventListener("change", function() {
+        const countryId = birthCountry.value;
+        if (countryId) {
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    birthState.innerHTML = '<option value="">Select State</option>';
+                    data.forEach(state => {
+                        birthState.innerHTML +=
+                            `<option value="${state.id}">${state.state}</option>`;
+                    });
+                    birthCity.innerHTML =
+                        '<option value="">Select City</option>'; // Reset city dropdown
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching states:', error);
+                    alert('Failed to fetch states. Please try again later.');
+                }
+            });
+        } else {
+            birthState.innerHTML = '<option value="">Select State</option>';
+            birthCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+
+    birthState.addEventListener("change", function() {
+        const stateId = birthState.value;
+
+        if (stateId) {
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    birthCity.innerHTML = '<option value="">Select City</option>';
+                    data.forEach(city => {
+                        birthCity.innerHTML +=
+                            `<option value="${city.id}">${city.city}</option>`;
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching cities:', error);
+                    alert('Failed to fetch cities. Please try again later.');
+                }
+            });
+        } else {
+            birthCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+</script>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+    const familyCountry = document.getElementById("family_living");
+    const familyState = document.getElementById("family_state");
+    const familyCity = document.getElementById("family_city");
+    console.log(country);
+    familyCountry.addEventListener("change", function() {
+        const countryId = familyCountry.value;
+        if (countryId) {
+            console.log(countryId);
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                
+                success: function(data) {
+                    familyState.innerHTML = '<option value="">Select State</option>';
+                    data.forEach(state => {
+                        familyState.innerHTML +=
+                            `<option value="${state.id}">${state.state}</option>`;
+                    });
+                    familyCity.innerHTML =
+                        '<option value="">Select City</option>'; // Reset city dropdown
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching states:', error);
+                    alert('Failed to fetch states. Please try again later.');
+                }
+            });
+        } else {
+            familyState.innerHTML = '<option value="">Select State</option>';
+            familyCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+
+    familyState.addEventListener("change", function() {
+        const stateId = familyState.value;
+
+        if (stateId) {
+            console.log(stateId);
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    familyCity.innerHTML = '<option value="">Select City</option>';
+                    data.forEach(city => {
+                        familyCity.innerHTML +=
+                            `<option value="${city.id}">${city.city}</option>`;
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching cities:', error);
+                    alert('Failed to fetch cities. Please try again later.');
+                }
+            });
+        } else {
+            familyCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+});
+</script>
 
 @endsection

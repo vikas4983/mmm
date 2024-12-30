@@ -8,11 +8,14 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasTeams;
+
+use function Termwind\parse;
 
 class User extends Authenticatable
 {
@@ -31,6 +34,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'image',
+        'matrimony_id',
         'name',
         'email',
         'password',
@@ -45,13 +49,19 @@ class User extends Authenticatable
     }
     public function getProfileForAttribute($value)
     {
-        return $value == 1 ? 'Self' :
-           ($value == 2 ? 'Son' :
-           ($value == 3 ? 'Daughter' :
-           ($value == 4 ? 'Sister' :
-           ($value == 5 ? 'Brother' :
-           ($value == 6 ? 'Relative/Friend' : 'NA')))));
+        return $value == 1 ? 'Self' : ($value == 2 ? 'Son' : ($value == 3 ? 'Daughter' : ($value == 4 ? 'Sister' : ($value == 5 ? 'Brother' : ($value == 6 ? 'Relative/Friend' : 'NA')))));
     }
+
+    public function getNameAttribute($value){
+        return ucfirst($value);
+    }
+    public function getCreatedAtAttribute($value){
+        return carbon::parse($value)->format('d M Y, h:i A');
+    }
+    public function getUpdatedAtAttribute($value){
+        return carbon::parse($value)->format('d M Y, h:i A');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -99,6 +109,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(FamilyDetail::class);
     }
+    public function userFamilyDetails()
+    {
+        return $this->hasOne(FamilyDetail::class);
+    }
+
     public function lifestyleDetails()
     {
         return $this->hasOne(LifeStyle::class);
@@ -107,12 +122,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(LikeDetail::class);
     }
-    
-    public function contactDetail()
+
+    public function contactDetails()
     {
         return $this->hasOne(ContactDetail::class);
     }
-    
+
 
 
     public function getImageUrlAttribute()
@@ -122,7 +137,7 @@ class User extends Authenticatable
     }
     public function images()
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Image::class, 'user_id' , 'id');
     }
 
     public function approvals()
@@ -180,5 +195,17 @@ class User extends Authenticatable
         }
 
         return $paidUsers;
+    }
+
+    public function age()
+    {
+        $user = Auth::user();
+        if (!$user || !$user->basicDetails || !$user->basicDetails->dob) {
+            return null;
+        }
+        $today = Carbon::now();
+        $dob = Carbon::parse($user->basicDetails->dob);
+
+        return "{$dob->age} Years";
     }
 }

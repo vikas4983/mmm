@@ -35,6 +35,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
 
+
+
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -47,6 +49,13 @@
     <!-- Chosen CSS -->
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/prism.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/chosen.css')); ?>">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+    <?php echo $__env->yieldContent('header'); ?>
+
 </head>
 
 <body>
@@ -111,7 +120,7 @@
                                             <span class="gt-text-orange">
                                                 <?php echo e($user->created_at ?? 'NA'); ?> </span>
                                         </p>
-                                        <?php if(isset($latestPayment)): ?>
+                                        <?php if(isset($latestPayment) ?? ''): ?>
                                             <p class="gt-margin-bottom-5 font-13">Membership :
                                                 <?php echo e($latestPayment->is_paid == 'Active' ? 'Paid' : 'Free'); ?> <span
                                                     class="gt-text-orange"></span>
@@ -178,7 +187,7 @@
                                         <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(route('quickSearch')); ?>">Quick Search</a></li>
+                                        <li><a href="<?php echo e(route('search')); ?>">Quick Search</a></li>
                                         <li><a href="<?php echo e(url('basic-search')); ?>">Basic Search</a></li>
                                         <li><a href="<?php echo e(url('advance-search')); ?>">Advanced Search</a></li>
                                         <li><a href="<?php echo e(url('keyword-search')); ?>">Keyword Search</a></li>
@@ -431,31 +440,13 @@
                     </div>
                 </div>
                 <!-- Right Click Disable -->
-                <!--
-<script language=JavaScript>
-    function clickIE4() {
-        if (event.button == 2) {
-            return false;
-        }
-    }
 
-    function clickNS4(e) {
-        if (document.layers || document.getElementById && !document.all) {
-            if (e.which == 2 || e.which == 3) {
-                return false;
-            }
-        }
-    }
-    if (document.layers) {
-        document.captureEvents(Event.MOUSEDOWN);
-        document.onmousedown = clickNS4;
-    } else if (document.all && !document.getElementById) {
-        document.onmousedown = clickIE4;
-    }
-    document.oncontextmenu = new Function("return false")
-</script>
--->
+                
+
                 <!-- /.Right Click Disable -->
+
+
+
 
                 <!-- Live Chat -->
                 <script type="text/javascript">
@@ -468,6 +459,10 @@
                     // refresh every 10 second
                 </script>
                 <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
+
+
+                
+                <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
                 
                 <!-- /. Live Chat -->
 
@@ -542,6 +537,10 @@
 <script>
     $(document).ready(function() {
         dis_thumbnail();
+
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
     });
 
     function dis_thumbnail() {

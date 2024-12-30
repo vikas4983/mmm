@@ -32,6 +32,10 @@
     }
     extract($optionData);
 @endphp
+@php
+    use App\Models\DietaryHabit;
+    $dietaryHabits = DietaryHabit::all();
+@endphp
 <div class="form-group ">
     @switch($name)
         @case('profile_for')
@@ -40,6 +44,34 @@
                 <option value="">Select {{ $label }}</option>
                 @foreach ($profileFors as $profileFor)
                     <option value="{{ $profileFor->id }}" {{ old($name) == $profileFor->id ? 'selected' : '' }}>
+                        {{ $profileFor->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error($name)
+                <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>
+            @enderror
+        @break
+        @case('alternate_owned_by')
+            <label for="{{ $name }}"><b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}</label>
+            <select id="{{ $name }}" name="{{ $name }}" class="form-control">
+                <option value="">Select {{ $label }}</option>
+                @foreach ($profileFors as $profileFor)
+                    <option value="{{ $profileFor->name }}" {{ old($name) == $profileFor->id ? 'selected' : '' }}>
+                        {{ $profileFor->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error($name)
+                <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>
+            @enderror
+        @break
+        @case('landline_owned_by')
+            <label for="{{ $name }}"><b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}</label>
+            <select id="{{ $name }}" name="{{ $name }}" class="form-control">
+                <option value="">Select {{ $label }}</option>
+                @foreach ($profileFors as $profileFor)
+                    <option value="{{ $profileFor->name }}" {{ old($name) == $profileFor->id ? 'selected' : '' }}>
                         {{ $profileFor->name }}
                     </option>
                 @endforeach
@@ -292,7 +324,7 @@
             @enderror
         @break
 
-        @case('complexion')
+        @case('complextion')
             <label for="{{ $name }}"><b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}" class="form-control" required>
                 <option value="">Select </option>
@@ -326,9 +358,9 @@
             <label for="{{ $name }}"><b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}</label>
             <select id="{{ $name }}" name="{{ $name }}" class="form-control" required>
                 <option value="">Select </option>
-                @foreach ($habits as $habit)
-                    <option value="{{ $habit->id }}" {{ old($name) == $habit->id ? 'selected' : '' }}>
-                        {{ $habit->name }}
+                @foreach ($dietaryHabits as $dietaryHabit)
+                    <option value="{{ $dietaryHabit->id }}" {{ old($name) == $dietaryHabit->id ? 'selected' : '' }}>
+                        {{ $dietaryHabit->name }}
                     </option>
                 @endforeach
             </select>

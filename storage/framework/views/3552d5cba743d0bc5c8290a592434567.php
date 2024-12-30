@@ -40,7 +40,7 @@
                                         </ul>
                                     </div>
                                 <?php endif; ?>
-                                <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                                <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                                 <?php
                                     $fields = config('formFields.login');
                                 ?>

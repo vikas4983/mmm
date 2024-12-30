@@ -1,0 +1,1 @@
+<h1>vikas</h1><?php /**PATH C:\xampp\htdocs\mmm\resources\views\frontend\users\myPhotos.blade.php ENDPATH**/ ?>

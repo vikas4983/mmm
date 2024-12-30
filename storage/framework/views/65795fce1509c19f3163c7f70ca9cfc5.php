@@ -1,6 +1,6 @@
 <div class="gt-panel gt-panel-default" id="editAboutEducationSection">
     <div class="gt-panel-head">
-        <span class="pull-left"><i class="fa fa-star"></i>About Education</span>
+        <span class="pull-left"><i class="fa fa-graduation-cap"></i>About Education</span>
         <a class="pull-right btn gt-btn-orange" id="editAboutEducationBtn">
             <i class="fas fa-pencil-alt fa-fw"></i>
             <font class="gt-margin-left-5">EDIT</font>

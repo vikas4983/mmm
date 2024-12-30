@@ -31,7 +31,7 @@
                         your
                         perfect match.</p>
                 </article>
-                @include('partials.alerts')
+                @include('alerts.alert')
                 <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
                 <form action="{{ route('likeDetails.store') }}" method="post">
                     @csrf

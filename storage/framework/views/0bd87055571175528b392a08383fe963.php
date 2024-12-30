@@ -43,7 +43,7 @@
 
                         ?>
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <h4>Verify Account through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>
                             <h5 class="gtMobileNo">+91-<?php echo e($mobile ?? 'NA'); ?></h5>

@@ -44,7 +44,7 @@
 
                         @endphp
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            @include('partials.alerts')
+                            @include('alerts.alert')
                             <h4>Verify Account through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>
                             <h5 class="gtMobileNo">+91-{{ $mobile ?? 'NA' }}</h5>

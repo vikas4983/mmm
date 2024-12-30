@@ -11,7 +11,9 @@
             <font class="gt-margin-left-5">Update</font>
         </a>
     </div>
-    <form id="horoscopeDetailsForm">
+    <form id="carrierDetailsForm" method="POST">
+        @csrf
+        @method('PATCH')
         <div class="gt-panel-body">
             <div class="row">
                 @foreach ($fields as $field)
@@ -49,24 +51,28 @@
         if (updateCarrierBtn) {
             updateCarrierBtn.addEventListener("click", function() {
 
-                const timeOfBirth = document.getElementById('time_of_birth')?.value;
-                const manglik = document.getElementById('manglik')?.value;
-                const placeOfBirth = document.getElementById('city')?.value;
-                const rashi = document.getElementById('rashi')?.value;
-                const horoscopeMatch = document.getElementById('horoscope_match')?.value;
-                const horoscopeShow = document.getElementById('horoscope_show')?.value;
-                console.log(placeOfBirth);
+                const education = document.getElementById('education')?.value;
+                const employee = document.getElementById('employee')?.value;
+                const occupation = document.getElementById('occupation')?.value;
+                const income = document.getElementById('income')?.value;
+                const organizationName = document.getElementById('organization_name')?.value;
+                const schoolName = document.getElementById('school_name')?.value;
+                const collegeName = document.getElementById('college_name')?.value;
+                const sittledAbroad = document.getElementById('interested_abroad')?.value;
+
                 $.ajax({
-                    url: "{{ route('update.horoscope.details') }}",
+                    url: "{{ route('update.carrier.details') }}",
                     method: "PATCH",
                     data: {
                         _token: "{{ csrf_token() }}",
-                        time_of_birth: timeOfBirth,
-                        manglik: manglik,
-                        place_of_birth: placeOfBirth,
-                        rashi: rashi,
-                        horoscope_match: horoscopeMatch,
-                        horoscope_show: horoscopeShow,
+                        education: education,
+                        employee: employee,
+                        occupation: occupation,
+                        income: income,
+                        organization_name: organizationName,
+                        school_name: schoolName,
+                        college_name: collegeName,
+                        interested_abroad: sittledAbroad,
                     },
                     success: function(response) {
                         $('#updateCarrierBtn').prop('disabled', false);
@@ -76,27 +82,26 @@
                             document.getElementById("editCarrierSection").style.display =
                                 'block';
 
-                            $('#userBirthTime').text(response.user.time_of_birth);
-                            $('#userManglik').text(response.user.manglik);
-                            $('#userPlaceOfBirth').text(response.user.place_of_birth);
-                            $('#userRashi').text(response.user.rashi);
-                            $('#userHoroscopeMatch').text(response.user.horoscope_match);
-                            $('#userHoroscopeShow').text(response.user.horoscope_show);
-                            $('#horoscopeDetailsAlert').get(0).scrollIntoView({
+                            $('#userEducation').text(response.user.education);
+                            $('#userEmployee').text(response.user.employee);
+                            $('#userOccupation').text(response.user.occupation);
+                            $('#userIncome').text(response.user.income);
+                            $('#userOrganizationName').text(response.user.organization_name);
+                            $('#userSchoolName').text(response.user.school_name);
+                            $('#userCollegeName').text(response.user.college_name);
+                            $('#userInterestedAbroad').text(response.user
+                                .interested_abroad);
+                            $('#carrierDetailsAlert').get(0).scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'center',
                                 inline: 'nearest' // Ensures the alert is visible at the center of the viewport
                             });
-
-                            // Dynamically update the alert content
                             $('#carrierDetailsAlert').html(`
     <div class="alert alert-success col-xxl-16 col-xl-16 col-lg-16 col-md-16 col-sm-16" role="alert">
         ${response.message}
         <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">x</button>
     </div>
 `);
-
-                            // Automatically fade out the alert after 1.5 seconds
                             setTimeout(function() {
                                 $('.alert').fadeOut('slow', function() {
                                     $(this).remove();
@@ -115,3 +120,43 @@
         }
     });
 </script>
+<script>
+    const employee = document.getElementById("employee");
+    const occupation = document.getElementById("occupation");
+    employee.addEventListener("change", function() {
+        const employeeId = employee.value;
+       
+        if (employeeId) {
+        
+            $.ajax({
+                url: '/get-occupation/' + employeeId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $("#occupation").empty();
+                    $("#occupation").append();
+                    $.each(data, function(key, value) {
+                        $('#occupation').append('<option value="' + value.id + '">' + value
+                            .occupation + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+
+            $('#occupation').fadeOut();
+            $('#occupation').empty();
+            $('#occupation').append('<option value="">Select occupation</option>');
+        }
+    });
+</script>
+

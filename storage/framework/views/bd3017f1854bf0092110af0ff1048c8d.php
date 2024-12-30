@@ -29,7 +29,7 @@
                         your
                         perfect match.</p>
                 </article>
-                <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
                 <form action="<?php echo e(route('members.store')); ?>" method="post">
                     <?php echo csrf_field(); ?>

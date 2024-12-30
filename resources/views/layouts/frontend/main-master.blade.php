@@ -35,6 +35,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
 
+
+
     <!-- Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap"
@@ -47,6 +49,13 @@
     <!-- Chosen CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/prism.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/chosen.css') }}">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+
+    @yield('header')
+
 </head>
 
 <body>
@@ -111,7 +120,7 @@
                                             <span class="gt-text-orange">
                                                 {{ $user->created_at ?? 'NA' }} </span>
                                         </p>
-                                        @if (isset($latestPayment))
+                                        @if (isset($latestPayment) ?? '')
                                             <p class="gt-margin-bottom-5 font-13">Membership :
                                                 {{ $latestPayment->is_paid == 'Active' ? 'Paid' : 'Free' }} <span
                                                     class="gt-text-orange"></span>
@@ -178,7 +187,7 @@
                                         <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ route('quickSearch') }}">Quick Search</a></li>
+                                        <li><a href="{{ route('search') }}">Quick Search</a></li>
                                         <li><a href="{{ url('basic-search') }}">Basic Search</a></li>
                                         <li><a href="{{ url('advance-search') }}">Advanced Search</a></li>
                                         <li><a href="{{ url('keyword-search') }}">Keyword Search</a></li>
@@ -431,31 +440,34 @@
                     </div>
                 </div>
                 <!-- Right Click Disable -->
-                <!--
-<script language=JavaScript>
-    function clickIE4() {
-        if (event.button == 2) {
-            return false;
-        }
-    }
 
-    function clickNS4(e) {
-        if (document.layers || document.getElementById && !document.all) {
-            if (e.which == 2 || e.which == 3) {
-                return false;
-            }
-        }
-    }
-    if (document.layers) {
-        document.captureEvents(Event.MOUSEDOWN);
-        document.onmousedown = clickNS4;
-    } else if (document.all && !document.getElementById) {
-        document.onmousedown = clickIE4;
-    }
-    document.oncontextmenu = new Function("return false")
-</script>
--->
+                {{-- <script language=JavaScript>
+                    function clickIE4() {
+                        if (event.button == 2) {
+                            return false;
+                        }
+                    }
+
+                    function clickNS4(e) {
+                        if (document.layers || document.getElementById && !document.all) {
+                            if (e.which == 2 || e.which == 3) {
+                                return false;
+                            }
+                        }
+                    }
+                    if (document.layers) {
+                        document.captureEvents(Event.MOUSEDOWN);
+                        document.onmousedown = clickNS4;
+                    } else if (document.all && !document.getElementById) {
+                        document.onmousedown = clickIE4;
+                    }
+                    document.oncontextmenu = new Function("return false")
+                </script> --}}
+
                 <!-- /.Right Click Disable -->
+
+
+
 
                 <!-- Live Chat -->
                 <script type="text/javascript">
@@ -468,6 +480,10 @@
                     // refresh every 10 second
                 </script>
                 <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
+
+
+                {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+                <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
                 {{-- <small class="pull-right">
         <link rel="stylesheet" type="text/css" href="mmm/who-is-online/widget.css" />
     <script type="text/javascript" src="mmm/who-is-online/widget.js"></script>
@@ -553,6 +569,10 @@
 <script>
     $(document).ready(function() {
         dis_thumbnail();
+
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
     });
 
     function dis_thumbnail() {
@@ -588,5 +608,6 @@
         });
     });
 </script>
+
 
 {{-- <script src="{{ asset('frontend/assets/js/custom-js/user-update-modal.js') }}"></script> --}}

@@ -1,6 +1,6 @@
 <div class="gt-panel gt-panel-default" id="editAboutOccupationSection">
     <div class="gt-panel-head">
-        <span class="pull-left"><i class="fa fa-star"></i>About Occupation</span>
+        <span class="pull-left"><i class="fa fa-briefcase"></i>About Occupation</span>
         <a class="pull-right btn gt-btn-orange" id="editAboutOccupationBtn">
             <i class="fas fa-pencil-alt fa-fw"></i>
             <font class="gt-margin-left-5">EDIT</font>

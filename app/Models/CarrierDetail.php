@@ -8,35 +8,52 @@ use Illuminate\Database\Eloquent\Model;
 class CarrierDetail extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'country', 'state','city', 'education','education_detail', 'employee','occupation','occupation_detail','income', 'about_me','approved_about_me','status'];
+    protected $fillable = ['user_id', 'country', 'state', 'city', 'education', 'education_detail', 'employee', 'occupation', 'occupation_detail', 'income', 'about_me', 'approved_about_me', 'organization_name', 'school_name', 'college_name', 'interested_abroad', 'status'];
     function getApprovedAboutMeAttribute($value)
     {
         return $value == 1 ? 'Approved' : 'Disapproved';
     }
+    function getInterestedAbroadAttribute($value)
+    {
+        return $value == 1 ? 'Yes' : 'No';
+    }
     public function countries()
     {
-       return $this->belongsTo(Country::class, 'country', 'id');
+        return $this->belongsTo(Country::class, 'country', 'id');
     }
-    
+
     public function states()
     {
-       return $this->belongsTo(State::class, 'state', 'id');
+        return $this->belongsTo(State::class, 'state', 'id');
     }
+
+    public function cities()
+    {
+        return $this->belongsTo(City::class, 'city', 'id');
+    }
+
     public function educations()
     {
-       return $this->belongsTo(Education::class, 'education', 'id');
+        return $this->belongsTo(Education::class, 'education', 'id');
     }
     public function occupations()
     {
-       return $this->belongsTo(Occupation::class, 'occupation', 'id');
+        return $this->belongsTo(Occupation::class, 'occupation', 'id');
     }
     public function employees()
     {
-       return $this->belongsTo(Employee::class, 'employee', 'id');
+        return $this->belongsTo(Employee::class, 'employee', 'id');
     }
     public function incomes()
     {
-       return $this->belongsTo(Income::class, 'income', 'id');
+        return $this->belongsTo(Income::class, 'income', 'id');
     }
 
+    public function getLocationAttribute()
+    {
+        $country = $this->countries->country;
+        $state = $this->states->state;
+        $city = $this->cities->city;
+        return $city . ',' . $country;
+    }
 }

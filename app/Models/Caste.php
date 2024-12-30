@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Caste extends Model
 {
     use HasFactory;
-    public $fillable = ['religion_id', 'caste', 'status'];
+    public $fillable = ['religion_id', 'name', 'status'];
     
     public function religions()
     {

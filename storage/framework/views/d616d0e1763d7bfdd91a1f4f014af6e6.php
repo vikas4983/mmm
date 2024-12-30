@@ -19,6 +19,7 @@
             <div class="row mb-20">
                 <img src="<?php echo e(asset('frontend/assets/img/reg-step-1.png')); ?>" class="img-responsive">
             </div>
+            <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
             <h3 class="gt-text-green mb-10 fontMerriWeather">
                 <i class="fa fa-user mr-10"></i>Basic Information
             </h3>

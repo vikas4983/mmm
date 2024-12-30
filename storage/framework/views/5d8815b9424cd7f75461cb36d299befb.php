@@ -40,12 +40,19 @@
             <div class="col-xxl-3 col-xl-4 col-xs-16 col-sm-16">
                 <div class="thumbnail gt-margin-bottom-0">
                     <?php $__currentLoopData = $user->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <img src="<?php echo e(isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
+                   
+                        <?php if($image->dp_image === '1' ): ?>
+                        <img src="<?php echo e(isset($image->name) && $image->name ? asset('storage/users/images/' . $image->name) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
                             class="img-responsive gtFullWidth" alt="User Image">
+                        <?php endif; ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    
-                    
-                    <a href="https://matrimonialphpscript.com/premium-demo-2/my-photo" class="gt-view-caption">
+                    <?php if($user->images->isEmpty()): ?>
+                        <img src="<?php echo e($user->gender == 'male'
+                            ? asset('storage/users/images/male-default.jpg')
+                            : asset('storage/users/images/female-default.jpg')); ?>"
+                            class="img-responsive gtFullWidth" alt="User Image">
+                    <?php endif; ?>
+                    <a href="<?php echo e(route('my.photos')); ?>" class="gt-view-caption">
                         Edit Profile Picture </a>
                 </div>
                 <!-- Modal more photos -->
@@ -170,131 +177,54 @@
                 </div>
                 <!-- /. Left Panel Mobile Only -->
             </div>
-            <div id="alert-container-acoountDetails">
-            </div>
-            <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16">
-                <!-- Basic Details -->
-                <div class="gt-panel gt-panel-default inViewProfile" id="edit1">
-                    <div class="gt-panel-head">
-                        <span class="pull-left"><i class="fa fa-file"></i>Account Details</span>
-                        <a class="pull-right btn gt-btn-orange" data-toggle="modal" data-backdrop ="static"
-                            data-keyboard="false" data-target="#dynamicUpdateModal" data-info=<?php echo e($user->id); ?>>
-                            <i class="fas fa-pencil-alt fa-fw"></i>
-                            <font class="gt-margin-left-5">EDIT</font>
-                        </a>
-                        <?php
-                            $fields = config('formFields.accountDetails');
-
-                        ?>
-                        <?php if (isset($component)) { $__componentOriginalfc35222c378ee3f03703efab785aaf6e = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalfc35222c378ee3f03703efab785aaf6e = $attributes; } ?>
-<?php $component = App\View\Components\EditFormFieldComponent::resolve(['user' => $user,'fields' => $fields,'actionUrl' => route('profile.update'),'id' => $user->id] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('edit-form-field-component'); ?>
+         
+             
+             <?php
+                $fields = config('formFields.accountDetails');
+             ?>
+            
+             
+             <?php if (isset($component)) { $__componentOriginal330faea03b83b565de0c12f919baa57c = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal330faea03b83b565de0c12f919baa57c = $attributes; } ?>
+<?php $component = App\View\Components\ViewAccountDetailsComponent::resolve(['user' => $user,'fields' => $fields,'prefix' => $prefix] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-account-details-component'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\EditFormFieldComponent::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewAccountDetailsComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginalfc35222c378ee3f03703efab785aaf6e)): ?>
-<?php $attributes = $__attributesOriginalfc35222c378ee3f03703efab785aaf6e; ?>
-<?php unset($__attributesOriginalfc35222c378ee3f03703efab785aaf6e); ?>
+<?php if (isset($__attributesOriginal330faea03b83b565de0c12f919baa57c)): ?>
+<?php $attributes = $__attributesOriginal330faea03b83b565de0c12f919baa57c; ?>
+<?php unset($__attributesOriginal330faea03b83b565de0c12f919baa57c); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginalfc35222c378ee3f03703efab785aaf6e)): ?>
-<?php $component = $__componentOriginalfc35222c378ee3f03703efab785aaf6e; ?>
-<?php unset($__componentOriginalfc35222c378ee3f03703efab785aaf6e); ?>
+<?php if (isset($__componentOriginal330faea03b83b565de0c12f919baa57c)): ?>
+<?php $component = $__componentOriginal330faea03b83b565de0c12f919baa57c; ?>
+<?php unset($__componentOriginal330faea03b83b565de0c12f919baa57c); ?>
 <?php endif; ?>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Name :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userName"><?php echo e($user->name ?? 'NA'); ?></b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Email :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userEmail"><?php echo e($user->email ?? 'NA'); ?></b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Mobile No :
-                                    </div>
-
-                                    <div class="col-xs-10">
-                                        <b id="userMobile"><?php echo e($user->mobile ?? 'NA'); ?></b>
-                                        <a data-toggle="modal" data-backdrop="static" data-keyboard="false"
-                                            data-target="#changeMobileModal" data-info="<?php echo e($user->id); ?>">
-                                            <i class="fa fa-edit" style="color: #E47203;"></i>
-                                        </a>
-                                    </div>
-                                    <?php if (isset($component)) { $__componentOriginal2d8ab24393e52c6ef56270234f50ad97 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal2d8ab24393e52c6ef56270234f50ad97 = $attributes; } ?>
-<?php $component = App\View\Components\ChangeMobileVerification::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('change-mobile-verification'); ?>
+             <?php if (isset($component)) { $__componentOriginal98499115d334333c1aa9cb85c0f9bf55 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal98499115d334333c1aa9cb85c0f9bf55 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateAccountDetailsComponent::resolve(['user' => $user,'prefix' => $prefix] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-account-details-component'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\App\View\Components\ChangeMobileVerification::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateAccountDetailsComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal2d8ab24393e52c6ef56270234f50ad97)): ?>
-<?php $attributes = $__attributesOriginal2d8ab24393e52c6ef56270234f50ad97; ?>
-<?php unset($__attributesOriginal2d8ab24393e52c6ef56270234f50ad97); ?>
+<?php if (isset($__attributesOriginal98499115d334333c1aa9cb85c0f9bf55)): ?>
+<?php $attributes = $__attributesOriginal98499115d334333c1aa9cb85c0f9bf55; ?>
+<?php unset($__attributesOriginal98499115d334333c1aa9cb85c0f9bf55); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal2d8ab24393e52c6ef56270234f50ad97)): ?>
-<?php $component = $__componentOriginal2d8ab24393e52c6ef56270234f50ad97; ?>
-<?php unset($__componentOriginal2d8ab24393e52c6ef56270234f50ad97); ?>
+<?php if (isset($__componentOriginal98499115d334333c1aa9cb85c0f9bf55)): ?>
+<?php $component = $__componentOriginal98499115d334333c1aa9cb85c0f9bf55; ?>
+<?php unset($__componentOriginal98499115d334333c1aa9cb85c0f9bf55); ?>
 <?php endif; ?>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Gender :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userGender"><?php echo e($user->gender ?? 'NA'); ?></b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6">
-                                        Profile Created By :
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <b id="userProfileFor">
-                                            <?php echo e($user->profile_for ?? 'NA'); ?> </b>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /. Basic Details -->
-            </div>
+           
         </div>
     </div>
     <div class="container gt-view-profile">
@@ -384,9 +314,9 @@
             <div class="col-xxl-13 col-xl-12 col-lg-16 col-md-16 col-sm-16">
                 <!-- About Me Section -->
                 <div id="aboutMeAlert">
-                    <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                    <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                 </div>
-                
+               
                     
                     <div id="aboutMeDetailsAlert"></div>
                     <?php if (isset($component)) { $__componentOriginalf435682ed168c90c1b0690ff2d505b58 = $component; } ?>
@@ -689,113 +619,137 @@
 <?php $component = $__componentOriginal034d26457e504563c601e168446619c4; ?>
 <?php unset($__componentOriginal034d26457e504563c601e168446619c4); ?>
 <?php endif; ?>
-
-                    <div class="gt-panel gt-panel-default" id="edit5">
-                        <div class="gt-panel-head">
-                            <span class="pull-left">
-                                <i class="fa fa-users"></i>Family Details </span>
-                            <a class="pull-right btn gt-btn-orange" onclick="return edit5();">
-                                <i class="fas fa-pencil-alt fa-fw"></i>
-                                <font class="gt-margin-left-5 ">EDIT</font>
-                            </a>
-                        </div>
-                        <div class="gt-panel-body">
-                            <div class="row">
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Family Type :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                Nuclear </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Family Status :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                Middle class </b>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Family Value :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                Traditional </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Father Occupation :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Mother Occupation :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">No. of Brothers :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No brother </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Married Brothers :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                No brother </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">No. of Sisters :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                1 Sister </b>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                    <div class="row">
-                                        <div class="col-xs-6">Married Sisters :</div>
-                                        <div class="col-xs-10">
-                                            <b>
-                                                1 married sister </b>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                   
+                    
+                    <div id="userFamilyDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee = $attributes; } ?>
+<?php $component = App\View\Components\ViewUserFamilyDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-user-family-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewUserFamilyDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee)): ?>
+<?php $attributes = $__attributesOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee; ?>
+<?php unset($__attributesOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee)): ?>
+<?php $component = $__componentOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee; ?>
+<?php unset($__componentOriginaladabf8bc1f6fc8d0ef1fda97729bc8ee); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginalab8bd7fa030555a01815e3fb177d1040 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalab8bd7fa030555a01815e3fb177d1040 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateUserFamilyDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-user-family-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateUserFamilyDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalab8bd7fa030555a01815e3fb177d1040)): ?>
+<?php $attributes = $__attributesOriginalab8bd7fa030555a01815e3fb177d1040; ?>
+<?php unset($__attributesOriginalab8bd7fa030555a01815e3fb177d1040); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalab8bd7fa030555a01815e3fb177d1040)): ?>
+<?php $component = $__componentOriginalab8bd7fa030555a01815e3fb177d1040; ?>
+<?php unset($__componentOriginalab8bd7fa030555a01815e3fb177d1040); ?>
+<?php endif; ?>
+                    
+                    
+                    <div id="userLifestyleDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginal9fc44011607cbcba5d569e05e0aba1fa = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal9fc44011607cbcba5d569e05e0aba1fa = $attributes; } ?>
+<?php $component = App\View\Components\ViewLifestyleDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-lifestyle-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewLifestyleDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal9fc44011607cbcba5d569e05e0aba1fa)): ?>
+<?php $attributes = $__attributesOriginal9fc44011607cbcba5d569e05e0aba1fa; ?>
+<?php unset($__attributesOriginal9fc44011607cbcba5d569e05e0aba1fa); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal9fc44011607cbcba5d569e05e0aba1fa)): ?>
+<?php $component = $__componentOriginal9fc44011607cbcba5d569e05e0aba1fa; ?>
+<?php unset($__componentOriginal9fc44011607cbcba5d569e05e0aba1fa); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal3fc000170a8ea7eacf7b8a8761932ba5 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal3fc000170a8ea7eacf7b8a8761932ba5 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateLifestyleDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-lifestyle-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateLifestyleDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal3fc000170a8ea7eacf7b8a8761932ba5)): ?>
+<?php $attributes = $__attributesOriginal3fc000170a8ea7eacf7b8a8761932ba5; ?>
+<?php unset($__attributesOriginal3fc000170a8ea7eacf7b8a8761932ba5); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal3fc000170a8ea7eacf7b8a8761932ba5)): ?>
+<?php $component = $__componentOriginal3fc000170a8ea7eacf7b8a8761932ba5; ?>
+<?php unset($__componentOriginal3fc000170a8ea7eacf7b8a8761932ba5); ?>
+<?php endif; ?>
+                   
+                    
+                    <div id="userContactDetailsAlert"></div>
+                    <?php if (isset($component)) { $__componentOriginal02b78eaca9166e1cab32fb43918ac5c4 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal02b78eaca9166e1cab32fb43918ac5c4 = $attributes; } ?>
+<?php $component = App\View\Components\ViewContactDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('view-contact-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\ViewContactDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal02b78eaca9166e1cab32fb43918ac5c4)): ?>
+<?php $attributes = $__attributesOriginal02b78eaca9166e1cab32fb43918ac5c4; ?>
+<?php unset($__attributesOriginal02b78eaca9166e1cab32fb43918ac5c4); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal02b78eaca9166e1cab32fb43918ac5c4)): ?>
+<?php $component = $__componentOriginal02b78eaca9166e1cab32fb43918ac5c4; ?>
+<?php unset($__componentOriginal02b78eaca9166e1cab32fb43918ac5c4); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginalb613354ededc30a22d8f5b88cb926b88 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb613354ededc30a22d8f5b88cb926b88 = $attributes; } ?>
+<?php $component = App\View\Components\UpdateContactDetailsComponent::resolve(['user' => $user] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('update-contact-details-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpdateContactDetailsComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb613354ededc30a22d8f5b88cb926b88)): ?>
+<?php $attributes = $__attributesOriginalb613354ededc30a22d8f5b88cb926b88; ?>
+<?php unset($__attributesOriginalb613354ededc30a22d8f5b88cb926b88); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb613354ededc30a22d8f5b88cb926b88)): ?>
+<?php $component = $__componentOriginalb613354ededc30a22d8f5b88cb926b88; ?>
+<?php unset($__componentOriginalb613354ededc30a22d8f5b88cb926b88); ?>
+<?php endif; ?>
+                   
+                    
                     <div class="gt-panel gt-panel-default" id="edit6">
                         <div class="gt-panel-head">
                             <span class="pull-left"><i class="fa fa-map-marker"></i>Location Information</span>
@@ -1356,7 +1310,139 @@
         });
     </script>
 
+ 
+<script>
+    const birthCountry = document.getElementById("country");
+    const birthState = document.getElementById("hstate");
+    const birthCity = document.getElementById("hcity");
 
+    birthCountry.addEventListener("change", function() {
+        const countryId = birthCountry.value;
+        if (countryId) {
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    birthState.innerHTML = '<option value="">Select State</option>';
+                    data.forEach(state => {
+                        birthState.innerHTML +=
+                            `<option value="${state.id}">${state.state}</option>`;
+                    });
+                    birthCity.innerHTML =
+                        '<option value="">Select City</option>'; // Reset city dropdown
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching states:', error);
+                    alert('Failed to fetch states. Please try again later.');
+                }
+            });
+        } else {
+            birthState.innerHTML = '<option value="">Select State</option>';
+            birthCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+
+    birthState.addEventListener("change", function() {
+        const stateId = birthState.value;
+
+        if (stateId) {
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    birthCity.innerHTML = '<option value="">Select City</option>';
+                    data.forEach(city => {
+                        birthCity.innerHTML +=
+                            `<option value="${city.id}">${city.city}</option>`;
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching cities:', error);
+                    alert('Failed to fetch cities. Please try again later.');
+                }
+            });
+        } else {
+            birthCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+</script>
+
+<script>
+     document.addEventListener("DOMContentLoaded", function() {
+    const familyCountry = document.getElementById("family_living");
+    const familyState = document.getElementById("family_state");
+    const familyCity = document.getElementById("family_city");
+    console.log(country);
+    familyCountry.addEventListener("change", function() {
+        const countryId = familyCountry.value;
+        if (countryId) {
+            console.log(countryId);
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                
+                success: function(data) {
+                    familyState.innerHTML = '<option value="">Select State</option>';
+                    data.forEach(state => {
+                        familyState.innerHTML +=
+                            `<option value="${state.id}">${state.state}</option>`;
+                    });
+                    familyCity.innerHTML =
+                        '<option value="">Select City</option>'; // Reset city dropdown
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching states:', error);
+                    alert('Failed to fetch states. Please try again later.');
+                }
+            });
+        } else {
+            familyState.innerHTML = '<option value="">Select State</option>';
+            familyCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+
+    familyState.addEventListener("change", function() {
+        const stateId = familyState.value;
+
+        if (stateId) {
+            console.log(stateId);
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    familyCity.innerHTML = '<option value="">Select City</option>';
+                    data.forEach(city => {
+                        familyCity.innerHTML +=
+                            `<option value="${city.id}">${city.city}</option>`;
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching cities:', error);
+                    alert('Failed to fetch cities. Please try again later.');
+                }
+            });
+        } else {
+            familyCity.innerHTML = '<option value="">Select City</option>';
+        }
+    });
+});
+</script>
 
 <?php $__env->stopSection(); ?>
 

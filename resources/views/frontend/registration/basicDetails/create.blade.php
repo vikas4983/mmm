@@ -19,6 +19,7 @@
             <div class="row mb-20">
                 <img src="{{ asset('frontend/assets/img/reg-step-1.png') }}" class="img-responsive">
             </div>
+            @include('alerts.alert')
             <h3 class="gt-text-green mb-10 fontMerriWeather">
                 <i class="fa fa-user mr-10"></i>Basic Information
             </h3>

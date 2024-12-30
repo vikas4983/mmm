@@ -46,7 +46,7 @@
                     <?php echo csrf_field(); ?>
                     <?php echo method_field('PUT'); ?>
                     <?php $__currentLoopData = $fields; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $field): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        case ('profile_for'): ?>
+                        <?php case ('profile_for'): ?>
                             <label for="<?php echo e($name); ?>"><b
                                     class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
                             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
