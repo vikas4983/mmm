@@ -53,7 +53,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-
     <?php echo $__env->yieldContent('header'); ?>
 
 </head>
@@ -181,20 +180,8 @@
                                         <li><a href="<?php echo e(url('document')); ?>">Manage Document</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(route('search')); ?>">Quick Search</a></li>
-                                        <li><a href="<?php echo e(url('basic-search')); ?>">Basic Search</a></li>
-                                        <li><a href="<?php echo e(url('advance-search')); ?>">Advanced Search</a></li>
-                                        <li><a href="<?php echo e(url('keyword-search')); ?>">Keyword Search</a></li>
-                                        <li><a href="<?php echo e(url('location-search')); ?>">Location Search</a></li>
-                                        <li><a href="<?php echo e(url('occupation-search')); ?>">Occupation Search</a></li>
-                                    </ul>
-                                </li>
+                                <li class="active ripplelink"><a href="<?php echo e(route('search')); ?>">Search</a></li>
+                                
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
@@ -571,11 +558,12 @@
             },
             dataType: 'json',
             success: function(data) {
-                // alert('Success');
+                
             }
         });
     });
 </script>
+
 
 
 

@@ -116,9 +116,12 @@ Route::middleware([
     });
     Route::get('/get-view', [DemoController::class, 'getView']);
     Route::get('signUp', [AjaxRequestController::class, 'signUp'])->name('sign.up');
-    Route::get('/get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
+    Route::get('get-caste/{religionId}', [AjaxRequestController::class, 'getCaste']);
+    Route::post('get-caste', [AjaxRequestController::class, 'getCastes']);
     Route::get('/get-state/{countryId}', [AjaxRequestController::class, 'getState']);
+    Route::post('get-state', [AjaxRequestController::class, 'getStates']);
     Route::get('/get-city/{stateId}', [AjaxRequestController::class, 'getCity']);
+    Route::post('get-city', [AjaxRequestController::class, 'getCities']);
     Route::get('/get-occupation/{employeeId}', [AjaxRequestController::class, 'getOccupation']);
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard')->middleware('mobileNumberUpdated');
     Route::resource('users', UserController::class)->middleware('mobileNumberUpdated');
@@ -179,7 +182,8 @@ Route::middleware([
     //Search
    Route::get('search',[SearchController::class, 'search'])->name('search')->middleware('mobileNumberUpdated');
    Route::post('search-result', [SearchController::class, 'searchById'])->name('search.by.id')->middleware('mobileNumberUpdated');
-   Route::post('quick-search', [SearchController::class, 'quickSearch'])->name('quick.search')->middleware('mobileNumberUpdated');
+   Route::post('quick-search-result', [SearchController::class, 'quickSearch'])->name('quick.search')->middleware('mobileNumberUpdated');
+   Route::post('basic-search-result', [SearchController::class, 'basicSearch'])->name('basic.search')->middleware('mobileNumberUpdated');
 
 
 

@@ -53,7 +53,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-
     @yield('header')
 
 </head>
@@ -181,8 +180,9 @@
                                         <li><a href="{{ url('document') }}">Manage Document</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
+                                <li class="active ripplelink"><a href="{{ route('search') }}">Search</a></li>
+                                {{-- <li class="dropdown">
+                                    <a href="{{ route('search') }}" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
                                         <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
                                     </a>
@@ -194,7 +194,7 @@
                                         <li><a href="{{ url('location-search') }}">Location Search</a></li>
                                         <li><a href="{{ url('occupation-search') }}">Occupation Search</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
@@ -603,11 +603,12 @@
             },
             dataType: 'json',
             success: function(data) {
-                // alert('Success');
+                
             }
         });
     });
 </script>
+
 
 
 {{-- <script src="{{ asset('frontend/assets/js/custom-js/user-update-modal.js') }}"></script> --}}

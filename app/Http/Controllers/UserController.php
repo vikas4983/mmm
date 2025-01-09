@@ -735,7 +735,7 @@ class UserController extends Controller
     }
     public function updateLifestyleDetails(Request $request)
     {
-        // dd($request->all());
+       
         try {
             $user = auth()->user();
             $fields = config('formFields.editLifestyleDetails');

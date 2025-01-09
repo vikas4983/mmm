@@ -16,7 +16,7 @@ class FrontendUserServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        View::composer(['layouts.main-master', 'frontend.settings.changePassword', 'dashboard', 'frontend.users.myProfile', 'frontend.search.quick','users','frontend.users.mobile-verification','frontend.users.photo','frontend.users.show' ], function ($view) {
+        View::composer(['layouts.main-master', 'frontend.settings.changePassword', 'dashboard', 'frontend.users.myProfile', 'frontend.search.quick','users','frontend.users.mobile-verification','frontend.users.photo','frontend.users.show','frontend.search.searchResult','components.search-result-component','components.profile-card-component' ], function ($view) {
             $user = Auth::user();
             $prefix = ProfileId::where('status', 1)->latest()->first();
            

@@ -1,5 +1,6 @@
 <div class="col-xxl-14 col-xxl-offset-1">
     <h3 class="inSearchTitle">Quick Search</h3>
+    <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle">
         Search profiles and provide you suitable profiles quickly.
     </p>
@@ -12,7 +13,8 @@
         $selectedCastes = session()->get('quickSearch.caste', []);
         $castes = \App\Models\Caste::all();
     ?>
-    <form id="quickSearchForm" method="post">
+    <form action="<?php echo e(route('quick.search')); ?>" method="post">
+        <?php echo csrf_field(); ?>
         <div class="form-group">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
@@ -47,7 +49,6 @@
                 </div>
             </div>
         </div>
-
         <div class="form-group">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
@@ -55,18 +56,12 @@
                         Religion </label>
                 </div>
                 <div class="col-xxl-8 col-xl-8">
-                    <select id="religion" name="religion[]" class="form-control" multiple multiselect-search="true"
-                        multiselect-select-all="true" style="width:377px">
+                    <select id="religion" name="religion[]" class="religion" multiple style="width:377px">
                         <?php $__currentLoopData = $options['religions']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $religion): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($religion->id); ?>"
-                            <?php if(in_array($religion->id, $selectedReligions)): ?> 
-                                selected style="
+                            <option value="<?php echo e($religion->id); ?>"
+                                <?php if(in_array($religion->id, $selectedReligions)): ?> selected style="
                                 background-color: #E27103;
-                                color: white;" 
-                            <?php endif; ?>>
-                            <?php echo e($religion->name); ?>
-
-                        </option>
+                                color: white;" <?php endif; ?>>
                                 <?php echo e($religion->name); ?>
 
                             </option>
@@ -77,80 +72,110 @@
             </div>
         </div>
 
-        <div class="form-group" id="caste-div">
+        <div class="form-group" id="caste-div" style="display: none">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
                     <label class="mt-10">
                         Caste </label>
                 </div>
                 <div class="col-xxl-8 col-xl-8">
-                    <select class="js-example-basic-multiple" id="caste" name="caste[]" multiple="multiple"
-                        style="width:377px">
-                        <?php $__currentLoopData = $castes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caste): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <option value="<?php echo e($caste->id); ?>"
-                            <?php echo e(in_array($caste->id, $selectedCastes) ? 'selected' : ''); ?>>
-                            <?php echo e($caste->name); ?>
-
-                        </option>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <select class=" caste" id="caste" name="caste[]" multiple="multiple" style="width:377px">
+                        <option id="selectedReligion"></option>
+                        
                     </select>
                 </div>
             </div>
         </div>
-
         <div class="form-group text-center">
             <input type="submit" value="Search Now" name="quick_sub" class="btn gt-btn-green">
             <a class="btn gt-btn-green gt-cursor" href="saved-searches">Saved
                 Search</a>
         </div>
     </form>
-   
 </div>
 <script>
-    const religion = document.getElementById("religion");
-    
-    religion.addEventListener("click", function(e) {
-        let religionId = religion.value;
+    $(document).ready(function() {
+        $('.religion').select2({
+            placeholder: "Select religion",
+            allowClear: true
+        });
+    });
+    $(document).ready(function() {
+        $('.caste').select2({
+            placeholder: "Select Caste",
+            allowClear: true,
 
-        if (religionId) {
-            caste.style.display = 'block';
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const oldReligionValue = Array.from(religion.selectedOptions).map(option => option.value);
+        
+        if (oldReligionValue.length > 0) {
+            $('#caste-div').css('display', 'block');
             $.ajax({
-                url: '/get-caste/' + religionId,
-                type: 'GET',
-                dataType: 'json',
+                url: 'get-caste',
+                type: 'POST',
+                data: {
+                    'religions': oldReligionValue
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function(data) {
-                    $("#caste").empty();
-                    document.getElementById("caste-div").style.display = "block";
-                    $("#caste").append('<option value="">Select Caste </option>');
-                    
-                    $.each(data, function(key, value) {
 
-                        $('#caste').append('<option value="' + value.id + '">' + value
-                            .name + '</option>');
-                    });
+                success: function(castes, religions) {
+                    $('#selectedReligion').append(religions);
+                    $('#caste').html(castes);
+
                 },
                 error: function(xhr, status, error) {
                     console.error('Error Status:', status);
                     console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
+
                 }
             });
-        } else {
-
-            $('#caste').fadeOut();
-            $('#caste').empty();
-            $('#caste').append('<option value="">Select Caste</option>');
+        }else{
+            console.log("No religion value selected or available.");
         }
+        $('#religion').on('change', function() {
+
+            const religionId = $(this).val();
+            if (religionId) {
+                $('#caste-div').css('display', 'block');
+                $.ajax({
+                    url: 'get-caste',
+                    type: 'POST',
+                    data: {
+                        'religions': religionId
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+
+                    success: function(castes, religions) {
+                        $('#selectedReligion').append(religions);
+                        $('#caste').html(castes);
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error Status:', status);
+                        console.error('Error Details:', xhr.responseText);
+
+                    }
+                });
+            } else {
+                console.log('ok1')
+                $('#caste').fadeOut();
+                $('#caste').empty();
+                $('#caste').append('<option value="">Select Caste</option>');
+            }
+        })
+
     });
 </script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const quickSearchForm = document.getElementById("quickSearchForm");
+    document.addEventListener("DOMContentLoaded", function() {
+        const quickSearchForm = document.getElementById("quickSearchForm");
         const quickSearchBtn = document.getElementById("quickSearchBtn");
         const errorMessage = document.getElementById("errorMessage");
         const alerts = document.getElementById("alerts");
@@ -162,8 +187,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (quickSearchForm) {
             quickSearchForm.addEventListener("submit", function(e) {
-              e.preventDefault();
-const fromAgeValue = fromAge.value;
+                e.preventDefault();
+                const fromAgeValue = fromAge.value;
                 const toAgeValue = toAge.value;
                 const religionValues = Array.from(religionSelect.selectedOptions).map(
                     (option) => option.value
@@ -171,8 +196,6 @@ const fromAgeValue = fromAge.value;
                 const casteValues = Array.from(casteSelect.selectedOptions).map(
                     (option) => option.value
                 );
-
-                
                 errorMessage.textContent = "";
                 if (
                     !fromAgeValue ||
@@ -181,11 +204,11 @@ const fromAgeValue = fromAge.value;
                     errorMessage.textContent = "All fields are required.";
                     return;
                 }
-               
                 $.ajax({
                     url: "<?php echo e(route('quick.search')); ?>",
                     method: "POST",
                     data: {
+
                         _token: csrfToken,
                         min_age: fromAgeValue,
                         max_age: toAgeValue,
@@ -193,10 +216,10 @@ const fromAgeValue = fromAge.value;
                         caste: casteValues,
                     },
                     success: function(response) {
-                    
+
                         const searchResult = document.getElementById("searchResult");
                         searchResult.innerHTML = response;
-                        
+
                     },
                     error: function(xhr) {
                         errorMessage.innerText = xhr.responseJSON.message;
@@ -207,5 +230,6 @@ const fromAgeValue = fromAge.value;
                 });
             });
         }
-   });
-</script><?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/quick-search-component.blade.php ENDPATH**/ ?>
+    });
+</script>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/quick-search-component.blade.php ENDPATH**/ ?>

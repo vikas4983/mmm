@@ -3,6 +3,7 @@
 @section('content')
 
 <div>
+  
   <x-search-result-component :searchResults="$searchResults" :user="$user" :options="$options" />
 </div>
 

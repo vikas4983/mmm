@@ -4,8 +4,7 @@
             <div class="row" bis_skin_checked="1">
                 <div class="col-xxl-5 col-xl-5 col-xs-16 col-lg-5 gridFullWidth gt-main-name" bis_skin_checked="1">
                     <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
-                        <?php echo e($searchResult->name ?? 'NA'); ?>
-
+                        <?php echo e($searchResult->name ?? 'NA'); ?>(<?php echo e($prefix->name ?? 'NA'); ?>-<?php echo e($searchResult->matrimony_id ?? 'NA'); ?>)
                     </h4>
                 </div>
                 <div class="col-xxl-11 col-xl-11 col-lg-11 col-xs-16 text-right gridHidden" bis_skin_checked="1">
@@ -14,38 +13,23 @@
                 </div>
             </div>
         </a>
+
         <a href="member-profile?view_id=IN38" target="_blank" class="gt-result-panel-body">
             <div class="row gt-padding-bottom-15" bis_skin_checked="1">
                 <div class="col-xxl-2 col-xl-2 col-xs-16 col-lg-3 gridFullWidth" bis_skin_checked="1">
                     <div class="thumbnail gt-margin-bottom-0" bis_skin_checked="1">
-
-                        <?php
-                            $userImages = App\Models\Image::where('user_id', $searchResult->id)->get();
-                            foreach ($userImages as $userImage) {
-                                if ($userImage->dp_image === '1') {
-                                    $dpImage = $userImage;
-                                }
-                            }
-                            $pendingImage = App\Models\Image::where('user_id', $searchResult->id)
-                                ->where('dp_image', 0)
-                                ->latest()
-                                ->first();
-                        ?>
-                        <?php if($userImages && !$userImages->isEmpty()): ?>
-                            <?php if(isset($dpImage)): ?>
-                                <img src="<?php echo e(asset('storage/users/images/' . $dpImage->name)); ?>"
-                                    class="img-responsive gtFullWidth" alt="User Image">
-                            <?php elseif($pendingImage): ?>
-                                <img src="<?php echo e($searchResult->gender === 'male'
-                                    ? asset('storage/users/images/male-default.jpg')
-                                    : asset('storage/users/images/female-default.jpg')); ?>"
-                                    class="img-responsive gtFullWidth" alt="User Image">
-                            <?php else: ?>
-                                <img src="<?php echo e($searchResult->gender === 'male'
-                                    ? asset('storage/users/images/male-default.jpg')
-                                    : asset('storage/users/images/female-default.jpg')); ?>"
-                                    class="img-responsive gtFullWidth" alt="User Image">
-                            <?php endif; ?>
+                        <?php if(isset($searchResult->images)): ?>
+                            <?php $__currentLoopData = $searchResult->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if($image->dp_image === '1'): ?>
+                                    <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                        class="img-responsive gtFullWidth" alt="User Image">
+                                <?php else: ?>
+                                    <img src="<?php echo e($searchResult->gender === 'male'
+                                        ? asset('storage/users/images/male-default.jpg')
+                                        : asset('storage/users/images/female-default.jpg')); ?>"
+                                        class="img-responsive gtFullWidth" alt="User Image">
+                                <?php endif; ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php else: ?>
                             <img src="<?php echo e($searchResult->gender === 'male'
                                 ? asset('storage/users/images/male-default.jpg')
@@ -62,7 +46,7 @@
                                 <p class="row gt-margin-bottom-0">
                                     <label class="col-xs-7 ">Age :</label>
                                     <span class="col-xs-9">
-                                        <?php echo e($searchResult->basicDetails->age ?? ''); ?>
+                                        <?php echo e($searchResult->basicDetails->age); ?>
 
 
                                     </span>
@@ -73,6 +57,13 @@
                                     <label class="col-xs-7 ">Height :</label>
                                     <span class="col-xs-9">
                                         <?php echo e($searchResult->basicDetails->heights->name ?? ''); ?> </span>
+                                </p>
+                            </div>
+                            <div class="col-xxl-8 col-xl-8 col-lg-8 col-xs-16 gridHidden " bis_skin_checked="1">
+                                <p class="row gt-margin-bottom-0">
+                                    <label class="col-xs-7">Marital Status :</label>
+                                    <span class="col-xs-9">
+                                        <?php echo e($searchResult->basicDetails->maritalStatus->name ?? ''); ?> </span>
                                 </p>
                             </div>
                             <div class="col-xxl-8 col-xl-8 col-lg-8 col-xs-16 gridHidden " bis_skin_checked="1">

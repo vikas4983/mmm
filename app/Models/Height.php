@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Height extends Model
 {
     use HasFactory;
+    
 }
