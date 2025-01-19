@@ -80,6 +80,7 @@ class FilterService
                 });
             });
         }
+       // dd('ok')
        
         return $query->latest()->get();
     }
