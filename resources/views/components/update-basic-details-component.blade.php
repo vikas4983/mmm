@@ -156,26 +156,19 @@
                     <div class="form-group">
                         <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
                         <select id="children" name="children" class="form-control">
-                            <option value="0"
-                                {{ old('children', $user->basicDetails->children ?? 'None') == 'None' ? 'selected' : '' }}>
-                                None
-                            </option>
                             <option value="1"
-                                {{ old('children', $user->basicDetails->children ?? 'One') == 'One' ? 'selected' : '' }}>
-                                One
+                                {{ old('children', $user->basicDetails->children ?? 'No') == 'No' ? 'selected' : '' }}>
+                                No
                             </option>
                             <option value="2"
-                                {{ old('children', $user->basicDetails->children ?? 'Two') == 'Two' ? 'selected' : '' }}>
-                                Two
+                                {{ old('children', $user->basicDetails->children ?? 'Yes, Living together') == 'Yes, Living together' ? 'selected' : '' }}>
+                                Yes, Living together
                             </option>
                             <option value="3"
-                                {{ old('children', $user->basicDetails->children ?? 'Three') == 'Three' ? 'selected' : '' }}>
-                                Three
+                                {{ old('children', $user->basicDetails->children ?? 'Yes, Not Living together') == 'Yes, Not Living together' ? 'selected' : '' }}>
+                                Yes, Not Living together
                             </option>
-                            <option value="4"
-                                {{ old('children', $user->basicDetails->children ?? 'Four') == 'Four' ? 'selected' : '' }}>
-                                Four
-                            </option>
+                           
                         </select>
                         @error('children')
                             <span class="text-danger" style="font-size: 0.8em;">{{ $message }}</span>

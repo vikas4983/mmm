@@ -53,13 +53,13 @@ class OptionService
                     if (is_callable($model)) {
                         $data = $model();
                     } else {
-                        $data = $model::where('status', 1)->get() ?? collect(); // Fallback to empty collection
+                        $data = $model::where('status', 1)->get() ?? collect();
                     }
                     return $data;
                 });
             } catch (\Exception $e) {
                 Log::error("Failed to fetch options for key: $key", ['error' => $e->getMessage()]);
-                $results[$key] = collect(); // Return an empty collection on failure
+                $results[$key] = collect(); 
             }
         }
 

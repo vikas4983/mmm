@@ -183,9 +183,7 @@
              @php
                 $fields = config('formFields.accountDetails');
              @endphp
-            
-             
-             <x-view-account-details-component :user="$user" :fields="$fields" :prefix="$prefix" />
+            <x-view-account-details-component :user="$user" :fields="$fields" :prefix="$prefix" />
              <x-update-account-details-component :user="$user" :prefix="$prefix"/>
            
         </div>

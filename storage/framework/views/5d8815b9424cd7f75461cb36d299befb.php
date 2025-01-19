@@ -182,9 +182,7 @@
              <?php
                 $fields = config('formFields.accountDetails');
              ?>
-            
-             
-             <?php if (isset($component)) { $__componentOriginal330faea03b83b565de0c12f919baa57c = $component; } ?>
+            <?php if (isset($component)) { $__componentOriginal330faea03b83b565de0c12f919baa57c = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal330faea03b83b565de0c12f919baa57c = $attributes; } ?>
 <?php $component = App\View\Components\ViewAccountDetailsComponent::resolve(['user' => $user,'fields' => $fields,'prefix' => $prefix] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('view-account-details-component'); ?>

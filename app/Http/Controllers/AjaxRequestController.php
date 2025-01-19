@@ -19,18 +19,23 @@ class AjaxRequestController extends Controller
   }
   public function getCaste(Request $request)
   {
-    $castes = Caste::whereIn('religion_id', $request->religions)->get();
-    $religions = Religion::whereIn('id', $request->religions)->get();
-   // return view('appendOptions', compact('castes', 'religions'));
-     return response()->json([
+    
+    $castes = Caste::whereIn('religion_id', $request->religions)->where('status', 1)->get();
+    $religions = Religion::whereIn('id', $request->religions)->where('status', 1)->get();
+    return response()->json([
       'castes' => $castes,
       'religions' => $religions,
     ]);
   }
   public function getCastes(Request $request)
   {
-    $castes = Caste::whereIn('religion_id', $request->religions)->get();
-    $religions = Religion::whereIn('id', $request->religions)->get();
+    $request->validate([
+      'religions' => 'required|array',
+      'religions.*' => 'integer', // Each value must be an integer
+    ]);
+    $castes = Caste::whereIn('religion_id', $request->religions)->where('status', 1)->get();
+    $religions = Religion::whereIn('id', $request->religions)->where('status', 1)->get();
+
     return view('ajaxOptions.appendCasteOptions', compact('castes', 'religions'));
     //  return response()->json([
     //   'castes' => $castes,
@@ -40,14 +45,15 @@ class AjaxRequestController extends Controller
 
   public function getState(Request $request, $countryId)
   {
-    $states = State::where('country_id', $countryId)->get();
+    $states = State::where('country_id', $countryId)->where('status', 1)->get();
     return response()->json($states);
   }
+
   public function getStates(Request $request)
   {
-    $countries = Country::whereIn('id', $request->countries)->get();
-    $states = State::whereIn('country_id', $request->countries)->get();
-    return view('ajaxOptions.appendStateOptions', compact('countries','states'));
+    $countries = Country::whereIn('id', $request->countries)->where('status', 1)->get();
+    $states = State::whereIn('country_id', $request->countries)->where('status', 1)->get();
+    return view('ajaxOptions.appendStateOptions', compact('countries', 'states'));
   }
 
   public function getCity(Request $request, $stateId)
@@ -58,10 +64,10 @@ class AjaxRequestController extends Controller
   }
   public function getCities(Request $request)
   {
-    $states = State::whereIn('id', $request->states)->get();
-    $cities = City::whereIn('state_id', $request->states)->get();
-    return view('ajaxOptions.appendCityOptions', compact('states','cities'));
-    
+    $states = State::whereIn('id', $request->states)->where('status', 1)->get();
+    $cities = City::whereIn('state_id', $request->states)->where('status', 1)->get();
+   
+    return view('ajaxOptions.appendCityOptions', compact('states', 'cities'));
   }
 
 
@@ -69,7 +75,7 @@ class AjaxRequestController extends Controller
 
   public function getOccupation(Request $request, $employeeId)
   {
-    $employees = Occupation::where('employee_id', $employeeId)->get();
+    $employees = Occupation::where('employee_id', $employeeId)->where('status', 1)->get();
     return response()->json($employees);
   }
 }

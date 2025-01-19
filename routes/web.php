@@ -80,15 +80,13 @@ Route::get('login', function () {
         session()->forget('registration_step');
         return view('auth.login');
     }
-})->name('login')->middleware(['checkRegistrationStep', 'mobileNumberUpdated']);
+})
+    ->name('login')
+    ->middleware(['checkRegistrationStep', 'mobileNumberUpdated']);
 Route::post('logout', function () {
     session()->flush();
     return redirect('/');
 })->name('logout');
-
-
-
-
 
 // Route::get('/localization/{locale}', function (string $locale) {
 //     if (!in_array($locale, ['en', 'hi', 'fr'])) {
@@ -102,13 +100,7 @@ Route::post('logout', function () {
 //     // ...
 // });
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-    'authUser',
-])->group(function () {
-
+Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'authUser'])->group(function () {
     Route::get('/refresh-cache', function () {
         $optionService = new OptionService();
         $optionService->getOption();
@@ -123,13 +115,23 @@ Route::middleware([
     Route::get('/get-city/{stateId}', [AjaxRequestController::class, 'getCity']);
     Route::post('get-city', [AjaxRequestController::class, 'getCities']);
     Route::get('/get-occupation/{employeeId}', [AjaxRequestController::class, 'getOccupation']);
-    Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard')->middleware('mobileNumberUpdated');
+    Route::get('dashboard', [UserController::class, 'dashboard'])
+        ->name('dashboard')
+        ->middleware('mobileNumberUpdated');
     Route::resource('users', UserController::class)->middleware('mobileNumberUpdated');
-    Route::post('users/userUpdate/{id}', [UserController::class, 'userUpdate'])->name('userUpdate')->middleware('mobileNumberUpdated');
-    Route::get('my-profile', [UserController::class, 'myProfile'])->name('my.profile')->middleware('mobileNumberUpdated');
+    Route::post('users/userUpdate/{id}', [UserController::class, 'userUpdate'])
+        ->name('userUpdate')
+        ->middleware('mobileNumberUpdated');
+    Route::get('my-profile', [UserController::class, 'myProfile'])
+        ->name('my.profile')
+        ->middleware('mobileNumberUpdated');
 
-    Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])->name('mobile.update')->middleware('mobileNumberUpdated');
-    Route::post('request-otp', [UserController::class, 'requestOtpForMobileChange'])->name('request.otp')->middleware('mobileNumberUpdated');
+    Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])
+        ->name('mobile.update')
+        ->middleware('mobileNumberUpdated');
+    Route::post('request-otp', [UserController::class, 'requestOtpForMobileChange'])
+        ->name('request.otp')
+        ->middleware('mobileNumberUpdated');
     Route::get('mobile-verification', [UserController::class, 'showMobileVerificationPage'])->name('mobile.verification');
     Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
     Route::post('request-otp-again', [UserController::class, 'requestOtpForMobileChangeAgain'])->name('request.otp.again');
@@ -146,57 +148,103 @@ Route::middleware([
         Route::resource('images', ImageController::class)->middleware('checkRegistrationStep');
     });
 
-    //Update 
-    Route::patch('profile-update', [UserController::class, 'updateProfile'])->name('profile.update')->middleware('mobileNumberUpdated');
+    //Update
+    Route::patch('profile-update', [UserController::class, 'updateProfile'])
+        ->name('profile.update')
+        ->middleware('mobileNumberUpdated');
     //Update About Me Details
-    Route::patch('account-details-update', [UserController::class, 'updateAccountDetail'])->name('account.details.update')->middleware('mobileNumberUpdated');
+    Route::patch('account-details-update', [UserController::class, 'updateAccountDetail'])
+        ->name('account.details.update')
+        ->middleware('mobileNumberUpdated');
     //Update About Me Details
-    Route::patch('about-me-update', [UserController::class, 'updateAboutMe'])->name('about.me.update')->middleware('mobileNumberUpdated');
+    Route::patch('about-me-update', [UserController::class, 'updateAboutMe'])
+        ->name('about.me.update')
+        ->middleware('mobileNumberUpdated');
     //Update About Education Details
-    Route::patch('education-details', [UserController::class, 'educationDetail'])->name('education.details')->middleware('mobileNumberUpdated');
+    Route::patch('education-details', [UserController::class, 'educationDetail'])
+        ->name('education.details')
+        ->middleware('mobileNumberUpdated');
     //Update About Occupation Details
-    Route::patch('occupation-details', [UserController::class, 'occupationDetail'])->name('occupation.details')->middleware('mobileNumberUpdated');
+    Route::patch('occupation-details', [UserController::class, 'occupationDetail'])
+        ->name('occupation.details')
+        ->middleware('mobileNumberUpdated');
     //Update About Occupation Details
-    Route::patch('family-details', [UserController::class, 'familyDetail'])->name('family.details')->middleware('mobileNumberUpdated');
+    Route::patch('family-details', [UserController::class, 'familyDetail'])
+        ->name('family.details')
+        ->middleware('mobileNumberUpdated');
     //Update Basic Details
-    Route::patch('basic-details-update', [UserController::class, 'updateBasicDetails'])->name('update.basic.details')->middleware('mobileNumberUpdated');
+    Route::patch('basic-details-update', [UserController::class, 'updateBasicDetails'])
+        ->name('update.basic.details')
+        ->middleware('mobileNumberUpdated');
     //Update Horoscope Details
-    Route::patch('horoscope-details-update', [UserController::class, 'updateHoroscopeDetails'])->name('update.horoscope.details')->middleware('mobileNumberUpdated');
+    Route::patch('horoscope-details-update', [UserController::class, 'updateHoroscopeDetails'])
+        ->name('update.horoscope.details')
+        ->middleware('mobileNumberUpdated');
     //Update Carrier Details
-    Route::patch('carrier-details-update', [UserController::class, 'updateCarrierDetails'])->name('update.carrier.details')->middleware('mobileNumberUpdated');
+    Route::patch('carrier-details-update', [UserController::class, 'updateCarrierDetails'])
+        ->name('update.carrier.details')
+        ->middleware('mobileNumberUpdated');
     //Update Family Details
-    Route::patch('user-family-details-update', [UserController::class, 'updateUserFamilyDetails'])->name('update.user.family.details')->middleware('mobileNumberUpdated');
+    Route::patch('user-family-details-update', [UserController::class, 'updateUserFamilyDetails'])
+        ->name('update.user.family.details')
+        ->middleware('mobileNumberUpdated');
     //Update Lifestyle Details
-    Route::patch('user-lifestyle-details-update', [UserController::class, 'updateLifestyleDetails'])->name('update.lifestyle.details')->middleware('mobileNumberUpdated');
+    Route::patch('user-lifestyle-details-update', [UserController::class, 'updateLifestyleDetails'])
+        ->name('update.lifestyle.details')
+        ->middleware('mobileNumberUpdated');
     //Update Contact Details
-    Route::patch('user-contact-details-update', [UserController::class, 'updateContactDetails'])->name('update.contact.details')->middleware('mobileNumberUpdated');
+    Route::patch('user-contact-details-update', [UserController::class, 'updateContactDetails'])
+        ->name('update.contact.details')
+        ->middleware('mobileNumberUpdated');
     //Update Images
-    Route::get('my-photos', [UserController::class, 'myPhotos'])->name('my.photos')->middleware('mobileNumberUpdated');
-    Route::post('upload-image', [UserController::class, 'uploadImages'])->name('upload.image')->middleware('mobileNumberUpdated');
-    Route::post('add-image', [ImageController::class, 'addImage'])->name('add.image')->middleware('mobileNumberUpdated');
-    Route::post('dp-image', [ImageController::class, 'dpImage'])->name('dp.image')->middleware('mobileNumberUpdated');
-    Route::post('change-profile-image', [ImageController::class, 'changeProfileImage'])->name('change.profile.image')->middleware('mobileNumberUpdated');
-    Route::post('change-image', [ImageController::class, 'changeImage'])->name('change.image')->middleware('mobileNumberUpdated');
-    Route::post('delete-image', [ImageController::class, 'deleteImage'])->name('delete.image')->middleware('mobileNumberUpdated');
+    Route::get('my-photos', [UserController::class, 'myPhotos'])
+        ->name('my.photos')
+        ->middleware('mobileNumberUpdated');
+    Route::post('upload-image', [UserController::class, 'uploadImages'])
+        ->name('upload.image')
+        ->middleware('mobileNumberUpdated');
+    Route::post('add-image', [ImageController::class, 'addImage'])
+        ->name('add.image')
+        ->middleware('mobileNumberUpdated');
+    Route::post('dp-image', [ImageController::class, 'dpImage'])
+        ->name('dp.image')
+        ->middleware('mobileNumberUpdated');
+    Route::post('change-profile-image', [ImageController::class, 'changeProfileImage'])
+        ->name('change.profile.image')
+        ->middleware('mobileNumberUpdated');
+    Route::post('change-image', [ImageController::class, 'changeImage'])
+        ->name('change.image')
+        ->middleware('mobileNumberUpdated');
+    Route::post('delete-image', [ImageController::class, 'deleteImage'])
+        ->name('delete.image')
+        ->middleware('mobileNumberUpdated');
 
     //Search
-   Route::get('search',[SearchController::class, 'search'])->name('search')->middleware('mobileNumberUpdated');
-   Route::post('search-result', [SearchController::class, 'searchById'])->name('search.by.id')->middleware('mobileNumberUpdated');
-   Route::post('quick-search-result', [SearchController::class, 'quickSearch'])->name('quick.search')->middleware('mobileNumberUpdated');
-   Route::post('basic-search-result', [SearchController::class, 'basicSearch'])->name('basic.search')->middleware('mobileNumberUpdated');
-
-
-
-
-
+    Route::get('search', [SearchController::class, 'search'])->name('search')->middleware('mobileNumberUpdated');
+    Route::post('search-result', [SearchController::class, 'searchById'])
+        ->name('search.by.id')
+        ->middleware('mobileNumberUpdated');
+    Route::post('quick-search-result', [SearchController::class, 'quickSearch'])
+        ->name('quick.search')
+        ->middleware('mobileNumberUpdated');
+    Route::post('basic-search-result', [SearchController::class, 'basicSearch'])
+        ->name('basic.search')
+        ->middleware('mobileNumberUpdated');
+    Route::post('advance-search-result', [SearchController::class, 'advanceSearch'])
+        ->name('advance.search')
+        ->middleware('mobileNumberUpdated');
 });
 Route::resource('members', MemberController::class)->middleware('checkRegistrationStep');
-Route::get('verification', [MemberOtpController::class, 'verification'])->name('verification')->middleware('checkRegistrationStep');
+Route::get('verification', [MemberOtpController::class, 'verification'])
+    ->name('verification')
+    ->middleware('checkRegistrationStep');
 Route::post('otp-varify', [MemberController::class, 'otpVarify'])->name('otp.varify');
 Route::post('otp-again', [MemberController::class, 'otpAgain'])->name('otp.again');
 
 //User Registration
-Route::post('registration', [MemberController::class, 'store'])->name('registration')->middleware('checkRegistrationStep');
+Route::post('registration', [MemberController::class, 'store'])
+    ->name('registration')
+    ->middleware('checkRegistrationStep');
 Route::get('basic-details', [BasicDetailController::class, 'index'])->name('basic.detail');
 Route::post('update-password', [MemberController::class, 'updatePassword'])->name('update.password');
 // User Forgot Password
@@ -236,64 +284,17 @@ Route::resource('menus', MenuController::class);
 //Search
 //Route::view('frontend.search.quick', 'frontend.search.quick')->name('quick.search');
 
-
 //Redis
 Route::get('test-redis', [RedisController::class, 'testRedis'])->name('test.redis');
-Route::get('clear-cache', function () {
-    $optionKeys = [
-        'profileFors',
-        'heights',
-        'motherTongues',
-        'religions',
-        'states',
-        'cities',
-        'maritalStatuses',
-        'rashies',
-        'countries',
-        'educations',
-        'employees',
-        'occupations',
-        'incomes',
-        'fatherOccupations',
-        'motherOccupations',
-        'bodyTypes',
-        'complexions',
-        'bloodGroups',
-        'habits',
-        'physicalStatuses',
-        'hobbies',
-        'interests',
-        'musics',
-        'dresses',
-        'movies',
-        'sports',
-    ];
 
+Route::get('clear-cache', function () {
+    $optionKeys = ['profileFors', 'heights', 'motherTongues', 'religions', 'castes', 'maritalStatuses', 'rashies', 'countries', 'states', 'cities', 'educations', 'employees', 'occupations', 'incomes', 'fatherOccupations', 'motherOccupations', 'bodyTypes', 'complextions', 'bloodGroups', 'habits', 'physicalStatuses', 'hobbies', 'interests', 'musics', 'dresses', 'movies', 'sports', 'familyTypes', 'familyValues', 'familyStatus', 'relationships', 'dietaryHabits', 'languageSpeaks'];
     foreach ($optionKeys as $key) {
         Cache::forget($key);
     }
     Cache::flush();
-    return "Clear cache";
+    return view('dashboard');
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // Admin Routes
 Route::post('admin-logout', function () {
@@ -329,115 +330,119 @@ Route::post('verify-otp-forgot-password', [MobileLoginController::class, 'verify
 Route::get('verify-otp-forgot-password', [MobileLoginController::class, 'showVerifyOtpForm']);
 Route::post('admin-change-password', [MobileLoginController::class, 'changePassword']);
 
-Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
-    Route::get('/api-tokens', [AdminApiTokenController::class, 'index']);
-    // Other admin routes...
-});
-Route::prefix('admin')->middleware(['admin'])->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'index']);
-    Route::post('logout', [AdminController::class, 'logout'])->name('admins.logout');
-    Route::get('plan', [PlanController::class, 'plan']);
-    Route::resource('admins', AdminController::class);
-    Route::view('/banners', 'banners');
-    Route::resource('countries', CountryController::class);
-    Route::resource('states', StateController::class);
-    Route::resource('cities', CityController::class);
-    Route::resource('religions', ReligionController::class);
-    Route::resource('castes', CasteController::class);
-    Route::resource('employees', EmployeeController::class);
-    Route::resource('educations', EducationController::class);
-    Route::resource('occupations', OccupationController::class);
-    Route::resource('incomes', IncomeController::class);
-    Route::resource('plans', PlanController::class);
-    Route::resource('banners', BannerController::class);
-    Route::get('dashboard', [DashboardController::class, 'dashboard']);
-    Route::resource('cmsPages', CmsPageController::class);
-    Route::resource('profileids', ProfileIdController::class);
-    Route::resource('emailSettings', EmailSettingController::class);
-    Route::resource('siteSettings', SiteSettingController::class);
-    Route::resource('siteConfigs', SiteConfigController::class);
-    Route::resource('approvals', ApprovalController::class);
-    Route::resource('successStories', SuccessStoryController::class);
-    // Route::resource('users', UserController::class);
-    Route::resource('payments', PaymentController::class);
-    Route::resource('spotelights', SpoteLightController::class);
-    Route::get('user-orders', [UserController::class, 'paidusersorders']);
-    Route::resource('paymentgateways', PaymentGatewayController::class);
-    Route::resource('modelCounts', ModelCountController::class);
-    Route::resource('adminMenus', AdminMenuController::class);
-    // CMS Delete,Active,InActive  Route
-    Route::post('cms-destroy', [CmsPageController::class, 'checkBoxDelete']);
-    Route::post('cms-active', [CmsPageController::class, 'activeItem']);
-    Route::post('cms-inActive', [CmsPageController::class, 'inActiveItem']);
-    //  User Active InActive Delete Route
-    // Route::post('admin-destroy', [UserController::class, 'checkBoxDelete']);
-    // Route::post('admin-active', [UserController::class, 'activeItem']);
-    // Route::post('admin-inActive', [UserController::class, 'inActiveItem']);
+Route::prefix('admin')
+    ->middleware(['auth:admin'])
+    ->group(function () {
+        Route::get('/api-tokens', [AdminApiTokenController::class, 'index']);
+        // Other admin routes...
+    });
+Route::prefix('admin')
+    ->middleware(['admin'])
+    ->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::post('logout', [AdminController::class, 'logout'])->name('admins.logout');
+        Route::get('plan', [PlanController::class, 'plan']);
+        Route::resource('admins', AdminController::class);
+        Route::view('/banners', 'banners');
+        Route::resource('countries', CountryController::class);
+        Route::resource('states', StateController::class);
+        Route::resource('cities', CityController::class);
+        Route::resource('religions', ReligionController::class);
+        Route::resource('castes', CasteController::class);
+        Route::resource('employees', EmployeeController::class);
+        Route::resource('educations', EducationController::class);
+        Route::resource('occupations', OccupationController::class);
+        Route::resource('incomes', IncomeController::class);
+        Route::resource('plans', PlanController::class);
+        Route::resource('banners', BannerController::class);
+        Route::get('dashboard', [DashboardController::class, 'dashboard']);
+        Route::resource('cmsPages', CmsPageController::class);
+        Route::resource('profileids', ProfileIdController::class);
+        Route::resource('emailSettings', EmailSettingController::class);
+        Route::resource('siteSettings', SiteSettingController::class);
+        Route::resource('siteConfigs', SiteConfigController::class);
+        Route::resource('approvals', ApprovalController::class);
+        Route::resource('successStories', SuccessStoryController::class);
+        // Route::resource('users', UserController::class);
+        Route::resource('payments', PaymentController::class);
+        Route::resource('spotelights', SpoteLightController::class);
+        Route::get('user-orders', [UserController::class, 'paidusersorders']);
+        Route::resource('paymentgateways', PaymentGatewayController::class);
+        Route::resource('modelCounts', ModelCountController::class);
+        Route::resource('adminMenus', AdminMenuController::class);
+        // CMS Delete,Active,InActive  Route
+        Route::post('cms-destroy', [CmsPageController::class, 'checkBoxDelete']);
+        Route::post('cms-active', [CmsPageController::class, 'activeItem']);
+        Route::post('cms-inActive', [CmsPageController::class, 'inActiveItem']);
+        //  User Active InActive Delete Route
+        // Route::post('admin-destroy', [UserController::class, 'checkBoxDelete']);
+        // Route::post('admin-active', [UserController::class, 'activeItem']);
+        // Route::post('admin-inActive', [UserController::class, 'inActiveItem']);
 
-    //  Country Active InActive Delete Route
-    Route::post('countries-destroy', [CountryController::class, 'checkBoxDelete']);
-    Route::post('countries-active', [CountryController::class, 'activeItem']);
-    Route::post('countries-inActive', [CountryController::class, 'inActiveItem']);
-    //  State Active InActive Delete Route
-    Route::post('states-destroy', [StateController::class, 'checkBoxDelete']);
-    Route::post('states-active', [StateController::class, 'activeItem']);
-    Route::post('states-inActive', [StateController::class, 'inActiveItem']);
-    //  City Active InActive Delete Route
-    Route::post('cities-destroy', [CityController::class, 'checkBoxDelete']);
-    Route::post('cities-active', [CityController::class, 'activeItem']);
-    Route::post('cities-inActive', [CityController::class, 'inActiveItem']);
-    //  Religion Active InActive Delete Route
-    Route::post('religions-destroy', [ReligionController::class, 'checkBoxDelete']);
-    Route::post('religions-active', [ReligionController::class, 'activeItem']);
-    Route::post('religions-inActive', [ReligionController::class, 'inActiveItem']);
-    //  Caste Active InActive Delete Route
-    Route::post('castes-destroy', [CasteController::class, 'checkBoxDelete']);
-    Route::post('castes-active', [CasteController::class, 'activeItem']);
-    Route::post('castes-inActive', [CasteController::class, 'inActiveItem']);
-    //  Employee Active InActive Delete Route
-    Route::post('employees-destroy', [EmployeeController::class, 'checkBoxDelete']);
-    Route::post('employees-active', [EmployeeController::class, 'activeItem']);
-    Route::post('employees-inActive', [EmployeeController::class, 'inActiveItem']);
-    //  Occupation Active InActive Delete Route
-    Route::post('occupations-destroy', [OccupationController::class, 'checkBoxDelete']);
-    Route::post('occupations-active', [OccupationController::class, 'activeItem']);
-    Route::post('occupations-inActive', [OccupationController::class, 'inActiveItem']);
-    //  Education Active InActive Delete Route
-    Route::post('educations-destroy', [EducationController::class, 'checkBoxDelete']);
-    Route::post('educations-active', [EducationController::class, 'activeItem']);
-    Route::post('educations-inActive', [EducationController::class, 'inActiveItem']);
-    //  Income Active InActive Delete Route
-    Route::post('incomes-destroy', [IncomeController::class, 'checkBoxDelete']);
-    Route::post('incomes-active', [IncomeController::class, 'activeItem']);
-    Route::post('incomes-inActive', [IncomeController::class, 'inActiveItem']);
-    //  Plan Active InActive Delete Route
-    Route::post('plans-destroy', [PlanController::class, 'checkBoxDelete']);
-    Route::post('plans-active', [PlanController::class, 'activeItem']);
-    Route::post('plans-inActive', [PlanController::class, 'inActiveItem']);
-    //  Logo Active InActive Delete Route
-    Route::post('logos-destroy', [LogoFaviconController::class, 'checkBoxDelete']);
-    Route::post('logos-active', [LogoFaviconController::class, 'activeItem']);
-    Route::post('logos-inActive', [LogoFaviconController::class, 'inActiveItem']);
-    //  Favicon Active InActive Delete Route
-    Route::post('favicons-destroy', [FaviconController::class, 'checkBoxDelete']);
-    Route::post('favicons-active', [FaviconController::class, 'activeItem']);
-    Route::post('favicons-inActive', [FaviconController::class, 'inActiveItem']);
-    //  Banner Active InActive Delete Route
-    Route::post('banners-destroy', [BannerController::class, 'checkBoxDelete']);
-    Route::post('banners-active', [BannerController::class, 'activeItem']);
-    Route::post('banners-inActive', [BannerController::class, 'inActiveItem']);
-    //  Menu Active InActive Delete Route
-    Route::post('menus-destroy', [MenuController::class, 'checkBoxDelete']);
-    Route::post('menus-active', [MenuController::class, 'activeItem']);
-    Route::post('menus-inActive', [MenuController::class, 'inActiveItem']);
-    //  ProfileId Active InActive Delete Route
-    Route::post('profileids-destroy', [MenuController::class, 'checkBoxDelete']);
-    Route::post('profileids-active', [MenuController::class, 'activeItem']);
-    Route::post('profileids-inActive', [MenuController::class, 'inActiveItem']);
-    // RazorPay
-    Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index']);
-    Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
-});
+        //  Country Active InActive Delete Route
+        Route::post('countries-destroy', [CountryController::class, 'checkBoxDelete']);
+        Route::post('countries-active', [CountryController::class, 'activeItem']);
+        Route::post('countries-inActive', [CountryController::class, 'inActiveItem']);
+        //  State Active InActive Delete Route
+        Route::post('states-destroy', [StateController::class, 'checkBoxDelete']);
+        Route::post('states-active', [StateController::class, 'activeItem']);
+        Route::post('states-inActive', [StateController::class, 'inActiveItem']);
+        //  City Active InActive Delete Route
+        Route::post('cities-destroy', [CityController::class, 'checkBoxDelete']);
+        Route::post('cities-active', [CityController::class, 'activeItem']);
+        Route::post('cities-inActive', [CityController::class, 'inActiveItem']);
+        //  Religion Active InActive Delete Route
+        Route::post('religions-destroy', [ReligionController::class, 'checkBoxDelete']);
+        Route::post('religions-active', [ReligionController::class, 'activeItem']);
+        Route::post('religions-inActive', [ReligionController::class, 'inActiveItem']);
+        //  Caste Active InActive Delete Route
+        Route::post('castes-destroy', [CasteController::class, 'checkBoxDelete']);
+        Route::post('castes-active', [CasteController::class, 'activeItem']);
+        Route::post('castes-inActive', [CasteController::class, 'inActiveItem']);
+        //  Employee Active InActive Delete Route
+        Route::post('employees-destroy', [EmployeeController::class, 'checkBoxDelete']);
+        Route::post('employees-active', [EmployeeController::class, 'activeItem']);
+        Route::post('employees-inActive', [EmployeeController::class, 'inActiveItem']);
+        //  Occupation Active InActive Delete Route
+        Route::post('occupations-destroy', [OccupationController::class, 'checkBoxDelete']);
+        Route::post('occupations-active', [OccupationController::class, 'activeItem']);
+        Route::post('occupations-inActive', [OccupationController::class, 'inActiveItem']);
+        //  Education Active InActive Delete Route
+        Route::post('educations-destroy', [EducationController::class, 'checkBoxDelete']);
+        Route::post('educations-active', [EducationController::class, 'activeItem']);
+        Route::post('educations-inActive', [EducationController::class, 'inActiveItem']);
+        //  Income Active InActive Delete Route
+        Route::post('incomes-destroy', [IncomeController::class, 'checkBoxDelete']);
+        Route::post('incomes-active', [IncomeController::class, 'activeItem']);
+        Route::post('incomes-inActive', [IncomeController::class, 'inActiveItem']);
+        //  Plan Active InActive Delete Route
+        Route::post('plans-destroy', [PlanController::class, 'checkBoxDelete']);
+        Route::post('plans-active', [PlanController::class, 'activeItem']);
+        Route::post('plans-inActive', [PlanController::class, 'inActiveItem']);
+        //  Logo Active InActive Delete Route
+        Route::post('logos-destroy', [LogoFaviconController::class, 'checkBoxDelete']);
+        Route::post('logos-active', [LogoFaviconController::class, 'activeItem']);
+        Route::post('logos-inActive', [LogoFaviconController::class, 'inActiveItem']);
+        //  Favicon Active InActive Delete Route
+        Route::post('favicons-destroy', [FaviconController::class, 'checkBoxDelete']);
+        Route::post('favicons-active', [FaviconController::class, 'activeItem']);
+        Route::post('favicons-inActive', [FaviconController::class, 'inActiveItem']);
+        //  Banner Active InActive Delete Route
+        Route::post('banners-destroy', [BannerController::class, 'checkBoxDelete']);
+        Route::post('banners-active', [BannerController::class, 'activeItem']);
+        Route::post('banners-inActive', [BannerController::class, 'inActiveItem']);
+        //  Menu Active InActive Delete Route
+        Route::post('menus-destroy', [MenuController::class, 'checkBoxDelete']);
+        Route::post('menus-active', [MenuController::class, 'activeItem']);
+        Route::post('menus-inActive', [MenuController::class, 'inActiveItem']);
+        //  ProfileId Active InActive Delete Route
+        Route::post('profileids-destroy', [MenuController::class, 'checkBoxDelete']);
+        Route::post('profileids-active', [MenuController::class, 'activeItem']);
+        Route::post('profileids-inActive', [MenuController::class, 'inActiveItem']);
+        // RazorPay
+        Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index']);
+        Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
+    });
 
 // Route::post('logout', function () {
 //     Auth::logout();

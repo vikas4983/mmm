@@ -1,111 +1,19 @@
+<style>
+    .select2-results__group {
+       font-weight: bold;
+       color: #ffff;
+       background-color: #ff6600;
+       padding: 5px;
+       border-bottom: 1px solid #ddd;
+       
+    }
+</style>
+
 <div class="col-xxl-14 col-xxl-offset-1">
     <h3 class="inSearchTitle">Basic Search</h3>
     <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle">
         Searches to provide suitable profiles.
     </p>
-    <style>
-        .select2-results__group {
-           font-weight: bold;
-           color: #ffff;
-           background-color: #ff6600;
-           padding: 5px;
-           border-bottom: 1px solid #ddd;
-           
-        }
-    </style>
-    <script>
-        $(document).ready(function() {
-            $('#basicReligion').select2({
-                placeholder: "Select religion",
-                allowClear: true
-            });
-
-        });
-        $(document).ready(function() {
-            $('#basicCaste').select2({
-                placeholder: "Select Caste",
-                allowClear: true,
-                style: "color:red",
-
-            });
-        });
-
-        $(document).ready(function() {
-            let previousSelectedOptionValue = []; // To track previously selected values
-
-            $('#maritalStatus').select2({
-                placeholder: "Select Marital Status",
-                allowClear: true,
-            });
-            $("#maritalStatus").on("change", function(e) {
-                const maritalStatus = document.getElementById("maritalStatus");
-                const lastSelectedValue = e?.params?.data?.id;
-                const doesNotMatter = '0';
-                let selectedValues = $(this).val(); // Get selected values
-
-                const addedValue = selectedValues.filter(val => !previousSelectedOptionValue.includes(val));
-                if (addedValue.length > 0) {
-                    console.log("Latest selected value:", addedValue[0]);
-                }
-                // Find the newly unselected value
-                const removedValue = previousSelectedOptionValue.filter(val => !selectedValues.includes(
-                    val));
-                if (removedValue.length > 0) {
-                    console.log("Latest unselected value:", removedValue[0]);
-                }
-
-                previousSelectedOptionValue = selectedValues;
-
-
-                if (maritalStatus) {
-                    const selectedOptions = maritalStatus.selectedOptions;
-
-                    // if (selectedValues.length > 1 && [selectedValues.length - 1] === 0) {
-                    //     selectedValues = ['0'];
-                    //     if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
-                    //         $(maritalStatus).val(selectedValues).trigger('change');
-                    //     }
-                    // } else {
-                    //     // 
-                    // }
-
-                    if (selectedValues.length > 1 && selectedValues.includes(doesNotMatter)) {
-                        selectedValues = selectedValues.filter(value => value !== '0');
-                        if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
-                            $(maritalStatus).val(selectedValues).trigger('change');
-                        }
-                    }
-
-
-                    // if (selectedValues.includes(doesNotMatter)) {
-                    //     selectedValues = [doesNotMatter];
-                    //     if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
-                    //         $(maritalStatus).val(selectedValues).trigger('change');
-                    //     }
-                    // }
-                }
-            });
-        });
-
-        $(document).ready(function() {
-            $('#basicCountry').select2({
-                placeholder: "Select Country",
-                allowClear: true,
-
-            });
-            $('#basicState').select2({
-                placeholder: "Select State",
-                allowClear: true,
-
-            });
-            $('#basicCity').select2({
-                placeholder: "Select City",
-                allowClear: true,
-
-            });
-        });
-    </script>
-
     <form action="<?php echo e(route('basic.search')); ?>" method="post">
         <?php echo csrf_field(); ?>
         <div class="form-group">
@@ -193,7 +101,7 @@
                         Religion </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="basicReligion" name="basic_religion[]" class="basicReligion" multiple
+                    <select id="basicReligion" name="religion[]" class="basicReligion" multiple
                         style="width: 432px">
                       <?php $__currentLoopData = $options['religions']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $religion): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($religion->id); ?>">
@@ -215,7 +123,7 @@
                         Caste </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class=" basicCaste" id="basicCaste" name="basic_caste[]" multiple="multiple"
+                    <select class=" basicCaste" id="basicCaste" name="caste[]" multiple="multiple"
                         style="width: 432px">
                     </select>
                 </div>
@@ -229,7 +137,7 @@
                         Country living in </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class="select2-results__group" id="basicCountry" name="basic_country[]" multiple="multiple"
+                    <select class="select2-results__group" id="basicCountry" name="country[]" multiple="multiple"
                         style="width: 432px">
                         <?php $__currentLoopData = $options['countries']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($country->id); ?>">
@@ -248,7 +156,7 @@
                         State </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class=" select2-results__group" id="basicState" name="basic_state[]" multiple="multiple"
+                    <select class=" select2-results__group" id="basicState" name="state[]" multiple="multiple"
                         style="width: 432px">
 
                     </select>
@@ -262,7 +170,7 @@
                         City </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class=" select2-results__group" id="basicCity" name="basic_city[]" multiple="multiple"
+                    <select class=" select2-results__group" id="basicCity" name="city[]" multiple="multiple"
                         style="width: 432px">
 
                     </select>
@@ -274,10 +182,10 @@
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
                     <label class="mt-10">
-                        Photo settings </label>
+                        Profiles </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="basicPhoto" name="basic_photo" style="width: 432px">
+                    <select id="basicPhoto" name="photo" style="width: 432px">
                         <option value="0">Doesn't Matter</option>
                         <option value="1">With Photo</option>
 
@@ -293,6 +201,98 @@
         </div>
     </form>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#basicReligion').select2({
+            placeholder: "Select religion",
+            allowClear: true
+        });
+
+    });
+    $(document).ready(function() {
+        $('#basicCaste').select2({
+            placeholder: "Select Caste",
+            allowClear: true,
+            style: "color:red",
+
+        });
+    });
+
+    $(document).ready(function() {
+        let previousSelectedOptionValue = []; // To track previously selected values
+
+        $('#maritalStatus').select2({
+            placeholder: "Select Marital Status",
+            allowClear: true,
+        });
+        $("#maritalStatus").on("change", function(e) {
+            const maritalStatus = document.getElementById("maritalStatus");
+            const lastSelectedValue = e?.params?.data?.id;
+            const doesNotMatter = '0';
+            let selectedValues = $(this).val(); // Get selected values
+
+            const addedValue = selectedValues.filter(val => !previousSelectedOptionValue.includes(val));
+            if (addedValue.length > 0) {
+                console.log("Latest selected value:", addedValue[0]);
+            }
+            // Find the newly unselected value
+            const removedValue = previousSelectedOptionValue.filter(val => !selectedValues.includes(
+                val));
+            if (removedValue.length > 0) {
+                console.log("Latest unselected value:", removedValue[0]);
+            }
+
+            previousSelectedOptionValue = selectedValues;
+
+
+            if (maritalStatus) {
+                const selectedOptions = maritalStatus.selectedOptions;
+
+                // if (selectedValues.length > 1 && [selectedValues.length - 1] === 0) {
+                //     selectedValues = ['0'];
+                //     if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
+                //         $(maritalStatus).val(selectedValues).trigger('change');
+                //     }
+                // } else {
+                //     // 
+                // }
+
+                if (selectedValues.length > 1 && selectedValues.includes(doesNotMatter)) {
+                    selectedValues = selectedValues.filter(value => value !== '0');
+                    if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
+                        $(maritalStatus).val(selectedValues).trigger('change');
+                    }
+                }
+
+
+                // if (selectedValues.includes(doesNotMatter)) {
+                //     selectedValues = [doesNotMatter];
+                //     if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
+                //         $(maritalStatus).val(selectedValues).trigger('change');
+                //     }
+                // }
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        $('#basicCountry').select2({
+            placeholder: "Select Country",
+            allowClear: true,
+
+        });
+        $('#basicState').select2({
+            placeholder: "Select State",
+            allowClear: true,
+
+        });
+        $('#basicCity').select2({
+            placeholder: "Select City",
+            allowClear: true,
+
+        });
+    });
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const oldBasicReligionValue = Array.from(basicReligion.selectedOptions).map(option => option.value);

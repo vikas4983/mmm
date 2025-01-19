@@ -108,6 +108,13 @@
                                         <?php echo e($searchResult->carrierDetails->occupations->occupation ?? ''); ?> </span>
                                 </p>
                             </div>
+                            <div class="col-xxl-8 col-xl-8 col-lg-8 col-xs-16 gridHidden" bis_skin_checked="1">
+                                <p class="row gt-margin-bottom-0">
+                                    <label class="col-xs-7">Income :</label>
+                                    <span class="col-xs-9">
+                                        <?php echo e($searchResult->carrierDetails->incomes->income ?? ''); ?> </span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 @extends('layouts.frontend.main-master')
 @section('title', 'Dashboard - Mangal Mandap')
 @section('content')
+    <script src="{{ mix('js/app.js') }}"></script>
     <div id="dashboard">
         <div class="container mt-20 searchresult" id="searchresult">
             <div class="row">
@@ -23,7 +24,7 @@
                                 : asset('storage/users/images/female-default.jpg') }}"
                                 class="img-responsive gtFullWidth" alt="User Image">
                         @endif
-                     
+
                         <a href="{{ route('my.photos') }}">
                             <i class="fa fa-camera gt-margin-right-10"></i><span
                                 class="">{{ $dashboardConstacts['change_profile_picture'] ?? 'Default' }}</span>
@@ -550,6 +551,9 @@
                         </div>
                     </div>
                 </aside>
+                <div id="app"></div>
+                <script src="{{ mix('js/app.js') }}"></script>
+
                 <div class="col-xxl-12 col-xl-12 col-xs-16">
                     <!-- Recently Joined -->
                     <div class="gt-panel inHomePanel">
@@ -557,6 +561,8 @@
                             <div class="gt-panel-title inPanelGreenTitle">
                                 RECENTLY JOINED </div>
                         </div>
+
+
                         <div class="gt-panel-body">
                             <div class="row">
                                 <div class="col-xxl-4 col-xs-8 col-lg-4 gt-margin-bottom-10">

@@ -40,11 +40,10 @@ class BasicDetail extends Model
 
     function getChildrenAttribute($value)
     {
-        return $value == 0 ? 'None' : ($value == 1 ? 'One' : ($value == 2 ? 'Two' : ($value == 3 ? 'Three' : ($value == 4 ? 'Four' : 'Null'))));
+        return $value == 1 ? 'No' : ($value == 2 ? 'Yes, Living together' : ($value == 3 ? 'Yes, Not Living together' : ''));
     }
     public function getDobAttribute($value)
     {
-      
         return $value ? Carbon::parse($value)->format('d M Y') : null;
     }
 

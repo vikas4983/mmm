@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\FilterRequest;
+use App\Http\Requests\searches\BasicFilterRequest;
+use App\Http\Requests\searches\AdvanceFilterRequest;
 use App\Models\Caste;
 use App\Models\City;
 use App\Models\Country;
@@ -22,12 +23,13 @@ class SearchController extends Controller
 {
     use SearchGender;
 
+
     protected $optionService;
     protected $filterService;
 
-    
+   
 
-    public function searchById(Request $request, OptionService $optionService, )
+    public function searchById(Request $request, OptionService $optionService,)
     {
         $options = $optionService->getOptions();
 
@@ -121,17 +123,36 @@ class SearchController extends Controller
         }
     }
 
-    public function basicSearch(FilterRequest $request, OptionService $optionService, FilterService $filterService)
+    public function basicSearch(BasicFilterRequest $request, OptionService $optionService, FilterService $filterService)
     {
-        
+       dump($request->all());
         $validatedData = $request->validated();
+        
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');
         }
         $options = $optionService->getOptions();
-        $searchResults =$filterService->filter($validatedData, $user);
-        
+        $searchResults = $filterService->filter($validatedData, $user);
+         //dd(  $searchResults);
+        if (count($searchResults) > 0) {
+            return view('components.search-result-component', compact('searchResults', 'options', 'user'));
+        } else {
+            return redirect()->back()->with('error', 'Result not found!');
+        }
+    }
+    public function advanceSearch(AdvanceFilterRequest $request, OptionService $optionService, FilterService $filterService)
+    {
+      
+        $validatedData = $request->validated();
+       
+        $user = Auth::user();
+        if (!$user) {
+            return redirect()->with('error', 'Login first!');
+        }
+        $options = $optionService->getOptions();
+        $searchResults = $filterService->filter($validatedData, $user);
+
         if (count($searchResults) > 0) {
             return view('components.search-result-component', compact('searchResults', 'options', 'user'));
         } else {
@@ -150,7 +171,7 @@ class SearchController extends Controller
             $maritalStatus = MaritalStatus::all()->pluck('id')->toArray();
         } else {
             $maritalStatus = MaritalStatus::whereIn('id', $maritalStatusId)->pluck('id')->toArray();
-            dump( $maritalStatus);
+           
         }
         return $maritalStatus;
     }

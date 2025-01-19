@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\searches;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FilterRequest extends FormRequest
+class BasicFilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +21,7 @@ class FilterRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return  [
             'min_age' => 'required|integer',
             'max_age' => 'required|integer',
             'min_height' => 'required|integer',

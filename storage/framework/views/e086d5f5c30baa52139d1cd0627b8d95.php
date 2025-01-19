@@ -196,26 +196,19 @@ unset($__errorArgs, $__bag); ?>
                     <div class="form-group">
                         <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
                         <select id="children" name="children" class="form-control">
-                            <option value="0"
-                                <?php echo e(old('children', $user->basicDetails->children ?? 'None') == 'None' ? 'selected' : ''); ?>>
-                                None
-                            </option>
                             <option value="1"
-                                <?php echo e(old('children', $user->basicDetails->children ?? 'One') == 'One' ? 'selected' : ''); ?>>
-                                One
+                                <?php echo e(old('children', $user->basicDetails->children ?? 'No') == 'No' ? 'selected' : ''); ?>>
+                                No
                             </option>
                             <option value="2"
-                                <?php echo e(old('children', $user->basicDetails->children ?? 'Two') == 'Two' ? 'selected' : ''); ?>>
-                                Two
+                                <?php echo e(old('children', $user->basicDetails->children ?? 'Yes, Living together') == 'Yes, Living together' ? 'selected' : ''); ?>>
+                                Yes, Living together
                             </option>
                             <option value="3"
-                                <?php echo e(old('children', $user->basicDetails->children ?? 'Three') == 'Three' ? 'selected' : ''); ?>>
-                                Three
+                                <?php echo e(old('children', $user->basicDetails->children ?? 'Yes, Not Living together') == 'Yes, Not Living together' ? 'selected' : ''); ?>>
+                                Yes, Not Living together
                             </option>
-                            <option value="4"
-                                <?php echo e(old('children', $user->basicDetails->children ?? 'Four') == 'Four' ? 'selected' : ''); ?>>
-                                Four
-                            </option>
+                           
                         </select>
                         <?php $__errorArgs = ['children'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
