@@ -350,12 +350,10 @@
                                         </label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10">
-                                        <select id="advance_manglik" name="manglik" class="form-control"
+                                        <select id="advance_manglik" name="horoscope" class="form-control"
                                             style="width: 429px;margin-left: -177px;">
                                             <option value="0" selected>Doesn't Matter</option>
                                             <option value="1">Yes</option>
-
-
                                         </select>
                                     </div>
                                 </div>
@@ -394,7 +392,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <div class="row">
                                     <div class="col-xxl-6 col-xl-6">
                                         <label class="mt-10">
@@ -413,7 +411,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <hr>
@@ -511,8 +509,8 @@
                                         <select id="advance_hiv" name="hiv[]" class="form-control" multiple
                                             style="width: 429px; margin-left: -177px;">
                                             <option value="0" selected>Doesn't Matter</option>
-                                            <option value="Yes">HIV+</option>
-                                            <option value="No">HIV-</option>
+                                            <option value="1">HIV+</option>
+                                            <option value="2">HIV-</option>
                                         </select>
                                     </div>
                                 </div>

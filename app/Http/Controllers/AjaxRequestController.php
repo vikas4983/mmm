@@ -17,12 +17,11 @@ class AjaxRequestController extends Controller
   {
     return view('frontend.signup');
   }
-  public function getCaste(Request $request)
+  public function getCaste(Request $request, $religionId)
   {
-    
-    $castes = Caste::whereIn('religion_id', $request->religions)->where('status', 1)->get();
-    $religions = Religion::whereIn('id', $request->religions)->where('status', 1)->get();
-    return response()->json([
+  $castes = Caste::where('religion_id', $request->religionId)->where('status', 1)->get();
+   $religions = Religion::where('id', $request->religionId)->where('status', 1)->get();
+   return response()->json([
       'castes' => $castes,
       'religions' => $religions,
     ]);

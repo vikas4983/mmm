@@ -35,4 +35,11 @@ class HoroscopeDetail extends Model
                 : ($value == 2 ? 'only accept member'
                     : 'Unknown'));
     }
+    public function getManglikAttribute($value)
+    {
+        return $value == 1 ? 'Yes'
+            : ($value == 2 ? 'No'
+                : ($value == 0 ? "Don't know"
+                    : ''));
+    }
 }

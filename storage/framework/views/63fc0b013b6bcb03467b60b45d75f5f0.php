@@ -1408,4 +1408,4 @@ unset($__errorArgs, $__bag); ?>
     <?php break; ?>
 
 <?php endswitch; ?>
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\select-profile-update-component.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/select-profile-update-component.blade.php ENDPATH**/ ?>

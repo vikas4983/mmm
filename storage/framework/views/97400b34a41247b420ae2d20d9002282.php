@@ -278,7 +278,29 @@
                 </div>
             </div>
         </div>
-        
+        <div class="form-group" id="children_div">
+            <div class="row">
+                <div class="col-xxl-6 col-xl-6">
+                    <label class="mt-10">
+                        Children </label>
+                </div>
+                <div class="col-xxl-10 col-xl-10">
+                    <select id="advance_children" name="children[]" style="width: 432px" multiple>
+                        <option value="0" id="optionMaritalStatus" selected>Doesn't Matter
+                        </option>
+                        <option value="1">No</option>
+                        <option value="2">Yes, Living together</option>
+                        <option value="3">Yes, Not Living together</option>
+                    </select>
+                </div>
+                <script>
+                    $(document).ready(function() {
+
+
+                    });
+                </script>
+            </div>
+        </div>
         <div class="form-group">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
@@ -296,7 +318,261 @@
         </div>
 
 
-        
+        <div class="container mt-5">
+            
+            <div class="accordion" id="accordionExample">
+                <div class="accordion-item">
+                    <hr>
+                    <h5 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            Astro <span class="toggle-icon">+</span>
+                        </button>
+                    </h5>
+                    <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne">
+
+                        <div class="accordion-body options">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">
+                                            Manglik Status </label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10">
+                                        <select id="advance_manglik" name="manglik" class="form-control"
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <option value="1">Manglik</option>
+                                            <option value="2">Non-Manglik</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">
+                                            Horoscope Available?
+                                        </label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10">
+                                        <select id="advance_manglik" name="horoscope" class="form-control"
+                                            style="width: 429px;margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="accordion-item">
+
+                    <h5 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Family <span class="toggle-icon">+</span>
+                        </button>
+                    </h5>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour">
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">
+                                            Family Status </label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_family_status" name="family_status[]"
+                                            class="form-control" multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['familyStatus']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($status->id); ?>">
+                                                    <?php echo e($status->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="accordion-item">
+
+                    <h5 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Education & Career<span class="toggle-icon">+</span>
+                        </button>
+                    </h5>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">
+                                            Education</label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_education" name="education[]" class="form-control"
+                                            multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['educations']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $education): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($education->id); ?>">
+                                                    <?php echo e($education->education); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">
+                                            Occupation </label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_occupation" name="occupation[]" class="form-control"
+                                            multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['occupations']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $occupation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($occupation->id); ?>">
+                                                    <?php echo e($occupation->occupation); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+                <div class="accordion-item">
+
+                    <h5 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Lifestyle<span class="toggle-icon">+</span>
+                        </button>
+                    </h5>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
+                        <div class="accordion-body">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">Physical Status</label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_physical_status" name="physical_status[]"
+                                            class="form-control" multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['physicalStatuses']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $physicalStatus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($physicalStatus->id); ?>">
+                                                    <?php echo e($physicalStatus->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">HIV+?</label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_hiv" name="hiv[]" class="form-control" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <option value="Yes">HIV+</option>
+                                            <option value="No">HIV-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">Diet</label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_diet" name="diet[]" class="form-control" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['dietaryHabits']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diet): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($diet->id); ?>">
+                                                    <?php echo e($diet->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">Drink</label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_drink" name="drink[]" class="form-control" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['habits']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $habit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($habit->id); ?>">
+                                                    <?php echo e($habit->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <label class="mt-10">Smoke</label>
+                                    </div>
+                                    <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
+                                        <select id="advance_smoke" name="smoke[]" class="form-control" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0" selected>Doesn't Matter</option>
+                                            <?php $__currentLoopData = $options['habits']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $habit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($habit->id); ?>">
+                                                    <?php echo e($habit->name); ?>
+
+                                                </option>
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
         <script>
             document.querySelectorAll('.accordion-button').forEach(button => {
                 button.addEventListener('click', function() {

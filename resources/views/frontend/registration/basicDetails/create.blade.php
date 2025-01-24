@@ -69,12 +69,14 @@
                     success: function(data) {
                         $("#caste").empty();
                         $("#caste").append('<option value="">Select Caste</option>');
-                        $.each(data, function(key, value) {
-                            $('#caste').append('<option value="' + value.id + '">' + value
+                        $.each(data.castes, function(id, caste) {
+                            $('#caste').append('<option value="' + caste.id + '">' + caste
                                 .name + '</option>');
                         });
                     },
+
                     error: function(xhr, status, error) {
+                        debugger
                         console.error('Error Status:', status);
                         console.error('Error Details:', xhr.responseText);
                         alert(
@@ -82,6 +84,7 @@
                         );
                     }
                 });
+                debugger
             } else {
 
                 $('#caste').fadeOut();

@@ -125,16 +125,14 @@ class SearchController extends Controller
 
     public function basicSearch(BasicFilterRequest $request, OptionService $optionService, FilterService $filterService)
     {
-       dump($request->all());
+      
         $validatedData = $request->validated();
-        
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');
         }
         $options = $optionService->getOptions();
         $searchResults = $filterService->filter($validatedData, $user);
-         //dd(  $searchResults);
         if (count($searchResults) > 0) {
             return view('components.search-result-component', compact('searchResults', 'options', 'user'));
         } else {
@@ -143,9 +141,8 @@ class SearchController extends Controller
     }
     public function advanceSearch(AdvanceFilterRequest $request, OptionService $optionService, FilterService $filterService)
     {
-      
-        $validatedData = $request->validated();
        
+        $validatedData = $request->validated();
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');

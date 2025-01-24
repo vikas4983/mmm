@@ -617,7 +617,7 @@
     </script>
     <!-- Validation js -->
     <script type="text/javascript" src="{{ asset('frontend/assets/js/validetta.js') }}"></script>
-    <script>
+    {{-- <script>
         $(function() {
             $('#frm').validetta({
                 errorClose: false,
@@ -630,71 +630,71 @@
                 realTime: true
             });
         });
-    </script>
+    </script> --}}
     <!-- Owl Carousel Js -->
     <script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $("#inFetBride").owlCarousel({
-                autoPlay: 3000,
-                items: 5,
-                navigation: true,
-                navigationText: ["<i class='fa fa-chevron-left'></i>",
-                    "<i class='fa fa-chevron-right'></i>"
-                ],
-                itemsDesktop: [1199, 5],
-                itemsDesktopSmall: [979, 4],
-                itemsCustom: [
-                    [0, 1],
-                    [450, 1],
-                    [600, 2],
-                    [700, 2],
-                    [800, 3],
-                    [1000, 5],
-                    [1200, 5],
-                    [1400, 5],
-                    [1600, 5]
-                ],
-            });
-            $("#inFetGroom").owlCarousel({
-                autoPlay: 3000,
-                items: 5,
-                navigation: true,
-                navigationText: ["<i class='fa fa-chevron-left'></i>",
-                    "<i class='fa fa-chevron-right'></i>"
-                ],
-                itemsDesktop: [1199, 5],
-                itemsDesktopSmall: [979, 4],
-                itemsCustom: [
-                    [0, 1],
-                    [450, 1],
-                    [600, 2],
-                    [700, 2],
-                    [800, 3],
-                    [1000, 5],
-                    [1200, 5],
-                    [1400, 5],
-                    [1600, 5]
-                ],
-            });
-            $("#owl-demo-2").owlCarousel({
-                autoPlay: 3000,
-                autoPlay: true,
-                items: 1,
-                itemsDesktop: [1199, 1],
-                itemsDesktopSmall: [979, 1],
-                itemsCustom: [
-                    [0, 1],
-                    [450, 1],
-                    [600, 1],
-                    [700, 1],
-                    [1000, 1],
-                    [1200, 1],
-                    [1400, 1],
-                    [1600, 1]
-                ],
-            });
-        });
+        // $(document).ready(function() {
+        //     $("#inFetBride").owlCarousel({
+        //         autoPlay: 3000,
+        //         items: 5,
+        //         navigation: true,
+        //         navigationText: ["<i class='fa fa-chevron-left'></i>",
+        //             "<i class='fa fa-chevron-right'></i>"
+        //         ],
+        //         itemsDesktop: [1199, 5],
+        //         itemsDesktopSmall: [979, 4],
+        //         itemsCustom: [
+        //             [0, 1],
+        //             [450, 1],
+        //             [600, 2],
+        //             [700, 2],
+        //             [800, 3],
+        //             [1000, 5],
+        //             [1200, 5],
+        //             [1400, 5],
+        //             [1600, 5]
+        //         ],
+        //     });
+        //     $("#inFetGroom").owlCarousel({
+        //         autoPlay: 3000,
+        //         items: 5,
+        //         navigation: true,
+        //         navigationText: ["<i class='fa fa-chevron-left'></i>",
+        //             "<i class='fa fa-chevron-right'></i>"
+        //         ],
+        //         itemsDesktop: [1199, 5],
+        //         itemsDesktopSmall: [979, 4],
+        //         itemsCustom: [
+        //             [0, 1],
+        //             [450, 1],
+        //             [600, 2],
+        //             [700, 2],
+        //             [800, 3],
+        //             [1000, 5],
+        //             [1200, 5],
+        //             [1400, 5],
+        //             [1600, 5]
+        //         ],
+        //     });
+        //     $("#owl-demo-2").owlCarousel({
+        //         autoPlay: 3000,
+        //         autoPlay: true,
+        //         items: 1,
+        //         itemsDesktop: [1199, 1],
+        //         itemsDesktopSmall: [979, 1],
+        //         itemsCustom: [
+        //             [0, 1],
+        //             [450, 1],
+        //             [600, 1],
+        //             [700, 1],
+        //             [1000, 1],
+        //             [1200, 1],
+        //             [1400, 1],
+        //             [1600, 1]
+        //         ],
+        //     });
+        // });
     </script>
     <script>
         $("#gtFetVendor").owlCarousel({

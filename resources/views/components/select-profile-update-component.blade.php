@@ -215,12 +215,13 @@
                 <label for="{{ $name }}">
                     <b class="text-danger mr-5 gtRegMandatory">*</b>{{ $label }}
                 </label>
+               
                 <select id="{{ $name }}" name="{{ $name }}" class="form-control" required>
-                    <option value="yes" {{ old($name, $user->horoscopeDetails->{$name} ?? '') == 'yes' ? 'selected' : '' }}>
+                    <option value="1" {{ old($name, $user->horoscopeDetails->{$name} ?? '') == 'yes' ? 'selected' : '' }}>
                         Yes</option>
-                    <option value="no" {{ old($name, $user->horoscopeDetails->{$name} ?? '') == 'no' ? 'selected' : '' }}>
+                    <option value="2" {{ old($name, $user->horoscopeDetails->{$name} ?? '') == 'no' ? 'selected' : '' }}>
                         No</option>
-                    <option value="don't know"
+                    <option value="0"
                         {{ old($name, $user->horoscopeDetails->{$name} ?? '') == "don't know" ? 'selected' : '' }}>Don't Know
                     </option>
                 </select>
