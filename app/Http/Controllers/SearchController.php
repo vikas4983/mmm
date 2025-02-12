@@ -117,6 +117,7 @@ class SearchController extends Controller
                 session()->forget('quickSearch');
             }
             session()->put('quickSearch', $validatedData);
+            
             return view('components.search-result-component', compact('searchResults', 'options', 'user'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');

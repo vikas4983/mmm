@@ -35,6 +35,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
    
+   
 
 
 
@@ -55,7 +56,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <?php echo $__env->yieldContent('header'); ?>
-
+    <script src="<?php echo e(asset('frontend/js/custom-js/user-action/user-action.js')); ?>"></script>
 </head>
 
 <body>
@@ -202,7 +203,7 @@
                                         <span class="mr-5">Membership</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(url('plan')); ?>">Membership Plans</a></li>
+                                        <li><a href="<?php echo e(route('plan')); ?>">Membership Plans</a></li>
                                         <li><a href="<?php echo e(url('active-plan')); ?>">Current Plan</a></li>
                                     </ul>
                                 </li>

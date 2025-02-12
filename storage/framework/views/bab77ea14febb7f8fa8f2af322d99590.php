@@ -28,18 +28,7 @@
                                 <a href="#adv-search" aria-controls="adv-search" role="tab" data-toggle="tab">
                                     Advanced Search </a>
                             </li>
-                            <li role="presentation" class="">
-                                <a href="#key-search" aria-controls="key-search" role="tab" data-toggle="tab">
-                                    Keyword Search </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#loc-search" aria-controls="loc-search" role="tab" data-toggle="tab">
-                                    Location Search </a>
-                            </li>
-                            <li role="presentation" class="">
-                                <a href="#oct-search" aria-controls="oct-search" role="tab" data-toggle="tab">
-                                    Occupation Search </a>
-                            </li>
+                            
                         </ul>
                         <div class="tab-content">
                             <!-- Quick Search -->

@@ -17,15 +17,11 @@ class AuthUserMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-       
         $user = Auth::user();
-
-       
         if (!$user) {
             return redirect()->route('login');
         }
 
-     
         return $next($request);
     }
 }

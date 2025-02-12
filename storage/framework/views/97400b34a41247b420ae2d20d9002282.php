@@ -501,8 +501,8 @@
                                         <select id="advance_hiv" name="hiv[]" class="form-control" multiple
                                             style="width: 429px; margin-left: -177px;">
                                             <option value="0" selected>Doesn't Matter</option>
-                                            <option value="Yes">HIV+</option>
-                                            <option value="No">HIV-</option>
+                                            <option value="1">HIV+</option>
+                                            <option value="2">HIV-</option>
                                         </select>
                                     </div>
                                 </div>

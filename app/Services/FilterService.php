@@ -362,7 +362,6 @@ class FilterService
     }
     private function getHiv($hivId)
     {
-        dump($hivId);
         if (is_null($hivId)) {
             return [];
         }

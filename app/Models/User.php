@@ -14,6 +14,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasTeams;
+use Illuminate\Support\Str;
 
 use function Termwind\parse;
 
@@ -35,6 +36,7 @@ class User extends Authenticatable
     protected $fillable = [
         'image',
         'matrimony_id',
+        'uuid',
         'name',
         'email',
         'password',
@@ -43,6 +45,15 @@ class User extends Authenticatable
         'profile_for',
         'status'
     ];
+
+     protected static function boot(){
+        parent::boot();
+        static::creating(function ($model){
+          $model->uuid = (string) Str::uuid();
+        });
+     }
+
+
     public function getStatusAttribute($value)
     {
         return $value == 1 ? 'Self' : 'Inactive';
@@ -127,6 +138,12 @@ class User extends Authenticatable
     {
         return $this->hasOne(ContactDetail::class);
     }
+    public function invitationDetails()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+
 
 
 
@@ -147,7 +164,7 @@ class User extends Authenticatable
 
     public function payments()
     {
-        return $this->hasMany(Payment::class, 'user_id');
+        return $this->hasMany(Payment::class, 'user_id', 'id');
     }
     public function plans()
     {

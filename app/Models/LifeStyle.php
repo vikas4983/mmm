@@ -24,6 +24,10 @@ class LifeStyle extends Model
     {
         return $value == 1 ? 'Yes' : ($value == 2 ? 'No' : ($value == 3 ? 'Occasionally' : null));
     }
+    function getHivAttribute($value)
+    {
+        return $value == 1 ? 'Yes' : ($value == 2 ? 'No' : ($value == 3 ? 'Occasionally' : null));
+    }
     public function setWeightAttribute($value)
     {
       

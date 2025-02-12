@@ -21,7 +21,7 @@
                         </article>
                        
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            @include('partials.alerts')
+                            @include('alerts.alert')
                             <div id="alert-container-resend" class="mt-3"></div>
                             <h4>Verify mobile number through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>

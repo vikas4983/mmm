@@ -35,6 +35,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
    
+   
 
 
 
@@ -55,7 +56,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     @yield('header')
-
+    <script src="{{ asset('frontend/js/custom-js/user-action/user-action.js') }}"></script>
 </head>
 
 <body>
@@ -215,7 +216,7 @@
                                         <span class="mr-5">Membership</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ url('plan') }}">Membership Plans</a></li>
+                                        <li><a href="{{ route('plan') }}">Membership Plans</a></li>
                                         <li><a href="{{ url('active-plan') }}">Current Plan</a></li>
                                     </ul>
                                 </li>

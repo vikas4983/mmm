@@ -20,7 +20,7 @@
                         </article>
                        
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <div id="alert-container-resend" class="mt-3"></div>
                             <h4>Verify mobile number through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>

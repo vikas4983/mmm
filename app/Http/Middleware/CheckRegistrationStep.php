@@ -47,7 +47,7 @@ class CheckRegistrationStep
         $currentStep = (int) session('registration_step');
         $currentRouteName = $request->route()->getName();
         $requiredStep = $routes[$currentRouteName] ?? 1;
-        // dump($currentStep, $requiredStep);
+       
         if ($currentStep !== $requiredStep) {
             return redirect()->route(array_search($currentStep, $routes));
         }

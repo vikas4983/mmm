@@ -1,19 +1,16 @@
 <?php $__currentLoopData = $searchResults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $searchResult): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-    <li class="gt-panel gt-panel-default gt-panel-default gt-main-profile">
-        <a href="member-profile?view_id=IN38" target="_blank" class="gt-panel-head">
+    <li id="abcV<?php echo e($searchResult->id); ?>" class="gt-panel gt-panel-default gt-panel-default gt-main-profile ">
+        <a href="<?php echo e(route('profile', $searchResult->uuid)); ?>" target="_blank" class="gt-panel-head">
             <div class="row" bis_skin_checked="1">
                 <div class="col-xxl-5 col-xl-5 col-xs-16 col-lg-5 gridFullWidth gt-main-name" bis_skin_checked="1">
                     <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
                         <?php echo e($searchResult->name ?? 'NA'); ?>(<?php echo e($prefix->name ?? 'NA'); ?>-<?php echo e($searchResult->matrimony_id ?? 'NA'); ?>)
                     </h4>
                 </div>
-                <div class="col-xxl-11 col-xl-11 col-lg-11 col-xs-16 text-right gridHidden" bis_skin_checked="1">
-                    <h5 class="gt-margin-top-5 gt-margin-bottom-0">
-                        Register On: <?php echo e($searchResult->created_at ?? 'NA'); ?> </h5>
-                </div>
+                <span id="success-alert<?php echo e($searchResult->id); ?>"></span>
+                
             </div>
         </a>
-
         <a href="member-profile?view_id=IN38" target="_blank" class="gt-result-panel-body">
             <div class="row gt-padding-bottom-15" bis_skin_checked="1">
                 <div class="col-xxl-2 col-xl-2 col-xs-16 col-lg-3 gridFullWidth" bis_skin_checked="1">
@@ -120,38 +117,141 @@
                 </div>
             </div>
         </a>
+        <style>
+
+        </style>
         <div class="gt-result-panel-footer" bis_skin_checked="1">
             <div class="row" bis_skin_checked="1">
-                <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
-                    <a href="composeMessages?user_id=IN38" class="btn btn-default btn-block inResultSendMessageBtn">
-                        <i class="fas fa-envelope"></i> Send Message </a>
-                </div>
-                <div class="col-xxl-11 col-xl-11 col-lg-11 pull-right gridFullWidth" bis_skin_checked="1">
-                    <div class="row" bis_skin_checked="1">
-                        <div class="col-xxl-5 col-xl-5 col-xs-16 col-lg-5 gt-margin-top-10 gridFullWidth"
-                            bis_skin_checked="1">
-                            <a title="Send Reminder" onclick="sendreminder(4);" id="reminder4"
-                                class="btn gt-btn-orange btn-block">
-                                <i class="fas fa-bell gt-margin-right-5"></i>Send Reminder </a>
-                        </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden interest-btn-container"
+                    bis_skin_checked="1">
 
-                        <div class="col-xxl-5 col-xl-5 col-lg-5 col-xs-16 gt-margin-top-10 gridHidden"
-                            bis_skin_checked="1">
-                            <a class="btn btn-default btn-block inResultBlockBtn gt-cursor addToblock-data"
-                                id="IN38" title="Remove Blocklist">
-                                <i class="fas fa-ban gt-margin-right-5"></i>Remove Blocklist </a>
+                    <?php if(
+                        !empty($user) &&
+                            !empty($user->invitationDetails) &&
+                            $user->invitationDetails->where('receiver_id', $searchResult->id)->where('is_sent', 1)->isNotEmpty()): ?>
+                        <div id="send-request<?php echo e($searchResult->id); ?>">
+                            <a class="btn btn-default btn-block inResultSendMessageBtn cancel-interest-btn"
+                                data-id="<?php echo e($searchResult->id); ?>">
+                                <span style="color:#A0061C">
+                                    <i class="fas fa-times gt-margin-right-5 text-danger"></i> Cancel
+                                </span>
+                            </a>
                         </div>
-                        <div class="col-xxl-5 col-xl-5 col-lg-5 col-xs-16 gt-margin-top-10 gridHidden"
-                            bis_skin_checked="1">
-                            <a class="btn btn-default btn-block  inResultShortBtn gt-cursor 
-                                   addToblock-link"
-                                title="Remove From Shortlist" id="IN38">
-                                <i class="fa fa-sort gt-margin-right-5"></i> </a>
+                    <?php else: ?>
+                        <div id="send-request<?php echo e($searchResult->id); ?>">
+                            <a class="btn btn-default btn-block inResultSendMessageBtn send-interest-btn"
+                                data-id="<?php echo e($searchResult->id); ?>">
+                                <i class="fas fa-heart gt-margin-right-5"></i> Interest
+                            </a>
                         </div>
-                    </div>
+                    <?php endif; ?>
+
+
                 </div>
+                <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
+                    <a href="composeMessages?user_id=IN38" class="btn btn-default btn-block inResultSendMessageBtn ">
+                        <i class="fas fa-envelope"></i> Send Message</a>
+                </div>
+                <?php if(
+                    !empty($user) &&
+                        !empty($user->invitationDetails) &&
+                        $user->invitationDetails->where('receiver_id', $searchResult->id)->where('status', 0)->isNotEmpty()): ?>
+                    <div id="block-user<?php echo e($searchResult->id); ?>"
+                        class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
+                        <a data-id="<?php echo e($searchResult->id); ?>"
+                            class="btn btn-default btn-block inResultBlockBtn unBlock-btn">
+                            <i class="fas fa-lock gt-margin-right-5"></i> Unblock </a>
+                    </div>
+                <?php else: ?>
+                    <div id="block-user<?php echo e($searchResult->id); ?>"
+                        class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
+                        <a data-id="<?php echo e($searchResult->id); ?>"
+                            class="btn btn-default btn-block inResultBlockBtn block-btn">
+                            <i class="fas fa-lock gt-margin-right-5"></i> Block </a>
+                    </div>
+                <?php endif; ?>
+                
+                
+                <div id="view-contact<?php echo e($searchResult->id); ?>"
+                    class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
+                    <a data-id="<?php echo e($searchResult->id); ?>"
+                        class="btn btn-default btn-block inResultSendMessageBtn view-contact-btn">
+                        <i class="fas fa-mobile-alt"></i> View Contact </a>
+                </div>
+                
             </div>
         </div>
     </li>
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+<script>
+    $(document).on('click', '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn',
+        function() {
+            const receiver_id = $(this).data('id');
+            const sendInterest = $(this).hasClass('send-interest-btn');
+            const cancelInterest = $(this).hasClass('cancel-interest-btn');
+            const blockUser = $(this).hasClass('block-btn');
+            const unBlock = $(this).hasClass('unBlock-btn');
+            const viewContact = $(this).hasClass('view-contact-btn');
+            let action = sendInterest ?
+                '/send-interest' :
+                cancelInterest ?
+                '/cancel-interest' :
+                blockUser ?
+                '/block-user' :
+                unBlock ?
+                '/unblock-user' :
+                viewContact ?
+                '/view-contact' :
+                '';
+            sendRequest(receiver_id, action);
+
+        });
+
+    function sendRequest(receiver_id, action) {
+        $.ajax({
+            url: action,
+            method: 'POST',
+            data: {
+                receiver_id: receiver_id,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+                if (response.action === 'sendInterest') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    $("#send-request" + receiver_id).html(response.button)
+                }
+                if (response.action === 'blockUser') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    $("#block-user" + receiver_id).html(response.button);
+                }
+                if (response.action === 'viewContact') {
+                     //$("#success-alert" + receiver_id).html(response.message);
+                     $("body").append(response.html); 
+                     $("#contactModal" + receiver_id).modal("show");
+                }
+                if (response.action === 'hide') {
+                     $("#success-alert" + receiver_id).html(response.message);
+                    //  $("body").append(response.html); 
+                    //  $("#contactModal" + receiver_id).modal("show");
+                }
+                if (response.action === 'friend') {
+                     $("#success-alert" + receiver_id).html(response.message);
+                    //  $("body").append(response.html); 
+                    //  $("#contactModal" + receiver_id).modal("show");
+                }
+                if (response.action === 'expirePlan') {
+                     $("body").append(response.html); 
+                     $("#expireModal").modal("show");
+                }
+
+                // }
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON.message);
+            },
+        });
+
+    }
+</script>
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/profile-card-component.blade.php ENDPATH**/ ?>

@@ -52,8 +52,6 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Services\OptionService;
 
-
-
 class UserController extends Controller
 {
     use ModelCountsTrait;
@@ -67,7 +65,7 @@ class UserController extends Controller
     use SpoteLightUsersTrait;
     use UserEmailTemplateTrait;
     use MemberOtpTrait;
-  
+
     public function dashboard()
     {
         session(['login' => 'yes']);
@@ -89,9 +87,14 @@ class UserController extends Controller
         $paidUsers = $this->paidUsers();
         $spotlightUsers = $this->spotlightUsers();
 
-        $users = User::with(['payments' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }])->where('status', 1)->orderBy('created_at', 'desc')->get();
+        $users = User::with([
+            'payments' => function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+        ])
+            ->where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
         if ($request->paidUsers) {
             $this->paidUsersCount(User::class, $urlName, $premiumUsersCount);
             return view('admin.users.index', compact('paidUsers', 'premiumUsersCount', 'profilePrefixs', 'active', 'inActive', 'countAll'));
@@ -115,7 +118,6 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'paidUsers', 'premiumUsersCount', 'active', 'inActive', 'countAll'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -127,7 +129,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+    }
 
     /**
      * Display the specified resource.
@@ -140,63 +144,14 @@ class UserController extends Controller
                 return redirect()->route('login')->with('error', 'Please log in to continue.');
             }
 
-            $user = User::with(
-                'basicDetails',
-                'horoscopeDetails',
-                'carrierDetails',
-                'familyDetails',
-                'lifestyleDetails',
-                'likeDetails',
-                'contactDetails',
-                'images'
-            )->where('id', $user->id)->first();
-
-           
+            $user = User::with('basicDetails', 'horoscopeDetails', 'carrierDetails', 'familyDetails', 'lifestyleDetails', 'likeDetails', 'contactDetails', 'images')
+                ->where('id', $user->id)
+                ->first();
 
             if (!$user) {
                 return redirect()->route('login')->with('error', 'User not found.');
             }
 
-            return view('frontend.users.show', compact('user' ));
-        } catch (\Exception $e) {
-            Log::error('Error fetching user data: ' . $e->getMessage());
-            return redirect()->route('error')->with('error', 'An unexpected error occurred. Please try again later.');
-        }
-    }
-
-
-    public function myProfile()
-    {
-       
-        try {
-            if (!$user = auth()->user()) {
-                return redirect()->route('login');
-            }
-
-
-            $user = User::with([
-                'basicDetails.heights',
-                'basicDetails.motherTongues',
-                'basicDetails.religions',
-                'basicDetails.religions.castes',
-                'basicDetails.maritalStatus',
-                'horoscopeDetails.rashies',
-                'carrierDetails.educations',
-                'carrierDetails.occupations',
-                'carrierDetails.employees',
-                'carrierDetails.incomes',
-                'carrierDetails.countries',
-                'carrierDetails.states',
-                'carrierDetails.cities',
-                'familyDetails',
-                'familyDetails.familyCity',
-                'lifestyleDetails',
-                'likeDetails',
-                'contactDetails',
-                'images'
-            ])->where('id', $user->id)->where('status', 1)->first();
-          
-           
             return view('frontend.users.show', compact('user'));
         } catch (\Exception $e) {
             Log::error('Error fetching user data: ' . $e->getMessage());
@@ -204,15 +159,49 @@ class UserController extends Controller
         }
     }
 
+    public function showProfile($uuid)
+    {
+        $profile = User::where('uuid', $uuid)->where('status', 1)->first();
+        if(!$profile){
+            return redirect()->route('dashboard')->with('error', 'Something went wrong!');
+        }
+        return view('frontend.users.profiles.profile', compact('profile'));
+    }
+
+    public function myProfile()
+    {
+        try {
+            if (!($user = auth()->user())) {
+                return redirect()->route('login');
+            }
+
+            $user = User::with(['basicDetails.heights', 'basicDetails.motherTongues', 'basicDetails.religions', 'basicDetails.religions.castes', 'basicDetails.maritalStatus', 'horoscopeDetails.rashies', 'carrierDetails.educations', 'carrierDetails.occupations', 'carrierDetails.employees', 'carrierDetails.incomes', 'carrierDetails.countries', 'carrierDetails.states', 'carrierDetails.cities', 'familyDetails', 'familyDetails.familyCity', 'lifestyleDetails', 'likeDetails', 'contactDetails', 'images'])
+                ->where('id', $user->id)
+                ->where('status', 1)
+                ->first();
+
+            return view('frontend.users.show', compact('user'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching user data: ' . $e->getMessage());
+            return redirect()->route('error')->with('error', 'An unexpected error occurred. Please try again later.');
+        }
+    }
+
+    public function plan()
+    {
+        return view('frontend.users.plans.plan');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user) {}
+    public function edit(User $user)
+    {
+    }
 
     /**
      * Update the specified resource in storage.
      */
-
 
     public function updateProfile(Request $request)
     {
@@ -240,74 +229,66 @@ class UserController extends Controller
                 'user' => $user,
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'There was an error updating the user information. Please try again later.',
-            ], 500);
+            return response()->json(
+                [
+                    'error' => 'There was an error updating the user information. Please try again later.',
+                ],
+                500,
+            );
         }
     }
     public function updateAccountDetail(Request $request)
     {
-        //dd( $request->all());
         $user = auth()->user();
-
         if (!$user) {
             return redirect()->route('login');
         }
 
         // try {
-            $fields = config('formFields.editAccountDetails');
+        $fields = config('formFields.editAccountDetails');
 
-            $validationRules = [];
-            foreach ($fields as $key => $field) {
-                $validationRules[$field['name']] = $field['rules'];
-            }
-            $validationRules['state'] = ['required', 'integer'];
-            $validationRules['city'] = ['required', 'integer'];
-            $validateData = $request->validate($validationRules);
-           
-            $user->update(
-                [
-                    'name' => $validateData['name'],
-                    'email' => $validateData['user_email'],
-                    'profile_for' => $validateData['profile_for'],
-                   
-                ]
-            );
-            $user->carrierDetails->update(
-                [
-                    'country' => $validateData['country'],
-                    'state' => $validateData['state'],
-                    'city' => $validateData['city'],
-                   
-                ]
-            );
-            $country = Country::find($request->country)->country;
-            $state = State::find($request->state)->state;
-            $city = City::find($request->city)->city;
-            return response()->json([
-                'success' => 'true',
-                'message' => 'User account deatils updated successfully!',
-                'user' => 
-                [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'profile_for' => $user->profile_for,
-                    'country' => $country,
-                    'state' => $state,
-                    'city' => $city,
-                ],
-            ]);
+        $validationRules = [];
+        foreach ($fields as $key => $field) {
+            $validationRules[$field['name']] = $field['rules'];
+        }
+        $validationRules['state'] = ['required', 'integer'];
+        $validationRules['city'] = ['required', 'integer'];
+        $validateData = $request->validate($validationRules);
+
+        $user->update([
+            'name' => $validateData['name'],
+            'email' => $validateData['user_email'],
+            'profile_for' => $validateData['profile_for'],
+        ]);
+        $user->carrierDetails->update([
+            'country' => $validateData['country'],
+            'state' => $validateData['state'],
+            'city' => $validateData['city'],
+        ]);
+        $country = Country::find($request->country)->country;
+        $state = State::find($request->state)->state;
+        $city = City::find($request->city)->city;
+        return response()->json([
+            'success' => 'true',
+            'message' => 'User account deatils updated successfully!',
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'profile_for' => $user->profile_for,
+                'country' => $country,
+                'state' => $state,
+                'city' => $city,
+            ],
+        ]);
         // } catch (\Exception $e) {
-            return response()->json([
+        return response()->json(
+            [
                 'error' => 'There was an error updating the user information. Please try again later.',
-            ], 500);
+            ],
+            500,
+        );
         // }
     }
-
-
-
-
-
 
     public function mobileUpdate(Request $request)
     {
@@ -318,9 +299,8 @@ class UserController extends Controller
         }
 
         try {
-
             $validateData = $request->validate([
-                'mobile' => 'required|numeric|digits:10'
+                'mobile' => 'required|numeric|digits:10',
             ]);
             // $name='mobileVerification';
             // $emailTemplate = $this->userEmailTemplate($name);
@@ -328,7 +308,6 @@ class UserController extends Controller
             // return redirect('verification')->with(['success' =>  'OTP has been sent to your email & mobile number!']);
             $user->update([
                 'mobile' => $validateData['mobile'],
-
             ]);
 
             return response()->json([
@@ -336,13 +315,14 @@ class UserController extends Controller
                 'user' => $user,
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'There was an error updating the user information. Please try again later.',
-            ], 500);
+            return response()->json(
+                [
+                    'error' => 'There was an error updating the user information. Please try again later.',
+                ],
+                500,
+            );
         }
     }
-
-
 
     public function requestOtpForMobileChange(Request $request)
     {
@@ -356,9 +336,12 @@ class UserController extends Controller
             $user = Auth::user();
 
             if (!$user) {
-                return response()->json([
-                    'error' => 'Login First!'
-                ], 401);
+                return response()->json(
+                    [
+                        'error' => 'Login First!',
+                    ],
+                    401,
+                );
             }
 
             $user = User::where('id', $user->id)->first();
@@ -371,8 +354,8 @@ class UserController extends Controller
                 'mobile' => $validatedData['mobile'],
                 'email' => $user['email'],
                 'action' => $validatedData['action'],
-
             ];
+            
 
             session(['mobileVerification' => 'pending']);
             session()->put('data', $data);
@@ -384,7 +367,6 @@ class UserController extends Controller
         }
     }
 
-
     public function showMobileVerificationPage()
     {
         $data = session()->get('data');
@@ -393,7 +375,6 @@ class UserController extends Controller
 
     public function verifyOtpForMobile(Request $request)
     {
-
         try {
             $validatedData = $request->validate([
                 'otp' => 'required|numeric|digits:6',
@@ -423,7 +404,7 @@ class UserController extends Controller
                     'mobile' => $user['mobile'],
                     'email' => $user['email'],
                     'action' => $request->action,
-                    'error' => 'Oops! Incorrect OTP.'
+                    'error' => 'Oops! Incorrect OTP.',
                 ];
                 session()->put('data', $data);
                 return redirect()->route('mobile.verification')->with('error', 'Oops! Incorrect OTP.');
@@ -434,7 +415,7 @@ class UserController extends Controller
                     'mobile' => $user['mobile'],
                     'email' => $user['email'],
                     'action' => $request->action,
-                    'error' => 'Oops! OTP has expired.'
+                    'error' => 'Oops! OTP has expired.',
                 ];
                 session()->put('data', $data);
                 return redirect()->route('mobile.verification')->with('error', 'Oops! OTP has expired.');
@@ -443,7 +424,7 @@ class UserController extends Controller
             $otps->delete();
             $user->update([
                 'mobile' => $mobile,
-                'status' => 1
+                'status' => 1,
             ]);
 
             session()->forget('mobileVerification');
@@ -456,7 +437,6 @@ class UserController extends Controller
 
     public function requestOtpForMobileChangeAgain(Request $request)
     {
-
         try {
             $validatedData = $request->validate([
                 'mobile' => 'required|digits:10',
@@ -493,13 +473,16 @@ class UserController extends Controller
 
     public function updateAboutMe(Request $request)
     {
-        $validatedData = $request->validate([
-            'about_me' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
-        ], [
-            'about_me.required' => 'The education details field is required.',
-            'about_me.regex' => 'The education details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
-            'about_me.max' => 'The education details must not exceed 1000 characters.',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'about_me' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+            ],
+            [
+                'about_me.required' => 'The education details field is required.',
+                'about_me.regex' => 'The education details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+                'about_me.max' => 'The education details must not exceed 1000 characters.',
+            ],
+        );
         $user = Auth::user();
 
         $user->carrierDetails->update($validatedData);
@@ -507,68 +490,76 @@ class UserController extends Controller
             'success' => 'true',
             'message' => 'User about me details updated successfully!',
             'user' => [
-                'about_me' => $user->carrierDetails->about_me
+                'about_me' => $user->carrierDetails->about_me,
             ],
         ]);
     }
     public function educationDetail(Request $request)
     {
         $user = Auth::user();
-        $validatedData = $request->validate([
-            'education_detail' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
-        ], [
-            'education_detail.required' => 'The education details field is required.',
-            'education_detail.regex' => 'The education details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
-            'education_detail.max' => 'The education details must not exceed 1000 characters.',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'education_detail' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+            ],
+            [
+                'education_detail.required' => 'The education details field is required.',
+                'education_detail.regex' => 'The education details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+                'education_detail.max' => 'The education details must not exceed 1000 characters.',
+            ],
+        );
 
         $user->carrierDetails->update($validatedData);
         return response()->json([
             'success' => 'true',
             'message' => 'User about education details updated successfully!',
             'user' => [
-                'education_detail' => $user->carrierDetails->education_detail
+                'education_detail' => $user->carrierDetails->education_detail,
             ],
         ]);
     }
     public function occupationDetail(Request $request)
     {
         $user = Auth::user();
-        $validatedData = $request->validate([
-            'occupation_detail' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
-        ], [
-            'occupation_detail.required' => 'The occupation details field is required.',
-            'occupation_detail.regex' => 'The occupation details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
-            'occupation_detail.max' => 'The occupation details must not exceed 1000 characters.',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'occupation_detail' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+            ],
+            [
+                'occupation_detail.required' => 'The occupation details field is required.',
+                'occupation_detail.regex' => 'The occupation details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+                'occupation_detail.max' => 'The occupation details must not exceed 1000 characters.',
+            ],
+        );
 
         $user->carrierDetails->update($validatedData);
         return response()->json([
             'success' => 'true',
             'message' => 'User about occupation details updated successfully!',
             'user' => [
-                'about_family' => $user->carrierDetails->about_family
+                'about_family' => $user->carrierDetails->about_family,
             ],
         ]);
     }
     public function familyDetail(Request $request)
     {
-
         $user = Auth::user();
-        $validatedData = $request->validate([
-            'about_family' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
-        ], [
-            'about_family.required' => 'The family details field is required.',
-            'about_family.regex' => 'The family details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
-            'about_family.max' => 'The family details must not exceed 1000 characters.',
-        ]);
+        $validatedData = $request->validate(
+            [
+                'about_family' => ['required', 'string', 'regex:/^[a-zA-Z\s,.\?!]+$/', 'max:1000'],
+            ],
+            [
+                'about_family.required' => 'The family details field is required.',
+                'about_family.regex' => 'The family details must only contain alphabetic characters, spaces, and common punctuation marks (.,?!)',
+                'about_family.max' => 'The family details must not exceed 1000 characters.',
+            ],
+        );
 
         $user->familyDetails->update($validatedData);
         return response()->json([
             'success' => 'true',
             'message' => 'User about family details updated successfully!',
             'user' => [
-                'about_family' => $user->familyDetails->about_family
+                'about_family' => $user->familyDetails->about_family,
             ],
         ]);
     }
@@ -605,24 +596,25 @@ class UserController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => 'false',
-                'message' => 'An error occurred while updating user basic details.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'success' => 'false',
+                    'message' => 'An error occurred while updating user basic details.',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
         }
     }
     public function updateHoroscopeDetails(Request $request)
     {
-        // dd($request->all());
-
         $user = auth()->user();
         $fields = config('formFields.editHoroscopeDetails');
         $validationRules = [];
         foreach ($fields as $key => $field) {
             $validationRules[$field['name']] = $field['rules'];
         }
-        $validationRules['place_of_birth'] = ['nullable', 'integer',];
+        $validationRules['place_of_birth'] = ['nullable', 'integer'];
         $validateData = $request->validate($validationRules);
         $user->horoscopeDetails->update($validateData);
         $city = City::find($validateData['place_of_birth']) ?? 'Not provided';
@@ -635,8 +627,8 @@ class UserController extends Controller
             'user' => [
                 'time_of_birth' => $user->horoscopeDetails->time_of_birth,
                 'manglik' => $user->horoscopeDetails->manglik,
-                'place_of_birth' =>  $placeOfBirth,
-                'rashi' =>  $updatedRashi,
+                'place_of_birth' => $placeOfBirth,
+                'rashi' => $updatedRashi,
                 'horoscope_match' => $user->horoscopeDetails->horoscope_match,
                 'horoscope_show' => $user->horoscopeDetails->horoscope_show,
             ],
@@ -665,7 +657,7 @@ class UserController extends Controller
                 'message' => 'User Carrier details updated successfully!',
                 'user' => [
                     'education' => $education,
-                    'employee' =>  $employee,
+                    'employee' => $employee,
                     'occupation' => $occupation,
                     'income' => $income,
                     'organization_name' => $user->carrierDetails->organization_name,
@@ -675,16 +667,18 @@ class UserController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => 'false',
-                'message' => 'An error occurred while updating user carrier details.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'success' => 'false',
+                    'message' => 'An error occurred while updating user carrier details.',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
         }
     }
     public function updateUserFamilyDetails(Request $request)
     {
-        //dd($request->all());
         try {
             $user = auth()->user();
             $fields = config('formFields.editUserFamilyDetails');
@@ -693,8 +687,8 @@ class UserController extends Controller
             foreach ($fields as $key => $field) {
                 $validationRules[$field['name']] = $field['rules'];
             }
-            $validationRules['family_state'] = ['nullable', 'integer',];
-            $validationRules['family_city'] = ['nullable', 'integer',];
+            $validationRules['family_state'] = ['nullable', 'integer'];
+            $validationRules['family_city'] = ['nullable', 'integer'];
             $validateData = $request->validate($validationRules);
             $user->familyDetails->update($validateData);
             $fatherOccupation = FatherOccupation::find($validateData['father_occupation'])->name ?? 'NA';
@@ -710,7 +704,7 @@ class UserController extends Controller
                 'message' => 'User Family details updated successfully!',
                 'user' => [
                     'father_occupation' => $fatherOccupation,
-                    'mother_occupation' =>  $motherOccupation,
+                    'mother_occupation' => $motherOccupation,
                     'brother' => $user->familyDetails->brother,
                     'brother_married' => $user->familyDetails->brother_married,
                     'sister' => $user->familyDetails->sister,
@@ -726,16 +720,18 @@ class UserController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => 'false',
-                'message' => 'An error occurred while updating user carrier details.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'success' => 'false',
+                    'message' => 'An error occurred while updating user carrier details.',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
         }
     }
     public function updateLifestyleDetails(Request $request)
     {
-       
         try {
             $user = auth()->user();
             $fields = config('formFields.editLifestyleDetails');
@@ -761,7 +757,7 @@ class UserController extends Controller
                 'message' => 'User Lifestyles details updated successfully!',
                 'user' => [
                     'body_type' => $bodyType,
-                    'complextion' =>  $complextion,
+                    'complextion' => $complextion,
                     'dietary_habit' => $dietaryHabit,
                     'drinking_habit' => $habit,
                     'smoking_habit' => $habit,
@@ -777,16 +773,18 @@ class UserController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => 'false',
-                'message' => 'An error occurred while updating user lifestyle details.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'success' => 'false',
+                    'message' => 'An error occurred while updating user lifestyle details.',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
         }
     }
     public function updateContactDetails(Request $request)
     {
-       
         try {
             $user = auth()->user();
             $fields = config('formFields.editContactDetails');
@@ -798,26 +796,27 @@ class UserController extends Controller
 
             $validateData = $request->validate($validationRules);
             $user->contactDetails->update($validateData);
-           
 
             return response()->json([
                 'success' => 'true',
                 'message' => 'User Contact details updated successfully!',
                 'user' => [
-                    'alternate_mobile' =>  $user->contactDetails->alternate_mobile,
-                    'alternate_owned_by' =>   $user->contactDetails->alternate_owned_by,
-                    'landline_number' =>  $user->contactDetails->landline_number,
-                    'landline_owned_by' =>  $user->contactDetails->landline_owned_by,
+                    'alternate_mobile' => $user->contactDetails->alternate_mobile,
+                    'alternate_owned_by' => $user->contactDetails->alternate_owned_by,
+                    'landline_number' => $user->contactDetails->landline_number,
+                    'landline_owned_by' => $user->contactDetails->landline_owned_by,
                     'address' => $user->contactDetails->address,
-                    
                 ],
             ]);
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => 'false',
-                'message' => 'An error occurred while updating user lifestyle details.',
-                'error' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'success' => 'false',
+                    'message' => 'An error occurred while updating user lifestyle details.',
+                    'error' => $e->getMessage(),
+                ],
+                500,
+            );
         }
     }
     public function myPhotos(Request $request)
@@ -849,7 +848,6 @@ class UserController extends Controller
         }
     }
 
-
     private function createImage($image, $fileName, $filePath)
     {
         if (is_null($image->display_picture)) {
@@ -862,7 +860,6 @@ class UserController extends Controller
 
     private function updateImage($image, $fileName, $filePath)
     {
-
         if (!is_null($image->display_picture)) {
             $previousFilePath = $filePath . $image->display_picture;
             if (File::exists($previousFilePath)) {
@@ -870,38 +867,18 @@ class UserController extends Controller
             }
         }
 
-
         $image->update([
             'display_picture' => $fileName,
             'status' => 1,
         ]);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {}
+    public function destroy($id)
+    {
+    }
 
     public function checkBoxDelete(Request $request)
     {
@@ -929,7 +906,7 @@ class UserController extends Controller
                 $User = User::find($id);
                 if ($User) {
                     $User->update([
-                        'status' => 1
+                        'status' => 1,
                     ]);
                 }
             }
@@ -952,7 +929,7 @@ class UserController extends Controller
                 $User = User::find($id);
                 if ($User) {
                     $User->update([
-                        'status' => 0
+                        'status' => 0,
                     ]);
                 }
             }
@@ -983,10 +960,13 @@ class UserController extends Controller
         $profilePrefixs = $this->profilePrefix();
         $orders = User::whereHas('payments', function ($query) {
             $query->where('is_paid', 1);
-        })->with(['payments' => function ($query) {
-            $query->orderBy('is_paid', 'desc')
-                ->orderBy('created_at', 'desc')->count();
-        }])->get();
+        })
+            ->with([
+                'payments' => function ($query) {
+                    $query->orderBy('is_paid', 'desc')->orderBy('created_at', 'desc')->count();
+                },
+            ])
+            ->get();
 
         // $freeUsersOrders = User::whereDoesntHave('payments', function ($query) {
         //     $query->where('is_paid', 1);
@@ -996,11 +976,17 @@ class UserController extends Controller
 
         $freeUsersOrders = User::whereDoesntHave('payments', function ($query) {
             $query->where('is_paid', 1);
-        })->whereHas('payments', function ($query) {
-            $query->where('is_paid', 0);
-        })->with(['payments' => function ($query) {
-            $query->where('is_paid', 0);
-        }])->withCount('payments')->get();
+        })
+            ->whereHas('payments', function ($query) {
+                $query->where('is_paid', 0);
+            })
+            ->with([
+                'payments' => function ($query) {
+                    $query->where('is_paid', 0);
+                },
+            ])
+            ->withCount('payments')
+            ->get();
         // dd($freeUsersOrders);
 
         return view('admin.users.orders', compact('orders', 'profilePrefixs', 'freeUsersOrders'));

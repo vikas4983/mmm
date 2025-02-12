@@ -706,7 +706,7 @@
         'type' => 'date',
         'name' => 'dob',
         'label' => 'Date of Birth',
-        'rules' => 'required|date|before:2007-01-23',
+        'rules' => 'required|date|before:2007-02-09',
       ),
       'height' => 
       array (
@@ -2020,6 +2020,12 @@
       ),
     ),
   ),
+  'payumoney' => 
+  array (
+    'key' => 'qrIcqG',
+    'salt' => '3xr7Qtm20PszE05rEBG3ku5SI33FuJU8',
+    'mode' => 'https://secure.payu.in/_payment',
+  ),
   'permission' => 
   array (
     'models' => 
@@ -2171,7 +2177,7 @@
   ),
   'session' => 
   array (
-    'driver' => 'database',
+    'driver' => 'file',
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,

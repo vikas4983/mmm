@@ -54,8 +54,10 @@ use App\Http\Controllers\LifeStyleController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LikeDetailController;
 use App\Http\Controllers\ModelCountController;
+use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\RedisController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\UserActionController;
 use App\Models\CarrierDetail;
 use App\Models\City;
 use App\Models\Email;
@@ -67,16 +69,21 @@ use App\Services\OptionService;
 
 // User Routes
 Route::get('/', function () {
+    $user = Auth::user();
+    if (!$user) {
+        return view('/');
+    } else {
+        return redirect()->route('dashboard');
+    }
     if (session()->get('registration_step') === '2') {
         return redirect()->route('verification');
     }
     return view('index');
-})->middleware('mobileNumberUpdated');
+})->middleware(['mobileNumberUpdated', 'auth:sanctum', config('jetstream.auth_session')]);
 Route::get('login', function () {
     if (session()->get('registration_step') === '2') {
         return redirect()->route('verification');
     } else {
-        // Clear the 'registration_step' session variable
         session()->forget('registration_step');
         return view('auth.login');
     }
@@ -103,7 +110,7 @@ Route::post('logout', function () {
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'authUser'])->group(function () {
     Route::get('/refresh-cache', function () {
         $optionService = new OptionService();
-        $optionService->getOption();
+        $optionService->getOptions();
         return 'Cache repopulated!';
     });
     Route::get('/get-view', [DemoController::class, 'getView']);
@@ -124,6 +131,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         ->middleware('mobileNumberUpdated');
     Route::get('my-profile', [UserController::class, 'myProfile'])
         ->name('my.profile')
+        ->middleware('mobileNumberUpdated');
+    Route::get('plan', [UserController::class, 'plan'])
+        ->name('plan')
         ->middleware('mobileNumberUpdated');
 
     Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])
@@ -220,7 +230,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         ->middleware('mobileNumberUpdated');
 
     //Search
-    Route::get('search', [SearchController::class, 'search'])->name('search')->middleware('mobileNumberUpdated');
+    Route::get('search', [SearchController::class, 'search'])
+        ->name('search')
+        ->middleware('mobileNumberUpdated');
     Route::post('search-result', [SearchController::class, 'searchById'])
         ->name('search.by.id')
         ->middleware('mobileNumberUpdated');
@@ -233,7 +245,34 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('advance-search-result', [SearchController::class, 'advanceSearch'])
         ->name('advance.search')
         ->middleware('mobileNumberUpdated');
+
+    // Show User in new page
+    Route::get('profile/{uuid}', [UserController::class, 'showProfile'])->name('profile')
+        ->middleware('mobileNumberUpdated');
+    // Send Interst,Message,Block and View Contact
+    Route::post('send-interest', [UserActionController::class, 'sendInterest'])->name('send.interest');
+    Route::post('cancel-interest', [UserActionController::class, 'cancelInterest'])->name('cancel.interest');
+    Route::post('send-message', [UserActionController::class, 'sendMessage'])->name('send.message');
+    Route::post('block-user', [UserActionController::class, 'blockUser'])->name('block.user');
+    Route::post('unblock-user', [UserActionController::class, 'unBlockUser'])->name('unblock-user');
+    Route::post('view-contact', [UserActionController::class, 'viewContact'])->name('view.contact');
+
+    Route::get('my-interest', [UserActionController::class, 'interest'])->name('my.interest');
+    
+    // PayuMoney
+    Route::post('order', [PayUMoneyController::class, 'order'])->name('order')->middleware('mobileNumberUpdated');
+    Route::any('success', [PayUMoneyController::class, 'success'])->name('success');
+    Route::any('failure', [PayUMoneyController::class, 'failure'])->name('failure');
+    
+
+
+
+
+    // RazorPay
+    // Route::post('payment', [RazorpayPaymentController::class, 'index'])->name('payment');
+    // Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
 });
+
 Route::resource('members', MemberController::class)->middleware('checkRegistrationStep');
 Route::get('verification', [MemberOtpController::class, 'verification'])
     ->name('verification')
@@ -257,6 +296,8 @@ Route::get('otp-verification', [MemberOtpController::class, 'otpVerification'])-
 Route::post('login-otp', [MemberOtpController::class, 'loginOtp'])->name('login.otp');
 Route::post('login-otp-validate', [MemberOtpController::class, 'loginOtpValidate'])->name('login.otp.validate');
 Route::post('otp-resend', [MemberOtpController::class, 'otpResend'])->name('otp.resend');
+
+
 
 //Footer
 Route::view('aboutUs', 'aboutUs');
@@ -440,8 +481,8 @@ Route::prefix('admin')
         Route::post('profileids-active', [MenuController::class, 'activeItem']);
         Route::post('profileids-inActive', [MenuController::class, 'inActiveItem']);
         // RazorPay
-        Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index']);
-        Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
+        // Route::get('razorpay-payment', [RazorpayPaymentController::class, 'index'])->name('payment');
+        // Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
     });
 
 // Route::post('logout', function () {
