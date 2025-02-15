@@ -1,4 +1,0 @@
-deployment:
-  tasks:
-    - rm -rf /home2/mangaztt/abc.mangalmandap.com/*
-    - cp -R /home2/mangaztt/repositories/mmm/public/* /home2/mangaztt/abc.mangalmandap.com/
