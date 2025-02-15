@@ -1,4 +1,5 @@
+---
 deployment:
   tasks:
-    - rm -rf /home2/mangaztt/abc.mangalmandap.com/*
-    - /bin/cp -R /home2/mangaztt/repositreis/mmm/* /home2/mangaztt/abc.mangalmandap.com/
+    - export DEPLOYPATH=/home2/mangaztt/abc.mangalmandap.com/
+    - /bin/cp -R * $DEPLOYPATH
