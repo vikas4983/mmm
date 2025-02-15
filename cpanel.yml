@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home2/mangaztt/abc.mangalmandap.com/
-    - /bin/cp -R * $DEPLOYPATH
+    - export DEPLOYPATH=/home2/mangaztt/public_html/abc.mangalmandap.com/
+    - rsync -a --exclude='.git' --exclude='cpanel.yml' ./ $DEPLOYPATH
