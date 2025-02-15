@@ -140,25 +140,25 @@ $currentDate = \Carbon\Carbon::now();
 
                     <!-- Upgrade Plan Modal -->
                     <?php if(!empty($activeUser)): ?>
-                        <?php if (isset($component)) { $__componentOriginal0159ea5c86db2bbee810ee8cce9b8f10 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal0159ea5c86db2bbee810ee8cce9b8f10 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.upgrade-plan-component','data' => ['activeUser' => $activeUser]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+                        <?php if (isset($component)) { $__componentOriginalab70b78c0c82e28571c6c5e863e7a1da = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalab70b78c0c82e28571c6c5e863e7a1da = $attributes; } ?>
+<?php $component = App\View\Components\UpgradePlanComponent::resolve(['activeUser' => $activeUser] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('upgrade-plan-component'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php $attributes = $attributes->except(\App\View\Components\UpgradePlanComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['activeUser' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($activeUser)]); ?>
+<?php $component->withAttributes([]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
-<?php if (isset($__attributesOriginal0159ea5c86db2bbee810ee8cce9b8f10)): ?>
-<?php $attributes = $__attributesOriginal0159ea5c86db2bbee810ee8cce9b8f10; ?>
-<?php unset($__attributesOriginal0159ea5c86db2bbee810ee8cce9b8f10); ?>
+<?php if (isset($__attributesOriginalab70b78c0c82e28571c6c5e863e7a1da)): ?>
+<?php $attributes = $__attributesOriginalab70b78c0c82e28571c6c5e863e7a1da; ?>
+<?php unset($__attributesOriginalab70b78c0c82e28571c6c5e863e7a1da); ?>
 <?php endif; ?>
-<?php if (isset($__componentOriginal0159ea5c86db2bbee810ee8cce9b8f10)): ?>
-<?php $component = $__componentOriginal0159ea5c86db2bbee810ee8cce9b8f10; ?>
-<?php unset($__componentOriginal0159ea5c86db2bbee810ee8cce9b8f10); ?>
+<?php if (isset($__componentOriginalab70b78c0c82e28571c6c5e863e7a1da)): ?>
+<?php $component = $__componentOriginalab70b78c0c82e28571c6c5e863e7a1da; ?>
+<?php unset($__componentOriginalab70b78c0c82e28571c6c5e863e7a1da); ?>
 <?php endif; ?>
                     <?php endif; ?>
 

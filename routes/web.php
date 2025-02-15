@@ -256,6 +256,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('block-user', [UserActionController::class, 'blockUser'])->name('block.user');
     Route::post('unblock-user', [UserActionController::class, 'unBlockUser'])->name('unblock-user');
     Route::post('view-contact', [UserActionController::class, 'viewContact'])->name('view.contact');
+    Route::post('send-message', [UserActionController::class, 'sendMessage'])->name('send.message');
 
     Route::get('my-interest', [UserActionController::class, 'interest'])->name('my.interest');
     

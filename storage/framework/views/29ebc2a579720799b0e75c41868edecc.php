@@ -148,28 +148,32 @@
 
 
                 </div>
-                <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
-                    <a href="composeMessages?user_id=IN38" class="btn btn-default btn-block inResultSendMessageBtn ">
+                <div id="send-message<?php echo e($searchResult->id); ?>"
+                    class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
+                    <a data-id="<?php echo e($searchResult->id); ?>"
+                        class="btn btn-default btn-block inResultSendMessageBtn send-message-btn ">
                         <i class="fas fa-envelope"></i> Send Message</a>
                 </div>
-                <?php if(
-                    !empty($user) &&
-                        !empty($user->invitationDetails) &&
-                        $user->invitationDetails->where('receiver_id', $searchResult->id)->where('status', 0)->isNotEmpty()): ?>
+
+
+                <?php if(!empty($user) && !empty($user->blockedUser->contains('blocked_id', $searchResult->id))): ?>
                     <div id="block-user<?php echo e($searchResult->id); ?>"
                         class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                         <a data-id="<?php echo e($searchResult->id); ?>"
                             class="btn btn-default btn-block inResultBlockBtn unBlock-btn">
-                            <i class="fas fa-lock gt-margin-right-5"></i> Unblock </a>
+                            <i class="fas fa-lock gt-margin-right-5"></i> Unblock
+                        </a>
                     </div>
                 <?php else: ?>
                     <div id="block-user<?php echo e($searchResult->id); ?>"
                         class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                         <a data-id="<?php echo e($searchResult->id); ?>"
                             class="btn btn-default btn-block inResultBlockBtn block-btn">
-                            <i class="fas fa-lock gt-margin-right-5"></i> Block </a>
+                            <i class="fas fa-lock gt-margin-right-5"></i> Block
+                        </a>
                     </div>
                 <?php endif; ?>
+
                 
                 
                 <div id="view-contact<?php echo e($searchResult->id); ?>"
@@ -185,7 +189,8 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 <script>
-    $(document).on('click', '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn',
+    $(document).on('click',
+        '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn,.send-message-btn',
         function() {
             const receiver_id = $(this).data('id');
             const sendInterest = $(this).hasClass('send-interest-btn');
@@ -193,6 +198,7 @@
             const blockUser = $(this).hasClass('block-btn');
             const unBlock = $(this).hasClass('unBlock-btn');
             const viewContact = $(this).hasClass('view-contact-btn');
+            const sendMessage = $(this).hasClass('send-message-btn');
             let action = sendInterest ?
                 '/send-interest' :
                 cancelInterest ?
@@ -203,6 +209,8 @@
                 '/unblock-user' :
                 viewContact ?
                 '/view-contact' :
+                sendMessage ?
+                '/send-message' :
                 '';
             sendRequest(receiver_id, action);
 
@@ -225,24 +233,32 @@
                     $("#success-alert" + receiver_id).html(response.message);
                     $("#block-user" + receiver_id).html(response.button);
                 }
+                if (response.action === 'block') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    // $("#block-user" + receiver_id).html(response.button);
+                }
                 if (response.action === 'viewContact') {
-                     //$("#success-alert" + receiver_id).html(response.message);
-                     $("body").append(response.html); 
-                     $("#contactModal" + receiver_id).modal("show");
+                    //$("#success-alert" + receiver_id).html(response.message);
+                    $("body").append(response.html);
+                    $("#contactModal" + receiver_id).modal("show");
                 }
                 if (response.action === 'hide') {
-                     $("#success-alert" + receiver_id).html(response.message);
+                    $("#success-alert" + receiver_id).html(response.message);
                     //  $("body").append(response.html); 
                     //  $("#contactModal" + receiver_id).modal("show");
                 }
                 if (response.action === 'friend') {
-                     $("#success-alert" + receiver_id).html(response.message);
+                    $("#success-alert" + receiver_id).html(response.message);
                     //  $("body").append(response.html); 
                     //  $("#contactModal" + receiver_id).modal("show");
                 }
                 if (response.action === 'expirePlan') {
-                     $("body").append(response.html); 
-                     $("#expireModal").modal("show");
+                    $("body").append(response.html);
+                    $("#expireModal").modal("show");
+                }
+                if (response.action === 'sendMessage') {
+                    $("body").append(response.html);
+                    $("#expireModal").modal("show");
                 }
 
                 // }

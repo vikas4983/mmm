@@ -7,13 +7,16 @@ use App\Models\ContactViewByMe;
 use App\Models\ContactViewByOther;
 use App\Models\Invitation;
 use App\Models\User;
+use App\Models\UserBlock;
 use App\Models\UserSetting;
+use App\Models\ViewContact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\OptionService;
 use App\Traits\UserActionTrait;
 use App\Traits\LoginUserTrait;
 use App\Traits\PlanStatusTrait;
+use App\View\Components\ViewContact as ComponentsViewContact;
 use Carbon\Carbon;
 
 class UserActionController extends Controller
@@ -114,47 +117,27 @@ class UserActionController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = $loginuserId;
         $validatedData['sender_id'] = $loginuserId;
-        $existingrequest = $this->getUserData($validatedData);
-        if (!$existingrequest) {
-            $blockRequest = Invitation::create($validatedData);
-            $blockRequest->update(['status' => 0]);
-            return response()->json([
-                'success' => true,
-                'action' => 'blockUser',
-                'message' => '<span style="font-size: 14px; padding-left: 59px; color: #AF3042;" >
-             <i class="fas fa-lock gt-margin-right-5"></i>Block Profile
-             </span>',
-                'button' =>
-                '<div id="block-user-' .
-                    $blockRequest->receiver_id .
-                    '">
-            <a data-id="' .
-                    $blockRequest->receiver_id .
-                    '" class="btn btn-default btn-block inResultSendMessageBtn unBlock-btn" style="color: #AF3042;">
-                <i class="fas fa-unlock gt-margin-right-5"></i> Unblock
-            </a>
-        </div>',
-            ]);
-        }
-        $existingrequest->update([
-            'status' => 0,
+
+        $blockRequest = UserBlock::create([
+            'blocker_id' => $validatedData['user_id'],
+            'blocked_id' => $validatedData['receiver_id'],
         ]);
         return response()->json([
             'success' => true,
             'action' => 'blockUser',
             'message' => '<span style="font-size: 14px; padding-left: 59px; color: #AF3042;" >
-         <i class="fas fa-lock gt-margin-right-5"></i>Block Profile
-         </span>',
+                             <i class="fas fa-lock gt-margin-right-5"></i>Block Profile
+                             </span>',
             'button' =>
             '<div id="block-user-' .
-                $existingrequest->receiver_id .
+                $blockRequest->blocked_id .
                 '">
-        <a data-id="' .
-                $existingrequest->receiver_id .
+                            <a data-id="' .
+                $blockRequest->blocked_id .
                 '" class="btn btn-default btn-block inResultSendMessageBtn unBlock-btn" style="color: #AF3042;">
-            <i class="fas fa-unlock gt-margin-right-5"></i> Unblock
-        </a>
-    </div>',
+                                <i class="fas fa-unlock gt-margin-right-5"></i> Unblock
+                            </a>
+                        </div>',
         ]);
     }
     function unBlockUser(InvitationRequest $request)
@@ -163,10 +146,10 @@ class UserActionController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = $loginuserId;
         $validatedData['sender_id'] = $loginuserId;
-        $unBlockUser = $this->getUserData($validatedData);
-        $unBlockUser->update([
-            'status' => 1,
-        ]);
+        $blockerId = $validatedData['receiver_id'];
+
+        $unBlockUser = $this->getBlockUser($validatedData);
+        $unBlockUser->destroy($unBlockUser->id);
         return response()->json([
             'success' => true,
             'action' => 'blockUser',
@@ -175,10 +158,10 @@ class UserActionController extends Controller
          </span>',
             'button' =>
             '<div id="block-user' .
-                $unBlockUser->receiver_id .
+                $blockerId .
                 '">
         <a data-id="' .
-                $unBlockUser->receiver_id .
+                $blockerId .
                 '" class="btn btn-default btn-block inResultSendMessageBtn block-btn" style="color: #AF3042;">
            <i class="fas fa-lock gt-margin-right-5"></i> Block
         </a>
@@ -186,6 +169,30 @@ class UserActionController extends Controller
         ]);
     }
 
+    private function getBlockUser($validatedData)
+    {
+        $user = Auth::user();
+
+        
+        // $blockByOther = UserBlock::where('blocker_id', $validatedData['receiver_id'])
+        //     ->where('blocked_id', $user->id)
+        //     ->exists();
+
+        // if ($blockByOther) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'action' => 'block',
+        //         'message' => 'You have been blocked by this user.',
+        //     ]);
+        // }
+
+       
+        $existingRequest = UserBlock::where('blocker_id', $user->id)
+            ->where('blocked_id', $validatedData['receiver_id'])
+            ->first();
+
+        return $existingRequest;
+    }
 
     private function isFriend()
     {
@@ -216,8 +223,7 @@ class UserActionController extends Controller
                     // 'html' => view('components.view-contact')->render()
                 ]);
             } elseif (! empty($userSetting) && $userSetting->mobile === 1) {
-                $viewLog = $this->ContactViewLog($validatedData);
-
+                $this->ContactViewLog($validatedData);
                 return response()->json([
                     'success' => true,
                     'action' => 'viewContact',
@@ -225,7 +231,7 @@ class UserActionController extends Controller
                     'html' => view('components.view-contact', compact('contactDetails', 'user'))->render()
                 ]);
             } elseif (! empty($userSetting) && $userSetting->mobile === 2 && !empty($existingRequest) && $existingRequest->is_friend === 1) {
-                $viewLog = $this->ContactViewLog($validatedData);
+                $this->ContactViewLog($validatedData);
 
                 return response()->json([
                     'success' => true,
@@ -254,29 +260,21 @@ class UserActionController extends Controller
         $contactDetails =   User::where('id', $validatedData['receiver_id'])->where('status', 1)->first();
         return $contactDetails;
     }
+
+
     private function ContactViewLog($validatedData)
     {
-        $previouseBYMe = ContactViewByMe::where('view_profile', $validatedData['receiver_id'])->first();
-        $previouseRecordByOther = ContactViewByOther::where('view_profile', $validatedData['receiver_id'])->first();
-        if (!$previouseBYMe) {
+        $existingViewContact = ViewContact::where('view_id', $validatedData['user_id'])->where('viewed_id', $validatedData['receiver_id'])->first();
+        if (!$existingViewContact) {
             $planStatus = $this->planStatus($validatedData['user_id']);
-            $mobile = ContactViewByMe::create([
-                'user_id' => $validatedData['user_id'],
-                'view_profile' => $validatedData['receiver_id']
+            ViewContact::create([
+                'view_id' => $validatedData['user_id'],
+                'viewed_id' => $validatedData['receiver_id']
             ]);
             $leftMobileNumber = (int) $planStatus->contact - (int)1;
             $planStatus->update(['contact' => $leftMobileNumber]);
-        } else {
-            return $previouseBYMe;
         }
-        if (!$previouseRecordByOther) {
-            $mobile = ContactViewByOther::create([
-                'user_id' => $validatedData['user_id'],
-                'view_profile' => $validatedData['receiver_id']
-            ]);
-        } else {
-            return $previouseRecordByOther;
-        }
+        return $existingViewContact;
     }
 
     public function interest(OptionService $optionService)

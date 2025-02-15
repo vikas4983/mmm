@@ -142,6 +142,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invitation::class);
     }
+    
+    public function blockedUser(){
+        return $this->hasMany(UserBlock::class, 'blocker_id');
+    }
+    
+    public function blockedByUsers(){
+        return $this->hasMany(UserBlock::class, 'blocked_id');
+    }
+    public function viewUser(){
+        return $this->hasMany(ViewContact::class, 'view_id');
+    }
+
+    public function viewByUsers(){
+        return $this->hasMany(ViewContact::class, 'viewed_id');
+    }
 
 
 

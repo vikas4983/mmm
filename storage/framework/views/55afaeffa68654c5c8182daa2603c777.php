@@ -1,5 +1,5 @@
 <?php $__currentLoopData = $searchResults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $searchResult): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-    <li class="gt-panel gt-panel-default gt-panel-default gt-main-profile">
+    <li id="abcV<?php echo e($searchResult->id); ?>" class="gt-panel gt-panel-default gt-panel-default gt-main-profile ">
         <a href="<?php echo e(route('profile', $searchResult->uuid)); ?>" target="_blank" class="gt-panel-head">
             <div class="row" bis_skin_checked="1">
                 <div class="col-xxl-5 col-xl-5 col-xs-16 col-lg-5 gridFullWidth gt-main-name" bis_skin_checked="1">
@@ -7,15 +7,10 @@
                         <?php echo e($searchResult->name ?? 'NA'); ?>(<?php echo e($prefix->name ?? 'NA'); ?>-<?php echo e($searchResult->matrimony_id ?? 'NA'); ?>)
                     </h4>
                 </div>
-
                 <span id="success-alert<?php echo e($searchResult->id); ?>"></span>
-
-
-
                 
             </div>
         </a>
-
         <a href="member-profile?view_id=IN38" target="_blank" class="gt-result-panel-body">
             <div class="row gt-padding-bottom-15" bis_skin_checked="1">
                 <div class="col-xxl-2 col-xl-2 col-xs-16 col-lg-3 gridFullWidth" bis_skin_checked="1">
@@ -153,31 +148,35 @@
 
 
                 </div>
-                <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
-                    <a href="composeMessages?user_id=IN38" class="btn btn-default btn-block inResultSendMessageBtn ">
+                <div id="send-message<?php echo e($searchResult->id); ?>"
+                    class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
+                    <a data-id="<?php echo e($searchResult->id); ?>"
+                        class="btn btn-default btn-block inResultSendMessageBtn send-message-btn ">
                         <i class="fas fa-envelope"></i> Send Message</a>
                 </div>
-                <?php if(
-                    !empty($user) &&
-                        !empty($user->invitationDetails) &&
-                        $user->invitationDetails->where('receiver_id', $searchResult->id)->where('status', 0)->isNotEmpty()): ?>
+
+
+                <?php if(!empty($user) && !empty($user->blockedUser->contains('blocked_id', $searchResult->id))): ?>
                     <div id="block-user<?php echo e($searchResult->id); ?>"
                         class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                         <a data-id="<?php echo e($searchResult->id); ?>"
                             class="btn btn-default btn-block inResultBlockBtn unBlock-btn">
-                            <i class="fas fa-lock gt-margin-right-5"></i> Unblock </a>
+                            <i class="fas fa-lock gt-margin-right-5"></i> Unblock
+                        </a>
                     </div>
                 <?php else: ?>
                     <div id="block-user<?php echo e($searchResult->id); ?>"
                         class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                         <a data-id="<?php echo e($searchResult->id); ?>"
                             class="btn btn-default btn-block inResultBlockBtn block-btn">
-                            <i class="fas fa-lock gt-margin-right-5"></i> Block </a>
+                            <i class="fas fa-lock gt-margin-right-5"></i> Block
+                        </a>
                     </div>
                 <?php endif; ?>
+
                 
                 
-                <div id="block-contact<?php echo e($searchResult->id); ?>"
+                <div id="view-contact<?php echo e($searchResult->id); ?>"
                     class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                     <a data-id="<?php echo e($searchResult->id); ?>"
                         class="btn btn-default btn-block inResultSendMessageBtn view-contact-btn">
@@ -190,7 +189,8 @@
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
 <script>
-    $(document).on('click', '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn',
+    $(document).on('click',
+        '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn,.send-message-btn',
         function() {
             const receiver_id = $(this).data('id');
             const sendInterest = $(this).hasClass('send-interest-btn');
@@ -198,6 +198,7 @@
             const blockUser = $(this).hasClass('block-btn');
             const unBlock = $(this).hasClass('unBlock-btn');
             const viewContact = $(this).hasClass('view-contact-btn');
+            const sendMessage = $(this).hasClass('send-message-btn');
             let action = sendInterest ?
                 '/send-interest' :
                 cancelInterest ?
@@ -207,7 +208,9 @@
                 unBlock ?
                 '/unblock-user' :
                 viewContact ?
-                '/view.contact' :
+                '/view-contact' :
+                sendMessage ?
+                '/send-message' :
                 '';
             sendRequest(receiver_id, action);
 
@@ -229,6 +232,33 @@
                 if (response.action === 'blockUser') {
                     $("#success-alert" + receiver_id).html(response.message);
                     $("#block-user" + receiver_id).html(response.button);
+                }
+                if (response.action === 'block') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    // $("#block-user" + receiver_id).html(response.button);
+                }
+                if (response.action === 'viewContact') {
+                    //$("#success-alert" + receiver_id).html(response.message);
+                    $("body").append(response.html);
+                    $("#contactModal" + receiver_id).modal("show");
+                }
+                if (response.action === 'hide') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    //  $("body").append(response.html); 
+                    //  $("#contactModal" + receiver_id).modal("show");
+                }
+                if (response.action === 'friend') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    //  $("body").append(response.html); 
+                    //  $("#contactModal" + receiver_id).modal("show");
+                }
+                if (response.action === 'expirePlan') {
+                    $("body").append(response.html);
+                    $("#expireModal").modal("show");
+                }
+                if (response.action === 'sendMessage') {
+                    $("body").append(response.html);
+                    $("#expireModal").modal("show");
                 }
 
                 // }

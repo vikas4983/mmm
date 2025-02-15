@@ -19,4 +19,4 @@
         </div>
     </div>
 </div>
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/expire-plan-component.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\expire-plan-component.blade.php ENDPATH**/ ?>
