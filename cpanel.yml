@@ -1,5 +1,4 @@
----
 deployment:
   tasks:
-    - export DEPLOYPATH=/home2/mangaztt/abc.mangalmandap.com/
-    - /bin/cp -R * $DEPLOYPATH
+    - rm -rf /home2/mangaztt/abc.mangalmandap.com/*
+    - cp -R /home2/mangaztt/repositories/mmm/public/* /home2/mangaztt/abc.mangalmandap.com/
