@@ -24,7 +24,7 @@
         <label>Phone</label>
         <input type="text" name="phone" required><br>
 
-        <button type="submit">Pay Now</button>
+        <button type="submit ">Pay Now</button>
     </form>
 </body>
 
