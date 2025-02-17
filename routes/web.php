@@ -85,7 +85,7 @@ Route::get('login', function () {
         return redirect()->route('verification');
     } else {
         session()->forget('registration_step');
-        return view('auth.login');
+        return view('auth.login ');
     }
 })
     ->name('login')
