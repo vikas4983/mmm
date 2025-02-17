@@ -24,9 +24,9 @@
         <label>Phone</label>
         <input type="text" name="phone" required><br>
 
-        <button type="submit">Pay Now</button>
+        <button type="submit ">Pay Now</button>
     </form>
 </body>
 
 </html>
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views\payu\payu\form.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views\payu\form.blade.php ENDPATH**/ ?>

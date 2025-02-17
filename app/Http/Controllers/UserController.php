@@ -119,6 +119,8 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'paidUsers', 'premiumUsersCount', 'active', 'inActive', 'countAll'));
     }
 
+
+    
     /**
      * Show the form for creating a new resource.
      */

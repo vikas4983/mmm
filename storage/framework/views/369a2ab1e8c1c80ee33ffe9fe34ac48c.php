@@ -1,6 +1,6 @@
 <?php $__env->startSection('title', 'Dashboard - Mangal Mandap'); ?>
 <?php $__env->startSection('content'); ?>
-    <script src="<?php echo e(mix('js/app.js')); ?>"></script>
+    
     <div id="dashboard">
         <div class="container mt-20 searchresult" id="searchresult">
             <div class="row">

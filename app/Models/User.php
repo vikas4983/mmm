@@ -106,7 +106,7 @@ class User extends Authenticatable
 
     public function basicDetails()
     {
-        return $this->hasOne(basicDetail::class);
+        return $this->hasOne(BasicDetail::class);
     }
     public function horoscopeDetails()
     {

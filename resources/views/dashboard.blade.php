@@ -1,7 +1,7 @@
 @extends('layouts.frontend.main-master')
 @section('title', 'Dashboard - Mangal Mandap')
 @section('content')
-    <script src="{{ mix('js/app.js') }}"></script>
+    {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
     <div id="dashboard">
         <div class="container mt-20 searchresult" id="searchresult">
             <div class="row">
