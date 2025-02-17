@@ -7,7 +7,7 @@ use App\Models\SpoteLight;
 use Carbon\Carbon;
 
 
-trait paidUsersTrait
+trait PaidUsersTrait
 {
     
 

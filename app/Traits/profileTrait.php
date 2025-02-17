@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use App\Models\ProfileId;
 
-trait profileTrait
+trait ProfileTrait
 {
     public function profilePrefix()
     {
