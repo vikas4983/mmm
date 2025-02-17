@@ -39,11 +39,11 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use app\Services\UserService;
-use App\Traits\PaidUsersTrait;
+//use App\Traits\PaidUsersTrait;
 use App\Traits\ActiveUsersTrait;
 use App\Traits\InActiveUsersTrait;
 use App\Traits\MemberOtpTrait;
-use App\Traits\profileTrait;
+//use App\Traits\profileTrait;
 use App\Traits\SpoteLightUsersTrait;
 use App\Traits\ModelCountsTrait;
 use App\Traits\UserEmailTemplateTrait;
@@ -58,8 +58,8 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    use PaidUsersTrait;
-    use profileTrait;
+    //use PaidUsersTrait;
+    //use profileTrait;
     use ActiveUsersTrait;
     use InActiveUsersTrait;
     use SpoteLightUsersTrait;
@@ -84,7 +84,8 @@ class UserController extends Controller
         $countAll = User::count();
         $premiumUsersCount = count($this->paidUsers());
         $profilePrefixs = $this->profilePrefix();
-        $paidUsers = $this->paidUsers();
+       // $paidUsers = $this->paidUsers();
+        $paidUsers = '';
         $spotlightUsers = $this->spotlightUsers();
 
         $users = User::with([
