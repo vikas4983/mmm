@@ -7,6 +7,7 @@ namespace App\Mail;
 use App\Models\EmailSetting;
 use App\Models\EmailTemplate;
 use App\Models\Logo;
+use App\Models\MemberOtp;
 use App\Models\Menu;
 use App\Models\UserOTP;
 use Illuminate\Bus\Queueable;
@@ -17,6 +18,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Session;
 use App\Traits\MemberOtpTrait;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Blade;
 
 class UserEmail extends Mailable
@@ -57,7 +59,7 @@ class UserEmail extends Mailable
     {
 
         $userId = $this->user->id;
-        $otp = $this->generateOTP($userId);
+        $otp = $this->generateOTP1($userId);
       
         $footers = Menu::where('status', 1)->where('section', 0)->get();
         $logos = Logo::where('status', 1)->get();
@@ -90,6 +92,20 @@ class UserEmail extends Mailable
         return $this->subject($subject)
             ->html($renderedBody);
     }
+
+    
+        private  function generateOTP1($userId)
+        {
+            $otp = rand(100000, 999999);
+            MemberOtp::create([
+                'user_id' => $userId,
+                'otp' => $otp,
+                'expires_at' => Carbon::now()->addMinutes(5),
+                'status' => 1,
+            ]);
+            return $otp;
+        }
+    
 
     /**
      * Get the attachments for the message.
