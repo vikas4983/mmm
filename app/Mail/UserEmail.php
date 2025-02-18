@@ -59,7 +59,7 @@ class UserEmail extends Mailable
     {
 
         $userId = $this->user->id;
-        $otp = $this->generateOTP1($userId);
+        $otp = $this->generateOTP($userId);
       
         $footers = Menu::where('status', 1)->where('section', 0)->get();
         $logos = Logo::where('status', 1)->get();
@@ -94,17 +94,7 @@ class UserEmail extends Mailable
     }
 
     
-        private  function generateOTP1($userId)
-        {
-            $otp = rand(100000, 999999);
-            MemberOtp::create([
-                'user_id' => $userId,
-                'otp' => $otp,
-                'expires_at' => Carbon::now()->addMinutes(5),
-                'status' => 1,
-            ]);
-            return $otp;
-        }
+        
     
 
     /**
