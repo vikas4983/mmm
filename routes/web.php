@@ -93,16 +93,16 @@ Route::get('/', function () {
     }
   return view('index');
 })->middleware('checkRegistrationStep');
-Route::get('login', function () {
-    if (session()->get('registration_step') === '2') {
-        return redirect()->route('verification');
-    } else {
-        session()->forget('registration_step');
-        return view('auth.login');
-    }
-})
-    ->name('login')
-    ->middleware(['checkRegistrationStep', 'mobileNumberUpdated']);
+// Route::get('login', function () {
+//     if (session()->get('registration_step') === '2') {
+//         return redirect()->route('verification');
+//     } else {
+//         session()->forget('registration_step');
+//         return view('auth.login');
+//     }
+// })
+//     ->name('login')
+//     ->middleware(['checkRegistrationStep', 'mobileNumberUpdated']);
 Route::post('logout', function () {
     session()->flush();
     return view('index');
