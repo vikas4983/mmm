@@ -96,22 +96,22 @@
       <div class="card">
         <div class="logo-container">
           <!-- Dynamic Logo(s) with Anchor Tag -->
-          <!-- @foreach($logos as $logo) -->
+          <!-- <?php $__currentLoopData = $logos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $logo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> -->
             <a href="https://www.mangalmandap.com" target="_blank"> <!-- Ensure 'link' is the correct field for the logo URL -->
               <img src="https://www.mangalmandap.com/images/mangal_logo.png" alt="Logo"> <!-- Ensure the logo is a PNG with transparency -->
             </a>
-          <!-- @endforeach -->
+          <!-- <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?> -->
         </div>
         <div class="text-center">
           <img src="https://i.imgur.com/Dh7U4bp.png" width="200">
           <div>
-            <span class="d-block mt-3">Dear {{ $user['name'] }}, <br><br> {{ $otp }} is your one time password (OTP) for account verification OTP. Please do not share the OTP with others.</span>
+            <span class="d-block mt-3">Dear <?php echo e($user['name']); ?>, <br><br> <?php echo e($otp); ?> is your one time password (OTP) for Login With OTP. Please do not share the OTP with others.</span>
           </div>
           <div class="footer">
             <!-- Dynamic Footer Menu Links -->
-            @foreach($footers as $footer)
-              <a href="{{ $footer->url }}">{{ $footer->name }}</a>
-            @endforeach
+            <?php $__currentLoopData = $footers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $footer): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <a href="<?php echo e($footer->url); ?>"><?php echo e($footer->name); ?></a>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </div>
         </div>
       </div>
@@ -120,3 +120,4 @@
 </body>
 
 </html>
+<?php /**PATH C:\xampp\htdocs\mmm\storage\framework\views/659f970528243317bc40c48158abdd1d.blade.php ENDPATH**/ ?>

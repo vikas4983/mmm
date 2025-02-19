@@ -58,6 +58,8 @@ use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\RedisController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserActionController;
+use App\Mail\TestingMail;
+use App\Mail\UserEmail;
 use App\Models\CarrierDetail;
 use App\Models\City;
 use App\Models\Email;
@@ -66,8 +68,18 @@ use Aws\Middleware;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Telescope\Http\Controllers\RedisController as ControllersRedisController;
 use App\Services\OptionService;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Request;
 
 // User Routes
+
+Route::get('/email', function (Request $request) {
+    $user = auth()->user();
+    Mail::to($user->email)->send(new TestingMail($user));
+
+    return "Email sent";
+});
+
 Route::get('/', function () {
     if (session()->get('registration_step') === '1') {
         

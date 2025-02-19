@@ -80,6 +80,7 @@ class MemberOtpController
     {
         return view('forgotPassword');
     }
+  
     public function loginOtp(Request $request)
     {
 

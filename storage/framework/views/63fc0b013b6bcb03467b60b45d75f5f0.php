@@ -42,9 +42,9 @@
 <?php
     use App\Models\State;
     use App\Models\City;
-    use App\Models\familyType;
-    use App\Models\familyValue;
-    use App\Models\familyStatus;
+    use App\Models\FamilyType;
+    use App\Models\FamilyValue;
+    use App\Models\FamilyStatus;
     use App\Models\BodyType;
     use App\Models\Complextion;
     use App\Models\DietaryHabit;

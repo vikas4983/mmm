@@ -43,7 +43,7 @@
                                 <p class="row gt-margin-bottom-0">
                                     <label class="col-xs-7 ">Age :</label>
                                     <span class="col-xs-9">
-                                        <?php echo e($searchResult->basicDetails->age); ?>
+                                        <?php echo e($searchResult->basicDetails->age ?? ''); ?>
 
 
                                     </span>
