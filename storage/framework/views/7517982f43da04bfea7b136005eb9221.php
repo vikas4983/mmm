@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title')</title>
+    <title><?php echo $__env->yieldContent('title'); ?></title>
     <meta name="keyword" content="Welcome to Mangalmandap.com" />
     <meta name="description" content="Welcome to Mangalmandap.com" />
     <link type="image/x-icon" href="img/icon.png" rel="shortcut icon" />
@@ -17,34 +17,34 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="#549a11">
 
     <!-- Bootstrap & Custom CSS-->
-    <link href="{{ asset('frontend/assets/css/bootstrap.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/custom-responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/custom.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/assets/css/bootstrap.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/assets/css/custom-responsive.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/assets/css/custom.css')); ?>" rel="stylesheet">
 
     <!-- Font Awsome -->
     <script src="https://kit.fontawesome.com/48403ccd1a.js" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--GOOGLE FONTS-->
     <link
-        href="{{ isset($favicons->name) && !empty($favicons->name)
+        href="<?php echo e(isset($favicons->name) && !empty($favicons->name)
             ? asset('storage/admin/logo-favicon/favicons/' . $favicons->name)
-            : asset('assets/auth/images/favicon.png') }}"
+            : asset('assets/auth/images/favicon.png')); ?>"
         rel="shortcut icon" />
     <link
         href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <!--<link href="https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700|Source+Sans+Pro:300,400,600,700" rel="stylesheet">-->
     <!-- Owl Carousel CSS-->
-    <link href="{{ asset('frontend/assets/css/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('frontend/assets/css/owl.theme.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/assets/css/owl.carousel.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/assets/css/owl.theme.css')); ?>" rel="stylesheet">
 
     <!-- Chosen CSS -->
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/prism.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/chosen.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/prism.css')); ?>">
+    <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/chosen.css')); ?>">
 
     <!-- Angular JS-->
-    <script src="{{ asset('frontend/assets/js/angular.min.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/custom-js/select-all-checkbox.js') }}"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/angular.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/custom-js/select-all-checkbox.js')); ?>"></script>
 
 
 </head>
@@ -61,13 +61,11 @@
             <div id="main">
                 <header class="container gtHeaderForm">
                     <div class="row">
-                        {{-- {{ isset($logos->name) && !empty($logos->name)
-                            ? asset('storage/admin/logo-favicon/logos/' . $logo->name)
-                            : asset('assets/auth/images/logo.png') }} --}}
+                        
                         <!-- Logo -->
                         <div class="col-xxl-5 col-xl-4 col-xs-8 col-md-8 col-lg-5">
                             <a href="/" class="ripplelink">
-                                <img src="{{ isset($logos->name) && $logos->name ? asset('storage/admin/logo-favicon/logos/' . $logos->name) : asset('storage/admin/logo-favicon/logos/mangal_logo-removebg-preview.png') }}"
+                                <img src="<?php echo e(isset($logos->name) && $logos->name ? asset('storage/admin/logo-favicon/logos/' . $logos->name) : asset('storage/admin/logo-favicon/logos/mangal_logo-removebg-preview.png')); ?>"
                                     class="img-responsive gt-header-logo" max-height="50px">
                             </a>
 
@@ -77,8 +75,8 @@
                         <div
                             class="col-xxl-8 col-xl-10 col-lg-11 col-xs-16 col-sm-16 col-md-16 pull-right mt-20 hidden-xs hidden-sm hidden-md">
                             <div class="row">
-                                <form action="{{ route('login') }}" method="post" id="headerloginForm">
-                                    @csrf
+                                <form action="<?php echo e(route('login')); ?>" method="post" id="headerloginForm">
+                                    <?php echo csrf_field(); ?>
                                     <div class="col-xxl-6 col-xl-6 col-lg-6 form-group mt-10">
                                         <div class="input-group">
                                             <span class="input-group-addon" id="basic-addon1"><i
@@ -105,11 +103,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-xxl-5 pull-right text-right mb-5">
-                                    <a href="{{ route('user.forgot.password') }}" class="gt-text-Grey">Forgot Password
+                                    <a href="<?php echo e(route('user.forgot.password')); ?>" class="gt-text-Grey">Forgot Password
                                         ?</a>
                                 </div>
                                 <div class="col-xxl-6 pull-right text-right mb-5">
-                                    <a href="{{ route('login.with.otp') }}" class="gt-text-Grey">Login with OTP</a>
+                                    <a href="<?php echo e(route('login.with.otp')); ?>" class="gt-text-Grey">Login with OTP</a>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +156,7 @@
                                         <a href="forgot-password-password" class="gt-text-Grey">Forgot Password ?</a>
                                     </div>
                                     <div class="col-xxl-6 pull-right text-right mb-5">
-                                        <a href="{{ route('login.with.otp') }}" class="gt-text-Grey"
+                                        <a href="<?php echo e(route('login.with.otp')); ?>" class="gt-text-Grey"
                                             data-toggle="modal">Login with
                                             OTP</a>
                                     </div>
@@ -182,11 +180,11 @@
                             </button>
                         </div>
                         <!-- /.Mobile Menu Button -->
-                        {{-- @dump(session()->all()) --}}
+                        
                         <!-- Menu tabs -->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-left">
-                                <li class="active ripplelink"><a href="{{ url('/') }}"><i
+                                <li class="active ripplelink"><a href="<?php echo e(url('/')); ?>"><i
                                             class="fas fa-home mr-10 fa-lg"></i>Home</a></li>
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
@@ -205,32 +203,32 @@
                                     </ul>
                                 </li>
 
-                                <li class="ripplelink"><a href="{{ url('successStory') }}"><i
+                                <li class="ripplelink"><a href="<?php echo e(url('successStory')); ?>"><i
                                             class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
 
-                                <li class="ripplelink"><a href="{{ url('plans') }}"><i
+                                <li class="ripplelink"><a href="<?php echo e(url('plans')); ?>"><i
                                             class="fas fa-id-card-alt mr-10 fa-lg"></i>Membership</a></li>
 
-                                <li class="ripplelink"><a href="{{ url('help') }}"><i
+                                <li class="ripplelink"><a href="<?php echo e(url('help')); ?>"><i
                                             class="fa fa-phone-square mr-10 fa-lg"></i>Contact Us</a></li>
 
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li
                                     class="active ripplelink gt-border-right-green gt-border-left-green gtBorderRightSMXS0 gtBorderLeftSMXS0">
-                                    <a href="{{ route('login') }}"><i class="fas fa-sign-in-alt mr-10 fa-lg"></i>
+                                    <a href="<?php echo e(route('login')); ?>"><i class="fas fa-sign-in-alt mr-10 fa-lg"></i>
                                         Login</a>
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="{{ url('/') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                    <a href="<?php echo e(url('/')); ?>"><i class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
                                
-                                @if (session()->get('registration_step') != '1')
+                                <?php if(session()->get('registration_step') != '1'): ?>
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                        <form action="{{ url('logout') }}" method="post" style="display: inline;">
-                                            @csrf
+                                        <form action="<?php echo e(url('logout')); ?>" method="post" style="display: inline;">
+                                            <?php echo csrf_field(); ?>
                                             <button type="submit"
                                                 class="ripplelink gt-border-right-green gtBorderRightSMXS0"
                                                 style="background: none; border: none; color: #ffffff; padding: 15px 13px; font: inherit; cursor: pointer; display: inline-flex; align-items: center;">
@@ -238,7 +236,7 @@
                                             </button>
                                         </form>
                                     </li>
-                                @endif
+                                <?php endif; ?>
                             </ul>
                         </div>
                         <!-- /.Menu tabs -->
@@ -248,8 +246,8 @@
             </div>
         </div>
     </div>
-    @yield('styles')
-    @yield('content')
+    <?php echo $__env->yieldContent('styles'); ?>
+    <?php echo $__env->yieldContent('content'); ?>
 
 
 
@@ -261,29 +259,29 @@
                     <h5 class="gt-text-green gt-font-weight-600">
                         Help And Support </h5>
                     <ul class="">
-                        <li><a href="{{ url('help') }}">Help</a></li>
-                        <li><a href="{{ url('faq') }}">FAQ</a></li>
-                        {{-- <li><a href="cms?cms_id=16">Refund Policy</a></li> --}}
-                        <li><a href="{{ url('refund') }}">Refund Policy</a></li>
+                        <li><a href="<?php echo e(url('help')); ?>">Help</a></li>
+                        <li><a href="<?php echo e(url('faq')); ?>">FAQ</a></li>
+                        
+                        <li><a href="<?php echo e(url('refund')); ?>">Refund Policy</a></li>
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Terms & Policy </h5>
                     <ul class="">
-                        <li><a href="{{ url('refund') }}">Terms & Conditions</a></li>
-                        <li><a href="{{ url('refund') }}">Privacy Policy</a></li>
-                        {{-- <li><a href="cms?cms_id=15">Report Misuse</a></li> --}}
-                        <li><a href="{{ url('misuse') }}">Report Misuse</a></li>
+                        <li><a href="<?php echo e(url('refund')); ?>">Terms & Conditions</a></li>
+                        <li><a href="<?php echo e(url('refund')); ?>">Privacy Policy</a></li>
+                        
+                        <li><a href="<?php echo e(url('misuse')); ?>">Report Misuse</a></li>
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Need Help? </h5>
                     <ul class="">
-                        <li><a href="{{ url('login') }}">Login</a></li>
-                        <li><a href="{{ url('/') }}">Register</a></li>
-                        <li><a href="{{ url('plans') }}"><i class="fa fa-star gt-text-orange"></i> Upgrade
+                        <li><a href="<?php echo e(url('login')); ?>">Login</a></li>
+                        <li><a href="<?php echo e(url('/')); ?>">Register</a></li>
+                        <li><a href="<?php echo e(url('plans')); ?>"><i class="fa fa-star gt-text-orange"></i> Upgrade
                                 Plan</a></li>
                     </ul>
                 </div>
@@ -291,9 +289,9 @@
                     <h5 class="gt-text-green gt-font-weight-600">
                         Information </h5>
                     <ul class="">
-                        <li><a href="{{ url('successStory') }}">Success Story</a></li>
-                        {{-- <li><a href="cms?cms_id=8">About Us</a></li> --}}
-                        <li><a href="{{ url('about-us') }}">About Us</a></li>
+                        <li><a href="<?php echo e(url('successStory')); ?>">Success Story</a></li>
+                        
+                        <li><a href="<?php echo e(url('about-us')); ?>">About Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -374,23 +372,23 @@
                     <h5 class="modal-title text-center" id="loginWithOTPLabel">Login With OTP</h5>
                 </div>
                 <div class="modal-body">
-                    <form id="loginWithOTPForm" action="{{ route('login.with.otp') }}" method="post">
-                        @csrf
-                        @if ($errors->any())
+                    <form id="loginWithOTPForm" action="<?php echo e(route('login.with.otp')); ?>" method="post">
+                        <?php echo csrf_field(); ?>
+                        <?php if($errors->any()): ?>
                             <div class="alert alert-danger">
                                 <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
+                                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <li><?php echo e($error); ?></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
-                        @endif
-                        @if (session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif
-                        @if (session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
+                        <?php endif; ?>
+                        <?php if(session('error')): ?>
+                            <div class="alert alert-danger"><?php echo e(session('error')); ?></div>
+                        <?php endif; ?>
+                        <?php if(session('success')): ?>
+                            <div class="alert alert-success"><?php echo e(session('success')); ?></div>
+                        <?php endif; ?>
                         <div class="form-group">
                             <label> Mobile Number</label>
                             <input type="number" name="mobile" class="gt-form-control"
@@ -405,69 +403,12 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script>
-        $(document).ready(function() {
-            $('#loginWithOTPForm').on('submit', function(event) {
-                event.preventDefault(); // Prevent default form submission
-
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function(response) {
-                        // Handle success, e.g., redirect or show OTP form
-                        $('#loginWithOTP').modal('hide'); // Optionally hide the modal
-                        // You may want to redirect to another page or show a success message
-                    },
-                    error: function(xhr) {
-                        // Display the specific error message
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            $('.alert-danger').remove(); // Remove old error messages
-                            $('.modal-body').prepend('<div class="alert alert-danger">' + xhr
-                                .responseJSON.message + '</div>');
-                        } else {
-                            // Handle unexpected errors (if any)
-                            $('.alert-danger').remove();
-                            $('.modal-body').prepend(
-                                '<div class="alert alert-danger">An unexpected error occurred.</div>'
-                                );
-                        }
-
-                        // Hide the error message after 3 seconds
-                        setTimeout(function() {
-                            $('.alert-danger').fadeOut();
-                        }, 3000);
-                    }
-                });
-            });
-        });
-    </script> --}}
+    
 
 
     <!-- Right Click Disable -->
 
-    {{-- <script language=JavaScript>
-    function clickIE4() {
-        if (event.button == 2) {
-            return false;
-        }
-    }
-
-    function clickNS4(e) {
-        if (document.layers || document.getElementById && !document.all) {
-            if (e.which == 2 || e.which == 3) {
-                return false;
-            }
-        }
-    }
-    if (document.layers) {
-        document.captureEvents(Event.MOUSEDOWN);
-        document.onmousedown = clickNS4;
-    } else if (document.all && !document.getElementById) {
-        document.onmousedown = clickIE4;
-    }
-    document.oncontextmenu = new Function("return false")
-</script> --}}
+    
 
     <!-- /.Right Click Disable -->
 
@@ -479,7 +420,7 @@
             }, 15000
         ); // refresh every 10 second
     </script>
-    <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
     <small class="pull-right">
     </small>
     <!-- /. Live Chat -->
@@ -507,11 +448,11 @@
 
     </div>
     <!-- Jquery Js-->
-    <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
 
     <!-- Bootstrap & Green Js -->
-    <script src="{{ asset('frontend/assets/js/bootstrap.js') }}"></script>
-    <script src="{{ asset('frontend/assets/js/green.js') }}"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/bootstrap.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/green.js')); ?>"></script>
     <script>
         $(document).ready(function() {
             $('#body').show();
@@ -519,8 +460,8 @@
         });
     </script>
     <!-- Chosen Js -->
-    <script src="{{ asset('frontend/assets/js/chosen.jquery.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('frontend/assets/js/prism.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/chosen.jquery.js')); ?>" type="text/javascript"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/prism.js')); ?>" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         var config = {
             '.chosen-select': {},
@@ -617,23 +558,10 @@
         }
     </script>
     <!-- Validation js -->
-    <script type="text/javascript" src="{{ asset('frontend/assets/js/validetta.js') }}"></script>
-    {{-- <script>
-        $(function() {
-            $('#frm').validetta({
-                errorClose: false,
-                realTime: true
-            });
-        });
-        $(function() {
-            $('#quick-search').validetta({
-                errorClose: false,
-                realTime: true
-            });
-        });
-    </script> --}}
+    <script type="text/javascript" src="<?php echo e(asset('frontend/assets/js/validetta.js')); ?>"></script>
+    
     <!-- Owl Carousel Js -->
-    <script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/owl.carousel.min.js')); ?>"></script>
     <script>
         // $(document).ready(function() {
         //     $("#inFetBride").owlCarousel({
@@ -892,3 +820,4 @@
         }
     });
 </script>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views/layouts/frontend/master.blade.php ENDPATH**/ ?>

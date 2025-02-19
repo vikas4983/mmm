@@ -69,43 +69,32 @@ use App\Services\OptionService;
 
 // User Routes
 Route::get('/', function () {
+    if (session()->get('registration_step') === '1') {
+        
+        return view('index');
+    }
     $user = Auth::user();
     if (!$user) {
-        return view('/');
+        return view('index');
     } else {
         return redirect()->route('dashboard');
     }
-    if (session()->get('registration_step') === '2') {
-        return redirect()->route('verification');
-    }
-    return view('index');
-})->middleware(['mobileNumberUpdated', 'auth:sanctum', config('jetstream.auth_session')]);
+  return view('index');
+})->middleware('checkRegistrationStep');
 Route::get('login', function () {
     if (session()->get('registration_step') === '2') {
         return redirect()->route('verification');
     } else {
         session()->forget('registration_step');
-        return view('auth.login ');
+        return view('auth.login');
     }
 })
     ->name('login')
     ->middleware(['checkRegistrationStep', 'mobileNumberUpdated']);
 Route::post('logout', function () {
     session()->flush();
-    return redirect('/');
+    return view('index');
 })->name('logout');
-
-// Route::get('/localization/{locale}', function (string $locale) {
-//     if (!in_array($locale, ['en', 'hi', 'fr'])) {
-//         abort(400);
-//     }
-
-//     App::setLocale($locale);
-//     Session::put('locale', $locale);
-//     //Gets the translated message and displays it
-//     echo trans('auth.msg');
-//     // ...
-// });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified', 'authUser'])->group(function () {
     Route::get('/refresh-cache', function () {

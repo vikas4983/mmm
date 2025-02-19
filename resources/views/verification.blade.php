@@ -32,6 +32,7 @@
                         </div>
                         <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verfication
                         </h2>
+                       
                         <p class="inPageSubTitle text-center mb-20">Verify Account now to activate your
                             profile.</p>
                         <article class="text-center text-danger">
@@ -43,6 +44,7 @@
                             $email = session('accountInfo.email');
 
                         @endphp
+                       
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
                             @include('partials.alerts')
                             <h4>Verify Account through SMS</h4>

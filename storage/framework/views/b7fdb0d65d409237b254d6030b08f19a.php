@@ -31,7 +31,6 @@
                         </div>
                         <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">Account Verfication
                         </h2>
-                       
                         <p class="inPageSubTitle text-center mb-20">Verify Account now to activate your
                             profile.</p>
                         <article class="text-center text-danger">
@@ -43,9 +42,8 @@
                             $email = session('accountInfo.email');
 
                         ?>
-                       
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
-                            <?php echo $__env->make('partials.alerts', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+                            <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                             <h4>Verify Account through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>
                             <h5 class="gtMobileNo">+91-<?php echo e($mobile ?? 'NA'); ?></h5>
@@ -409,4 +407,4 @@
     </script>
 <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.frontend.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mmm\resources\views\verification.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.frontend.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\mmm\resources\views/frontend/verification.blade.php ENDPATH**/ ?>

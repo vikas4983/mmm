@@ -56,9 +56,9 @@
 
     $states = State::all();
     $cities = City::all();
-    $familyTypes = familyType::all();
-    $familyValues = familyValue::all();
-    $familyStatus = familyStatus::all();
+    $familyTypes = FamilyType::all();
+    $familyValues = FamilyValue::all();
+    $familyStatus = FamilyStatus::all();
     $bodyTypes = BodyType::all();
     $complextions = Complextion::all();
     $dietaryHabits = DietaryHabit::all();

@@ -180,7 +180,7 @@
                             </button>
                         </div>
                         <!-- /.Mobile Menu Button -->
-
+                        
                         <!-- Menu tabs -->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-left">
@@ -224,6 +224,7 @@
                                     <a href="<?php echo e(url('/')); ?>"><i class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
+                               
                                 <?php if(session()->get('registration_step') != '1'): ?>
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
                                         <form action="<?php echo e(url('logout')); ?>" method="post" style="display: inline;">
