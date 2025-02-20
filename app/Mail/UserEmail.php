@@ -25,21 +25,17 @@ class UserEmail extends Mailable
 {
     use Queueable, SerializesModels;
     use MemberOtpTrait;
-
     protected $user;
     protected $emailTemplate;
-   
+
 
     /**
      * Create a new message instance.
      */
     public function __construct($user, $emailTemplate)
     {
-
         $this->emailTemplate = $emailTemplate;
         $this->user = $user;
-        
-
     }
 
     /**
@@ -57,10 +53,9 @@ class UserEmail extends Mailable
      */
     public function build()
     {
-
         $userId = $this->user->id;
         $otp = $this->generateOTP($userId);
-      
+
         $footers = Menu::where('status', 1)->where('section', 0)->get();
         $logos = Logo::where('status', 1)->get();
 
@@ -92,12 +87,7 @@ class UserEmail extends Mailable
         return $this->subject($subject)
             ->html($renderedBody);
     }
-
-    
-        
-    
-
-    /**
+ /**
      * Get the attachments for the message.
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
