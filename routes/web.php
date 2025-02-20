@@ -75,7 +75,7 @@ use Illuminate\Support\Facades\Request;
 
 Route::get('/email', function (Request $request) {
     $user = auth()->user();
-    Mail::to($user->email)->send(new TestingMail($user));
+    Mail::to($user->email)->queue(new TestingMail($user));
 
     return "Email sent";
 });
