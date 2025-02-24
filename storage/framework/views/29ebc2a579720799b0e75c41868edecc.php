@@ -205,12 +205,76 @@
 <?php endif; ?>
 <script>
     $(document).ready(function() {
-        $('.send-message-modal').click(function() {
+        $('.send-message-modal').click(function(e) {
+            e.preventDefault();
             let receiver_id = $(this).data('id');
-            alert(receiver_id);
-            $('#messageModal' + receiver_id).modal('show');
+            console.log("Receiver ID:", receiver_id);
+            let modal = $('#messageModal' + receiver_id);
+            if (modal.length) {
+                modal.modal('show');
+            } else {
+                console.error("Modal not found for ID:", receiver_id);
+            }
         });
-        $('.modal-close-btn').click(function() {
+
+        $(document).on('submit', '.send-message-form', function(e) {
+            e.preventDefault();
+
+            let form = $(this);
+            let receiver_id = form.attr('data-id');
+            let message = form.find('textarea[name="message"]').val().trim();
+
+            if (!receiver_id) {
+                alert("Error: Receiver ID is missing!");
+                return;
+            }
+
+            if (!message) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            $.ajax({
+                url: '/send-message',
+                method: 'POST',
+                data: {
+                    receiver_id: receiver_id,
+                    message: message,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.action === 'sendMessage') {
+                        $("#successMessage" + receiver_id).html(response.message);
+                    }
+                    $("#message" + receiver_id).val('');
+                    setTimeout(function() {
+                        $("#successMessage" + receiver_id).html("");
+                    }, 2000);
+                    if (response.action === 'expirePlan') {
+                        $("#expireMessage" + receiver_id).html(response.message);
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                    }
+                    // $("#message" + receiver_id).val('');
+                    // setTimeout(function() {
+                    //     $("#successMessage" + receiver_id).html("");
+                    // }, 2000);
+
+                },
+                error: function(xhr) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    alert("Error: " + (xhr.responseJSON?.message ||
+                        "Something went wrong!"));
+                }
+            });
+        });
+
+
+        $(document).on('click', '.modal-close-btn', function() {
             $(this).closest('.modal').modal('hide');
         });
     });
@@ -225,7 +289,7 @@
             const blockUser = $(this).hasClass('block-btn');
             const unBlock = $(this).hasClass('unBlock-btn');
             const viewContact = $(this).hasClass('view-contact-btn');
-            // const sendMessage = $(this).hasClass('send-message-btn');
+
             let action = sendInterest ?
                 '/send-interest' :
                 cancelInterest ?
@@ -236,9 +300,8 @@
                 '/unblock-user' :
                 viewContact ?
                 '/view-contact' :
-                //sendMessage ?
-                //'/send-message' :
                 '';
+
             sendRequest(receiver_id, action);
 
         });
@@ -268,7 +331,17 @@
                     //$("#success-alert" + receiver_id).html(response.message);
                     $("body").append(response.html);
                     $("#contactModal" + receiver_id).modal("show");
+                    
                 }
+                if (response.action === 'exceededContact') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                   setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                   }
                 if (response.action === 'hide') {
                     $("#success-alert" + receiver_id).html(response.message);
                     //  $("body").append(response.html); 
@@ -282,11 +355,16 @@
                 if (response.action === 'expirePlan') {
                     $("body").append(response.html);
                     $("#expireModal").modal("show");
+                    if (response.action === 'expirePlan') {
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                    }
                 }
-                if (response.action === 'sendMessage') {
-                    $("body").append(response.html);
-                    $("#expireModal").modal("show");
-                }
+               
 
                 // }
             },
@@ -297,4 +375,4 @@
 
     }
 </script>
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\profile-card-component.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/profile-card-component.blade.php ENDPATH**/ ?>

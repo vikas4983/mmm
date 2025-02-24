@@ -46,12 +46,13 @@ class User extends Authenticatable
         'status'
     ];
 
-     protected static function boot(){
+    protected static function boot()
+    {
         parent::boot();
-        static::creating(function ($model){
-          $model->uuid = (string) Str::uuid();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
         });
-     }
+    }
 
 
     public function getStatusAttribute($value)
@@ -63,13 +64,16 @@ class User extends Authenticatable
         return $value == 1 ? 'Self' : ($value == 2 ? 'Son' : ($value == 3 ? 'Daughter' : ($value == 4 ? 'Sister' : ($value == 5 ? 'Brother' : ($value == 6 ? 'Relative/Friend' : 'NA')))));
     }
 
-    public function getNameAttribute($value){
+    public function getNameAttribute($value)
+    {
         return ucfirst($value);
     }
-    public function getCreatedAtAttribute($value){
+    public function getCreatedAtAttribute($value)
+    {
         return carbon::parse($value)->format('d M Y, h:i A');
     }
-    public function getUpdatedAtAttribute($value){
+    public function getUpdatedAtAttribute($value)
+    {
         return carbon::parse($value)->format('d M Y, h:i A');
     }
 
@@ -142,26 +146,33 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invitation::class);
     }
-    
-    public function blockedUser(){
+
+    public function blockedUser()
+    {
         return $this->hasMany(UserBlock::class, 'blocker_id');
     }
-    
-    public function blockedByUsers(){
+
+    public function blockedByUsers()
+    {
         return $this->hasMany(UserBlock::class, 'blocked_id');
     }
-    public function viewUser(){
+    public function viewUser()
+    {
         return $this->hasMany(ViewContact::class, 'view_id');
     }
 
-    public function viewByUsers(){
+    public function viewByUsers()
+    {
         return $this->hasMany(ViewContact::class, 'viewed_id');
     }
-
-
-
-
-
+    public function senderMessage()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+    public function receiverMessage()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
     public function getImageUrlAttribute()
     {
 
@@ -169,7 +180,7 @@ class User extends Authenticatable
     }
     public function images()
     {
-        return $this->hasMany(Image::class, 'user_id' , 'id');
+        return $this->hasMany(Image::class, 'user_id', 'id');
     }
 
     public function approvals()

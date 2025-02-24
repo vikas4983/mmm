@@ -73,6 +73,9 @@ use Illuminate\Support\Facades\Request;
 
 // User Routes
 
+Route::get('/test', function () {
+    return view('modals.modal');
+});
 Route::get('/email', function (Request $request) {
     $user = auth()->user();
     Mail::to($user->email)->queue(new TestingMail($user));

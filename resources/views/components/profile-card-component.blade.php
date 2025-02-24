@@ -46,7 +46,7 @@
                                 <p class="row gt-margin-bottom-0">
                                     <label class="col-xs-7 ">Age :</label>
                                     <span class="col-xs-9">
-                                        {{ $searchResult->basicDetails->age ?? ''}}
+                                        {{ $searchResult->basicDetails->age ?? '' }}
 
                                     </span>
                                 </p>
@@ -126,7 +126,6 @@
             <div class="row" bis_skin_checked="1">
                 <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden interest-btn-container"
                     bis_skin_checked="1">
-
                     @if (
                         !empty($user) &&
                             !empty($user->invitationDetails) &&
@@ -147,16 +146,13 @@
                             </a>
                         </div>
                     @endif
-
-
                 </div>
                 <div id="send-message{{ $searchResult->id }}"
                     class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                     <a data-id="{{ $searchResult->id }}"
-                        class="btn btn-default btn-block inResultSendMessageBtn send-message-btn ">
+                        class="btn btn-default btn-block inResultSendMessageBtn send-message-modal ">
                         <i class="fas fa-envelope"></i> Send Message</a>
                 </div>
-
 
                 @if (!empty($user) && !empty($user->blockedUser->contains('blocked_id', $searchResult->id)))
                     <div id="block-user{{ $searchResult->id }}"
@@ -222,10 +218,86 @@
         </div>
     </li>
 @endforeach
+<x-modals.message-modal-component :searchResults="$searchResults" />
+<script>
+    $(document).ready(function() {
+        $('.send-message-modal').click(function(e) {
+            e.preventDefault();
+            let receiver_id = $(this).data('id');
+            console.log("Receiver ID:", receiver_id);
+            let modal = $('#messageModal' + receiver_id);
+            if (modal.length) {
+                modal.modal('show');
+            } else {
+                console.error("Modal not found for ID:", receiver_id);
+            }
+        });
 
+        $(document).on('submit', '.send-message-form', function(e) {
+            e.preventDefault();
+
+            let form = $(this);
+            let receiver_id = form.attr('data-id');
+            let message = form.find('textarea[name="message"]').val().trim();
+
+            if (!receiver_id) {
+                alert("Error: Receiver ID is missing!");
+                return;
+            }
+
+            if (!message) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            $.ajax({
+                url: '/send-message',
+                method: 'POST',
+                data: {
+                    receiver_id: receiver_id,
+                    message: message,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.action === 'sendMessage') {
+                        $("#successMessage" + receiver_id).html(response.message);
+                    }
+                    $("#message" + receiver_id).val('');
+                    setTimeout(function() {
+                        $("#successMessage" + receiver_id).html("");
+                    }, 2000);
+                    if (response.action === 'expirePlan') {
+                        $("#expireMessage" + receiver_id).html(response.message);
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                    }
+                    // $("#message" + receiver_id).val('');
+                    // setTimeout(function() {
+                    //     $("#successMessage" + receiver_id).html("");
+                    // }, 2000);
+
+                },
+                error: function(xhr) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    alert("Error: " + (xhr.responseJSON?.message ||
+                        "Something went wrong!"));
+                }
+            });
+        });
+
+
+        $(document).on('click', '.modal-close-btn', function() {
+            $(this).closest('.modal').modal('hide');
+        });
+    });
+</script>
 <script>
     $(document).on('click',
-        '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn,.send-message-btn',
+        '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn',
         function() {
             const receiver_id = $(this).data('id');
             const sendInterest = $(this).hasClass('send-interest-btn');
@@ -233,7 +305,7 @@
             const blockUser = $(this).hasClass('block-btn');
             const unBlock = $(this).hasClass('unBlock-btn');
             const viewContact = $(this).hasClass('view-contact-btn');
-            const sendMessage = $(this).hasClass('send-message-btn');
+
             let action = sendInterest ?
                 '/send-interest' :
                 cancelInterest ?
@@ -244,9 +316,8 @@
                 '/unblock-user' :
                 viewContact ?
                 '/view-contact' :
-                sendMessage ?
-                '/send-message' :
                 '';
+
             sendRequest(receiver_id, action);
 
         });
@@ -276,7 +347,17 @@
                     //$("#success-alert" + receiver_id).html(response.message);
                     $("body").append(response.html);
                     $("#contactModal" + receiver_id).modal("show");
+                    
                 }
+                if (response.action === 'exceededContact') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                   setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                   }
                 if (response.action === 'hide') {
                     $("#success-alert" + receiver_id).html(response.message);
                     //  $("body").append(response.html); 
@@ -290,11 +371,16 @@
                 if (response.action === 'expirePlan') {
                     $("body").append(response.html);
                     $("#expireModal").modal("show");
+                    if (response.action === 'expirePlan') {
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                    }
                 }
-                if (response.action === 'sendMessage') {
-                    $("body").append(response.html);
-                    $("#expireModal").modal("show");
-                }
+               
 
                 // }
             },

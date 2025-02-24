@@ -18,26 +18,28 @@ trait PlanStatusTrait
         $planStatus = Payment::where('user_id', $userId)->latest('created_at')->first();
         $user = $this->loginUser();
         if (!$planStatus) {
-            response()->json([
+         return   response()->json([
                 'success' => true,
                 'message' => "You don't have any plan, Please purchase a plan",
+                'redirect' => route('plan'),
                 'html' => view('components.expire-plan-component', compact('user'))->render()
-            ])->send();
-            exit();
+            ]);
+            
         }
         if (Carbon::now()->greaterThanOrEqualTo($planStatus->expiry_date)) {
-            $this->clearInvitaions($userId);
-            $planStatus->update([
+           $this->clearInvitaions($userId);
+           $planStatus->update([
                 'is_paid' => 0,
                 'contact' => 0
             ]);
-            response()->json([
+            return response()->json([
                 'success' => true,
                 'action' => 'expirePlan',
                 'message' => 'Your plan has expired. Please purchase a new plan',
+                'redirect' => route('plan'),
                 'html' => view('components.expire-plan-component', compact('user'))->render()
-            ])->send();
-            exit();
+            ]);
+            
         }
         return $planStatus;
     }

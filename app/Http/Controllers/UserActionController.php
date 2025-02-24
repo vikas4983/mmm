@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateMenuRequest;
+use App\Http\Requests\CreateMessageRequest;
 use App\Http\Requests\invitations\InvitationRequest;
 use App\Models\ContactViewByMe;
 use App\Models\ContactViewByOther;
 use App\Models\Invitation;
+use App\Models\Message;
 use App\Models\User;
 use App\Models\UserBlock;
 use App\Models\UserSetting;
@@ -34,7 +37,6 @@ class UserActionController extends Controller
         $validatedData['sender_id'] = $loginuserId;
         if ($validatedData) {
             $sendRequest = $this->send($validatedData);
-
             return response()->json([
                 'success' => true,
                 'action' => 'sendInterest',
@@ -85,7 +87,35 @@ class UserActionController extends Controller
             ]);
         }
     }
+    public function sendMessage(CreateMessageRequest $request)
+    {
+        $userId = $this->loginUser()->id;
+        $user = $this->loginUser();
+        $validatedData = $request->validated();
+        if (!$userId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kindly login first'
+            ], 401);
+        }
+        $planStatusResponse = $this->planStatus($userId);
+        if ($planStatusResponse instanceof \Illuminate\Http\JsonResponse) {
+            return $planStatusResponse;
+        }
 
+        Message::create([
+            'sender_id' => $userId,
+            'receiver_id' => $validatedData['receiver_id'],
+            'message' => $validatedData['message'],
+
+        ]);
+        return response()->json([
+            'success' => true,
+            'action' => 'sendMessage',
+            'message' => '<h1><i class="fas fa-check-circle" style="color: green;"></i></h1><h4 style="color: green;">Message Sent</h4>',
+
+        ]);
+    }
     private function send($validatedData)
     {
         if ($validatedData) {
@@ -101,7 +131,6 @@ class UserActionController extends Controller
             return $existingrequest;
         }
     }
-
     private function cancel($validatedData)
     {
         if ($validatedData) {
@@ -110,14 +139,12 @@ class UserActionController extends Controller
             return $existingrequest;
         }
     }
-
     function blockUser(InvitationRequest $request)
     {
         $loginuserId = Auth::user()->id;
         $validatedData = $request->validated();
         $validatedData['user_id'] = $loginuserId;
         $validatedData['sender_id'] = $loginuserId;
-
         $blockRequest = UserBlock::create([
             'blocker_id' => $validatedData['user_id'],
             'blocked_id' => $validatedData['receiver_id'],
@@ -168,12 +195,9 @@ class UserActionController extends Controller
     </div>',
         ]);
     }
-
     private function getBlockUser($validatedData)
     {
         $user = Auth::user();
-
-        
         // $blockByOther = UserBlock::where('blocker_id', $validatedData['receiver_id'])
         //     ->where('blocked_id', $user->id)
         //     ->exists();
@@ -185,22 +209,17 @@ class UserActionController extends Controller
         //         'message' => 'You have been blocked by this user.',
         //     ]);
         // }
-
-       
-        $existingRequest = UserBlock::where('blocker_id', $user->id)
-            ->where('blocked_id', $validatedData['receiver_id'])
-            ->first();
+        $existingRequest = UserBlock::where('blocker_id', $user->id)->where('blocked_id', $validatedData['receiver_id'])->first();
 
         return $existingRequest;
     }
-
     private function isFriend()
     {
         // $unBlockUser = $this->getUserData();
     }
     private function checkUserSetting($validatedData)
     {
-        return  UserSetting::where('user_id', $validatedData['receiver_id'])->first();
+        return UserSetting::where('user_id', $validatedData['receiver_id'])->first();
     }
 
     function viewContact(InvitationRequest $request)
@@ -212,34 +231,44 @@ class UserActionController extends Controller
         $validatedData['sender_id'] = $user->id;
         if ($validatedData) {
             $userSetting = $this->checkUserSetting($validatedData);
-            $planStatus = $this->planStatus($userId);
+            $planStatusResponse = $this->planStatus($userId);
+            if ($planStatusResponse instanceof \Illuminate\Http\JsonResponse) {
+                return $planStatusResponse;
+            }
             $existingRequest = $this->getUserData($validatedData);
             $contactDetails = $this->getContact($validatedData);
-            if (! empty($userSetting) && $userSetting->mobile === 0) {
+
+            if (!empty($userSetting) && $userSetting->mobile === 0) {
                 return response()->json([
                     'success' => true,
                     'action' => 'hide',
                     'message' => 'Mobile number is hidden ',
                     // 'html' => view('components.view-contact')->render()
                 ]);
-            } elseif (! empty($userSetting) && $userSetting->mobile === 1) {
-                $this->ContactViewLog($validatedData);
+            } elseif (!empty($userSetting) && $userSetting->mobile === 1) {
+                $contactViewLogResponse = $this->ContactViewLog($validatedData);
+                if ($contactViewLogResponse instanceof \Illuminate\Http\JsonResponse) {
+                    return $contactViewLogResponse;
+                }
                 return response()->json([
                     'success' => true,
                     'action' => 'viewContact',
                     'message' => 'Contact Details ',
-                    'html' => view('components.view-contact', compact('contactDetails', 'user'))->render()
+                    'html' => view('components.view-contact', compact('contactDetails', 'user'))->render(),
                 ]);
-            } elseif (! empty($userSetting) && $userSetting->mobile === 2 && !empty($existingRequest) && $existingRequest->is_friend === 1) {
-                $this->ContactViewLog($validatedData);
+            } elseif (!empty($userSetting) && $userSetting->mobile === 2 && !empty($existingRequest) && $existingRequest->is_friend === 1) {
+                $contactViewLogResponse = $this->ContactViewLog($validatedData);
+                if ($contactViewLogResponse instanceof \Illuminate\Http\JsonResponse) {
+                    return $contactViewLogResponse;
+                }
 
                 return response()->json([
                     'success' => true,
                     'action' => 'viewContact',
                     'message' => 'View contact details of friend ',
-                    'html' => view('components.view-contact', compact('contactDetails', 'user'))->render()
+                    'html' => view('components.view-contact', compact('contactDetails', 'user'))->render(),
                 ]);
-            } elseif (! empty($userSetting) && $userSetting->mobile === 2) {
+            } elseif (!empty($userSetting) && $userSetting->mobile === 2) {
                 return response()->json([
                     'success' => true,
                     'action' => 'friend',
@@ -250,33 +279,43 @@ class UserActionController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'No data',
+                'message' => 'Something went wrong',
             ]);
         }
     }
-
     private function getContact($validatedData)
     {
-        $contactDetails =   User::where('id', $validatedData['receiver_id'])->where('status', 1)->first();
-        return $contactDetails;
+        $contactDetails = User::where('id', $validatedData['receiver_id'])->where('status', 1)->first();
+        return $contactDetails ?? [];
     }
-
-
     private function ContactViewLog($validatedData)
     {
-        $existingViewContact = ViewContact::where('view_id', $validatedData['user_id'])->where('viewed_id', $validatedData['receiver_id'])->first();
-        if (!$existingViewContact) {
-            $planStatus = $this->planStatus($validatedData['user_id']);
-            ViewContact::create([
-                'view_id' => $validatedData['user_id'],
-                'viewed_id' => $validatedData['receiver_id']
+        $planStatus = $this->planStatus($validatedData['user_id']);
+        if (!empty($planStatus && $planStatus->contact > 0)) {
+            $existingViewContact = ViewContact::where('view_id', $validatedData['user_id'])
+                ->where('viewed_id', $validatedData['receiver_id'])
+                ->first();
+            if (!$existingViewContact) {
+                ViewContact::create([
+                    'view_id' => $validatedData['user_id'],
+                    'viewed_id' => $validatedData['receiver_id'],
+                ]);
+                $leftMobileNumber = (int) $planStatus->contact - 1;
+                $planStatus->update(['contact' => $leftMobileNumber]);
+            }
+            return $existingViewContact;
+        } else {
+            return response()->json([
+                'success' => false,
+                'action' => 'exceededContact',
+                'message' => '<h4 style="color: red;">
+                                    <i class="fas fa-exclamation-circle"></i> 
+                                    You have exceeded your contact limit.
+                                  </h4>',
+                'redirect' => route('plan')
             ]);
-            $leftMobileNumber = (int) $planStatus->contact - (int)1;
-            $planStatus->update(['contact' => $leftMobileNumber]);
         }
-        return $existingViewContact;
     }
-
     public function interest(OptionService $optionService)
     {
         $searchResults = $this->getInvitation();
