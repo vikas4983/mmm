@@ -70,8 +70,21 @@ use Laravel\Telescope\Http\Controllers\RedisController as ControllersRedisContro
 use App\Services\OptionService;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Artisan;
 
-// User Routes
+Route::get('refresh', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('config:clear');
+    Artisan::call('view:clear');
+    Artisan::call('event:clear');
+    Artisan::call('route:cache');
+    Artisan::call('config:cache');
+    Artisan::call('view:cache');
+    Artisan::call('optimize');
+    return 'refresh project';
+});
+
 
 Route::get('/test', function () {
     return view('modals.modal');
@@ -85,7 +98,7 @@ Route::get('/email', function (Request $request) {
 
 Route::get('/', function () {
     if (session()->get('registration_step') === '1') {
-        
+
         return view('index');
     }
     $user = Auth::user();
@@ -94,7 +107,7 @@ Route::get('/', function () {
     } else {
         return redirect()->route('dashboard');
     }
-  return view('index');
+    return view('index');
 })->middleware('checkRegistrationStep');
 // Route::get('login', function () {
 //     if (session()->get('registration_step') === '2') {
@@ -138,6 +151,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         ->middleware('mobileNumberUpdated');
     Route::get('plan', [UserController::class, 'plan'])
         ->name('plan')
+        ->middleware('mobileNumberUpdated');
+    Route::get('active-plan', [UserController::class, 'activePlan'])
+        ->name('active.plan')
         ->middleware('mobileNumberUpdated');
 
     Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])
@@ -260,15 +276,33 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::post('block-user', [UserActionController::class, 'blockUser'])->name('block.user');
     Route::post('unblock-user', [UserActionController::class, 'unBlockUser'])->name('unblock-user');
     Route::post('view-contact', [UserActionController::class, 'viewContact'])->name('view.contact');
-    Route::post('send-message', [UserActionController::class, 'sendMessage'])->name('send.message');
-
+    //Route::post('send-message', [UserActionController::class, 'sendMessage'])->name('send.message');
     Route::get('my-interest', [UserActionController::class, 'interest'])->name('my.interest');
-    
+    Route::get('interest-sent-by-other', [UserActionController::class, 'SentByOther'])->name('interest.sent.by.other');
+    Route::post('interest-accept-by-me', [UserActionController::class, 'acceptByMe'])->name('interest.accept.by.me');
+    Route::get('interest-accepted-by-me', [UserActionController::class, 'acceptByMeList'])->name('interest.accepted.by.me');
+    Route::get('interest-accept-by-other', [UserActionController::class, 'acceptByOther'])->name('interest.accept.by.other');
+    Route::post('interest-decline-by-me', [UserActionController::class, 'declineByMe'])->name('interest.decline.by.me');
+    Route::get('interest-declined-by-me', [UserActionController::class, 'declineByList'])->name('interest.declined.by.me');
+    Route::get('interest-declined-by-other', [UserActionController::class, 'declineByOtherList'])->name('interest.declined.by.other');
+    Route::post('declined', [UserActionController::class, 'declined'])->name('declined');
+    Route::get('access-control', [UserActionController::class, 'accessControl'])->name('access.control');
+    Route::get('block-by-me', [UserActionController::class, 'blockByMe'])->name('block.by.me');
+    Route::get('block-by-other', [UserActionController::class, 'blockByOther'])->name('block.by.other');
+    Route::get('view-contact-by-me', [UserActionController::class, 'viewContactByMe'])->name('view.contact.by.me');
+    Route::get('view-contact-by-other', [UserActionController::class, 'viewContactByOther'])->name('view.contact.by.other');
+    Route::get('view-profile', [UserActionController::class, 'viewProfile'])->name('view.profile');
+    Route::get('view-profile-by-other', [UserActionController::class, 'viewProfileByOther'])->name('view.profile.by.other');
+    Route::get('my-message', [UserActionController::class , 'message'])->name('message');
+
+
+
+
     // PayuMoney
     Route::post('order', [PayUMoneyController::class, 'order'])->name('order')->middleware('mobileNumberUpdated');
     Route::any('success', [PayUMoneyController::class, 'success'])->name('success');
     Route::any('failure', [PayUMoneyController::class, 'failure'])->name('failure');
-    
+
 
 
 

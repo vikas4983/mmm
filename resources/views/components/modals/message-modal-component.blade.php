@@ -88,7 +88,7 @@
                             @endforeach
                             <h4>{{ $prefix->name }}{{ $searchResult->matrimony_id ?? '' }}</h4>
                             <div id="successMessage{{ $searchResult->id ?? '' }}"></div>
-                            <div id="expireMessage{{ $searchResult->id ?? '' }}" style="color: red"></div>
+                            <div id="expireMessage{{ $searchResult->id ?? '' }}" style="color: #AF3042"></div>
                         </div>
                         {{-- RIGHT SIDE: CONTENT --}}
                         <div class="col-md-8" style="margin-top: -2.5rem">
@@ -101,8 +101,10 @@
                                     <div class="row text-center">
                                         <button class="btn gt-btn-green gt-cursor send-message-btn"
                                             type="submit">Send</button>
-                                        <button class="btn gt-btn-green gt-cursor send-message-btn"
-                                            type="submit">View Chat</button>
+                                        {{-- <button class="btn gt-btn-green gt-cursor send-message-btn"
+                                            type="submit">View Chat</button> --}}
+                                  <a href="{{route('message')}}" class="btn gt-btn-green gt-cursor send-message-btn">View Message</a>
+
                                     </div>
                                 </form>
 

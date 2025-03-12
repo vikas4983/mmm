@@ -28,11 +28,13 @@ use App\Models\MotherOccupation;
 use App\Models\MotherTongue;
 use App\Models\Occupation;
 use App\Models\Payment;
+use App\Models\Plan;
 use App\Models\ProfileId;
 use App\Models\Rashi;
 use App\Models\Religion;
 use App\Models\State;
 use App\Models\User;
+use App\Models\ViewProfile;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -85,7 +87,7 @@ class UserController extends Controller
         $premiumUsersCount = count($this->paidUsers());
         $profilePrefixs = $this->profilePrefix();
         $paidUsers = $this->paidUsers();
-        
+
         $spotlightUsers = $this->spotlightUsers();
 
         $users = User::with([
@@ -120,7 +122,7 @@ class UserController extends Controller
     }
 
 
-    
+
     /**
      * Show the form for creating a new resource.
      */
@@ -132,9 +134,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -165,10 +165,24 @@ class UserController extends Controller
     public function showProfile($uuid)
     {
         $profile = User::where('uuid', $uuid)->where('status', 1)->first();
-        if(!$profile){
+        if (!$profile) {
             return redirect()->route('dashboard')->with('error', 'Something went wrong!');
         }
+        $this->viewProfile($profile->id);
         return view('frontend.users.profiles.profile', compact('profile'));
+    }
+    private function viewProfile($id)
+    {
+        if (!$id) {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+        $viewPrfile = ViewProfile::where('viewed_user_id', $id)->first();
+        if (!$viewPrfile) {
+            $viewPrfile = ViewProfile::create([
+                'viewer_id' => Auth::user()->id,
+                'viewed_user_id' => $id,
+            ]);
+        }
     }
 
     public function myProfile()
@@ -192,15 +206,39 @@ class UserController extends Controller
 
     public function plan()
     {
-        return view('frontend.users.plans.plan');
+        $activePlan = Payment::where('user_id', Auth::user()->id)->where('is_paid', 1)->latest('created_at')->first();
+        if (! $activePlan) {
+            return view('frontend.users.plans.plan');
+        }
+        return view('frontend.users.plans.plan', compact('activePlan'));
+    }
+    public function activePlan()
+    {
+        $activePlan = Payment::where('user_id', Auth::user()->id)
+            ->where('is_paid', 1)
+            ->latest('created_at')
+            ->first();
+
+        if (!$activePlan) {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+        $plan = Plan::where('id', $activePlan->plan_id)
+            ->where('status', 1)
+            ->first();
+
+        if (!$plan) {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+        $activePlanArray = $activePlan->toArray();
+        $planArray = $plan->toArray();
+        $activePlanDetails = array_merge($activePlanArray, $planArray);
+        return view('frontend.users.plans.activePlan', compact('activePlanDetails'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
-    {
-    }
+    public function edit(User $user) {}
 
     /**
      * Update the specified resource in storage.
@@ -358,7 +396,7 @@ class UserController extends Controller
                 'email' => $user['email'],
                 'action' => $validatedData['action'],
             ];
-            
+
 
             session(['mobileVerification' => 'pending']);
             session()->put('data', $data);
@@ -879,9 +917,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
-    {
-    }
+    public function destroy($id) {}
 
     public function checkBoxDelete(Request $request)
     {

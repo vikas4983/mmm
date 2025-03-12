@@ -19,11 +19,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\OptionService;
 use App\Services\FilterService;
 use App\Traits\UserBlockTrait;
+use App\Traits\UserStatusTrait;
 
 class SearchController extends Controller
 {
     use SearchGender;
     use UserBlockTrait;
+    use UserStatusTrait;
 
 
     protected $optionService;
@@ -92,13 +94,17 @@ class SearchController extends Controller
         }
 
         $gender = $this->getGender($user);
-        $blockedIds =  $blockIds = $this->userBlock($user);
+        $blockedIds =  $this->userBlock($user);
+        $userStatusIds = $this->userStatus();
         [$minYear, $maxYear] = $this->getMinMaxYear($validatedData['min_age'], $validatedData['max_age']);
         $religions = $this->getReligion($validatedData['religion'] ?? []);
         $castes = $this->getCaste($validatedData['caste'] ?? []);
-        $query = User::query()->where('gender', $gender);
+        $query = User::query()->where('gender', $gender)->where('status', 1)->orderBy('id', 'desc');
         if (!empty($blockedIds)) {
             $query->whereNotIn('id', $blockedIds);
+        }
+        if (!empty($userStatusIds)) {
+            $query->whereNotIn('id', $userStatusIds);
         }
         if (!empty($validatedData['min_age'] && $validatedData['max_age']) && !empty($validatedData['religion']) && !empty($validatedData['caste'])) {
             $query->whereHas('basicDetails', function ($query) use ($religions, $castes, $minYear, $maxYear) {

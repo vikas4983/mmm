@@ -146,6 +146,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(Invitation::class);
     }
+    public function senderInvitation()
+    {
+        return $this->hasMany(Invitation::class, 'sender_id', 'id'); // User is sender
+    }
+
+    public function receiverInvitation()
+    {
+        return $this->hasMany(Invitation::class, 'receiver_id', 'id'); // User is receiver
+    }
+
 
     public function blockedUser()
     {
@@ -156,6 +166,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserBlock::class, 'blocked_id');
     }
+
     public function viewUser()
     {
         return $this->hasMany(ViewContact::class, 'view_id');
@@ -165,14 +176,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(ViewContact::class, 'viewed_id');
     }
+
+    public function viewProfileByMe()
+    {
+        return $this->hasMany(ViewProfile::class, 'viewer_id');
+    }
+    public function viewProfileByOther()
+    {
+        return $this->hasMany(ViewProfile::class, 'viewed_user_id');
+    }
+
     public function senderMessage()
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
+   
+   
     public function receiverMessage()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
+    
+    
+    
     public function getImageUrlAttribute()
     {
 

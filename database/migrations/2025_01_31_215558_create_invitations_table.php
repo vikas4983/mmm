@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('invitations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('sender_id');
-            $table->integer('receiver_id');
+            $table->foreignId('sender_id');
+            $table->foreignId('receiver_id');
             $table->integer('is_sent')->default(0);
             $table->integer('is_friend')->default(0);
             $table->integer('status')->default(1);

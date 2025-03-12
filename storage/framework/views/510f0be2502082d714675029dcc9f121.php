@@ -168,11 +168,11 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-xxl-12 col-xl-12 col-xs-16 col-sm-16 col-md-16 gt-upload-photo">
                 <div class="inUploadPhoto mb-30">
                     <?php echo $__env->make('alerts.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                  <div class="gt-profile-pic-title">
+                    <div class="gt-profile-pic-title">
                         <h4>Change Or Upload Profile Picture</h4>
                     </div>
                     <div class="gt-profile-pic-panel">
@@ -193,17 +193,18 @@
                                                     <?php echo csrf_field(); ?>
                                                     <input type="hidden" name="id" value="<?php echo e($image->id); ?>">
 
-                                                    <button class="btn btn-danger btn-block mt-5" onclick="deleteDisplayImage(event)"> Delete Profile
+                                                    <button class="btn btn-danger btn-block mt-5"
+                                                        onclick="deleteDisplayImage(event)"> Delete Profile
                                                         Picture</button>
                                                 </form>
                                             <?php endif; ?>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         <?php if($user->images->isEmpty()): ?>
-                                        <img src="<?php echo e($user->gender == 'male'
-                                            ? asset('storage/users/images/male-default.jpg')
-                                            : asset('storage/users/images/female-default.jpg')); ?>"
-                                            class="img-responsive gtFullWidth" alt="User Image">
-                                    <?php endif; ?>
+                                            <img src="<?php echo e($user->gender == 'male'
+                                                ? asset('storage/users/images/male-default.jpg')
+                                                : asset('storage/users/images/female-default.jpg')); ?>"
+                                                class="img-responsive gtFullWidth" alt="User Image">
+                                        <?php endif; ?>
                                         <a href="#addPhoto1Modal" data-toggle="modal" data-info="<?php echo e($image->id ?? ''); ?>"
                                             class="btn gt-btn-green btn-block mt-5">
                                             Add Photos
@@ -229,7 +230,7 @@
                                                 <div class="text-center">
                                                     <!-- Flexbox container for buttons -->
                                                     <div class="d-flex flex-row justify-content-center align-items-center gap-2"
-                                                        style="flex-wrap: nowrap;">
+                                                        style="display: flex; justify-content: center;">
                                                         <!-- DP Image Button -->
                                                         <form action="<?php echo e(route('dp.image')); ?>" method="post"
                                                             class="m-0">
@@ -239,12 +240,12 @@
                                                             <button type="submit"
                                                                 class="btn btn-icon btn-outline-danger btn-rounded-circle"
                                                                 style="color:#E47203">
-                                                                <i class="mdi mdi-star-face"></i>
+                                                                <i class="mdi mdi-star-face" title="Set as Display Image"></i>
                                                             </button>
                                                         </form>
                                                         <a href="#<?php echo e($image->id); ?>" data-toggle="modal"
                                                             class="btn btn-icon btn-outline-danger btn-rounded-circle"
-                                                            style="color:#499202">
+                                                            style="color:#499202" title="Change Image">
                                                             <i class="mdi mdi-image-plus"></i>
                                                         </a>
                                                         <form action="<?php echo e(route('delete.image')); ?>" method="post"
@@ -254,7 +255,7 @@
                                                                 value="<?php echo e($image->id); ?>">
                                                             <button type="submit"
                                                                 class="btn btn-icon btn-outline-danger btn-rounded-circle"
-                                                                style="color:#D74F4B" onclick="deleteImage(event)">
+                                                                style="color:#D74F4B" onclick="deleteImage(event)" title="Delete Image">
                                                                 <i class="mdi mdi-delete-empty"></i>
                                                             </button>
                                                         </form>
@@ -346,12 +347,12 @@
                             <p class="text-center">Select image and then click on submit button to upload image</p>
                             <div class="col-xxl-10 col-xxl-offset-3">
                                 <center>
-                                    <img src="<?php echo e(isset($user->image) && $user->image 
-                                    ? asset('storage/users/images/' . $user->image) 
-                                    : ($user->gender === 'male' 
-                                        ? asset('storage/users/images/male-default.jpg') 
-                                        : asset('storage/users/images/female-default.jpg'))); ?>"
-                            class="img-fluid img-thumbnail" id="photo2_prev">
+                                    <img src="<?php echo e(isset($user->image) && $user->image
+                                        ? asset('storage/users/images/' . $user->image)
+                                        : ($user->gender === 'male'
+                                            ? asset('storage/users/images/male-default.jpg')
+                                            : asset('storage/users/images/female-default.jpg'))); ?>"
+                                        class="img-fluid img-thumbnail" id="photo2_prev">
                                     <input type="file" name="photo2" id="photo2" onchange="readURL2(this);">
 
                                     <label for="photo2" class="btn gt-btn-orange btn-block gt-margin-top-20">
@@ -372,47 +373,48 @@
         <!-- Photo Change Modal -->
         <?php $__currentLoopData = $user->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php if($image->dp_image === '0'): ?>
-            <div class="modal fade" id="<?php echo e($image->id); ?>" tabindex="-1" role="dialog" aria-labelledby="changePhoto1Modal"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header text-center">
-                        <div class="col-12">
-                            <h5 class="modal-title" id="exampleModalLabel">Change Photo  <button type="button"
-                                    class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </h5>
+                <div class="modal fade" id="<?php echo e($image->id); ?>" tabindex="-1" role="dialog"
+                    aria-labelledby="changePhoto1Modal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <div class="col-12">
+                                    <h5 class="modal-title" id="exampleModalLabel">Change Photo <button type="button"
+                                            class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <form action="<?php echo e(route('change.image')); ?>" method="post" enctype="multipart/form-data"
+                                    class="editPhotoModal">
+                                    <?php echo csrf_field(); ?>
+
+                                    <p class="text-center">Select image and then click on submit button to upload image</p>
+                                    <div class="col-xxl-10 col-xxl-offset-3">
+                                        <center>
+                                            <img src="<?php echo e(isset($image->name) && $image->name ? asset('storage/users/images/' . $image->name) : ($image->name == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
+                                                class="img-fluid img-thumbnail" id="photo3_prev">
+                                            <input type="file" name="photo3" id="photo3"
+                                                onchange="readURL3(this);">
+                                            <input type="hidden" name="id" value="<?php echo e($image->id ?? ''); ?>">
+
+                                            <label for="photo3" class="btn gt-btn-orange btn-block gt-margin-top-20">
+                                                Select Image </label>
+                                            <div class="form-group text-center mt-3">
+
+                                                <input type="submit" name="editPhoto3" value="SUBMIT"
+                                                    class="btn gt-btn-green btn-block gt-margin-top-20">
+                                            </div>
+                                        </center>
+                                    </div>
+                                </form>
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="modal-body">
-                        <form action="<?php echo e(route('change.image')); ?>" method="post" enctype="multipart/form-data"
-                            class="editPhotoModal">
-                            <?php echo csrf_field(); ?>
-
-                            <p class="text-center">Select image and then click on submit button to upload image</p>
-                            <div class="col-xxl-10 col-xxl-offset-3">
-                                <center>
-                                    <img src="<?php echo e(isset($image->name) && $image->name ? asset('storage/users/images/' . $image->name) : ($image->name == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg'))); ?>"
-                                        class="img-fluid img-thumbnail" id="photo3_prev">
-                                    <input type="file" name="photo3" id="photo3" onchange="readURL3(this);">
-                                    <input type="hidden" name="id" value="<?php echo e($image->id ?? ''); ?>">
-
-                                    <label for="photo3" class="btn gt-btn-orange btn-block gt-margin-top-20">
-                                        Select Image </label>
-                                    <div class="form-group text-center mt-3">
-
-                                        <input type="submit" name="editPhoto3" value="SUBMIT"
-                                            class="btn gt-btn-green btn-block gt-margin-top-20">
-                                    </div>
-                                </center>
-                            </div>
-                        </form>
-                        <div class="clearfix"></div>
-                    </div>
                 </div>
-            </div>
-        </div>
             <?php endif; ?>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
@@ -506,19 +508,19 @@
     </script>
     <script>
         function deleteDisplayImage(e) {
-          let confirmDelete = confirm('Are you sure you want to delete Display Picture?');
-           if (!confirmDelete) {
+            let confirmDelete = confirm('Are you sure you want to delete Display Picture?');
+            if (!confirmDelete) {
                 e.preventDefault();
             }
-         }
+        }
     </script>
     <script>
         function deleteImage(e) {
-          let confirmDelete = confirm('Are you sure you want to delete this image?');
-           if (!confirmDelete) {
+            let confirmDelete = confirm('Are you sure you want to delete this image?');
+            if (!confirmDelete) {
                 e.preventDefault();
             }
-         }
+        }
     </script>
 <?php $__env->stopSection(); ?>
 

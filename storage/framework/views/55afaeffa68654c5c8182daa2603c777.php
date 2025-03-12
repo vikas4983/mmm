@@ -5,6 +5,8 @@
                 <div class="col-xxl-5 col-xl-5 col-xs-16 col-lg-5 gridFullWidth gt-main-name" bis_skin_checked="1">
                     <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
                         <?php echo e($searchResult->name ?? 'NA'); ?>(<?php echo e($prefix->name ?? 'NA'); ?>-<?php echo e($searchResult->matrimony_id ?? 'NA'); ?>)
+                        - <?php echo e($searchResult->id); ?>
+
                     </h4>
                 </div>
                 <span id="success-alert<?php echo e($searchResult->id); ?>"></span>
@@ -117,33 +119,132 @@
                 </div>
             </div>
         </a>
-        <style>
-
-        </style>
         <div class="gt-result-panel-footer" bis_skin_checked="1">
             <div class="row" bis_skin_checked="1">
                 <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden interest-btn-container"
                     bis_skin_checked="1">
-                    <?php if(
-                        !empty($user) &&
-                            !empty($user->invitationDetails) &&
-                            $user->invitationDetails->where('receiver_id', $searchResult->id)->where('is_sent', 1)->isNotEmpty()): ?>
-                        <div id="send-request<?php echo e($searchResult->id); ?>">
-                            <a class="btn btn-default btn-block inResultSendMessageBtn cancel-interest-btn"
-                                data-id="<?php echo e($searchResult->id); ?>">
-                                <span style="color:#A0061C">
-                                    <i class="fas fa-times gt-margin-right-5 text-danger"></i> Cancel
-                                </span>
-                            </a>
-                        </div>
-                    <?php else: ?>
-                        <div id="send-request<?php echo e($searchResult->id); ?>">
-                            <a class="btn btn-default btn-block inResultSendMessageBtn send-interest-btn"
-                                data-id="<?php echo e($searchResult->id); ?>">
-                                <i class="fas fa-heart gt-margin-right-5"></i> Interest
-                            </a>
-                        </div>
+                    <?php if(!empty($user)): ?>
+                        <?php
+                            $invitationFound = false;
+                            $isDecline = false;
+
+                        ?>
+
+                        <?php $__currentLoopData = $user->senderInvitation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sender): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if(
+                                $sender->receiver_id === $searchResult->id &&
+                                    $sender->is_sent === 1 &&
+                                    $sender->is_friend === 1 &&
+                                    $sender->is_decline === 0): ?>
+                                <?php $invitationFound = true; ?>
+                                <div id="send-request<?php echo e($searchResult->id); ?>">
+                                    <a class="btn btn-default btn-block inResultSendMessageBtn cancel-interest-btn"
+                                        data-id="<?php echo e($searchResult->id); ?>">
+                                        <span>
+                                            <i class="fas fa-check gt-margin-right-5"
+                                                style="color: #28a745; transition: transform 0.3s;"></i>Friend
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php elseif(
+                                $sender->receiver_id === $searchResult->id &&
+                                    $sender->is_sent === 1 &&
+                                    $sender->is_friend === 0 &&
+                                    $sender->is_decline === 0): ?>
+                                <?php $invitationFound = true; ?>
+                                <div id="send-request<?php echo e($searchResult->id); ?>">
+                                    <a class="btn btn-default btn-block inResultSendMessageBtn decline-interest-btn-by-other"
+                                        data-id="<?php echo e($searchResult->id); ?>">
+                                        <span style="color:#A0061C">
+                                            <i class="fas fa-times gt-margin-right-5 text-danger"></i>Cancel
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php elseif(
+                                $sender->receiver_id === $searchResult->id &&
+                                    $sender->is_sent === 1 &&
+                                    $sender->is_friend === 0 &&
+                                    $sender->is_decline === 1): ?>
+                                <?php $invitationFound = true; ?>
+                                <div class="row" id="accept-by-me<?php echo e($searchResult->id); ?>"
+                                    style="display: flex; margin-left: 35px;">
+                                    <a class="btn btn-default inResultSendMessageBtn " style="margin-right: 1.5rem"
+                                        data-id="<?php echo e($searchResult->id); ?>">
+                                        <span style="color:#A0061C; margin-left:-1.5rem;">
+                                            <i class="fas fa-exclamation-circle text-danger gt-margin-right-5"></i>Your
+                                            request rejected
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                        <?php $__currentLoopData = $user->receiverInvitation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $receiver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($receiver->sender_id === $searchResult->id && $receiver->is_sent === 1 && $receiver->is_friend === 1): ?>
+                                <?php $invitationFound = true; ?>
+                                <div id="send-request<?php echo e($searchResult->id); ?>">
+                                    <a class="btn btn-default btn-block inResultSendMessageBtn cancel-interest-btn"
+                                        data-id="<?php echo e($searchResult->id); ?>">
+                                        <span>
+                                            <i class="fas fa-check gt-margin-right-5"
+                                                style="color: #28a745; transition: transform 0.3s;"></i>Friend
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php elseif(
+                                $receiver->sender_id === $searchResult->id &&
+                                    $receiver->is_sent === 1 &&
+                                    $receiver->is_friend === 0 &&
+                                    $receiver->is_decline === 0): ?>
+                                <?php $invitationFound = true; ?>
+                                <div class="row" id="accept-by-me<?php echo e($searchResult->id); ?>"
+                                    style="display: flex; margin-left: 35px;">
+                                    <a class="btn btn-default inResultSendMessageBtn accept-interest-btn-by-me"
+                                        style="margin-left: 1.5rem" data-id="<?php echo e($searchResult->id); ?>">
+                                        <i class="fas fa-handshake gt-margin-right-5"></i>Accept <span
+                                            style="color: #E47203">|</span>
+                                    </a>
+                                    <a class="btn btn-default inResultSendMessageBtn decline-interest-btn-by-me"
+                                        style="margin-right: 1.5rem" data-id="<?php echo e($searchResult->id); ?>">
+                                        <span style="color:#A0061C; margin-left:-1.5rem;">
+                                            <i class="fas fa-times gt-margin-right-5"></i>Decline
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php elseif(
+                                $receiver->sender_id === $searchResult->id &&
+                                    $receiver->is_sent === 1 &&
+                                    $receiver->is_friend === 0 &&
+                                    $receiver->is_decline === 1): ?>
+                                <?php $invitationFound = true; ?>
+                                <div class="row" id="accept-by-me<?php echo e($searchResult->id); ?>"
+                                    style="display: flex; margin-left: 35px;">
+                                    <a class="btn btn-default inResultSendMessageBtn decline-btn "
+                                        data-id="<?php echo e($searchResult->id); ?>">
+                                        <span
+                                            style="color:#A0061C; text-align: center;border: none; padding: 7px 10px 7px 10px;border-radius: 5px;margin-bottom: 0px;font-size: 14px; background: none;transition: all 0.3sease">
+                                            <i class="fas fa-times gt-margin-right-5"></i>Decline
+                                        </span>
+                                    </a>
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                        <?php if(!$invitationFound): ?>
+                            <div id="send-request<?php echo e($searchResult->id); ?>">
+                                <a class="btn btn-default btn-block inResultSendMessageBtn send-interest-btn"
+                                    data-id="<?php echo e($searchResult->id); ?>">
+                                    <i class="fas fa-heart gt-margin-right-5"></i>Interest
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
+
+                    <style>
+                        .fa-check:hover {
+                            transform: scale(1.5);
+                        }
+                    </style>
                 </div>
                 <div id="send-message<?php echo e($searchResult->id); ?>"
                     class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
@@ -157,7 +258,7 @@
                         class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                         <a data-id="<?php echo e($searchResult->id); ?>"
                             class="btn btn-default btn-block inResultBlockBtn unBlock-btn">
-                            <i class="fas fa-lock gt-margin-right-5"></i> Unblock
+                            <i class="fas fa-lock gt-margin-right-5"></i>Unblock
                         </a>
                     </div>
                 <?php else: ?>
@@ -165,20 +266,16 @@
                         class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                         <a data-id="<?php echo e($searchResult->id); ?>"
                             class="btn btn-default btn-block inResultBlockBtn block-btn">
-                            <i class="fas fa-lock gt-margin-right-5"></i> Block
+                            <i class="fas fa-lock gt-margin-right-5"></i>Block
                         </a>
                     </div>
                 <?php endif; ?>
-
-                
-                
                 <div id="view-contact<?php echo e($searchResult->id); ?>"
                     class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden" bis_skin_checked="1">
                     <a data-id="<?php echo e($searchResult->id); ?>"
                         class="btn btn-default btn-block inResultSendMessageBtn view-contact-btn">
                         <i class="fas fa-mobile-alt"></i> View Contact </a>
                 </div>
-                
             </div>
         </div>
     </li>
@@ -205,19 +302,81 @@
 <?php endif; ?>
 <script>
     $(document).ready(function() {
-        $('.send-message-modal').click(function() {
+        $('.send-message-modal').click(function(e) {
+            e.preventDefault();
             let receiver_id = $(this).data('id');
-            alert(receiver_id);
-            $('#messageModal' + receiver_id).modal('show');
+            console.log("Receiver ID:", receiver_id);
+            let modal = $('#messageModal' + receiver_id);
+            if (modal.length) {
+                modal.modal('show');
+            } else {
+                console.error("Modal not found for ID:", receiver_id);
+            }
         });
-        $('.modal-close-btn').click(function() {
+        $(document).on('submit', '.send-message-form', function(e) {
+            e.preventDefault();
+
+            let form = $(this);
+            let receiver_id = form.attr('data-id');
+            let message = form.find('textarea[name="message"]').val().trim();
+            if (!message) {
+                alert("Please enter a message.");
+                return;
+            }
+
+            $.ajax({
+                url: '/send-message',
+                method: 'POST',
+                data: {
+                    receiver_id: receiver_id,
+                    message: message,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+
+                success: function(response) {
+                    if (response.action === 'sendMessage') {
+                        $("#successMessage" + receiver_id).html(response.message);
+                    }
+                    $("#message" + receiver_id).val('');
+                    setTimeout(function() {
+                        $("#successMessage" + receiver_id).html("");
+                    }, 2000);
+                    if (response.action === 'expirePlan') {
+                        $("#expireMessage" + receiver_id).html(response.message);
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                    }
+                    if (response.action === 'takePlan') {
+                        $("#expireMessage" + receiver_id).html(response.message);
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
+
+                    }
+
+
+                },
+                error: function(xhr) {
+                    console.error("AJAX Error:", xhr.responseText);
+                    alert("Error: " + (xhr.responseJSON?.message ||
+                        "Something went wrong!"));
+                }
+            });
+        });
+        $(document).on('click', '.modal-close-btn', function() {
             $(this).closest('.modal').modal('hide');
         });
     });
 </script>
 <script>
     $(document).on('click',
-        '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn',
+        '.send-interest-btn, .cancel-interest-btn, .block-btn, .unBlock-btn, .view-contact-btn, .accept-interest-btn-by-me, .decline-interest-btn-by-me, .decline-btn',
         function() {
             const receiver_id = $(this).data('id');
             const sendInterest = $(this).hasClass('send-interest-btn');
@@ -225,7 +384,9 @@
             const blockUser = $(this).hasClass('block-btn');
             const unBlock = $(this).hasClass('unBlock-btn');
             const viewContact = $(this).hasClass('view-contact-btn');
-            // const sendMessage = $(this).hasClass('send-message-btn');
+            const acceptByMe = $(this).hasClass('accept-interest-btn-by-me');
+            const declineByMe = $(this).hasClass('decline-interest-btn-by-me');
+            const declined = $(this).hasClass('decline-btn');
             let action = sendInterest ?
                 '/send-interest' :
                 cancelInterest ?
@@ -236,11 +397,14 @@
                 '/unblock-user' :
                 viewContact ?
                 '/view-contact' :
-                //sendMessage ?
-                //'/send-message' :
+                acceptByMe ?
+                '/interest-accept-by-me' :
+                declineByMe ?
+                '/interest-decline-by-me' :
+                declined ?
+                '/declined' :
                 '';
             sendRequest(receiver_id, action);
-
         });
 
     function sendRequest(receiver_id, action) {
@@ -255,7 +419,9 @@
                 if (response.action === 'sendInterest') {
                     $("#success-alert" + receiver_id).html(response.message);
                     $("#send-request" + receiver_id).html(response.button)
+                    $("#accept-by-me" + receiver_id).html(response.button)
                 }
+
                 if (response.action === 'blockUser') {
                     $("#success-alert" + receiver_id).html(response.message);
                     $("#block-user" + receiver_id).html(response.button);
@@ -268,6 +434,16 @@
                     //$("#success-alert" + receiver_id).html(response.message);
                     $("body").append(response.html);
                     $("#contactModal" + receiver_id).modal("show");
+
+                }
+                if (response.action === 'exceededContact') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    setTimeout(function() {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    }, 2000);
+
                 }
                 if (response.action === 'hide') {
                     $("#success-alert" + receiver_id).html(response.message);
@@ -279,16 +455,45 @@
                     //  $("body").append(response.html); 
                     //  $("#contactModal" + receiver_id).modal("show");
                 }
+                if (response.action === 'acceptByMe') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    $("#accept-by-me" + receiver_id).html(response.button);
+
+                }
+                if (response.action === 'declineByMe') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    $("#accept-by-me" + receiver_id).html(response.button);
+
+                }
+                if (response.action === 'declined') {
+                    $("#success-alert" + receiver_id).html(response.message);
+                    $("#accept-by-me" + receiver_id).html(response.button);
+
+                }
+                if (response.action === 'takePlan') {
+                    // $("body").append(response.html);
+                    // $("#expireModal").modal("show");
+                    $("#success-alert" + receiver_id).html(response.message);
+
+                    setTimeout(function() {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    }, 2000);
+                }
+
                 if (response.action === 'expirePlan') {
                     $("body").append(response.html);
                     $("#expireModal").modal("show");
-                }
-                if (response.action === 'sendMessage') {
-                    $("body").append(response.html);
-                    $("#expireModal").modal("show");
-                }
+                    if (response.action === 'expirePlan') {
+                        setTimeout(function() {
+                            if (response.redirect) {
+                                window.location.href = response.redirect;
+                            }
+                        }, 2000);
 
-                // }
+                    }
+                }
             },
             error: function(xhr) {
                 alert(xhr.responseJSON.message);

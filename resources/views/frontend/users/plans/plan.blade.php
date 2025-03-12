@@ -15,7 +15,9 @@
             <div class="col-xs-16 col-lg-16 col-xxl-16 col-xl-16">
                 <div class="row mb-20">
                     @foreach ($plans as $plan)
-                        <label for="gt-plan-28" class="col-xxl-4 col-xl-4 col-xs-16 col-lg-8">
+                        <label for="gt-plan-28" class="col-xxl-4 col-xl-4 col-xs-16 col-lg-8"
+                            >
+                            {{-- style="{{ $plan->id === $activePlan->plan_id ? '' : '' }}" --}}
                             <div class="gt-plan" id="setselected28">
                                 <div class="gt-plan-header">
                                     {{-- <h1><i class="fa fa-certificate"></i></h1> --}}
@@ -87,38 +89,69 @@
                                 </div>
                                 <!-- /. Plan display for mobile -->
                                 <!-- Plan for desktop -->
-                                <div class="gt-plan-body hidden-xs hidden-sm hidden-md">
-                                    <ul class="gt-plan-desc">
-                                        <li>
-                                            <h3>Duration</h3>
-                                            <h5 id="planduration28">
-                                                {{ $plan->duration ?? '' }}
-                                            </h5>
-                                        </li>
-                                        <li>
-                                            <h3>Messages</h3>
-                                            <h5>
-                                                {{ $plan->message ?? 'Unlimited' }}
-                                            </h5>
-                                        </li>
-                                        <li>
-                                            <h3>Contact Views</h3>
-                                            <h5>
-                                                {{ $plan->allow_contact ?? '' }} </h5>
-                                            </h5>
-                                        </li>
-                                        <li>
-                                            <h3>Live Chat</h3>
-                                            <h5>
-                                                {{ $plan->chat ?? 'Unlimited' }} </h5>
-                                        </li>
+                                @if (!empty($plan) && !empty($activePlan) && $plan->id === $activePlan->plan_id)
+                                    <div class="gt-plan-body hidden-xs hidden-sm hidden-md">
+                                        <ul class="gt-plan-desc">
+                                            <li>
+                                                <h3>Duration</h3>
+                                                <h5 id="planduration28">
+                                                    {{ $plan->duration ?? '' }}
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h3>Messages</h3>
+                                                <h5>
+                                                    {{ $plan->message ?? 'Unlimited' }}
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h3>Contact Views</h3>
+                                                <h5>
+                                                    {{ $plan->allow_contact ?? '' }} </h5>
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h3>Live Chat</h3>
+                                                <h5>
+                                                    {{ $plan->chat ?? 'Unlimited' }} </h5>
+                                            </li>
 
-                                    </ul>
-                                </div>
+                                        </ul>
+                                    </div>
+                                @else
+                                    <div class="gt-plan-body hidden-xs hidden-sm hidden-md">
+                                        <ul class="gt-plan-desc">
+                                            <li>
+                                                <h3>Duration</h3>
+                                                <h5 id="planduration28">
+                                                    {{ $plan->duration ?? '' }}
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h3>Messages</h3>
+                                                <h5>
+                                                    {{ $plan->message ?? 'Unlimited' }}
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h3>Contact Views</h3>
+                                                <h5>
+                                                    {{ $plan->allow_contact ?? '' }} </h5>
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h3>Live Chat</h3>
+                                                <h5>
+                                                    {{ $plan->chat ?? 'Unlimited' }} </h5>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                @endif
                                 <form action="{{ route('order') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="planId" value="{{ $plan->id ?? '' }}">
-                                   
+
                                     <button type="submit" style="width: 263px;"
                                         class="gt-plan-footer hidden-xs hidden-sm hidden-md">
                                         Net Payable: ₹ {{ $plan->offer_price > 0 ? $plan->offer_price : $plan->price }}

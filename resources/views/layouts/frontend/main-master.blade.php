@@ -34,8 +34,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
-   
-   
+
+
 
 
 
@@ -174,12 +174,13 @@
                                         <li><a href="{{ route('my.profile') }}">View Profile</a>
                                         </li>
                                         {{-- <li><a href="#">Edit Profile</a></li> --}}
-                                        <li><a href="{{ url('saved-search') }}">My Saved Searches</a></li>
-                                        <li><a href="{{ url('messages') }}">My Messages</a></li>
+                                        {{-- <li><a href="{{ url('saved-search') }}">My Saved Searches</a></li> --}}
+                                        <li><a href="{{ route('message') }}">My Messages</a></li>
                                         <li><a href="{{ url('my-interest') }}">My Express Interest</a></li>
-                                        <li><a href="{{ url('my-photos') }}">Manage Photo</a></li>
-                                        <li><a href="{{ url('my-horoscope') }}">Manage Horoscope</a></li>
-                                        <li><a href="{{ url('document') }}">Manage Document</a></li>
+                                        <li><a href="{{ url('access-control') }}">Access Control</a></li>
+                                        <li><a href="{{ url('my.photos') }}">Manage Photo</a></li>
+                                        {{-- <li><a href="{{ url('my-horoscope') }}">Manage Horoscope</a></li>
+                                        <li><a href="{{ url('document') }}">Manage Document</a></li> --}}
                                     </ul>
                                 </li>
                                 <li class="active ripplelink"><a href="{{ route('search') }}">Search</a></li>
@@ -197,30 +198,25 @@
                                         <li><a href="{{ url('occupation-search') }}">Occupation Search</a></li>
                                     </ul>
                                 </li> --}}
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">My Matches</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="one-way-matches">One Way Matches</a></li>
-                                        <li><a href="two-way-matches">Two Way Matches</a></li>
-                                        <li><a href="broader-matches">Broader Matches</a></li>
-                                        <li><a href="preferred-matches">Preferred Matches</a></li>
-                                        <li><a href="custom-matches">Custom Matches</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">Membership</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ route('plan') }}">Membership Plans</a></li>
-                                        <li><a href="{{ url('active-plan') }}">Current Plan</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
+                                @if (!empty($activePlan) && $activePlan->is_paid === 'Active')
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
+                                            role="button" aria-expanded="false">
+                                            <span class="mr-5">Membership</span><span
+                                                class="fa fa-angle-down"></span>
+                                        </a>
+                                        <ul class="dropdown-menu flat" role="menu">
+                                            <li><a href="{{ route('plan') }}">Membership Plans</a></li>
+
+                                            <li><a href="{{ route('active.plan') }}">Current Plan</a></li>
+                                        @else
+                                            <li class="active ripplelink"><a
+                                                    href="{{ route('plan') }}">Membership</a></li>
+                                @endif
+
+                            </ul>
+                            </li>
+                            {{-- <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
                                         <span class="mr-5">Profile Details</span><span
@@ -234,9 +230,9 @@
                                         <li><a href="{{ url('mobile-numbers-view-by') }}">My Mobile No Viewed By</a>
                                         </li>
                                         <li><a href="{{ url('i-view-mobile-numbers') }}">I View Mobile No </a></li>
-                                        {{-- <li><a href="photo-request">Photo Password Request</a></li> --}}
+                                        <li><a href="photo-request">Photo Password Request</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown gt-border-right-green gt-border-left-green">

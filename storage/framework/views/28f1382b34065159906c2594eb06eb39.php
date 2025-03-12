@@ -174,12 +174,12 @@
                                         <li><a href="<?php echo e(route('my.profile')); ?>">View Profile</a>
                                         </li>
                                         
-                                        <li><a href="<?php echo e(url('saved-search')); ?>">My Saved Searches</a></li>
-                                        <li><a href="<?php echo e(url('messages')); ?>">My Messages</a></li>
+                                        
+                                        <li><a href="<?php echo e(route('message')); ?>">My Messages</a></li>
                                         <li><a href="<?php echo e(url('my-interest')); ?>">My Express Interest</a></li>
-                                        <li><a href="<?php echo e(url('my-photos')); ?>">Manage Photo</a></li>
-                                        <li><a href="<?php echo e(url('my-horoscope')); ?>">Manage Horoscope</a></li>
-                                        <li><a href="<?php echo e(url('document')); ?>">Manage Document</a></li>
+                                        <li><a href="<?php echo e(url('access-control')); ?>">Access Control</a></li>
+                                        <li><a href="<?php echo e(url('my.photos')); ?>">Manage Photo</a></li>
+                                        
                                     </ul>
                                 </li>
                                 <li class="active ripplelink"><a href="<?php echo e(route('search')); ?>">Search</a></li>
@@ -204,26 +204,10 @@
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
                                         <li><a href="<?php echo e(route('plan')); ?>">Membership Plans</a></li>
-                                        <li><a href="<?php echo e(url('active-plan')); ?>">Current Plan</a></li>
+                                        <li><a href="<?php echo e(route('active.plan')); ?>">Current Plan</a></li>
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">Profile Details</span><span
-                                            class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(url('sortlist-profiles')); ?>">Shortlisted Profile</a></li>
-                                        <li><a href="<?php echo e(url('blocklist-profiles')); ?>">Blocked Profile</a></li>
-                                        <li><a href="<?php echo e(url('profiles-view-by')); ?>">My Profile Viewed By</a></li>
-                                        <li><a href="<?php echo e(url('i-view-profiles')); ?>">I Visited Profile</a></li>
-                                        <li><a href="<?php echo e(url('mobile-numbers-view-by')); ?>">My Mobile No Viewed By</a>
-                                        </li>
-                                        <li><a href="<?php echo e(url('i-view-mobile-numbers')); ?>">I View Mobile No </a></li>
-                                        
-                                    </ul>
-                                </li>
+                                
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown gt-border-right-green gt-border-left-green">
