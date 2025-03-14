@@ -16,7 +16,8 @@
                 <div class="row mb-20">
                     <?php $__currentLoopData = $plans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $plan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <label for="gt-plan-28" class="col-xxl-4 col-xl-4 col-xs-16 col-lg-8"
-                            style="<?php echo e($plan->id === $activePlan->plan_id ? '' : ''); ?>">
+                            >
+                            
                             <div class="gt-plan" id="setselected28">
                                 <div class="gt-plan-header">
                                     

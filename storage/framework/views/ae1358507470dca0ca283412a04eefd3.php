@@ -132,9 +132,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <form id="replyMessage " method="POST" style="display: flex;">
+                    <form id="replyMessage" action="<?php echo e(route('reply.message')); ?>" method="POST" style="display: flex;">
                         <?php echo csrf_field(); ?>
-                        <input type="text" name="reply" id="reply" class="form-control"
+                        <input type="text" name="message" id="message" class="form-control"
                             placeholder="Type a message..." style="margin-right: 1rem;">
                         <input type="hidden" name="receiver_id" id="receiver_id" value="<?php echo e($user->id ?? ''); ?>"
                             class="form-control">
@@ -144,12 +144,10 @@
                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('replyMessage ');
@@ -158,7 +156,7 @@
             const message = document.getElementById('reply').value.trim();
             const receiver_id = document.getElementById('receiver_id').value;
 
-            alert(message, receiver_id);
+            alert(receiver_id);
             if (!message) {
                 alert('Please enter a message');
                 return;
@@ -190,4 +188,4 @@
         });
     });
 </script>
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\user-actions\show-message-component.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\xampp\htdocs\mmm\resources\views/components/user-actions/show-message-component.blade.php ENDPATH**/ ?>

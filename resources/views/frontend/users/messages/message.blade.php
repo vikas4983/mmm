@@ -1,6 +1,19 @@
 @extends('layouts.frontend.main-master')
 @section('title', 'Mangal Mandap - Access Controll')
 @section('content')
+    <style>
+        .profile-circle {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 1s ease;
+            display: block;
+            margin: auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+
+        }
+    </style>
     <div class="container gt-margin-top-20">
         <div class="row">
             <div class="row" bis_skin_checked="1">
@@ -16,7 +29,7 @@
                         aria-controls="collapseExample">
                         Options <i class="fa fa-angel-down"></i>
                     </a>
-                    <div class="collapse mobile-collapse in" id="collapseExample" bis_skin_checked="1">
+                    {{-- <div class="collapse mobile-collapse in" id="collapseExample" bis_skin_checked="1">
                         <div class="col-xs-16 gt-margin-bottom-10" bis_skin_checked="1">
                             <div class="row" bis_skin_checked="1">
                                 <a href="composeMessages.php" class="btn gt-btn-orange btn-block gt-btn-lg"
@@ -24,7 +37,7 @@
                                     data-original-title=""><i class="fa fa-envelope gt-margin-right-10"></i>Send Message</a>
                             </div>
                         </div>
-                        {{-- <ul>
+                        <ul>
                             <li class="">
                                 <a href="inboxMessages.php"><span class="pull-left">Inbox</span><span
                                         class="pull-right badge">0</span></a>
@@ -37,8 +50,8 @@
                                 <a href="importantMessages.php"><span class="pull-left">Important</span><span
                                         class="pull-right badge">0</span></a>
                             </li>
-                        </ul> --}}
-                    </div>
+                        </ul>
+                    </div> --}}
                 </div>
                 <div class="col-xxl-13 col-xl-12 col-xs-16 col-sm-16 col-md-16 gt-msg-board" id="test-list"
                     bis_skin_checked="1">
@@ -105,6 +118,7 @@
                                     </li>
                                 </ul>
                             </div> --}}
+                            @include('alerts.alert')
                             <div class="col-xxl-5 col-xl-6 col-md-16 col-lg-6 pull-right" bis_skin_checked="1">
                                 <div class="input-group" bis_skin_checked="1">
                                     <input type="text" class="gt-form-control flat search"
@@ -117,78 +131,98 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content4 col-xs-16 col-xxl-16 col-xl-16 gt-msg-dash" bis_skin_checked="1">
-                        <div id="msg_result_data" class="row" bis_skin_checked="1">
-                            <form method="post" action="" id="msg_data_form">
+
+                    @if (count($users) > 0)
+                        <div class="content4 col-xs-16 col-xxl-16 col-xl-16 gt-msg-dash" bis_skin_checked="1">
+                            <div id="msg_result_data" class="row" bis_skin_checked="1">
                                 <div class="d-flex flex-wrap mb-3 fw-bold">
+                                    <div class="col-xxl-2 col-xs-4 col-sm-4 col-md-4 col-lg-2">
+                                        <strong> Image </strong>
+                                    </div>
+
                                     <div class="col-xxl-4 col-xs-10 col-sm-10 col-md-8 col-lg-4">
-                                        <strong>Matri ID</strong>
+                                        <strong> Name </strong>
                                     </div>
 
-                                    <div class="col-xxl-8 col-xs-16 col-sm-16 col-md-16 col-lg-8">
-                                        <strong> Message</strong>
+                                    <div class="col-xxl-6 col-xs-16 col-sm-16 col-md-16 col-lg-6">
+                                        <strong> Message </strong>
                                     </div>
 
-                                    <div class="col-xxl-2 col-xs-16 col-sm-16 col-md-16 col-lg-2">
-                                        <strong> Date</strong>
+                                    <div class="col-xxl-4 col-xs-16 col-sm-16 col-md-16 col-lg-4">
+                                        <strong> Date </strong>
                                     </div>
                                 </div>
-                                <ul class="list">
 
-                                    @foreach ($users as $user)
-                                        <li class="d-flex flex-wrap align-items-start mb-3">
-
+                                @foreach ($users as $user)
+                                    <ul class="list">
+                                        <li class="d-flex flex-wrap align-items-start mb-3" style="display: flex;">
+                                            <div class="col-xxl-2 col-xs-4 col-sm-4 col-md-4 col-lg-2"
+                                                style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                                                <a href="{{route('profile', $user->uuid ?? 'NA')}}" title="View Profile">
+                                                    <div class="user-name"
+                                                    style="font-size: 14px; font-weight: 600; color: #FF7E00;">
+                                                    {{ $prefix->name ?? 'NA' }}{{ $user->id ?? 'NA' }}
+                                                </div>
+                                                @foreach ($user->images as $image)
+                                                    @if ($image->dp_image === '1')
+                                                        <a href="{{route('profile', $user->uuid ?? 'NA')}}"  class="image-frame">
+                                                            <img src="{{ asset('storage/users/images/' . $image->name) }}"
+                                                                class="profile-circle" alt="User Image"
+                                                                style="margin-bottom: 5px;" title="View Profile">
+                                                        </a>
+                                                    @else
+                                                        <div class="image-frame">
+                                                            <img src="{{ $user->gender === 'male'
+                                                                ? asset('storage/users/images/male-default.jpg')
+                                                                : asset('storage/users/images/female-default.jpg') }}"
+                                                                class="profile-circle" alt="User Image"
+                                                                style="margin-bottom: 5px;">
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+                                                </a>
+                                            </div>
                                             <div class="col-xxl-4 col-xs-10 col-sm-10 col-md-8 col-lg-4"
                                                 style="display: flex; align-items: center;">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target="#messageModal{{ $user->id }}"><i
-                                                        class="fa fa-envelope gt-margin-right-10 sendMessage"
-                                                        style="margin-right: 10px;color:#FF7E00"></i></a>
-
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target="#messageModal{{ $user->id }}" title="Matri ID"
-                                                    style="text-decoration: none;">
-                                                    <span class="name">{{ $prefix->name }}{{ $user->id ?? 'NA' }}</span>
+                                                <a data-toggle="modal" data-target="#messageModal{{ $user->id }}">
+                                                    <i class="fa fa-envelope gt-margin-right-10 sendMessage"
+                                                        style="margin-right: 10px; color:#FF7E00" title="View Message"></i>
+                                                </a>
+                                                <a data-toggle="modal" data-target="#messageModal{{ $user->id }}"
+                                                    title="Name" style="text-decoration: none;">
+                                                    <span class="name">{{ $user->name ?? 'NA' }}</span>
                                                 </a>
                                             </div>
-
-
-                                            <div class="col-xxl-8 col-xs-16 col-sm-16 col-md-16 col-lg-8 gt-margin-top-8">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target="#messageModal{{ $user->id }}" title="Message">
-                                                    <h4 class="name1">{{ $user->receiverMessage->last()->message ?? 'NA' }}
+                                            <div class="col-xxl-6 col-xs-16 col-sm-16 col-md-16 col-lg-6 gt-margin-top-8">
+                                                <a data-toggle="modal" data-target="#messageModal{{ $user->id }}"
+                                                    title="Message">
+                                                    <h4 class="name1">
+                                                        {{ Str::limit($user->receiverMessage->last()->message ?? 'NA', 35) }}
                                                     </h4>
                                                 </a>
                                             </div>
 
-                                            <div class="col-xxl-2 col-xs-16 col-sm-16 col-md-16 col-lg-2">
-                                                <a href="javascript:void(0);" data-toggle="modal"
-                                                    data-target="#messageModal{{ $user->id }}" title="Date">
+                                            <div class="col-xxl-4 col-xs-16 col-sm-16 col-md-16 col-lg-4">
+                                                <a data-toggle="modal" data-target="#messageModal{{ $user->id }}"
+                                                    title="Date">
                                                     <h4 class="name2">
-                                                        {{ \Carbon\Carbon::parse($user->receiverMessage->last()->created_at ?? now())->format('d M Y') }}
+                                                        {{ \Carbon\Carbon::parse($user->receiverMessage->last()->created_at ?? now())->format('d M Y, h:i A') }}
                                                     </h4>
                                                 </a>
                                             </div>
-
                                         </li>
-                                        <x-user-actions.show-message-component :user="$user" />
                                         <hr class="my-2" />
-                                    @endforeach
+                                    </ul>
+                                @endforeach
 
-
-
-                                </ul>
-
-
-
-                            </form>
-
+                                <x-user-actions.show-message-component :users="$users" />
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <img src="{{ asset('storage/users/images/nodata-available.jpg') }}" class="img-responsive">
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
-

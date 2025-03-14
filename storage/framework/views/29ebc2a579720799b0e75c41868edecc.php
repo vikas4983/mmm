@@ -1,3 +1,49 @@
+<style>
+    .image-frame {
+        position: relative;
+        width: 100px;
+        height: 120px;
+        overflow: hidden;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f9f9f9;
+    }
+
+    .main-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .eye-icon {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #E47203;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .eye-icon:hover {
+        background-color: rgba(228, 114, 3, 0.8);
+        color: #fff;
+    }
+</style>
 <?php $__currentLoopData = $searchResults; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $searchResult): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <li id="abcV<?php echo e($searchResult->id); ?>" class="gt-panel gt-panel-default gt-panel-default gt-main-profile ">
         <a href="<?php echo e(route('profile', $searchResult->uuid)); ?>" target="_blank" class="gt-panel-head">
@@ -13,31 +59,64 @@
                 
             </div>
         </a>
-        <a href="member-profile?view_id=IN38" target="_blank" class="gt-result-panel-body">
+
+        <div class="gt-result-panel-body">
             <div class="row gt-padding-bottom-15" bis_skin_checked="1">
-                <div class="col-xxl-2 col-xl-2 col-xs-16 col-lg-3 gridFullWidth" bis_skin_checked="1">
-                    <div class="thumbnail gt-margin-bottom-0" bis_skin_checked="1">
+                <div class="col-xxl-2 col-xl-2 col-xs-16 col-lg-3 gridFullWidth " bis_skin_checked="1">
+                    <div >
                         <?php if(isset($searchResult->images)): ?>
                             <?php $__currentLoopData = $searchResult->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php if($image->dp_image === '1'): ?>
-                                    <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
-                                        class="img-responsive gtFullWidth" alt="User Image">
+                                    <a class="image-frame" data-toggle="modal" data-target="#photoModal<?php echo e($image->id); ?>">
+                                        <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                            class="img-responsive gtFullWidth main-image " alt="User Image">
+                                        <div class="eye-icon viewPhotosModal">
+                                            <i class="fas fa-eye"></i>
+                                        </div>
+                                    </a>
+                                    <?php if (isset($component)) { $__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da = $attributes; } ?>
+<?php $component = App\View\Components\Modals\ViewPhotosModalComponent::resolve(['image' => $image] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('modals.view-photos-modal-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Modals\ViewPhotosModalComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da)): ?>
+<?php $attributes = $__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da; ?>
+<?php unset($__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da)): ?>
+<?php $component = $__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da; ?>
+<?php unset($__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da); ?>
+<?php endif; ?>
                                 <?php else: ?>
+                                <div class="image-frame">
                                     <img src="<?php echo e($searchResult->gender === 'male'
                                         ? asset('storage/users/images/male-default.jpg')
                                         : asset('storage/users/images/female-default.jpg')); ?>"
-                                        class="img-responsive gtFullWidth" alt="User Image">
+                                        class="img-responsive gtFullWidth main-image" alt="User Image">
+                                    </div>
                                 <?php endif; ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php else: ?>
+                        <div class="image-frame">
                             <img src="<?php echo e($searchResult->gender === 'male'
-                                ? asset('storage/users/images/male-default.jpg')
-                                : asset('storage/users/images/female-default.jpg')); ?>"
-                                class="img-responsive gtFullWidth" alt="User Image">
+                            ? asset('storage/users/images/male-default.jpg')
+                            : asset('storage/users/images/female-default.jpg')); ?>"
+                            class="img-responsive gtFullWidth main-image" alt="User Image">
+                        </div>
+                            
                         <?php endif; ?>
                     </div>
                 </div>
-                <div class="col-xxl-14 col-xl-14 col-xs-16 col-lg-13 gt-margin-top-10 gridFullWidth"
+
+                <a href="<?php echo e(route('profile', $searchResult->uuid)); ?>" target="_blank"
+                    class="col-xxl-14 col-xl-14 col-xs-16 col-lg-13 gt-margin-top-10 gridFullWidth"
                     bis_skin_checked="1">
                     <div class="row" bis_skin_checked="1">
                         <div class="redirect" bis_skin_checked="1">
@@ -116,9 +195,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
-        </a>
+        </div>
         <div class="gt-result-panel-footer" bis_skin_checked="1">
             <div class="row" bis_skin_checked="1">
                 <div class="col-xxl-4 col-xl-4 col-lg-4 gt-margin-top-10 gridHidden interest-btn-container"
@@ -300,6 +379,9 @@
 <?php $component = $__componentOriginalb55be17bee5a7c18ce1be12c9593f430; ?>
 <?php unset($__componentOriginalb55be17bee5a7c18ce1be12c9593f430); ?>
 <?php endif; ?>
+
+
+
 <script>
     $(document).ready(function() {
         $('.send-message-modal').click(function(e) {

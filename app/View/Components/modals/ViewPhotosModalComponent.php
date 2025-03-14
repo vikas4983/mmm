@@ -1,21 +1,20 @@
 <?php
 
-namespace App\View\Components\userActions;
+namespace App\View\Components\modals;
 
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class ShowMessageComponent extends Component
+class ViewPhotosModalComponent extends Component
 {
     /**
      * Create a new component instance.
      */
-    public $users;
-
-    public function __construct($users)
+    public $image;
+    public function __construct($image)
     {
-        $this->users = $users;
+        $this->image = $image;
     }
 
     /**
@@ -23,6 +22,6 @@ class ShowMessageComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.user-actions.show-message-component');
+        return view('components.modals.view-photos-modal-component');
     }
 }

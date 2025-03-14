@@ -72,7 +72,6 @@ class UserController extends Controller
     {
         session(['login' => 'yes']);
         $dashboardConstacts = config('constants.dashboard');
-        //dump( $dashboardConstacts );
         return view('dashboard', compact('dashboardConstacts'));
     }
     public function index(Request $request)
@@ -121,24 +120,13 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'paidUsers', 'premiumUsersCount', 'active', 'inActive', 'countAll'));
     }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.admins.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request) {}
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
         try {
@@ -235,14 +223,8 @@ class UserController extends Controller
         return view('frontend.users.plans.activePlan', compact('activePlanDetails'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(User $user) {}
 
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function updateProfile(Request $request)
     {

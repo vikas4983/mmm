@@ -34,8 +34,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
-   
-   
+
+
 
 
 
@@ -184,30 +184,25 @@
                                 </li>
                                 <li class="active ripplelink"><a href="<?php echo e(route('search')); ?>">Search</a></li>
                                 
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">My Matches</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="one-way-matches">One Way Matches</a></li>
-                                        <li><a href="two-way-matches">Two Way Matches</a></li>
-                                        <li><a href="broader-matches">Broader Matches</a></li>
-                                        <li><a href="preferred-matches">Preferred Matches</a></li>
-                                        <li><a href="custom-matches">Custom Matches</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">Membership</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(route('plan')); ?>">Membership Plans</a></li>
-                                        <li><a href="<?php echo e(route('active.plan')); ?>">Current Plan</a></li>
-                                    </ul>
-                                </li>
-                                
+                                <?php if(!empty($activePlan) && $activePlan->is_paid === 'Active'): ?>
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
+                                            role="button" aria-expanded="false">
+                                            <span class="mr-5">Membership</span><span
+                                                class="fa fa-angle-down"></span>
+                                        </a>
+                                        <ul class="dropdown-menu flat" role="menu">
+                                            <li><a href="<?php echo e(route('plan')); ?>">Membership Plans</a></li>
+
+                                            <li><a href="<?php echo e(route('active.plan')); ?>">Current Plan</a></li>
+                                        <?php else: ?>
+                                            <li class="active ripplelink"><a
+                                                    href="<?php echo e(route('plan')); ?>">Membership</a></li>
+                                <?php endif; ?>
+
+                            </ul>
+                            </li>
+                            
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown gt-border-right-green gt-border-left-green">

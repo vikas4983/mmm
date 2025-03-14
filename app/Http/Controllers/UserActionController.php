@@ -96,7 +96,6 @@ class UserActionController extends Controller
     }
     public function sendMessage(CreateMessageRequest $request)
     {
-       
         $userId = $this->loginUser()->id;
         $validatedData = $request->validated();
         if (!$userId) {
@@ -123,6 +122,20 @@ class UserActionController extends Controller
             'action' => 'sendMessage',
             'message' => '<h1><i class="fas fa-check-circle" style="color: green;"></i></h1><h4 style="color: green;">Message Sent</h4>',
         ]);
+    }
+    public function replyMessage(CreateMessageRequest $request)
+    {
+        $validatedData = $request->validated();
+        $userId = $this->loginUser()->id;
+        if (!$userId) {
+            return redirect()->route('/')->with('error', 'Login First!');
+        }
+        Message::create([
+            'sender_id' => $userId,
+            'receiver_id' => $validatedData['receiver_id'],
+            'message' => $validatedData['message'],
+        ]);
+        return redirect()->back()->with('success', 'Message sent successfully');
     }
     private function send($validatedData)
     {
@@ -538,7 +551,11 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $userIds = array_unique($user->senderMessage->pluck('receiver_id')->toArray());
-        $users = User::whereIn('id', $userIds)->get();
+        $priorityUserId = Message::where('sender_id', $user->id)->latest('created_at')->pluck('receiver_id')->first();
+        $users = User::whereIn('id', $userIds)
+            ->orderByRaw("FIELD(id, ?) DESC",  [$priorityUserId])
+            ->orderBy('id', 'desc')
+            ->get();
         return view('frontend.users.messages.message', compact('users'));
     }
     private function getInvitation()
