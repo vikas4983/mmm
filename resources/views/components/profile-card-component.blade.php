@@ -1,5 +1,3 @@
-
-
 <style>
     .image-frame {
         position: relative;
@@ -108,7 +106,7 @@
                         @if ($nameSetting->name === 1 && $userPayment === 'Active')
                             <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
                                 {{ $searchResult->name ?? 'NA' }}
-                               
+
                             </h4>
                         @elseif ($nameSetting->name === 2)
                             @php
@@ -122,21 +120,20 @@
                                 <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
                                     {{ $searchResult->name ?? 'NA' }}
                                     ({{ $prefix->name ?? 'NA' }}-{{ $searchResult->matrimony_id ?? 'NA' }})
-                                    
                                 </h4>
                             @else
                                 <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
                                     <i class="far fa-id-card" title="Visible to Friends Only"
                                         style="color: #3A7303"></i>
                                     {{ $prefix->name ?? 'NA' }}-{{ $searchResult->matrimony_id ?? 'NA' }}
-                                    
+
                                 </h4>
                             @endif
                         @elseif ($nameSetting->name === 0)
                             <h4 class="gt-margin-top-0 gt-margin-bottom-0 inThemeOrange">
                                 <i class="fas fa-lock" title="Name Hidden" style="color: #670311"></i>
                                 {{ $prefix->name ?? 'NA' }}-{{ $searchResult->matrimony_id ?? 'NA' }}
-                                
+
                             </h4>
                         @endif
                     @endforeach

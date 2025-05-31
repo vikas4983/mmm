@@ -29,10 +29,6 @@
 
                         <div class="gt-filter-result collapse in aside-sideFilter" id="collapseExample" bis_skin_checked="1"
                             aria-expanded="true">
-                            <form name="frm_filter" id="frm_filter" method="post" action="">
-
-                                <div class="gt-panel gt-panel-default" bis_skin_checked="1">
-                                    <div class="gt-panel-head" bis_skin_checked="1">
                                         <div class="row" bis_skin_checked="1">
                                             <div class="col-xs-12" bis_skin_checked="1">
                                                 <b>Photo Setting </b>

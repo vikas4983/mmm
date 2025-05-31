@@ -11,10 +11,10 @@ class ViewPhotosModalComponent extends Component
     /**
      * Create a new component instance.
      */
-    public $photos;
-    public function __construct($photos)
+    public $image;
+    public function __construct($image)
     {
-        $this->photos = $photos;
+        $this->image = $image;
     }
 
     /**
