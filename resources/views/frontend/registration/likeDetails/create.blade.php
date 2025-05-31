@@ -53,7 +53,7 @@
         </div>
 
     </div>
-    <script>
+    {{-- <script>
         const employee = document.getElementById("employee");
         const occupation = document.getElementById("hiddenOccupation");
         employee.addEventListener("change", function() {
@@ -91,5 +91,5 @@
                 $('#occupation').append('<option value="">Select occupation</option>');
             }
         });
-    </script>
+    </script> --}}
 @endsection

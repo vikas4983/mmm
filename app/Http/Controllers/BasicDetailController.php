@@ -30,6 +30,7 @@ class BasicDetailController extends Controller
      */
     public function store(Request $request)
     {
+       
         $fields = config('formFields.basicDetails');
         $validationRules = [];
         if (in_array($request->marital_status, ['2', '3', '4', '5'])) {

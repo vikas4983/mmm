@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 class HoroscopeDetail extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'time_of_birth', 'manglik', 'place_of_birth', 'rashi', 'horoscope_match', 'horoscope_show', 'status'];
+    protected $fillable = ['user_id', 'time_of_birth', 'manglik', 'place_of_birth', 'state_of_birth', 'country_of_birth', 'rashi', 'horoscope_match', 'horoscope_show', 'status'];
 
     public function rashies()
     {
@@ -19,6 +19,14 @@ class HoroscopeDetail extends Model
     public function cities()
     {
         return $this->belongsTo(City::class, 'place_of_birth', 'id');  // The related model (TestModel) should be passed here
+    }
+    public function states()
+    {
+        return $this->belongsTo(State::class, 'place_of_state', 'id');  // The related model (TestModel) should be passed here
+    }
+    public function countries()
+    {
+        return $this->belongsTo(Country::class, 'place_of_country', 'id');  // The related model (TestModel) should be passed here
     }
     public function getTimeOfBirthAttribute($value)
     {

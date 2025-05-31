@@ -47,37 +47,78 @@
                 <style>
                     .panel-title a::after {
                         content: '\f105';
-                        /* Right arrow (>) for closed state */
                         font-family: 'FontAwesome';
                         float: right;
                         font-size: 25px;
-                        /* Arrow size */
                         color: #333;
-                        /* Arrow color */
                         font-weight: bold;
-                        /* Bold arrow */
                         transition: transform 0.3s ease;
-                        /* Smooth animation */
                     }
 
                     .panel-title a[aria-expanded="true"]::after {
                         content: '\f107';
-                        /* Down arrow (v) for open state */
                         transform: rotate(0deg);
-                        /* No rotation, just change the arrow */
                     }
 
                     .panel-title a[aria-expanded="false"]::after {
                         content: '\f105';
-                        /* Right arrow (>) for closed state */
                     }
                 </style>
 
                 <div class="collapse mobile-collapse gt-padding-bottom-15" id="collapseLeftPanel">
                     <a href="exp-interest.php" class="btn gt-btn-orange gt-btn-xl mb-20 btn-block">
-                        <i class="fa fa-star gt-margin-right-10 fa-spin"></i> Access Controll
+                        <i class="fa fa-star gt-margin-right-10 fa-spin"></i> Access Control
                     </a>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <!-- View Profile -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                        href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        View Profile
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    <a href="<?php echo e(route('view.profile')); ?>" class="gt-exp-opt gt-cursor">View Profile By Me
+                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
+                                    </a>
+                                    <a href="<?php echo e(route('view.profile.by.other')); ?>" class="gt-exp-opt gt-cursor">View Profile
+                                        By Others
+                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- View Contact -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h4 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
+                                        href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        View Contact
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    <a href="<?php echo e(route('view.contact.by.me')); ?>" class="gt-exp-opt gt-cursor">Contacts Viewed
+                                        By Me
+                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
+                                    </a>
+                                    <a href="<?php echo e(route('view.contact.by.other')); ?>" class="gt-exp-opt gt-cursor">Contacts
+                                        Viewed By Others
+                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Block Profile -->
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab" id="headingOne">
@@ -94,56 +135,32 @@
                                     <a href="<?php echo e(route('block.by.me')); ?>" class="gt-exp-opt gt-cursor">Block By Me
                                         <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
                                     </a>
-                                    <a href="<?php echo e(route('block.by.other')); ?>" class="gt-exp-opt gt-cursor">Block By
+                                    <a href="<?php echo e(route('block.by.other')); ?>" class="gt-exp-opt gt-cursor">Block By Others
+                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shortlist Profiles -->
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFour">
+                                <h4 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+                                        aria-expanded="false" aria-controls="collapseFour">
+                                        Shortlist Profiles
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel"
+                                aria-labelledby="headingFour">
+                                <div class="panel-body">
+                                    <a href="<?php echo e(Route('my.shortlist')); ?>" class="gt-exp-opt gt-cursor">Shortlisted By Me
+                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
+                                    </a>
+                                    <a href="<?php echo e(Route('shortlisted.by.other')); ?>" class="gt-exp-opt gt-cursor">Shortlisted
+                                        By
                                         Others
-                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- View Profile -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingTwo">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                                        href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                        View Profile
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-                                aria-labelledby="headingTwo">
-                                <div class="panel-body">
-                                    <a href="<?php echo e(route('view.profile')); ?>" class="gt-exp-opt gt-cursor">View
-                                        Profile By Me
-                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
-                                    </a>
-                                    <a href="<?php echo e(route('view.profile.by.other')); ?>" class="gt-exp-opt gt-cursor">View
-                                        Profile By Others
-                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- View Contact -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading" role="tab" id="headingThree">
-                                <h4 class="panel-title">
-                                    <a  class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                                        href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                        View Contact
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-                                aria-labelledby="headingThree">
-                                <div class="panel-body">
-                                    <a href="<?php echo e(route('view.contact.by.me')); ?>"  class="gt-exp-opt gt-cursor">Contacts Viewed By Me
-                                        <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
-                                    </a>
-                                    <a href="<?php echo e(route('view.contact.by.other')); ?>"  class="gt-exp-opt gt-cursor">Contacts Viewed By Others
                                         <i class="fa fa-chevron-right gt-margin-left-10 pull-right"></i>
                                     </a>
                                 </div>
@@ -165,14 +182,13 @@
                                 id="sent_all">
                                 <a href="#exp-tab-2" aria-controls="exp-tab-2" role="tab" data-toggle="tab">
                                     
-                                  <strong>  <?php echo e($heading ?? 'Na'); ?></strong>
+                                    <strong> <?php echo e($heading ?? 'Na'); ?></strong>
                                 </a>
                             </li>
                             
                         </ul>
 
                         <div class="tab-content" bis_skin_checked="1">
-                            
                             <div role="tabpanel" class="tab-pane fade in active " id="exp-tab-2" bis_skin_checked="1">
                                 <?php if(count($searchResults) > 0): ?>
                                     <?php if (isset($component)) { $__componentOriginalf23dcddf411442c3128d2d01b57e9509 = $component; } ?>
@@ -201,6 +217,7 @@
                                 <?php endif; ?>
                             </div>
                         </div>
+
 
                     </div>
                 </div>

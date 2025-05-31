@@ -5,12 +5,6 @@ return [
 
     'register' => [
 
-        // 'image' => [
-        //     'type' => 'file',
-        //     'name' => 'image',
-        //     'label' => 'Profile Image',
-        //     'rules' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // ],
         'name' => [
             'type' => 'text',
             'name' => 'name',
@@ -44,11 +38,11 @@ return [
             'name' => 'mobile',
             'label' => 'Mobile',
             'placeholder' => 'Enter Mobile Number',
-            'rules' =>   'required|numeric|regex:/^[0-9]{10,12}$/',
+            'rules' =>   'required|integer|unique:users,mobile|regex:/^[0-9]{10,12}$/',
         ],
         'profile_for' => [
             'type' => 'select',
-            'label' => 'Profile For',
+            'label' => 'Created By',
             'name' => 'profile_for',
             'options' => [],
             'rules' => 'required',
@@ -272,12 +266,11 @@ return [
 
         'country_of_birth' => [
             'type' => 'select',
-            'label' => 'Country of birth',
+            'label' => 'Country',
             'name' => 'country',
             'options' => [],
             'rules' => 'nullable|numeric',
         ],
-
         'time_of_birth' => [
             'type' => 'time',
             'name' => 'time_of_birth',
@@ -296,11 +289,12 @@ return [
             'label' => 'Manglik',
             'name' => 'manglik',
             'options' => [
-                'yes' => 'Yes',
-                'no' => 'No',
-                "don't know" => "Don't Know"
+                '1' => 'Yes',
+                '2' => 'No',
+                '0' => "Don't Know"
             ],
-            'rules' => 'required|string',
+            'rules' => 'nullable|string',
+            'value' => '1',
         ],
 
 
@@ -309,23 +303,27 @@ return [
             'name' => 'horoscope_match',
             'label' => 'Horoscope Match',
             'options' => [
-                'yes' => 'Yes',
-                'no' => 'No',
-                "doesn't matter" => "Does't Matter"
+                '1' => 'Yes',
+                '2' => 'No',
+                "0" => "Does't Matter"
             ],
             'rules' => 'nullable|string',
+            'value' => '1',
+
+
         ],
         'horoscope_show' => [
             'type' => 'radio',
             'name' => 'horoscope_show',
             'label' => 'Horoscope Show',
             'options' => [
-                'yes' => 'Yes',
-                "only accept member" => "Only Accept Member",
-                'no' => 'No',
+                '1' => 'Yes',
+                "2" => "Only Accept Member",
+                '0' => 'No',
 
             ],
             'rules' => 'nullable|string',
+            'value' => '1',
         ],
 
     ],
@@ -532,29 +530,29 @@ return [
             'type' => 'select',
             'name' => 'brother',
             'label' => 'Brother',
-            'options' => ['none' => 'None', '1' => '1', '2' => '2', '3' => '3+'],
-            'rules' => 'nullable|numeric',
+            'options' => ['none' => '0', '1' => '1', '2' => '2', '3' => '3+'],
+            'rules' => 'nullable|string',
         ],
         'brother_married' => [
             'type' => 'select',
             'name' => 'brother_married',
             'label' => 'Brother Married',
-            'options' => ['none' => 'None', '1' => '1', '2' => '2', '3' => '3+'],
-            'rules' => 'nullable|numeric',
+            'options' => ['none' => '0', '1' => '1', '2' => '2', '3' => '3+'],
+            'rules' => 'nullable|string',
         ],
         'sister' => [
             'type' => 'select',
             'name' => 'sister',
             'label' => 'Sister',
-            'options' => ['none' => 'None', '1' => '1', '2' => '2', '3' => '3+'],
-            'rules' => 'nullable|numeric',
+            'options' => ['none' => '0', '1' => '1', '2' => '2', '3' => '3+'],
+            'rules' => 'nullable|string',
         ],
         'sister_married' => [
             'type' => 'select',
             'name' => 'sister_married',
             'label' => 'Sister Married',
-            'options' => ['none' => 'None', '1' => '1', '2' => '2', '3' => '3+'],
-            'rules' => 'nullable|numeric',
+            'options' => ['none' => '0', '1' => '1', '2' => '2', '3' => '3+'],
+            'rules' => 'nullable|string',
         ],
         'family_living' => [
             'type' => 'select',
@@ -918,7 +916,7 @@ return [
             'id' => 'userAlternateMobile',
             'label' => 'Alternate Mobile Number ',
             'placeholder' => 'Enter number',
-            'rules' =>  'nullable|numeric|regex:/^[0-9]{10,12}$/',
+            'rules' =>  'sometimes|numeric|regex:/^[0-9]{10,12}$/',
         ],
 
         'alternate_owned_by' => [
@@ -927,7 +925,7 @@ return [
             'id' => 'userAlternateOwned',
             'label' => 'Alternate Mobile number owned by ',
             'options' => [],
-            'rules' => 'nullable|string',
+            'rules' => 'sometimes|string',
         ],
 
         'landline_number' => [
@@ -936,7 +934,7 @@ return [
             'id' => 'userLandlineNumber',
             'label' => 'Landline number with code ',
             'placeholder' => 'Enter number',
-            'rules' =>  'nullable|numeric|regex:/^[0-9]{10,12}$/'
+            'rules' =>  'sometimes|numeric|regex:/^[0-9]{10,12}$/'
 
         ],
         'landline_owned_by' => [
@@ -945,7 +943,7 @@ return [
             'id' => 'userLandlineOwned',
             'label' => 'Landline number owned by ',
             'options' => [],
-            'rules' => 'nullable|string',
+            'rules' => 'sometimes|string',
         ],
         'address' => [
             'type' => 'text',
@@ -953,7 +951,7 @@ return [
             'id' => 'userAddress',
             'label' => 'Address',
             'placeholder' => 'Enter Address',
-            'rules' =>  'nullable|string|'
+            'rules' =>  'sometimes|string|'
 
         ],
 

@@ -24,7 +24,7 @@
                         return true;
                     }
                 </script> <!-- /. Header & Menu -->
-                {{-- @dump((session()->all())) --}}
+
                 <div class="container">
                     <div class="gtMobileVerification col-xxl-10 col-xxl-offset-3 col-xs-16 col-xs-offset-0">
                         <div class="text-center inThemeOrange">
@@ -45,6 +45,7 @@
                         @endphp
                         <div class="gtSMSVerification col-xxl-10 col-xxl-offset-3">
                             @include('alerts.alert')
+                            
                             <h4>Verify Account through SMS</h4>
                             <p class="font-12">An SMS with verification PIN has been sent to </p>
                             <h5 class="gtMobileNo">+91-{{ $mobile ?? 'NA' }}</h5>
@@ -66,7 +67,7 @@
                                     <!-- Centered Text Box -->
                                     <div class="mb-3 text-center">
                                         <input type="text" class="form-control text-center" name="otp" id="otp"
-                                            placeholder="Enter OTP" maxlength="6">
+                                            placeholder="Enter OTP" maxlength="6" required>
 
                                         <input type="hidden" name="email" id="email" value="{{ $email }}">
                                         <input type="hidden" name="mobile" id="mobile" value="{{ $mobile }}">
@@ -96,41 +97,7 @@
                                     Resend OTP
                                 </button>
                                 </form>
-                                <script>
-                                    var spn = document.getElementById("countVerify");
-                                    var resendOTPBtn = document.getElementById("resendOTPBtn");
-                                    var resendForm = document.getElementById("resendForm");
-
-                                    var count = 5;
-                                    var timer = null;
-
-                                    function countDown() {
-                                        spn.textContent = count;
-
-                                        if (count > 0) {
-                                            count--;
-                                            resendOTPBtn.setAttribute("disabled", false);
-                                            timer = setTimeout(countDown, 1000);
-                                        } else {
-                                            resendOTPBtn.removeAttribute("disabled");
-                                            clearTimeout(timer);
-                                        }
-                                    }
-
-
-
-                                    resendOTPBtn.addEventListener("click", function(e) {
-                                        resendForm.submit();
-                                        this.disabled = true;
-                                        count = 5;
-                                        countDown();
-                                    });
-
-
-                                    window.onload = function() {
-                                        countDown();
-                                    };
-                                </script>
+                               
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -204,58 +171,37 @@
         </div>
         <!-- Right Click Disable -->
         <!--
-                                                                                                                                                        <script language=JavaScript>
-                                                                                                                                                            function clickIE4() {
-                                                                                                                                                                if (event.button == 2) {
-                                                                                                                                                                    return false;
-                                                                                                                                                                }
-                                                                                                                                                            }
+                                                                                                                                                                    <script language=JavaScript>
+                                                                                                                                                                        function clickIE4() {
+                                                                                                                                                                            if (event.button == 2) {
+                                                                                                                                                                                return false;
+                                                                                                                                                                            }
+                                                                                                                                                                        }
 
-                                                                                                                                                            function clickNS4(e) {
-                                                                                                                                                                if (document.layers || document.getElementById && !document.all) {
-                                                                                                                                                                    if (e.which == 2 || e.which == 3) {
-                                                                                                                                                                        return false;
-                                                                                                                                                                    }
-                                                                                                                                                                }
-                                                                                                                                                            }
-                                                                                                                                                            if (document.layers) {
-                                                                                                                                                                document.captureEvents(Event.MOUSEDOWN);
-                                                                                                                                                                document.onmousedown = clickNS4;
-                                                                                                                                                            } else if (document.all && !document.getElementById) {
-                                                                                                                                                                document.onmousedown = clickIE4;
-                                                                                                                                                            }
-                                                                                                                                                            document.oncontextmenu = new Function("return false")
-                                                                                                                                                        </script>
-                                                                                                                                                                                                                                    -->
+                                                                                                                                                                        function clickNS4(e) {
+                                                                                                                                                                            if (document.layers || document.getElementById && !document.all) {
+                                                                                                                                                                                if (e.which == 2 || e.which == 3) {
+                                                                                                                                                                                    return false;
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                        if (document.layers) {
+                                                                                                                                                                            document.captureEvents(Event.MOUSEDOWN);
+                                                                                                                                                                            document.onmousedown = clickNS4;
+                                                                                                                                                                        } else if (document.all && !document.getElementById) {
+                                                                                                                                                                            document.onmousedown = clickIE4;
+                                                                                                                                                                        }
+                                                                                                                                                                        document.oncontextmenu = new Function("return false")
+                                                                                                                                                                    </script>
+                                                                                                                                                                                                                                                -->
         <!-- /.Right Click Disable -->
 
         <!-- Live Chat -->
-        <script type="text/javascript">
-            var auto_refresh = setInterval(
-                function() {
-                    $('#count').load('parts/online').fadeIn("slow");
-                }, 15000
-            ); // refresh every 10 second
-        </script>
+        
         <script src="js/jquery.min.js"></script>
         <small class="pull-right">
         </small>
-        <script>
-            var id = 'UA-demo';
-            (function(i, s, o, g, r, a, m) {
-                i['GoogleAnalyticsObject'] = r;
-                i[r] = i[r] || function() {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-                a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
-                a.async = 1;
-                a.src = g;
-                m.parentNode.insertBefore(a, m)
-            })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-            ga('create', id, 'auto');
-            ga('send', 'pageview');
-        </script>
+        
     </div>
     <script>
         $(document).ready(function() {
@@ -265,26 +211,13 @@
     </script>
 
     <script type="text/javascript" src="{{ asset('frontend/assets/js/bootstrap-pincode-input.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('#pincode-input1').pincodeInput({
-                hidedigits: false,
-                complete: function(value, e, errorElement) {
-                    $("#pincode-callback").html(
-                        "This is the 'complete' callback firing. Current value: " + value);
-                }
-            });
-        });
-        window.onload = function() {
-            $('#pincode-input1').pincodeInput().data('plugin_pincodeInput').focus();
-        };
-    </script>
+    
     <script>
         var spn = document.getElementById("countVerify");
         var resendOTPBtn = document.getElementById("resendOTPBtn");
         var resendForm = document.getElementById("resendForm");
 
-        var count = 5;
+        var count = 60;
         var timer = null;
 
         function countDown() {
@@ -302,108 +235,13 @@
         resendOTPBtn.addEventListener("click", function(e) {
             resendForm.submit();
             this.disabled = true;
-            count = 5;
+            count = 60;
             countDown();
         });
         window.onload = function() {
             countDown();
         };
     </script>
-    <script>
-        // var spn = document.getElementById("countVerify");
-        // var btn = document.getElementById("btnCounterVerify");
-
-        // var count = 2;
-        // var timer = null;
-
-        // function countDown() {
-
-        //     spn.textContent = count;
-
-
-        //     if (count !== 0) {
-        //         timer = setTimeout(countDown, 1000);
-        //         count--;
-        //     } else {
-
-        //         btn.removeAttribute("disabled");
-        //     }
-        // }
-
-        // document.getElementById('resendForm').addEventListener('submit', function(e) {
-        //     e.preventDefault(); // Prevent the default form submission
-        //     const mobile = document.querySelector('input[name="mobile"]').value;
-
-
-        //     // Pause execution in the browser's developer tools
-
-        //     fetch('{{ route('otp.resend') }}', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //             },
-        //             body: JSON.stringify({
-        //                 mobile: mobile,
-
-        //             })
-
-
-        //         })
-        //         .then(response => {
-        //             if (!response.ok) {
-        //                 throw new Error('Network response was not ok');
-        //             }
-        //             return response.json();
-        //         })
-        //         .then(data => {
-        //             document.getElementById('send-otp-success')?.remove();
-        //             document.getElementById('send-otp-error')?.remove();
-        //             const alertContainer = document.getElementById('alert-container-resend');
-        //             alertContainer.innerHTML = ''; // Clear previous alerts
-
-        //             if (data.success) {
-        //                 alertContainer.innerHTML = `
-    //                 <div class="alert alert-success alert-dismissible fade show" role="alert">
-    //                     ${data.message}
-    //                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                         <span aria-hidden="true">&times;</span>
-    //                     </button>
-    //                 </div>
-    //             `;
-        //                 setTimeout(() => {
-        //                     const successAlert = document.getElementById('alert-container-resend');
-        //                     if (successAlert) {
-        //                         successAlert.classList.remove('show');
-        //                         successAlert.classList.add('fade');
-        //                     }
-        //                 }, 5000);
-
-        //                 document.getElementById('resendOTP').disabled = true; // Disable the button again
-        //                 startCountdown(); // Start the countdown
-        //             } else {
-        //                 alertContainer.innerHTML = `
-    //                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    //                     ${data.error}
-    //                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                         <span aria-hidden="true">&times;</span>
-    //                     </button>
-    //                 </div>
-    //             `;
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Fetch Error:', error);
-        //             const alertContainer = document.getElementById('alert-container-resend');
-        //             alertContainer.innerHTML = `
-    //             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-    //                 An error occurred. Please try again.
-    //                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //                     <span aria-hidden="true">&times;</span>
-    //                 </button>
-    //             </div>
-    //         `;
-        //         });
-        // });
-    </script>
+    
+    
 @endsection

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('time_of_birth')->nullable();
             $table->string('manglik')->nullable();
             $table->string('place_of_birth')->nullable();
+            $table->string('place_of_state')->nullable();
+            $table->string('place_of_country')->nullable();
             $table->string('rashi')->nullable();
             $table->string('horoscope_match')->nullable();
             $table->string('horoscope_show')->nullable();

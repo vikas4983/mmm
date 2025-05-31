@@ -77,110 +77,99 @@
         margin-top: 5px;
     }
 </style>
+<?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <div class="modal fade" id="messageModal<?php echo e($user->id); ?>" tabindex="-1" aria-hidden="true" data-backdrop="static"
+        data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h3 class="modal-title badge bg-primary" style="background-color: #FF7E00; color:white">
+                        Message - <?php echo e($user->name ?? 'NA'); ?>
 
-<div class="modal fade" id="messageModal<?php echo e($user->id); ?>" tabindex="-1" aria-hidden="true" data-backdrop="static"
-    data-keyboard="false">
+                    </h3>
+                    <button type="button"
+                        class="btn btn-lr btn-secondary rounded-circle d-flex justify-content-center align-items-center"
+                        data-dismiss="modal" aria-label="Close"
+                        style="width: 35px; height: 35px; position: absolute; top: 10px; right: 10px;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="chat-wrapper">
+                        <div class="chat-container">
+                            <?php
+                                $messages = collect($user->receiverMessage)
+                                    ->merge($user->senderMessage)
+                                    ->sortBy('created_at')
+                                    ->groupBy(function ($msg) {
+                                        return \Carbon\Carbon::parse($msg->created_at)->format('d M Y');
+                                    });
+                            ?>
+                            <?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $date => $dayMessages): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <div style="text-align: center; margin: 15px 0;">
+                                    <span class="badge bg-secondary">
+                                        <?php echo e($date); ?>
 
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <div class="modal-header text-center">
-                <h3 class="modal-title badge bg-primary" style="background-color: #FF7E00; color:white">
-                    Message - <?php echo e($user->name ?? 'NA'); ?>
-
-                </h3>
-                <button type="button"
-                    class="btn btn-lr btn-secondary rounded-circle d-flex justify-content-center align-items-center"
-                    data-dismiss="modal" aria-label="Close"
-                    style="width: 35px; height: 35px; position: absolute; top: 10px; right: 10px;">
-                    <i class="fas fa-times"></i>
-                </button>
-
-
-            </div>
-
-            <div class="modal-body">
-                <div class="chat-wrapper">
-                    <div class="chat-container">
-
-                        <?php
-                            $messages = collect($user->receiverMessage)
-                                ->merge($user->senderMessage)
-                                ->sortBy('created_at')
-                                ->groupBy(function ($msg) {
-                                    return \Carbon\Carbon::parse($msg->created_at)->format('d M Y');
-                                });
-                        ?>
-
-                        <?php $__currentLoopData = $messages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $date => $dayMessages): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <div style="text-align: center; margin: 15px 0;">
-                                <span class="badge bg-secondary">
-                                    <?php echo e($date); ?>
-
-                                </span>
-                            </div>
-
-                            <?php $__currentLoopData = $dayMessages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <?php
-                                    $isSender = $msg->sender_id === auth()->id();
-                                ?>
-
-                                <div class="chat-line <?php echo e($isSender ? 'right' : 'left'); ?>">
-                                    <div class="message-bubble <?php echo e($isSender ? 'sender' : 'receiver'); ?>">
-                                        <span class="message-text"><?php echo e($msg->message); ?></span>
-                                        <span class="message-time">
-                                            <?php echo e(\Carbon\Carbon::parse($msg->created_at)->format('h:i A')); ?>
-
-                                        </span>
-                                    </div>
+                                    </span>
                                 </div>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php $__currentLoopData = $dayMessages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $msg): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php
+                                        $isSender = $msg->sender_id === auth()->id();
+                                    ?>
 
+                                    <div class="chat-line <?php echo e($isSender ? 'right' : 'left'); ?>">
+                                        <div class="message-bubble <?php echo e($isSender ? 'sender' : 'receiver'); ?>">
+                                            <span class="message-text"><?php echo e($msg->message); ?></span>
+                                            <span class="message-time">
+                                                <?php echo e(\Carbon\Carbon::parse($msg->created_at)->format('h:i A')); ?>
+
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <form id="replyMessage" action="<?php echo e(route('reply.message')); ?>" method="POST" style="display: flex;">
+                        <?php echo csrf_field(); ?>
+                        <input type="text" name="message" id="message" class="form-control"
+                            placeholder="Type a message..." style="margin-right: 1rem;">
+                        <input type="hidden" name="receiver_id" id="receiver_id" value="<?php echo e($user->id ?? ''); ?>"
+                            class="form-control">
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                    <div class="row text-center" style="margin-top: 1rem;">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <form id="sendMessage" action="javascript:void(0);" method="POST">
-                    <?php echo csrf_field(); ?>
-                    <input type="text" name="message" id="message" class="form-control"
-                        placeholder="Type a message...">
-
-                    <button type="submit" class="btn btn-primary">Send</button>
-                </form>
-
-                <div class="row text-center">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-
         </div>
     </div>
-</div>
-
-
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('sendMessage');
-
+        const form = document.getElementById('replyMessage ');
         form.addEventListener('submit', function(e) {
-            e.preventDefault(); // This stops the form from submitting automatically
+            e.preventDefault();
+            const message = document.getElementById('reply').value.trim();
+            const receiver_id = document.getElementById('receiver_id').value;
 
-            const message = document.getElementById('message').value.trim();
-
+            alert(receiver_id);
             if (!message) {
                 alert('Please enter a message');
                 return;
             }
-
-            fetch('<?php echo e(route('send.message')); ?>', {
+            fetch('<?php echo e(route('reply.message')); ?>', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
                         'Accept': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: message
+                        message: message,
+                        receiver_id: receiver_id
                     })
                 })
                 .then(response => {

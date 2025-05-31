@@ -1,7 +1,126 @@
 
 <?php $__env->startSection('title', 'Mangal Mandap - Profile'); ?>
 <?php $__env->startSection('content'); ?>
+    <style>
+        .image-frame {
+            position: relative;
+            width: 250px;
+            height: 260px;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
 
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .eye-icon {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #E47203;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .eye-icon:hover {
+            background-color: rgba(228, 114, 3, 0.8);
+            color: #fff;
+        }
+
+        .blurred-image {
+            filter: blur(7px);
+            transition: filter 0.3s ease;
+        }
+
+        .blurred-image-frame {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .center-text {
+            position: absolute;
+            /* transform: translate(-50%, -50%); */
+            /* background-color: rgba(0, 0, 0, 0.5); */
+            color: #ffffff;
+            /* padding: 5px 10px; */
+            border-radius: 5px;
+            font-size: 20px;
+            margin-left: -0.2rem;
+            margin-top: 16rem;
+        }
+
+        .friend-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            padding: 6px;
+            width: 100px;
+            background: white;
+            border: 1px solid #ccc;
+            /* Ensures border remains visible */
+            transition: all 0.3s ease-in-out;
+            position: relative;
+        }
+
+        /* Remove the black border when clicking but keep the default border */
+        .friend-btn:focus,
+        .friend-btn:active {
+            outline: none !important;
+            box-shadow: none !important;
+            border: 1px solid #ccc !important;
+            /* Retains the border */
+        }
+
+        /* Initially hide the cancel text */
+        .cancel-text {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+        }
+
+        /* When hovering, fade out the friend text and fade in the cancel text */
+        .friend-btn:hover .friend-text {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .friend-btn:hover .cancel-text {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+    <?php
+        $user = Auth::user();
+        $userPayment = $user->payments->last()->is_paid ?? 0;
+        $sender = $user->senderInvitation;
+        $receiver = $user->receiverInvitation;
+        $friends = $sender->merge($receiver);
+        $isFriend = $friends->contains(function ($friend) use ($profile) {
+            return ($friend->sender_id === $profile->id || $friend->receiver_id === $profile->id) &&
+                $friend->is_friend === 1;
+        });
+    ?>
     <div class="container">
         <div class="row">
             <div class="col-xxl-14 col-xxl-offset-1 col-xl-16 col-xl-offset-0 col-lg-16 col-md-16 col-sm-16">
@@ -16,36 +135,159 @@
         <div class="row">
             <div class="col-xxl-14 col-xxl-offset-1 col-xl-16 col-xl-offset-0 col-lg-16 col-md-16 col-sm-16">
                 <div class="row">
+
                     <div
                         class="col-xxl-4 col-xxl-offset-0 col-xl-4 col-xl-offset-0 col-xs-16 col-sm-16 col-md-8 col-md-offset-4 col-lg-4 col-lg-offset-0">
-                        <a class="thumbnail gt-cursor gt-margin-bottom-0" data-toggle="modal" data-target="#myModal5"
-                            onClick="photoview('MM11');">
-                            <img src="my_photos/watermark.php?image=1695554242.png&watermark=watermark.png"
-                                class="img-responsive gtFullWidth" title="shubhi khanna" title="shubhi khanna"
-                                alt="MM11">
+                        <?php $__currentLoopData = $profile->userSettings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $imageSetting): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php if($imageSetting->image === 1 && $userPayment === 'Active'): ?>
+                                <?php if($profile->images->isNotEmpty()): ?>
+                                    <?php $__currentLoopData = $profile->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($image->dp_image === '1'): ?>
+                                            <a class="image-frame" data-toggle="modal"
+                                                data-target="#photoModal<?php echo e($image->id); ?>">
+                                                <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                                    class="img-responsive gtFullWidth main-image" alt="User Image">
+                                                <div class="viewPhotosModal">
+                                                    <?php echo e($profile->images->count()); ?>
 
-                            <?php if(isset($profile->images)): ?>
-                                <?php $__currentLoopData = $profile->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <?php if($image->dp_image === '1'): ?>
-                                        <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
-                                            class="img-responsive gtFullWidth" alt="User Image" style="height: 100px; width: auto;">
-                                    <?php else: ?>
+                                                </div>
+                                            </a>
+                                            <?php if (isset($component)) { $__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da = $attributes; } ?>
+<?php $component = App\View\Components\Modals\ViewPhotosModalComponent::resolve(['photos' => $profile->images] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('modals.view-photos-modal-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Modals\ViewPhotosModalComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da)): ?>
+<?php $attributes = $__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da; ?>
+<?php unset($__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da)): ?>
+<?php $component = $__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da; ?>
+<?php unset($__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da); ?>
+<?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
+                                    <div class="image-frame">
                                         <img src="<?php echo e($profile->gender === 'male'
                                             ? asset('storage/users/images/male-default.jpg')
                                             : asset('storage/users/images/female-default.jpg')); ?>"
-                                            class="img-responsive gtFullWidth" alt="User Image" style="height: 100px; width: auto;">
-                                    <?php endif; ?>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            <?php else: ?>
-                                <img src="<?php echo e($profile->gender === 'male'
-                                    ? asset('storage/users/images/male-default.jpg')
-                                    : asset('storage/users/images/female-default.jpg')); ?>"
-                                    class="img-responsive gtFullWidth" alt="User Image" style="height: 100px; width: auto;">
-                            <?php endif; ?>
+                                            class="img-responsive gtFullWidth main-image" alt="User Image">
+                                    </div>
+                                <?php endif; ?>
+                            <?php elseif($imageSetting->image === 2): ?>
+                                <?php if($isFriend && $userPayment === 'Active'): ?>
+                                    <?php if($profile->images->isNotEmpty()): ?>
+                                        <?php $__currentLoopData = $profile->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($image->dp_image === '1'): ?>
+                                                <a class="image-frame" data-toggle="modal"
+                                                    data-target="#photoModal<?php echo e($image->id); ?>">
+                                                    <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                                        class="img-responsive gtFullWidth main-image" alt="User Image">
+                                                    <div class=" viewPhotosModal">
+                                                        
 
-                            <span class="gtMemAlbum">
-                                1 </span>
-                        </a>
+                                                    </div>
+                                                </a>
+                                                <?php if (isset($component)) { $__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da = $attributes; } ?>
+<?php $component = App\View\Components\Modals\ViewPhotosModalComponent::resolve(['photos' => $profile->images] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('modals.view-photos-modal-component'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\Modals\ViewPhotosModalComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da)): ?>
+<?php $attributes = $__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da; ?>
+<?php unset($__attributesOriginal25f4e9139185c7d4f0f6ef75ce4177da); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da)): ?>
+<?php $component = $__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da; ?>
+<?php unset($__componentOriginal25f4e9139185c7d4f0f6ef75ce4177da); ?>
+<?php endif; ?>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                        <div class="image-frame">
+                                            <img src="<?php echo e($profile->gender === 'male'
+                                                ? asset('storage/users/images/male-default.jpg')
+                                                : asset('storage/users/images/female-default.jpg')); ?>"
+                                                class="img-responsive gtFullWidth main-image" alt="User Image">
+                                        </div>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <?php if($profile->images->isNotEmpty()): ?>
+                                        <?php $__currentLoopData = $profile->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <?php if($image->dp_image === '1'): ?>
+                                                <a class="image-frame blurred-image-frame">
+                                                    <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                                        class="img-responsive gtFullWidth main-image blurred-image"
+                                                        alt="User Image">
+                                                    <div class="viewPhotosModal">
+                                                        
+
+                                                    </div>
+                                                    <div class="center-text" title="Show Visible on Accept">Visible on
+                                                        Accept</div>
+                                                </a>
+                                            <?php endif; ?>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php else: ?>
+                                        <div class="image-frame">
+                                            <img src="<?php echo e($profile->gender === 'male'
+                                                ? asset('storage/users/images/male-default.jpg')
+                                                : asset('storage/users/images/female-default.jpg')); ?>"
+                                                class="img-responsive gtFullWidth main-image" alt="User Image">
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            <?php elseif($imageSetting->image === 0): ?>
+                                <?php if($profile->images->isNotEmpty()): ?>
+                                    <?php $__currentLoopData = $profile->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <?php if($image->dp_image === '1'): ?>
+                                            <a class="image-frame blurred-image-frame">
+                                                <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                                    class="img-responsive gtFullWidth main-image blurred-image"
+                                                    alt="User Image">
+                                                <div class=" viewPhotosModal">
+                                                    
+
+                                                </div>
+                                                <div class="center-text"><i class="fas fa-eye-slash" title="Photo Hide"></i>
+                                                </div>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
+                                    <div class="image-frame">
+                                        <img src="<?php echo e($profile->gender === 'male'
+                                            ? asset('storage/users/images/male-default.jpg')
+                                            : asset('storage/users/images/female-default.jpg')); ?>"
+                                            class="img-responsive gtFullWidth main-image" alt="User Image">
+                                    </div>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <div class="image-frame">
+                                    <img src="<?php echo e($profile->gender === 'male'
+                                        ? asset('storage/users/images/male-default.jpg')
+                                        : asset('storage/users/images/female-default.jpg')); ?>"
+                                        class="img-responsive gtFullWidth main-image" alt="User Image">
+                                </div>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <span class="gtMemAlbum">
+                            <?php echo e($profile->images->count() ?? ''); ?> </span>
                     </div>
                     <div class="col-xxl-12 col-xl-12 col-xs-16 col-sm-16 col-lg-12">
                         <div class="gt-panel gt-panel-default">
@@ -64,27 +306,42 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                        class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                        <div class="row">
-                                            <div class="col-xs-7"> Marital Status: </div>
-                                            <div class="col-xs-9">
-                                                <b>
-                                                    <?php echo e($profile->basicDetails->maritalStatus->name ?? ''); ?> </b>
+                                    <?php switch($profile->basicDetails->maritalStatus->name):
+                                        case ('Never Married'): ?>
+                                            <div
+                                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                                <div class="row">
+                                                    <div class="col-xs-7"> Marital Status: </div>
+                                                    <div class="col-xs-9">
+                                                        <b>
+                                                            <?php echo e($profile->basicDetails->maritalStatus->name ?? ''); ?> </b>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                        <div class="row">
-                                            <div class="col-xs-7"> No Of Children: </div>
-                                            <div class="col-xs-9">
-                                                <b>
-                                                    <?php echo e($profile->basicDetails->children ?? ''); ?></b>
+                                        <?php break; ?>
+
+                                        <?php default: ?>
+                                            <div
+                                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                                <div class="row">
+                                                    <div class="col-xs-7"> Marital Status: </div>
+                                                    <div class="col-xs-9">
+                                                        <b>
+                                                            <?php echo e($profile->basicDetails->maritalStatus->name ?? ''); ?> </b>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    
+                                            <div
+                                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                                <div class="row">
+                                                    <div class="col-xs-7"> Children Living Status: </div>
+                                                    <div class="col-xs-9">
+                                                        <b>
+                                                            <?php echo e($profile->basicDetails->children ?? ''); ?> </b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    <?php endswitch; ?>
                                     <div
                                         class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
                                         <div class="row">
@@ -129,36 +386,195 @@
                     </div>
                 </div>
                 <div class="btn-group btn-group-justified gt-margin-bottom-15 gtMemProfileBtn" role="group">
-                    <div class="btn-group" role="group">
-                        <button type="button" data-toggle="modal" data-target="#myModal1" title="Send Interest"
-                            onclick="ExpressInterest('MM11')" class="gt-cursor btn btn-default"> <i class="fa fa-heart"></i>
-                            <p class="hidden-xs hidden-sm hidden-md"> Send Express Interest </p>
-                        </button>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <button type="button" data-toggle="modal" data-target="#myModal2" title="View Contact Details"
-                            onClick="checkcontactcount('MM11')" class="gt-cursor btn btn-default"> <i
-                                class="fas fa-phone-alt"></i>
+                    <?php
+                        $matched = false;
+                        $shortlist = false;
+
+                    ?>
+
+                    <?php $__currentLoopData = $user->senderInvitation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sender): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if(
+                            $sender->receiver_id === $profile->id &&
+                                $sender->is_sent === 1 &&
+                                $sender->is_friend === 1 &&
+                                $sender->is_decline === 0): ?>
+                            <div id="send-request<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                                <a title="Send Interest" class="gt-cursor btn btn-default">
+                                    <i class="fa fa-heart"></i>
+                                    <p class="hidden-xs hidden-sm hidden-md"> Friend </p>
+                                </a>
+                            </div>
+                            <?php $matched = true; ?>
+                            <?php break; ?>
+
+                        <?php elseif(
+                            $sender->receiver_id === $profile->id &&
+                                $sender->is_sent === 1 &&
+                                $sender->is_friend === 0 &&
+                                $sender->is_decline === 0): ?>
+                            <div id="send-request<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                                <a title="Cancel Interest" class="gt-cursor btn btn-default cancel-interest-btn"
+                                    data-id="<?php echo e($profile->id); ?>">
+                                    <i class="fa fa-heart"></i>
+                                    <p class="hidden-xs hidden-sm hidden-md"> Cancel Express Interest </p>
+                                </a>
+                            </div>
+                            <?php $matched = true; ?>
+                            <?php break; ?>
+
+                        <?php elseif(
+                            $sender->receiver_id === $profile->id &&
+                                $sender->is_sent === 1 &&
+                                $sender->is_friend === 0 &&
+                                $sender->is_decline === 1): ?>
+                            <div id="send-request<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                                <a title="Rejected" class="gt-cursor btn btn-default " data-id="<?php echo e($profile->id); ?>">
+                                    <i class="fas fa-exclamation-circle text-danger gt-margin-right-5"></i>
+                                    <p class="hidden-xs hidden-sm hidden-md"> Your
+                                        request rejected </p>
+                                </a>
+                            </div>
+                            <?php $matched = true; ?>
+                            <?php break; ?>
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+                    <?php $__currentLoopData = $user->receiverInvitation; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $receiver): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php if(
+                            $receiver->sender_id === $profile->id &&
+                                $receiver->is_sent === 1 &&
+                                $receiver->is_friend === 0 &&
+                                $receiver->is_decline === 0): ?>
+                            <div id="accept-decline<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                                <div style="display: flex; width: 100%;">
+                                    <a title="Accept Interest" class="gt-cursor btn btn-default accept-interest-by-me-btn"
+                                        data-id="<?php echo e($profile->id); ?>"
+                                        style="flex: 1;text-align: border-radius:0px; center; padding: 0px;height:64px;align-content: center;">
+                                        <i class="fas fa-handshake" style="color:#499202;"></i>
+                                        <span class="hidden-xs hidden-sm hidden-md">Accept</span>
+                                    </a>
+
+                                    <a title="Cancel Interest"
+                                        class="gt-cursor btn btn-default decline-interest-by-me-btn"
+                                        data-id="<?php echo e($profile->id); ?>"
+                                        style="flex: 1;text-align: center; border-radius:0px; padding: 0px;height: 64px;align-content: center;">
+                                        <i class="fas fa-times-circle" style="color:#A0061C;"></i>
+                                        <span class="hidden-xs hidden-sm hidden-md">Decline</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <?php $matched = true; ?>
+                            <?php break; ?>
+
+                        <?php elseif(
+                            $receiver->sender_id === $profile->id &&
+                                $receiver->is_sent === 1 &&
+                                $receiver->is_friend === 1 &&
+                                $receiver->is_decline === 0): ?>
+                            <div id="profile-cancel-friend<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                                <button id="friend-btn<?php echo e($profile->id); ?>" title="You are Friend"
+                                    class="gt-cursor btn btn-default friend-btn" data-id="<?php echo e($profile->id); ?>">
+                                    <span class="friend-text">
+                                        <i class="fas fa-check-circle"></i>
+                                        <p class="hidden-xs hidden-sm hidden-md">
+                                            <span style="color: #499202;">Friend</span>
+                                        </p>
+                                    </span>
+                                    <span class="cancel-text" title="Cancel Friend">
+                                        <i class="fas fa-times-circle" style="color: red;"></i>
+                                        <p class="hidden-xs hidden-sm hidden-md cancel-friend-btn"
+                                            data-id="<?php echo e($profile->id); ?>">
+                                            Cancel Friend
+                                        </p>
+                                    </span>
+                                </button>
+                            </div>
+                            <?php $matched = true; ?>
+                            <?php break; ?>
+
+                        <?php elseif(
+                            $receiver->sender_id === $profile->id &&
+                                $receiver->is_sent === 1 &&
+                                $receiver->is_friend === 0 &&
+                                $receiver->is_decline === 1): ?>
+                            <div class="btn-group btn-group-justified gt-margin-bottom-15 gtMemProfileBtn" role="group">
+                                <div id="cancel-decline<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                                    <a title="Cancel Decline Request"
+                                        class="gt-cursor btn btn-default cancel-decline-by-me-btn"
+                                        data-id="<?php echo e($profile->id); ?>" style="margin-left: 1rem;">
+                                        <i class="fas fa-times-circle"></i>
+                                        <p class="hidden-xs hidden-sm hidden-md">
+                                            <span style="color: #FF6D00;">Cancel Decline Request</span>
+                                        </p>
+                                    </a>
+                                </div>
+                            </div>
+                            <?php $matched = true; ?>
+                            <?php break; ?>
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php if(!$matched): ?>
+                        <div id="send-request<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                            <a title="Send Interest" class="gt-cursor btn btn-default send-interest-btn"
+                                data-id="<?php echo e($profile->id); ?>">
+                                <i class="fa fa-heart"></i>
+                                <p class="hidden-xs hidden-sm hidden-md"> Send Express Interest </p>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+
+                    <div id="viewContact<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                        <a title="View Contact Details" data-id="<?php echo e($profile->id); ?>"
+                            class="gt-cursor btn btn-default view-contact-btn"> <i class="fas fa-phone-alt"></i>
                             <p class="hidden-xs hidden-sm hidden-md"> View Contact Details </p>
-                        </button>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <a href="composeMessages?user_id=MM11 " class="btn btn-default"> <i class="fa fa-envelope"></i>
-                            <p class="hidden-xs hidden-sm hidden-md"> Send Personal Message </p>
                         </a>
                     </div>
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-default gt-cursor addToshort-data" id="MM11" title="Add to Blocklist">
-                            <i class="fa fa-ban"></i>
-                            <p class="hidden-xs hidden-sm hidden-md"> Add to Blocklist </p>
-                        </a>
-                    </div>
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-default gt-cursor addToshort-link" id="MM11" title="Add to Shortlist">
-                            <i class="fa fa-sort"></i>
-                            <p class="hidden-xs hidden-sm hidden-md"> Add to Shortlist </p>
-                        </a>
-                    </div>
+                    <?php if(
+                        !$user->blockedUser->contains('blocked_id', $profile->id) &&
+                            !$profile->blockedUser->contains('blocked_id', $user->id)): ?>
+                        <div id="block-user<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                            <a class="btn btn-default gt-cursor block-btn" data-id="<?php echo e($profile->id); ?>"
+                                title="Add to Blocklist">
+                                <i class="fa fa-ban"></i>
+                                <p class="hidden-xs hidden-sm hidden-md"> Add to Blocklist </p>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if($user->shortlisted->contains('shortlisted_user_id', $profile->id)): ?>
+                        <div id="remove-to-shorlist<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                            <a class="btn btn-default gt-cursor remove-to-shortlist-btn" data-id="<?php echo e($profile->id); ?>"
+                                title="Add to Shortlist">
+                                <i class="fas fa-heart-broken"></i>
+                                <p class="hidden-xs hidden-sm hidden-md" style="color: #499202"> Remove from Shortlist
+                                </p>
+                            </a>
+                        </div>
+                        <?php
+                            $shortlist = true;
+                        ?>
+                    <?php elseif($user->shortlistedUser->contains('shortlisted_by_id', $profile->id)): ?>
+                        <div id="add-to-shorlist<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                            <a class="btn btn-default gt-cursor remove-to-shortlist-btn" data-id="<?php echo e($profile->id); ?>"
+                                title="Add to Shortlist">
+                                <i class="fas fa-bookmark"></i>
+                                <p class="hidden-xs hidden-sm hidden-md" style="color: #499202"> You are shortlisted</p>
+                            </a>
+                        </div>
+                        <?php
+                            $shortlist = true;
+                        ?>
+                    <?php endif; ?>
+                    <?php if(!$shortlist): ?>
+                        <div id="add-to-shortlist<?php echo e($profile->id); ?>" class="btn-group" role="group">
+                            <a class="btn btn-default gt-cursor add-to-shortlist-btn" data-id="<?php echo e($profile->id); ?>"
+                                title="Add to Shortlist">
+                                <i class="fas fa-star"></i>
+                                <p class="hidden-xs hidden-sm hidden-md"> Add to Shortlist </p>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+
                 </div>
                 <div class="gt-panel gt-panel-default">
                     <div class="gt-panel-head">
@@ -489,60 +905,153 @@
                         </div>
                     </div>
                 </div>
-                <div class="gt-panel gt-panel-default">
-                    <div class="gt-panel-head">
-                        <span class="pull-left">
-                            <i class="fas fa-moon"></i>Horoscope Information </span>
-                    </div>
-                    <div class="gt-panel-body">
-                        <div class="row">
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6"> Manglik : </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            <?php echo e($profile->horoscopeDetails->manglik ?? ''); ?> </b>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6"> Star : </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            <?php echo e($profile->horoscopeDetails->rashies->name ?? ''); ?>
 
 
-                                        </b>
-                                    </div>
-                                </div>
+
+                <?php
+                    $user = Auth::user();
+                    $userPayment = $user->payments->last()->is_paid ?? 0;
+                    $sender = $user->senderInvitation;
+                    $receiver = $user->receiverInvitation;
+                    $friends = $sender->merge($receiver);
+                    $isFriend = $friends->contains(function ($friend) use ($profile) {
+                        return ($friend->sender_id === $profile->id || $friend->receiver_id === $profile->id) &&
+                            $friend->is_friend === 1;
+                    });
+
+                ?>
+                <?php $__currentLoopData = $profile->userSettings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $horoscopeSetting): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php if($horoscopeSetting->horoscope === 1 && $userPayment === 'Active'): ?>
+                        <div class="gt-panel gt-panel-default">
+                            <div class="gt-panel-head">
+                                <span class="pull-left">
+                                    <i class="fas fa-moon"></i>Horoscope Information </span>
                             </div>
-                            
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                            <div class="gt-panel-body">
                                 <div class="row">
-                                    <div class="col-xs-6"> Birth Time : </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            <?php echo e($profile->horoscopeDetails->time_of_birth ?? ''); ?> </b>
+                                    <div
+                                        class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                        <div class="row">
+                                            <div class="col-xs-6"> Manglik : </div>
+                                            <div class="col-xs-10">
+                                                <b>
+                                                    <?php echo e($profile->horoscopeDetails->manglik ?? ''); ?> </b>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div
-                                class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
-                                <div class="row">
-                                    <div class="col-xs-6"> Birth Place : </div>
-                                    <div class="col-xs-10">
-                                        <b>
-                                            <?php echo e($profile->horoscopeDetails->place_of_birth ?? ''); ?> </b>
+                                    <div
+                                        class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                        <div class="row">
+                                            <div class="col-xs-6"> Star : </div>
+                                            <div class="col-xs-10">
+                                                <b>
+                                                    <?php echo e($profile->horoscopeDetails->rashies->name ?? ''); ?>
+
+
+                                                </b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                        <div class="row">
+                                            <div class="col-xs-6"> Birth Time : </div>
+                                            <div class="col-xs-10">
+                                                <b>
+                                                    <?php echo e($profile->horoscopeDetails->time_of_birth ?? ''); ?> </b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                        <div class="row">
+                                            <div class="col-xs-6"> Birth Place : </div>
+                                            <div class="col-xs-10">
+                                                <b>
+                                                    <?php echo e($profile->horoscopeDetails->cities->city ?? ''); ?> </b>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    <?php elseif($horoscopeSetting->horoscope === 2): ?>
+                        <?php if($isFriend && $userPayment === 'Active'): ?>
+                            <div class="gt-panel gt-panel-default">
+                                <div class="gt-panel-head">
+                                    <span class="pull-left">
+                                        <i class="fas fa-moon"></i>Horoscope Information </span>
+                                </div>
+                                <div class="gt-panel-body">
+                                    <div class="row">
+                                        <div
+                                            class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                            <div class="row">
+                                                <div class="col-xs-6"> Manglik : </div>
+                                                <div class="col-xs-10">
+                                                    <b>
+                                                        <?php echo e($profile->horoscopeDetails->manglik ?? ''); ?> </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                            <div class="row">
+                                                <div class="col-xs-6"> Star : </div>
+                                                <div class="col-xs-10">
+                                                    <b>
+                                                        <?php echo e($profile->horoscopeDetails->rashies->name ?? ''); ?>
+
+
+                                                    </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                            <div class="row">
+                                                <div class="col-xs-6"> Birth Time : </div>
+                                                <div class="col-xs-10">
+                                                    <b>
+                                                        <?php echo e($profile->horoscopeDetails->time_of_birth ?? ''); ?> </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 pb-10 pt-10 gt-view-detail">
+                                            <div class="row">
+                                                <div class="col-xs-6"> Birth Place : </div>
+                                                <div class="col-xs-10">
+                                                    <b>
+                                                        <?php echo e($profile->horoscopeDetails->cities->city ?? ''); ?> </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="gt-panel gt-panel-default">
+                                <div class="gt-panel-head">
+                                    <span class="pull-left">
+                                        <i class="fas fa-moon"></i>Horoscope Information : <i
+                                            class="fas fa-lock text-center" style="color: #670311"
+                                            title="Visible on Friend"></i> </span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div class="gt-panel gt-panel-default">
+                            <div class="gt-panel-head">
+                                <span class="pull-left">
+                                    <i class="fas fa-moon"></i>Horoscope Information : <i class="fas fa-eye-slash"
+                                        style="color: #670311" title="Hide by User"></i> </span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
                 <div class="gt-panel gt-panel-default">
                     <div class="gt-panel-head">
                         <span class="pull-left">

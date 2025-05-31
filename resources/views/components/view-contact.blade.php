@@ -3,16 +3,28 @@
     <div class="modal-dialog">
         <div class="modal-content" style="margin-top: 100px; padding: 15px;">
             <button data-dismiss="modal"
-                style="margin-left: 530px; background-color:white;border:none;font-size:20px">X</button>
+                style="margin-left: 44rem; background-color:white;border:none;font-size:20px">X</button>
             <div class="modal-body">
                 <div class="row">
                     {{-- LEFT SIDE: IMAGE --}}
                     <div class="col-md-4">
                         @foreach ($contactDetails->images as $image)
-                            <img src="{{ $image->name ? asset('storage/users/images/' . $image->name) : asset('user/images/male-default.jpg') }}"
-                                class="rounded-circle img-fluid" style="width: 100px; height: 100px; object-fit: cover;"
-                                alt="User Image">
+                            @if ($image->dp_image === '1')
+                                <a class="image-frame-">
+                                    <img src="{{ asset('storage/users/images/' . $image->name) }}"
+                                        class="img-responsive gtFullWidth main-image " alt="User Image">
+
+                                </a>
+                            @endif
                         @endforeach
+                        @if ($contactDetails->images->count() === 0)
+                            <div class="image-frame-">
+                                <img src="{{ $contactDetails->gender === 'male'
+                                    ? asset('storage/users/images/male-default.jpg')
+                                    : asset('storage/users/images/female-default.jpg') }}"
+                                    class="img-responsive gtFullWidth main-image" alt="User Image">
+                            </div>
+                        @endif
                     </div>
                     {{-- RIGHT SIDE: CONTENT --}}
                     <div class="col-md-12">

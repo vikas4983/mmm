@@ -27,41 +27,46 @@ trait RegistrationStepsTrait
         $contactDetails = ContactDetail::where('user_id', $userId)->first();
         $images = Image::where('user_id', $userId)->first();
 
-        if ($basicDetails === null || $basicDetails->status === 0) {
+        if (empty($basicDetails) || $basicDetails->status === 0) {
             session(['registration_step' => 4]);
             return redirect()->route('basicDetails.create');
         }
 
-        if ($horoscopeDetails === null || $horoscopeDetails->status === 0) {
+        if (empty($horoscopeDetails) || $horoscopeDetails->status === 0) {
             session(['registration_step' => 5]);
             return redirect()->route('horoscopes.create');
         }
 
-        if ($carrierDetails === null || $carrierDetails->status === 0) {
-
+        if (empty($carrierDetails) || $carrierDetails->status === 0) {
             session(['registration_step' => 6]);
             return redirect()->route('carrierDetails.create');
         }
-        if ($familyDetails === null || $familyDetails->status === 0) {
+
+        if (empty($familyDetails) || $familyDetails->status === 0) {
             session(['registration_step' => 7]);
             return redirect()->route('familyDetails.create');
         }
-        if ($lifestyleDetails === null || $lifestyleDetails->status === 0) {
+
+        if (empty($lifestyleDetails) || $lifestyleDetails->status === 0) {
             session(['registration_step' => 8]);
             return redirect()->route('lifestyleDetails.create');
         }
-        if ($likeDetails === null || $likeDetails->status === 0) {
+
+        if (empty($likeDetails) || $likeDetails->status === 0) {
             session(['registration_step' => 9]);
             return redirect()->route('likeDetails.create');
         }
-        if ($contactDetails === null || $contactDetails->status === 0) {
+
+        if (empty($contactDetails) || $contactDetails->status === 0) {
             session(['registration_step' => 10]);
             return redirect()->route('contactDetails.create');
         }
-        if ($images === null || $images->status === 0) {
+
+        if (empty($images) || $images->status === 0) {
             session(['registration_step' => 11]);
             return redirect()->route('images.create');
         }
-        return null;
+         session(['login' => 'yes']);
+        return redirect()->route('dashboard');
     }
 }

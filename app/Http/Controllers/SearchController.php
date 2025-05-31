@@ -2,22 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuickSearchFilterRequest;
 use App\Http\Requests\searches\BasicFilterRequest;
 use App\Http\Requests\searches\AdvanceFilterRequest;
+use App\Http\Requests\sidebarFilter\ReligionRequest;
+use App\Http\Requests\sidebarFilter\SidebarFilterRequest;
+use App\Models\AdvanceSearch;
+use App\Models\BasicSearch;
 use App\Models\Caste;
 use App\Models\City;
 use App\Models\Country;
 use App\Models\Height;
 use App\Models\Image;
 use App\Models\MaritalStatus;
+use App\Models\QuickSearch;
 use App\Models\Religion;
 use App\Models\State;
 use App\Models\User;
+use App\Services\filterCriterias\AdvanceFilterCriteria;
+use App\Services\filterCriterias\BasicFilterCriteria;
+use App\Services\filterCriterias\QuickFilterCriteria;
 use Illuminate\Http\Request;
 use App\Traits\SearchGender;
 use Illuminate\Support\Facades\Auth;
 use App\Services\OptionService;
 use App\Services\FilterService;
+use App\Services\sidebarFilterService;
 use App\Traits\UserBlockTrait;
 use App\Traits\UserStatusTrait;
 
@@ -27,16 +37,13 @@ class SearchController extends Controller
     use UserBlockTrait;
     use UserStatusTrait;
 
-
     protected $optionService;
     protected $filterService;
-
-
+    protected $sidebarFilterService;
 
     public function searchById(Request $request, OptionService $optionService,)
     {
         $options = $optionService->getOptions();
-
         $validatedData = $request->validate([
             'searchById' => ['required', 'numeric'],
         ]);
@@ -59,40 +66,115 @@ class SearchController extends Controller
             return redirect()->back()->with('error', 'User not found!');
         }
     }
-
-    public function search(OptionService $optionService)
+    function getSelectedFilters(array $fields, array $advanceFilter): array
+    {
+        $result = [];
+        foreach ($fields as $field) {
+            $value = old($field, $advanceFilter[$field] ?? ['0']);
+            if (is_string($value)) {
+                $value = explode(',', $value);
+            }
+            $result[$field] = array_map('intval', (array) $value);
+        }
+        return $result;
+    }
+    public function search(OptionService $optionService, QuickFilterCriteria $quickFilter, BasicFilterCriteria $basicFilter, AdvanceFilterCriteria $advanceFilter,)
     {
         $options = $optionService->getOptions();
+        $quickFilter = $quickFilter->quickFilter();
+        $basicFilter = $basicFilter->basicFilter();
+        $advanceFilter = $advanceFilter->advanceFilter();
+        $advanceFilter = is_array($advanceFilter)
+            ? $advanceFilter
+            : ($advanceFilter ? $advanceFilter->toArray() : ['0']);
         $searchResults = '';
-        $user = auth()->user();
+        $filterFields = ['min_age', 'max_age', 'min_height', 'max_height', 'religion', 'caste', 'marital_status', 'children', 'mother_tongue', 'country', 'state', 'city', 'income', 'education', 'occupation', 'profile_show', 'horoscope', 'manglik', 'family_status', 'physical_status', 'diet', 'drink', 'smoke', 'hiv'];
+        $selectedAdvanceFilters = $this->getSelectedFilters($filterFields, $advanceFilter);
 
-        return view('frontend.search.quick', compact('options', 'searchResults', 'user'));
+        $user = auth()->user();
+        return view('frontend.search.search', compact('options', 'searchResults', 'user', 'quickFilter', 'basicFilter', 'selectedAdvanceFilters'));
     }
 
-    public function quickSearch(Request $request, OptionService $optionService)
+    public function quickSearchCriteria($validatedData)
     {
-        $validatedData = $request->validate([
-            'min_age' => 'required|integer',
-            'max_age' => 'required|integer',
-            'religion' => 'nullable|array',
-            'religion.*' => 'integer',
-            'caste' => 'nullable|array',
-            'caste.*' => 'integer',
-        ]);
+        $userId = Auth::user()->id;
+        if ($validatedData) {
+            if (isset($validatedData['religion']) && is_array($validatedData['religion'])) {
+                $validatedData['religion'] = implode(',', $validatedData['religion']);
+            }
+
+            if (isset($validatedData['caste']) && is_array($validatedData['caste'])) {
+                $validatedData['caste'] = implode(',', $validatedData['caste']);
+            }
+            QuickSearch::updateOrCreate(
+                ['user_id' => $userId],
+                $validatedData
+            );
+        }
+    }
+    public function basicSearchCriteria($validatedData)
+    {
+        $userId = Auth::user()->id;
+        if ($validatedData) {
+            foreach (['marital_status', 'children', 'religion', 'caste', 'country', 'state', 'city', 'profile_show'] as $field) {
+                if (isset($validatedData[$field]) && is_array($validatedData[$field])) {
+                    $validatedData[$field] = implode(',', $validatedData[$field]);
+                }
+            }
+            BasicSearch::updateOrCreate(
+                ['user_id' => $userId],
+                $validatedData
+            );
+        }
+    }
+    public function advanceSearchCriteria($validatedData)
+    {
+        $userId = Auth::user()->id;
+        if ($validatedData) {
+            foreach (
+                [
+                    'religion',
+                    'caste',
+                    'marital_status',
+                    'children',
+                    'mother_tongue',
+                    'photo',
+                    'horoscope',
+                    'manglik',
+                    'country',
+                    'state',
+                    'city',
+                    'income',
+                    'education',
+                    'occupation',
+                    'family_status',
+                    'physical_status',
+                    'diet',
+                    'drink',
+                    'smoke',
+                    'hiv'
+                ] as $field
+            ) {
+                if (isset($validatedData[$field]) && is_array($validatedData[$field])) {
+                    $validatedData[$field] = implode(',', $validatedData[$field]);
+                }
+            }
+            AdvanceSearch::updateOrCreate(
+                ['user_id' => $userId],
+                $validatedData
+            );
+        }
+    }
+
+    public function quickSearch(QuickSearchFilterRequest $request, OptionService $optionService)
+    {
+
+        $validatedData = $request->validated();
         $options = $optionService->getOptions();
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');
-            // session()->flash('error', 'Please login first!');
-            // $error = view('alerts.alert')->render();
-            // return response()->json(
-            //     [
-            //         'alert' => $error,
-            //     ],
-            //     404,
-            // );
         }
-
         $gender = $this->getGender($user);
         $blockedIds =  $this->userBlock($user);
         $userStatusIds = $this->userStatus();
@@ -106,6 +188,7 @@ class SearchController extends Controller
         if (!empty($userStatusIds)) {
             $query->whereNotIn('id', $userStatusIds);
         }
+
         if (!empty($validatedData['min_age'] && $validatedData['max_age']) && !empty($validatedData['religion']) && !empty($validatedData['caste'])) {
             $query->whereHas('basicDetails', function ($query) use ($religions, $castes, $minYear, $maxYear) {
                 $query
@@ -122,15 +205,12 @@ class SearchController extends Controller
                 $query->whereBetween('dob', ["$minYear-01-01", "$maxYear-12-31"]);
             });
         }
-        $searchResults = $query->with('basicDetails')->get();
+        $searchResults = $query->with('basicDetails')->paginate(1);
 
         if ($searchResults->count() > 0) {
-            if (session()->has('quickSearch')) {
-                session()->forget('quickSearch');
-            }
-            session()->put('quickSearch', $validatedData);
 
-            return view('components.search-result-component', compact('searchResults', 'options', 'user'));
+            $this->quickSearchCriteria($validatedData);
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
@@ -145,17 +225,19 @@ class SearchController extends Controller
             return redirect()->with('error', 'Login first!');
         }
         $options = $optionService->getOptions();
-        $searchResults = $filterService->filter($validatedData, $user);
+
+        $searchResults = $filterService->filter($validatedData, $user)->sortByDesc('id');
         if (count($searchResults) > 0) {
-            return view('components.search-result-component', compact('searchResults', 'options', 'user'));
+            $this->basicSearchCriteria($validatedData);
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
     }
     public function advanceSearch(AdvanceFilterRequest $request, OptionService $optionService, FilterService $filterService)
     {
-
         $validatedData = $request->validated();
+      
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');
@@ -164,12 +246,41 @@ class SearchController extends Controller
         $searchResults = $filterService->filter($validatedData, $user);
 
         if (count($searchResults) > 0) {
-            return view('components.search-result-component', compact('searchResults', 'options', 'user'));
+            $this->advanceSearchCriteria($validatedData);
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
     }
 
+    public function sidebarFilter(SidebarFilterRequest $request, OptionService $optionService,  sidebarFilterService $sidebarFilterService,)
+    {
+        $validatedData = $request->validated();
+        $user = Auth::user();
+        
+        if (!$user) {
+            return redirect()->with('error', 'Login first!');
+        }
+        $searchResults = $sidebarFilterService->sidebarFilter($validatedData, $user)->sortByDesc('id');
+        $count = $searchResults->count();
+        if (count($searchResults) > 0) {
+            if ($request->ajax()) {
+                $html = view('components.profile-card-component', compact('searchResults'))->render();
+                return response()->json([
+                    'html' => $html,
+                    'count' => $count,
+                ]);
+            }
+        } else {
+            if ($request->ajax()) {
+                $html = view('components.no-data.no-data-found-component')->render();
+                return response()->json([
+                    'html' => $html,
+                    'count' => $count,
+                ]);
+            }
+        }
+    }
     public function searchResult()
     {
         return view('frontend.search.searchResult');

@@ -530,12 +530,12 @@
         'name' => 'mobile',
         'label' => 'Mobile',
         'placeholder' => 'Enter Mobile Number',
-        'rules' => 'required|numeric|regex:/^[0-9]{10,12}$/',
+        'rules' => 'required|integer|unique:users,mobile|regex:/^[0-9]{10,12}$/',
       ),
       'profile_for' => 
       array (
         'type' => 'select',
-        'label' => 'Profile For',
+        'label' => 'Created By',
         'name' => 'profile_for',
         'options' => 
         array (
@@ -706,7 +706,7 @@
         'type' => 'date',
         'name' => 'dob',
         'label' => 'Date of Birth',
-        'rules' => 'required|date|before:2007-03-12',
+        'rules' => 'required|date|before:2007-05-31',
       ),
       'height' => 
       array (
@@ -777,7 +777,7 @@
       'country_of_birth' => 
       array (
         'type' => 'select',
-        'label' => 'Country of birth',
+        'label' => 'Country',
         'name' => 'country',
         'options' => 
         array (
@@ -808,11 +808,12 @@
         'name' => 'manglik',
         'options' => 
         array (
-          'yes' => 'Yes',
-          'no' => 'No',
-          'don\'t know' => 'Don\'t Know',
+          1 => 'Yes',
+          2 => 'No',
+          0 => 'Don\'t Know',
         ),
-        'rules' => 'required|string',
+        'rules' => 'nullable|string',
+        'value' => '1',
       ),
       'horoscope_match' => 
       array (
@@ -821,11 +822,12 @@
         'label' => 'Horoscope Match',
         'options' => 
         array (
-          'yes' => 'Yes',
-          'no' => 'No',
-          'doesn\'t matter' => 'Does\'t Matter',
+          1 => 'Yes',
+          2 => 'No',
+          0 => 'Does\'t Matter',
         ),
         'rules' => 'nullable|string',
+        'value' => '1',
       ),
       'horoscope_show' => 
       array (
@@ -834,11 +836,12 @@
         'label' => 'Horoscope Show',
         'options' => 
         array (
-          'yes' => 'Yes',
-          'only accept member' => 'Only Accept Member',
-          'no' => 'No',
+          1 => 'Yes',
+          2 => 'Only Accept Member',
+          0 => 'No',
         ),
         'rules' => 'nullable|string',
+        'value' => '1',
       ),
     ),
     'editHoroscopeDetails' => 
@@ -1093,12 +1096,12 @@
         'label' => 'Brother',
         'options' => 
         array (
-          'none' => 'None',
+          'none' => '0',
           1 => '1',
           2 => '2',
           3 => '3+',
         ),
-        'rules' => 'nullable|numeric',
+        'rules' => 'nullable|string',
       ),
       'brother_married' => 
       array (
@@ -1107,12 +1110,12 @@
         'label' => 'Brother Married',
         'options' => 
         array (
-          'none' => 'None',
+          'none' => '0',
           1 => '1',
           2 => '2',
           3 => '3+',
         ),
-        'rules' => 'nullable|numeric',
+        'rules' => 'nullable|string',
       ),
       'sister' => 
       array (
@@ -1121,12 +1124,12 @@
         'label' => 'Sister',
         'options' => 
         array (
-          'none' => 'None',
+          'none' => '0',
           1 => '1',
           2 => '2',
           3 => '3+',
         ),
-        'rules' => 'nullable|numeric',
+        'rules' => 'nullable|string',
       ),
       'sister_married' => 
       array (
@@ -1135,12 +1138,12 @@
         'label' => 'Sister Married',
         'options' => 
         array (
-          'none' => 'None',
+          'none' => '0',
           1 => '1',
           2 => '2',
           3 => '3+',
         ),
-        'rules' => 'nullable|numeric',
+        'rules' => 'nullable|string',
       ),
       'family_living' => 
       array (
@@ -1612,7 +1615,7 @@
         'id' => 'userAlternateMobile',
         'label' => 'Alternate Mobile Number ',
         'placeholder' => 'Enter number',
-        'rules' => 'nullable|numeric|regex:/^[0-9]{10,12}$/',
+        'rules' => 'sometimes|numeric|regex:/^[0-9]{10,12}$/',
       ),
       'alternate_owned_by' => 
       array (
@@ -1623,7 +1626,7 @@
         'options' => 
         array (
         ),
-        'rules' => 'nullable|string',
+        'rules' => 'sometimes|string',
       ),
       'landline_number' => 
       array (
@@ -1632,7 +1635,7 @@
         'id' => 'userLandlineNumber',
         'label' => 'Landline number with code ',
         'placeholder' => 'Enter number',
-        'rules' => 'nullable|numeric|regex:/^[0-9]{10,12}$/',
+        'rules' => 'sometimes|numeric|regex:/^[0-9]{10,12}$/',
       ),
       'landline_owned_by' => 
       array (
@@ -1643,7 +1646,7 @@
         'options' => 
         array (
         ),
-        'rules' => 'nullable|string',
+        'rules' => 'sometimes|string',
       ),
       'address' => 
       array (
@@ -1652,7 +1655,7 @@
         'id' => 'userAddress',
         'label' => 'Address',
         'placeholder' => 'Enter Address',
-        'rules' => 'nullable|string|',
+        'rules' => 'sometimes|string|',
       ),
     ),
     'editContactDetails' => 

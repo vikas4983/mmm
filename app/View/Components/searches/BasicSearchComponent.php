@@ -11,12 +11,14 @@ class BasicSearchComponent extends Component
     /**
      * Create a new component instance.
      */
-    public $age;
+    
     public $options;
-    public function __construct($age = '',$options = '' )
+    public $basicFilter;
+    public function __construct($options = '', $basicFilter )
     {
-        $this->age = $age;
+        
         $this->options = $options;
+        $this->basicFilter = $basicFilter;
     }
 
     /**

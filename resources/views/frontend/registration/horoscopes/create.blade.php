@@ -29,14 +29,15 @@
              @include('alerts.alert')
              <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
              <br>
-            
-            <form action="{{ route('horoscopes.store') }}" method="POST">
-                <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
+
+             <form action="{{ route('horoscopes.store') }}" method="POST">
+                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                  @csrf
                  @php
                      $fields = config('formFields.horoscopeDetails');
 
                  @endphp
+
                  <x-form-fields-component :fields="$fields" />
                  <div class="row form-group">
                      <div class="col-xxl-16 text-center">
@@ -49,93 +50,89 @@
      </div>
      </div>
 
-     {{-- <script>
-         let horoscopesDetailsBtn = document.getElementById("horoscopesDetailsBtn");
-         let horoscopesDetailsForm = document.getElementById("horoscopesDetailsForm");
-         horoscopesDetailsForm.addEventListener("submit", function(e) {
-             e.preventDefault();
-             horoscopesDetailsBtn.disabled = true;
-             const formData = new FormData(this);
-             for (let [key, value] of formData.entries()) {
-                 console.log(key, value);
-             }
-             fetch('{{ route('horoscopes.store') }}', {
-                     method: 'POST',
-                     body: formData,
-                     headers: {
-                         'X-Requested-With': 'XMLHttpRequest',
-                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                     }
-                 })
-                 .then(response => response.json())
-                 .then(data => {
-                     if (data.success) {
-                         document.getElementById("message").innerHTML = `<div class="alert alert-success">
-                            ${data.message}
-                        </div>`;
-                         horoscopesDetailsBtn.disabled = true;
-                         document.getElementById("horoscopePage").style.display = 'none';
-                         document.getElementById("carrierDetailsPage").innerHTML = data.html;
-                         document.getElementById("message").innerHTML = `<div class="alert alert-success">
-                    ${data.message}
-                </div>`;
-                         window.scrollTo({
-                             top: 0,
-                             behavior: 'smooth'
-                         });
-
-                      
-                     } else {
-                         document.getElementById("message").innerHTML = `<div class="alert alert-danger">
-                            ${data.message}
-                        </div>`;
-                         horoscopesDetailsBtn.disabled = false;
-                     }
-                 })
-                 .catch(error => {
-                     horoscopesDetailsBtn.disabled = false;
-                     console.error('Error:', error);
-                     document.getElementById("message").innerText =
-                         'An error occurred while submitting the form.';
-                 });
-         });
-     </script> --}}
      <script>
-        const state1 = document.getElementById("state");
-        const city = document.getElementById("hiddenCity");
-        city.style.display = 'none';
-        state1.addEventListener("change", function(e) {
-            let stateId = state1.value;
-            if (stateId) {
-                city.style.display = 'block';
-                $.ajax({
-                    url: '/get-city/' + stateId,
-                    type: 'GET',
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(data) {
-                        $("#city").empty();
-                        $("#city").append('<option value="">Select City</option>');
-                        $.each(data, function(key, value) {
-                            $('#city').append('<option value="' + value.id + '">' + value
-                                .city + '</option>');
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error Status:', status);
-                        console.error('Error Details:', xhr.responseText);
-                        alert(
-                            'An error occurred while fetching the caste data. Please try again later.'
-                        );
-                    }
-                });
-            } else {
-                $('#city').fadeOut();
-                $('#city').empty();
-                $('#city').append('<option value="">Select City</option>');
-            }
-        });
-    </script>
+         const country = document.getElementById("country");
+         const state = document.getElementById("hiddenState");
+         const state1 = document.getElementById("state");
+         const city = document.getElementById("hiddenCity");
+         const CountryLoader = document.getElementById('country-loader');
+         const stateLoader = document.getElementById('state-loader');
+
+         state.style.display = 'none';
+         country.addEventListener("change", function(e) {
+             let countryId = country.value;
+             console.log(countryId);
+             if (countryId) {
+                 if (CountryLoader) {
+                     CountryLoader.style.display = 'flex';
+                     setTimeout(function() {
+                         CountryLoader.style.display = 'none';
+                     }, 1000);
+                 }
+
+                 $.ajax({
+                     url: '/get-state/' + countryId,
+                     type: 'GET',
+                     dataType: 'json',
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     },
+                     success: function(data) {
+                         state.style.display = 'block';
+                         $("#state").append('<option value="">Select state</option>');
+                         $.each(data, function(key, value) {
+                             $('#state').append('<option value="' + value.id + '">' + value
+                                 .state + '</option>');
+                         });
+                     },
+                     error: function(xhr, status, error) {
+                         console.error('Error Status:', status);
+                         console.error('Error Details:', xhr.responseText);
+                         alert(
+                             'An error occurred while fetching the caste data. Please try again later.'
+                         );
+                     }
+                 });
+             } else {
+                 state.style.display = 'none';
+             }
+         });
+
+         city.style.display = 'none';
+         state1.addEventListener("change", function(e) {
+             let stateId = state1.value;
+             if (stateId) {
+                 stateLoader.style.display = 'flex';
+                 setTimeout(function() {
+                     stateLoader.style.display = 'none';
+                 }, 1000);
+
+                 $.ajax({
+                     url: '/get-city/' + stateId,
+                     type: 'GET',
+                     dataType: 'json',
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     },
+                     success: function(data) {
+                         city.style.display = 'block';
+                         $("#city").append('<option value="">Select City</option>');
+                         $.each(data, function(key, value) {
+                             $('#city').append('<option value="' + value.id + '">' + value
+                                 .city + '</option>');
+                         });
+                     },
+                     error: function(xhr, status, error) {
+                         console.error('Error Status:', status);
+                         console.error('Error Details:', xhr.responseText);
+                         alert(
+                             'An error occurred while fetching the caste data. Please try again later.'
+                         );
+                     }
+                 });
+             } else {
+                 city.style.display = 'none';
+             }
+         });
+     </script>
  @endsection

@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateMenuRequest;
 use App\Http\Requests\CreateMessageRequest;
 use App\Http\Requests\invitations\InvitationRequest;
+use App\Http\Requests\UpdateUserSettingRequest;
 use App\Models\ContactViewByMe;
 use App\Models\ContactViewByOther;
 use App\Models\Invitation;
 use App\Models\Message;
+use App\Models\Shortlist;
 use App\Models\User;
 use App\Models\UserBlock;
 use App\Models\UserSetting;
@@ -16,12 +18,15 @@ use App\Models\ViewContact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\OptionService;
+use App\Services\RecentJoinProfile;
 use App\Traits\UserActionTrait;
 use App\Traits\LoginUserTrait;
 use App\Traits\PlanStatusTrait;
 use Illuminate\Http\JsonResponse;
 use App\View\Components\ViewContact as ComponentsViewContact;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 class UserActionController extends Controller
 {
@@ -41,62 +46,219 @@ class UserActionController extends Controller
             if ($planStatusResponse instanceof JsonResponse) {
                 return $planStatusResponse;
             }
-
-            $sendRequest = $this->send($validatedData);
+            $this->send($validatedData);
+            $response = $this->getPreviousUrlForInterest($validatedData);
+            if ($response instanceof \Illuminate\Http\JsonResponse) {
+                return $response;
+            }
+            $action = 'sendInterest';
+            $receiverId = $validatedData['receiver_id'];
+            $button = view('userAction.buttons.button', compact('action', 'receiverId'))->render();
+            $message = view('userAction.messages.message', compact('action'))->render();
             return response()->json([
                 'success' => true,
-                'action' => 'sendInterest',
-                'message' => '<span style="font-size: 14px; padding-left: 59px;">
-                <i class="fas fa-check gt-margin-right-5"></i> Interest Sent
-             </span>',
-                'button' =>
-                '<div id="cancel-request-' .
-                    $validatedData['receiver_id'] .
-                    '" data-id="' .
-                    $validatedData['receiver_id'] .
-                    '">
-    <a data-id="' .
-                    $validatedData['receiver_id'] .
-                    '" class="btn btn-default btn-block inResultSendMessageBtn cancel-interest-btn" style="color: #AF3042;">
-        <i class="fas fa-times gt-margin-right-5 text-danger"></i> Cancel
-    </a>
-</div>',
+                'action' =>  $action,
+                'message' => $message,
+                'button' => $button
             ]);
+        }
+    }
+    private function getPreviousUrlForInterest($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $html = view('userAction.buttons.profiles.cancelInterest', compact('receiverId'))->render();
+            $message = view('userAction.buttons.profiles.sentMessage', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileSendInterest',
+                    'message' =>  $message,
+                    'button' => $html,
+                ]
+            );
         }
     }
     public function cancelInterest(InvitationRequest $request)
     {
-
         $loginuserId = Auth::user()->id;
         $validatedData = $request->validated();
         $validatedData['user_id'] = $loginuserId;
         $validatedData['sender_id'] = $loginuserId;
         if ($validatedData) {
-            $cancelRequest = $this->cancel($validatedData);
+            $this->cancel($validatedData);
+            $response = $this->getPreviousUrlForCancelInterest($validatedData);
+            if ($response instanceof \Illuminate\Http\JsonResponse) {
+                return $response;
+            }
+            $action = 'cancelInterest';
+            $receiverId = $validatedData['receiver_id'];
+            $button = view('userAction.buttons.button', compact('action', 'receiverId'))->render();
+            $message = view('userAction.messages.message', compact('action'))->render();
             return response()->json([
                 'success' => true,
-                'action' => 'sendInterest',
-                'message' => '<span style="font-size: 14px; padding-left: 59px; color: #A0061C;">
-                <i class="fas fa-times gt-margin-right-5"></i> Interest Cancel
-             </span>',
-                'button' =>
-                '<div id="send-request' .
-                    $validatedData['receiver_id'] .
-                    '" data-id="' .
-                    $validatedData['receiver_id'] .
-                    '">
-    <a data-id="' .
-                    $validatedData['receiver_id'] .
-                    '" class="btn btn-default btn-block inResultSendMessageBtn send-interest-btn" >
-       <i class="fas fa-heart gt-margin-right-5"></i> Interest
-    </a>
-</div>',
+                'action' =>  $action,
+                'message' => $message,
+                'button' => $button
             ]);
+        }
+    }
+    public function acceptByMe(InvitationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $user = Auth::user();
+        if (!$user) {
+            redirect()->route()->back()->with('error', 'Something went wrong!');
+        }
+        $acceptedUser = Invitation::where('sender_id',  $validatedData['receiver_id'])->first();
+        if ($acceptedUser) {
+            $acceptedUser->update([
+                'is_friend' => 1,
+                'is_sent' => 1,
+                'is_decline' => 0,
+            ]);
+        }
+        $response = $this->getPreviousUrlForAcceptInterest($validatedData);
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response;
+        }
+
+        $action = 'friend';
+        $receiverId = $validatedData['receiver_id'];
+        $button = view('userAction.buttons.button', compact('action', 'receiverId'))->render();
+        $message = view('userAction.messages.message', compact('action'))->render();
+        return response()->json([
+            'success' => true,
+            'action' =>  $action,
+            'message' => $message,
+            'button' => $button
+        ]);
+    }
+    public function declineByMe(InvitationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $user = Auth::user();
+        if (!$user) {
+            redirect()->route()->back()->with('error', 'Something went wrong!');
+        }
+        $declineByMe = Invitation::where('sender_id',  $validatedData['receiver_id'])->where('is_decline', 0)->first();
+        if ($declineByMe) {
+            $declineByMe->update([
+                'is_decline' => 1,
+                'is_friend' => 0,
+            ]);
+        }
+        $response = $this->getPreviousUrlForDeclineInterest($validatedData);
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response;
+        }
+        $action = 'declineByMe';
+        $receiverId = $validatedData['receiver_id'];
+        $button = view('userAction.buttons.button', compact('action', 'receiverId'))->render();
+        $message = view('userAction.messages.message', compact('action'))->render();
+        return response()->json([
+            'success' => true,
+            'action' =>  $action,
+            'message' => $message,
+            'button' => $button
+        ]);
+    }
+    public function cancelFriend(InvitationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $user = Auth::user();
+        if (!$user) {
+            redirect()->route()->back()->with('error', 'Something went wrong!');
+        }
+        $declineByMe = Invitation::where('sender_id',  $validatedData['receiver_id'])->where('is_decline', 0)->first();
+        if ($declineByMe) {
+            $declineByMe->update([
+                'is_sent' => 1,
+                'is_decline' => 0,
+                'is_friend' => 0,
+            ]);
+        }
+        $response = $this->getPreviousUrlForCancelFriend($validatedData);
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response;
+        }
+    }
+    private function getPreviousUrlForCancelFriend($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $html = view('userAction.buttons.profiles.acceptDeclineBtn', compact('receiverId'))->render();
+            $message = view('userAction.buttons.profiles.cancelfriendMessage', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileCancelFriend',
+                    'message' =>  $message,
+                    'button' => $html,
+                ]
+            );
+        }
+    }
+    public function cancelDeclineByMe(InvitationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $user = Auth::user();
+        if (!$user) {
+            redirect()->route()->back()->with('error', 'Something went wrong!');
+        }
+        $cancelDeclineByMe = Invitation::where('sender_id',  $validatedData['receiver_id'])->where('is_decline', 1)->first();
+        if ($cancelDeclineByMe) {
+            $cancelDeclineByMe->update([
+                'is_decline' => 0,
+                'is_friend' => 0,
+                'is_sent' => 1,
+            ]);
+        }
+        $response = $this->getPreviousUrlForCancelDeclineRequest($validatedData);
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response;
+        }
+        $action = 'cancelDeclineByMe';
+        $receiverId = $validatedData['receiver_id'];
+        $button = view('userAction.buttons.button', compact('action', 'receiverId'))->render();
+        $message = view('userAction.messages.message', compact('action'))->render();
+        return response()->json([
+            'success' => true,
+            'action' =>  $action,
+            'message' => $message,
+            'button' => $button
+        ]);
+    }
+    private function getPreviousUrlForCancelInterest($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $html = view('userAction.buttons.profiles.sendInterest', compact('receiverId'))->render();
+            $message = view('userAction.buttons.profiles.cancelMessage', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileCancelInterest',
+                    'message' =>  $message,
+                    'button' => $html,
+                ]
+            );
         }
     }
     public function sendMessage(CreateMessageRequest $request)
     {
-       
         $userId = $this->loginUser()->id;
         $validatedData = $request->validated();
         if (!$userId) {
@@ -124,12 +286,26 @@ class UserActionController extends Controller
             'message' => '<h1><i class="fas fa-check-circle" style="color: green;"></i></h1><h4 style="color: green;">Message Sent</h4>',
         ]);
     }
+    public function replyMessage(CreateMessageRequest $request)
+    {
+        $validatedData = $request->validated();
+        $userId = $this->loginUser()->id;
+        if (!$userId) {
+            return redirect()->route('/')->with('error', 'Login First!');
+        }
+        Message::create([
+            'sender_id' => $userId,
+            'receiver_id' => $validatedData['receiver_id'],
+            'message' => $validatedData['message'],
+        ]);
+        return redirect()->back()->with('success', 'Message sent successfully');
+    }
     private function send($validatedData)
     {
-
         if ($validatedData) {
             $existingRequest = $this->getUserData($validatedData);
-            if (!empty($existingRequest) && $existingRequest->is_decline === 0 && $existingRequest->is_sent === 1) {
+            if (!empty($existingRequest) && $existingRequest->is_decline === 1 && $existingRequest->is_sent === 1) {
+
                 $existingRequest->destroy($existingRequest->id);
                 Invitation::create([
                     'user_id' => $validatedData['user_id'],
@@ -166,6 +342,10 @@ class UserActionController extends Controller
             'blocker_id' => $validatedData['user_id'],
             'blocked_id' => $validatedData['receiver_id'],
         ]);
+        $response = $this->getPreviouseUrlForBlock($validatedData);
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response;
+        }
         return response()->json([
             'success' => true,
             'action' => 'blockUser',
@@ -184,6 +364,27 @@ class UserActionController extends Controller
                         </div>',
         ]);
     }
+    private function getPreviouseUrlForBlock($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+
+            $html = view('userAction.buttons.profiles.unBlockBtn', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileUnblock',
+                    'button' => $html
+
+                ]
+            );
+        }
+    }
+
     function unBlockUser(InvitationRequest $request)
     {
         $loginuserId = Auth::user()->id;
@@ -194,6 +395,10 @@ class UserActionController extends Controller
 
         $unBlockUser = $this->getBlockUser($validatedData);
         $unBlockUser->destroy($unBlockUser->id);
+        $response = $this->getPreviouseUrlForUnblock($validatedData);
+        if ($response instanceof \Illuminate\Http\JsonResponse) {
+            return $response;
+        }
         return response()->json([
             'success' => true,
             'action' => 'blockUser',
@@ -212,27 +417,30 @@ class UserActionController extends Controller
     </div>',
         ]);
     }
+    private function getPreviouseUrlForUnblock($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $html = view('userAction.buttons.profiles.blockBtn', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileBlock',
+                    'button' => $html
+
+                ]
+            );
+        }
+    }
     private function getBlockUser($validatedData)
     {
         $user = Auth::user();
-        // $blockByOther = UserBlock::where('blocker_id', $validatedData['receiver_id'])
-        //     ->where('blocked_id', $user->id)
-        //     ->exists();
-
-        // if ($blockByOther) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'action' => 'block',
-        //         'message' => 'You have been blocked by this user.',
-        //     ]);
-        // }
         $existingRequest = UserBlock::where('blocker_id', $user->id)->where('blocked_id', $validatedData['receiver_id'])->first();
-
         return $existingRequest;
-    }
-    private function isFriend()
-    {
-        // $unBlockUser = $this->getUserData();
     }
     private function checkUserSetting($validatedData)
     {
@@ -256,11 +464,14 @@ class UserActionController extends Controller
             $contactDetails = $this->getContact($validatedData);
 
             if (!empty($userSetting) && $userSetting->mobile === 0) {
+                $response = $this->getPreviousUrlForMessageMobileSetting0($validatedData);
+                if ($response instanceof \Illuminate\Http\JsonResponse) {
+                    return $response;
+                }
                 return response()->json([
                     'success' => true,
                     'action' => 'hide',
                     'message' => 'Mobile number is hidden ',
-                    // 'html' => view('components.view-contact')->render()
                 ]);
             } elseif (!empty($userSetting) && $userSetting->mobile === 1) {
                 $contactViewLogResponse = $this->ContactViewLog($validatedData);
@@ -286,11 +497,14 @@ class UserActionController extends Controller
                     'html' => view('components.view-contact', compact('contactDetails', 'user'))->render(),
                 ]);
             } elseif (!empty($userSetting) && $userSetting->mobile === 2) {
+                $response = $this->getPreviousUrlForMessageMobileSetting2($validatedData);
+                if ($response instanceof \Illuminate\Http\JsonResponse) {
+                    return $response;
+                }
                 return response()->json([
                     'success' => true,
                     'action' => 'friend',
                     'message' => 'Visible to friends only ',
-                    // 'html' => view('components.view-contact', compact('contactDetails','user'))->render()
                 ]);
             }
         } else {
@@ -300,6 +514,113 @@ class UserActionController extends Controller
             ]);
         }
     }
+    private function getPreviousUrlForMessageMobileSetting2($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $message = view('userAction.viewContacts.messageForMobileSetting2', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'messageForMobileSetting2',
+                    'message' => $message
+
+                ]
+            );
+        }
+    }
+    private function getPreviousUrlForMessageMobileSetting0($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $message = view('userAction.viewContacts.messageForMobileSetting0', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'messageForMobileSetting0',
+                    'message' => $message
+
+                ]
+            );
+        }
+    }
+
+    public function shortlist(InvitationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $userId  = Auth::user()->id;
+        if ($validatedData) {
+            $shortlisted = Shortlist::where('shortlisted_by_id', $userId)->where('shortlisted_user_id',  $validatedData['receiver_id'])->first();
+            if (!$shortlisted) {
+                Shortlist::create([
+                    'shortlisted_by_id' => $userId,
+                    'shortlisted_user_id' => $validatedData['receiver_id'],
+                ]);
+            }
+            $button = 'add-to-shortlist';
+            $receiverId = $validatedData['receiver_id'];
+            $html = view('userAction.buttons.profiles.shortlist', compact('button', 'receiverId'))->render();
+            return response()->json([
+                'success' => true,
+                'action' => 'addToShortlist',
+                'message' => '',
+                'button' =>  $html,
+            ]);
+        }
+    }
+    public function shortlistedUser(InvitationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $userId  = Auth::user()->id;
+        if ($validatedData) {
+            $shortlisted = Shortlist::where('shortlisted_by_id', $userId)->where('shortlisted_user_id',  $validatedData['receiver_id'])->first();
+            if ($shortlisted) {
+                $shortlisted->destroy($shortlisted->id);
+            }
+            $button = 'remove-to-shortlist';
+            $receiverId = $validatedData['receiver_id'];
+            $html = view('userAction.buttons.profiles.shortlist', compact('button', 'receiverId'))->render();
+            return response()->json([
+                'success' => true,
+                'action' => 'removeToShortlist',
+                'message' => '',
+                'button' =>  $html,
+            ]);
+        }
+    }
+
+    public function myShortlist()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            redirect()->route()->back()->with('error', 'Something went wrong!');
+        }
+        $myShortlistedIds = $user->shortlisted->pluck('shortlisted_user_id')->toArray();
+        $searchResults = User::whereIn('id', $myShortlistedIds)->where('status', 1)->get();
+        $heading = 'All My Shortlisted';
+        return view('userAction.accessControll', compact('searchResults', 'heading'));
+    }
+    public function shortlistedByOther()
+    {
+        $user = Auth::user();
+        if (!$user) {
+            redirect()->route()->back()->with('error', 'Something went wrong!');
+        }
+        $shortlistedByOtherIds = $user->shortlistedUser->pluck('shortlisted_by_id')->toArray();
+        $searchResults = User::whereIn('id', $shortlistedByOtherIds)->where('status', 1)->get();
+        $heading = 'All Shortlisted by Others';
+        return view('userAction.accessControll', compact('searchResults', 'heading'));
+    }
+
+
     private function getContact($validatedData)
     {
         $contactDetails = User::where('id', $validatedData['receiver_id'])->where('status', 1)->first();
@@ -372,30 +693,27 @@ class UserActionController extends Controller
         $sentByOtherIds =  $user->receiverInvitation->where('is_friend', 0)->where('is_sent', 1)->where('is_decline', 0)->pluck('sender_id')->toArray();
         return User::with('senderInvitation')->whereIn('id', $sentByOtherIds)->where('status', 1)->orderBy('id', 'desc')->get();
     }
-    public function acceptByMe(InvitationRequest $request)
-    {
-        $validatedData = $request->validated();
-        $user = Auth::user();
-        if (!$user) {
-            redirect()->route()->back()->with('error', 'Something went wrong!');
-        }
-        $acceptedUser = Invitation::where('sender_id',  $validatedData['receiver_id'])->first();
-        if ($acceptedUser) {
-            $acceptedUser->update([
-                'is_friend' => 1,
-                'is_sent' => 1
-            ]);
-        }
-        $receiverId = $acceptedUser->id;
-        $button = view('userAction.buttons.friendButton', compact('receiverId'))->render();
-        return response()->json([
-            'success' => true,
-            'action' => 'acceptByMe',
-            'message' => 'Now you are friend',
-            'button' => $button
-        ]);
-    }
 
+
+    private function getPreviousUrlForAcceptInterest($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $message = view('userAction.buttons.profiles.friendMessage', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'friendProfile',
+                    'message' =>  $message,
+                    // 'button' => $html,
+                ]
+            );
+        }
+    }
     public function acceptByMeList()
     {
         $user = Auth::user();
@@ -407,29 +725,45 @@ class UserActionController extends Controller
         $heading = 'All Interest Received Accepted';
         return view('frontend.users.interests.interest', compact('searchResults', 'heading'));
     }
-    public function declineByMe(InvitationRequest $request)
+    private function getPreviousUrlForDeclineInterest($validatedData)
     {
-        $validatedData = $request->validated();
-        $user = Auth::user();
-        if (!$user) {
-            redirect()->route()->back()->with('error', 'Something went wrong!');
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $message = view('userAction.buttons.profiles.declineMessage', compact('receiverId'))->render();
+            $html = view('userAction.buttons.profiles.interestDeclineBtn', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileDeclineInterest',
+                    'message' =>  $message,
+                    'button' => $html,
+                ]
+            );
         }
-        $declineByMe = Invitation::where('sender_id',  $validatedData['receiver_id'])->where('is_decline', 0)->first();
-
-        if ($declineByMe) {
-            $declineByMe->update([
-                'is_decline' => 1,
-
-            ]);
+    }
+    private function getPreviousUrlForCancelDeclineRequest($validatedData)
+    {
+        $previousUrl = url()->previous();
+        $parsedPath = parse_url($previousUrl, PHP_URL_PATH);
+        $Path = ltrim($parsedPath, '/');
+        $uuid = User::findOrFail($validatedData['receiver_id'])->uuid;
+        if ($Path == 'profile/' . $uuid) {
+            $receiverId = $validatedData['receiver_id'];
+            $message = view('userAction.buttons.profiles.declineMessage', compact('receiverId'))->render();
+            $html = view('userAction.buttons.profiles.acceptDeclineBtn', compact('receiverId'))->render();
+            return response()->json(
+                [
+                    'success' => true,
+                    'action' => 'profileCancelDecline',
+                    'message' =>  $message,
+                    'button' => $html,
+                ]
+            );
         }
-        $receiverId = $declineByMe->id;
-        $button = view('userAction.buttons.interestButton', compact('receiverId'))->render();
-        return response()->json([
-            'success' => true,
-            'action' => 'declineByMe',
-            'message' => '<span style="color: #AF3042;"><i class="fas fa-times-circle"></i> Interest request declined</span>',
-            'button' => $button
-        ]);
     }
     public function declineByList(Request $request)
     {
@@ -458,13 +792,11 @@ class UserActionController extends Controller
     public function declined(InvitationRequest $request)
     {
         $validatedData = $request->validated();
-
         $user = Auth::user();
         if (!$user) {
             redirect()->route()->back()->with('error', 'Something went wrong!');
         }
         $declined = Invitation::where('sender_id',  $validatedData['receiver_id'])->where('is_decline', 1)->first();
-
         if ($declined) {
             $declined->update([
                 'is_decline' => 0,
@@ -499,6 +831,13 @@ class UserActionController extends Controller
         $blockByOtherIds = $user->blockedByUsers->pluck('blocker_id')->toArray();
         $searchResults = User::whereIn('id', $blockByOtherIds)->where('status', 1)->get();
         $heading = 'All Blocked By Others';
+        return view('userAction.accessControll', compact('searchResults', 'heading'));
+    }
+    public function recentJoinProfile(Request $request, RecentJoinProfile $recentJoinProfile)
+    {
+        $path =  $request->path() ?? '';
+        $searchResults =  $recentJoinProfile->getProfile($path);
+        $heading = 'Recent Join Profiles';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
     public function viewContactByMe(Request $request)
@@ -538,8 +877,149 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $userIds = array_unique($user->senderMessage->pluck('receiver_id')->toArray());
-        $users = User::whereIn('id', $userIds)->get();
+        $priorityUserId = Message::where('sender_id', $user->id)->latest('created_at')->pluck('receiver_id')->first();
+        $users = User::whereIn('id', $userIds)
+            ->orderByRaw("FIELD(id, ?) DESC",  [$priorityUserId])
+            ->orderBy('id', 'desc')
+            ->get();
         return view('frontend.users.messages.message', compact('users'));
+    }
+    public function privacySetting()
+    {
+        $heading = 'Profile Name Setting';
+        $settingData = '';
+        return view('frontend.settings.privacySetting', compact('heading', 'settingData'));
+    }
+    public function nameSetting(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        $heading = 'Profile Name Setting';
+        return view('frontend.settings.privacySetting', compact('heading', 'settingData'));
+    }
+
+    private function namePrivacy() {}
+    public function imageSetting(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        $heading = 'Profile Photo Setting';
+        return view('frontend.settings.privacySetting', compact('heading', 'settingData'));
+    }
+    public function horoscopeSetting(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        $heading = 'Profile Horoscope Setting';
+        return view('frontend.settings.privacySetting', compact('heading', 'settingData'));
+    }
+    public function mobileNumberSetting(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        $heading = 'Profile Mobile Number Setting';
+        return view('frontend.settings.privacySetting', compact('heading', 'settingData'));
+    }
+
+    public function nameUpdate(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        if ($settingData) {
+            $settingData->update([
+                'name' => $validatedData['name_privacy']
+            ]);
+        }
+        $heading = 'Profile Name Setting';
+        return redirect()->back()->with([
+            'success' => 'Profile Name Setting Updated Successfully',
+            'heading' => $heading,
+            'settingData' => $settingData,
+        ]);
+    }
+    public function imageUpdate(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        if ($settingData) {
+            $settingData->update([
+                'image' => $validatedData['image_privacy']
+            ]);
+        }
+        $heading = 'Profile Photo Setting';
+        return redirect()->back()->with([
+            'success' => 'Profile Photo Setting Updated Successfully',
+            'heading' => $heading,
+            'settingData' => $settingData,
+        ]);
+    }
+    public function horoscopeUpdate(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        if ($settingData) {
+            $settingData->update([
+                'horoscope' => $validatedData['horoscope_privacy']
+            ]);
+        }
+        $heading = 'Profile Horoscope Setting';
+        return redirect()->back()->with([
+            'success' => 'Profile Horoscope Setting Updated Successfully',
+            'heading' => $heading,
+            'settingData' => $settingData,
+        ]);
+    }
+    public function mobileNumberUpdate(UpdateUserSettingRequest $request)
+    {
+        $userId = Auth::user()->id;
+        if (!$userId) {
+            return redirect()->back()->with('error', 'Login first!');
+        }
+        $validatedData = $request->validated();
+        $settingData = $this->userSetting($userId);
+        if ($settingData) {
+            $settingData->update([
+                'mobile' => $validatedData['mobile_number_privacy']
+            ]);
+        }
+        $heading = 'Profile Mobile Number Setting';
+        return redirect()->back()->with([
+            'success' => 'Profile Mobile Number Setting Updated Successfully',
+            'heading' => $heading,
+            'settingData' => $settingData,
+        ]);
+    }
+    private function userSetting($userId)
+    {
+        return UserSetting::where('user_id', $userId)->first();
     }
     private function getInvitation()
     {

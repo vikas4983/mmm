@@ -1,11 +1,13 @@
 <?php
-    $selectedstates = [];
+    //$selectedstates = [];
 ?>
+
+<option value="0" selected >Doesn't Matter</option>
 <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <optgroup label=<?php echo e($country->country); ?>>
         <?php $__currentLoopData = $states; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php if($state->country_id === $country->id): ?>
-                <option value="<?php echo e($state->id); ?>" <?php echo e(in_array($state->id, $selectedstates) ? 'selected' : ''); ?>>
+                <option value="<?php echo e($state->id); ?>">
                     <?php echo e($state->state); ?>
 
             <?php endif; ?>

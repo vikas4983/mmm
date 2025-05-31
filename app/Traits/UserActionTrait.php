@@ -15,6 +15,7 @@ trait UserActionTrait
                     ->where('receiver_id', $validatedData['receiver_id'])
                     ->first();
                 if ($sentByMe) {
+                   
                     return $sentByMe;
                 }
             }

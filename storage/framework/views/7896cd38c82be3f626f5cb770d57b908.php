@@ -186,22 +186,7 @@
                             <ul class="nav navbar-nav navbar-left">
                                 <li class="active ripplelink"><a href="<?php echo e(url('/')); ?>"><i
                                             class="fas fa-home mr-10 fa-lg"></i>Home</a></li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5"><i
-                                                class="fas fa-search mr-10 fa-lg"></i>Search</span><span
-                                            class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="search?gt-quick-search">Quick Search</a></li>
-                                        <li><a href="search?gt-basic-search">Basic Search</a></li>
-                                        <li><a href="search?gt-advance-search">Advanced Search</a></li>
-                                        <li><a href="search?gt-keyword-search">Keyword Search</a></li>
-                                        <li><a href="search?gt-location-search">Location Search</a></li>
-                                        <li><a href="search?gt-occupation-search">Occupation Search</a></li>
-                                    </ul>
-                                </li>
+                                
 
                                 <li class="ripplelink"><a href="<?php echo e(url('successStory')); ?>"><i
                                             class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
@@ -221,22 +206,11 @@
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="<?php echo e(url('/')); ?>"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                    <a href="<?php echo e(route('members.create')); ?>"><i class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
                                
-                                <?php if(session()->get('registration_step') != '1'): ?>
-                                    <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                        <form action="<?php echo e(url('logout')); ?>" method="post" style="display: inline;">
-                                            <?php echo csrf_field(); ?>
-                                            <button type="submit"
-                                                class="ripplelink gt-border-right-green gtBorderRightSMXS0"
-                                                style="background: none; border: none; color: #ffffff; padding: 15px 13px; font: inherit; cursor: pointer; display: inline-flex; align-items: center;">
-                                                <i class="fas fa-sign-out-alt mr-10 fa-lg"></i> Logout
-                                            </button>
-                                        </form>
-                                    </li>
-                                <?php endif; ?>
+                                
                             </ul>
                         </div>
                         <!-- /.Menu tabs -->
@@ -742,82 +716,5 @@
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    const country = document.getElementById("country");
-    const state = document.getElementById("hiddenState");
-    state.style.display = 'none';
-    country.addEventListener("change", function(e) {
-        let countryId = country.value;
-        console.log(countryId);
-        if (countryId) {
-            state.style.display = 'block';
-            $.ajax({
-                url: '/get-state/' + countryId,
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#state").empty();
-                    $("#state").append('<option value="">Select state</option>');
-                    $.each(data, function(key, value) {
-                        $('#state').append('<option value="' + value.id + '">' + value
-                            .state + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
-                }
-            });
-        } else {
 
-            $('#state').fadeOut();
-            $('#state').empty();
-            $('#state').append('<option value="">Select state</option>');
-        }
-    });
-</script>
-<script>
-    const state1 = document.getElementById("state");
-    const city = document.getElementById("hiddenCity");
-    city.style.display = 'none';
-    state1.addEventListener("change", function(e) {
-        let stateId = state1.value;
-        if (stateId) {
-            city.style.display = 'block';
-            $.ajax({
-                url: '/get-city/' + stateId,
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#city").empty();
-                    $("#city").append('<option value="">Select City</option>');
-                    $.each(data, function(key, value) {
-                        $('#city').append('<option value="' + value.id + '">' + value
-                            .city + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
-                }
-            });
-        } else {
-            $('#city').fadeOut();
-            $('#city').empty();
-            $('#city').append('<option value="">Select City</option>');
-        }
-    });
-</script>
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views\layouts\frontend\master.blade.php ENDPATH**/ ?>

@@ -83,20 +83,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="active ripplelink"><a href="<?php echo e(url('/')); ?>"
                                         class="inPrem2Link">Home</a></li>
-                                <li class="dropdown">
-                                    <a href="search.php" class="dropdown-toggle ripplelink inPrem2Link"
-                                        data-toggle="dropdown" role="button" aria-expanded="false">
-                                        <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="search?gt-quick-search">Quick Search</a></li>
-                                        <li><a href="search?gt-basic-search">Basic Search</a></li>
-                                        <li><a href="search?gt-advance-search">Advanced Search</a></li>
-                                        <li><a href="search?gt-keyword-search">Keyword Search</a></li>
-                                        <li><a href="search?gt-location-search">Location Search</a></li>
-                                        <li><a href="search?gt-occupation-search">Occupation Search</a></li>
-                                    </ul>
-                                </li>
+                                
 
                                 <!--                                        <li class="ripplelink"><a href="success-story.php"><i class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
                                     -->
@@ -157,8 +144,7 @@
                                     </div>
                                     <div class="gt-slideUp-form-body">
 
-                                        <form action="<?php echo e(route('members.store')); ?>" id="registerPage1"
-                                            method="post" name="registerPage1" onsubmit="return validateForm()">
+                                        <form action="<?php echo e(route('members.store')); ?>" method="post">
                                             <?php echo csrf_field(); ?>
                                             <?php
                                                 $fields = config('formFields.register');

@@ -13,11 +13,13 @@ class QuickSearchComponent extends Component
      */
     public $age;
     public $options;
+    public $quickFilter;
     
-    public function __construct($age = null, $options = [])
+    public function __construct($age = null, $options = [], $quickFilter=[])
     {
         $this->age = $age ; 
         $this->options = $options; 
+        $this->quickFilter = $quickFilter; 
     }
     /**
      * Get the view / contents that represent the component.

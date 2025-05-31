@@ -22,6 +22,7 @@
     <link href="<?php echo e(asset('frontend/assets/css/bootstrap.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('frontend/assets/css/custom-responsive.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('frontend/assets/css/custom.css')); ?>" rel="stylesheet">
+    <link href="<?php echo e(asset('frontend/assets/css/custom-css/message-modal.css')); ?>" rel="stylesheet">
     <link
         href="<?php echo e(isset($favicons->name) && !empty($favicons->name)
             ? asset('storage/admin/logo-favicon/favicons/' . $favicons->name)
@@ -34,6 +35,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="<?php echo e(asset('frontend/assets/js/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(asset('frontend/assets/js/custom-js/user-action/user-action.js')); ?>"></script>
+
 
 
 
@@ -51,6 +54,7 @@
     <!-- Chosen CSS -->
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/prism.css')); ?>">
     <link rel="stylesheet" href="<?php echo e(asset('frontend/assets/css/chosen.css')); ?>">
+   
 
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -177,8 +181,8 @@
                                         
                                         <li><a href="<?php echo e(route('message')); ?>">My Messages</a></li>
                                         <li><a href="<?php echo e(url('my-interest')); ?>">My Express Interest</a></li>
-                                        <li><a href="<?php echo e(url('access-control')); ?>">Access Control</a></li>
-                                        <li><a href="<?php echo e(url('my.photos')); ?>">Manage Photo</a></li>
+                                        <li><a href="<?php echo e(route('view.profile')); ?>">Access Control</a></li>
+                                        <li><a href="<?php echo e(route('my.photos')); ?>">Manage Photo</a></li>
                                         
                                     </ul>
                                 </li>
@@ -212,8 +216,7 @@
                                             class="hidden-xxl hidden-xl hidden-lg">Settings</span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="<?php echo e(url('privacy')); ?>">Privacy Setting </a></li>
-                                        <li><a href="settings?contactdiv">Contact View Setting</a></li>
+                                        <li><a href="<?php echo e(route('setting.name')); ?>">Privacy Setting </a></li>
                                         <li><a href="<?php echo e(Route('changePassword')); ?>">Change Password</a></li>
                                         <li>
                                             <form id="logoutForm" action="<?php echo e(route('logout')); ?>" method="POST">
@@ -548,4 +551,90 @@
 
 
 
+<script>
+    const country = document.getElementById("country");
+    const state = document.getElementById("hiddenState");
+    const state1 = document.getElementById("state");
+    const city = document.getElementById("hiddenCity");
+    const CountryLoader = document.getElementById('country-loader');
+    const stateLoader = document.getElementById('state-loader');
+
+    state.style.display = 'none';
+    country.addEventListener("change", function(e) {
+        let countryId = country.value;
+        console.log(countryId);
+        if (countryId) {
+            alert(countryId);
+           if(CountryLoader){
+            CountryLoader.style.display = 'flex';
+            setTimeout(function() {
+                CountryLoader.style.display = 'none';
+            }, 1000);
+           }
+
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    state.style.display = 'block';
+                    $("#state").append('<option value="">Select state</option>');
+                    $.each(data, function(key, value) {
+                        $('#state').append('<option value="' + value.id + '">' + value
+                            .state + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+            state.style.display = 'none';
+        }
+    });
+
+    city.style.display = 'none';
+    state1.addEventListener("change", function(e) {
+        let stateId = state1.value;
+        if (stateId) {
+            stateLoader.style.display = 'flex';
+            setTimeout(function() {
+                stateLoader.style.display = 'none';
+            }, 1000);
+
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    city.style.display = 'block';
+                    $("#city").append('<option value="">Select City</option>');
+                    $.each(data, function(key, value) {
+                        $('#city').append('<option value="' + value.id + '">' + value
+                            .city + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+            city.style.display = 'none';
+        }
+    });
+</script>
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views/layouts/frontend/main-master.blade.php ENDPATH**/ ?>

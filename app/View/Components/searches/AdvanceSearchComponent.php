@@ -12,9 +12,12 @@ class AdvanceSearchComponent extends Component
      * Create a new component instance.
      */
     public $options;
-    public function __construct($options)
+    public $selectedAdvanceFilters;
+
+    public function __construct($options, $selectedAdvanceFilters)
     {
         $this->options = $options;
+        $this->selectedAdvanceFilters = $selectedAdvanceFilters;
     }
 
     /**

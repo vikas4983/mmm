@@ -3,16 +3,28 @@
     <div class="modal-dialog">
         <div class="modal-content" style="margin-top: 100px; padding: 15px;">
             <button data-dismiss="modal"
-                style="margin-left: 530px; background-color:white;border:none;font-size:20px">X</button>
+                style="margin-left: 44rem; background-color:white;border:none;font-size:20px">X</button>
             <div class="modal-body">
                 <div class="row">
                     
                     <div class="col-md-4">
                         <?php $__currentLoopData = $contactDetails->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <img src="<?php echo e($image->name ? asset('storage/users/images/' . $image->name) : asset('user/images/male-default.jpg')); ?>"
-                                class="rounded-circle img-fluid" style="width: 100px; height: 100px; object-fit: cover;"
-                                alt="User Image">
+                            <?php if($image->dp_image === '1'): ?>
+                                <a class="image-frame-">
+                                    <img src="<?php echo e(asset('storage/users/images/' . $image->name)); ?>"
+                                        class="img-responsive gtFullWidth main-image " alt="User Image">
+
+                                </a>
+                            <?php endif; ?>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php if($contactDetails->images->count() === 0): ?>
+                            <div class="image-frame-">
+                                <img src="<?php echo e($contactDetails->gender === 'male'
+                                    ? asset('storage/users/images/male-default.jpg')
+                                    : asset('storage/users/images/female-default.jpg')); ?>"
+                                    class="img-responsive gtFullWidth main-image" alt="User Image">
+                            </div>
+                        <?php endif; ?>
                     </div>
                     
                     <div class="col-md-12">

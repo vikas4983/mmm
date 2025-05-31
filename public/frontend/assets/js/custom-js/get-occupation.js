@@ -2,7 +2,7 @@ const employee = document.getElementById("employee");
 const occupation = document.getElementById("hiddenOccupation");
 employee.addEventListener("change", function() {
     const employeeId = employee.value;
-    console.log(employeeId);
+   
     if (employeeId) {
         occupation.style.display = 'block';
         $.ajax({

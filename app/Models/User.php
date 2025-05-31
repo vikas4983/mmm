@@ -52,7 +52,40 @@ class User extends Authenticatable
         static::creating(function ($model) {
             $model->uuid = (string) Str::uuid();
         });
+
+        static::created(function ($model) {
+            UserSetting::create([
+                'user_id' => $model->id,
+                'name' => 1,
+                'image' => 1,
+                'horoscope' => 1,
+                'mobile' => 1,
+            ]);
+        });
     }
+
+
+    public function scopeGetUsers($query, $user)
+    {
+        return $query->whereIn('id', $user)
+            ->where('status', 1);
+    }
+    public function scopeExcludeUser($query, $user)
+    {
+        return $query->where('id', '!=', $user->id);
+    }
+
+    public function scopeOppositeGender($query, $gender)
+    {
+        $opposite = $gender === 'male' ? 'female' : 'male';
+        return $query->where('gender', $opposite);
+    }
+
+    public function scopeCreatedWithinLastDays($query, $days = 30)
+    {
+        return $query->where('created_at', '>=', Carbon::now()->subDays($days));
+    }
+
 
 
     public function getStatusAttribute($value)
@@ -157,6 +190,7 @@ class User extends Authenticatable
     }
 
 
+
     public function blockedUser()
     {
         return $this->hasMany(UserBlock::class, 'blocker_id');
@@ -165,6 +199,15 @@ class User extends Authenticatable
     public function blockedByUsers()
     {
         return $this->hasMany(UserBlock::class, 'blocked_id');
+    }
+    public function shortlisted()
+    {
+        return $this->hasMany(Shortlist::class, 'shortlisted_by_id');
+    }
+
+    public function shortlistedUser()
+    {
+        return $this->hasMany(Shortlist::class, 'shortlisted_user_id');
     }
 
     public function viewUser()
@@ -190,15 +233,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
-   
-   
+
+
     public function receiverMessage()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
-    
-    
-    
+
+    public function userSettings()
+    {
+        return $this->hasMany(UserSetting::class);
+    }
+
     public function getImageUrlAttribute()
     {
 

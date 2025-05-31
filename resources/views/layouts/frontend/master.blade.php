@@ -188,7 +188,7 @@
                             <ul class="nav navbar-nav navbar-left">
                                 <li class="active ripplelink"><a href="{{ url('/') }}"><i
                                             class="fas fa-home mr-10 fa-lg"></i>Home</a></li>
-                                <li class="dropdown">
+                                {{-- <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
                                         <span class="mr-5"><i
@@ -203,7 +203,7 @@
                                         <li><a href="search?gt-location-search">Location Search</a></li>
                                         <li><a href="search?gt-occupation-search">Occupation Search</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
                                 <li class="ripplelink"><a href="{{ url('successStory') }}"><i
                                             class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
@@ -223,11 +223,11 @@
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="{{ url('/') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                    <a href="{{ route('members.create') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
                                
-                                @if (session()->get('registration_step') != '1')
+                                {{-- @if (session()->get('registration_step') != '1')
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
                                         <form action="{{ url('logout') }}" method="post" style="display: inline;">
                                             @csrf
@@ -238,7 +238,7 @@
                                             </button>
                                         </form>
                                     </li>
-                                @endif
+                                @endif --}}
                             </ul>
                         </div>
                         <!-- /.Menu tabs -->
@@ -814,81 +814,4 @@
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    const country = document.getElementById("country");
-    const state = document.getElementById("hiddenState");
-    state.style.display = 'none';
-    country.addEventListener("change", function(e) {
-        let countryId = country.value;
-        console.log(countryId);
-        if (countryId) {
-            state.style.display = 'block';
-            $.ajax({
-                url: '/get-state/' + countryId,
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#state").empty();
-                    $("#state").append('<option value="">Select state</option>');
-                    $.each(data, function(key, value) {
-                        $('#state').append('<option value="' + value.id + '">' + value
-                            .state + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
-                }
-            });
-        } else {
 
-            $('#state').fadeOut();
-            $('#state').empty();
-            $('#state').append('<option value="">Select state</option>');
-        }
-    });
-</script>
-<script>
-    const state1 = document.getElementById("state");
-    const city = document.getElementById("hiddenCity");
-    city.style.display = 'none';
-    state1.addEventListener("change", function(e) {
-        let stateId = state1.value;
-        if (stateId) {
-            city.style.display = 'block';
-            $.ajax({
-                url: '/get-city/' + stateId,
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#city").empty();
-                    $("#city").append('<option value="">Select City</option>');
-                    $.each(data, function(key, value) {
-                        $('#city').append('<option value="' + value.id + '">' + value
-                            .city + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
-                }
-            });
-        } else {
-            $('#city').fadeOut();
-            $('#city').empty();
-            $('#city').append('<option value="">Select City</option>');
-        }
-    });
-</script>

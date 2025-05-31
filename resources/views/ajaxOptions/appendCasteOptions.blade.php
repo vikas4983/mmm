@@ -1,8 +1,9 @@
 @php
-      $selectedCastes = session()->get('quickSearch.caste', []);
+      $selectedCastes = $quickFilter['caste'] ?? [];
 @endphp
+<option value="0" {{ in_array(0, $selectedCastes) ? 'selected' : '' }}>Doesn't Matter</option>
 @foreach ($religions as $religion)
-<optgroup label={{ $religion->name }} class="select2-results__group">
+<optgroup label={{ $religion->name }} class="select2-results__group" >
     @foreach ($castes as $caste)
    @if ($caste->religion_id === $religion->id)
        <option value="{{ $caste->id }}"

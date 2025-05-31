@@ -86,8 +86,10 @@
                         <div class="col-xs-6">
                             <select class="gt-form-control" name="min_age" id="advance_min_age">
                                 <?php for($age = 18; $age <= 60; $age++): ?>
-                                    <option value="<?php echo e($age); ?>" <?php echo e(old('min_age') == $age ? 'selected' : ''); ?>>
-                                        <?php echo e($age); ?> Years</option>
+                                    <option value="<?php echo e($age); ?>"
+                                        <?php echo e(in_array($age, $selectedAdvanceFilters['min_age']) ? 'selected' : ''); ?>>
+                                        <?php echo e($age); ?> Years
+                                    </option>
                                 <?php endfor; ?>
                             </select>
                         </div>
@@ -95,7 +97,8 @@
                         <div class="col-xs-6">
                             <select class="gt-form-control" name="max_age" id="advance_max_age">
                                 <?php for($age = 18; $age <= 60; $age++): ?>
-                                    <option value="<?php echo e($age); ?>" <?php echo e(old('max_age') == $age ? 'selected' : ''); ?>>
+                                    <option value="<?php echo e($age); ?>"
+                                        <?php echo e(in_array($age, $selectedAdvanceFilters['max_age']) ? 'selected' : ''); ?>>
                                         <?php echo e($age); ?> Years</option>
                                 <?php endfor; ?>
                             </select>
@@ -116,7 +119,8 @@
                             <select class="gt-form-control flat" name="min_height" id="advance_min_height">
                                 <?php $__currentLoopData = $options['heights']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $height): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($height->id); ?>"
-                                        <?php echo e(old('height') == $height->id ? 'selected' : ''); ?>><?php echo e($height->name); ?>
+                                        <?php echo e(in_array($height->id, $selectedAdvanceFilters['min_height']) ? 'selected' : ''); ?>>
+                                        <?php echo e($height->name); ?>
 
                                     </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -128,7 +132,8 @@
                             <select class="gt-form-control flat" name="max_height" id="advance_max_height">
                                 <?php $__currentLoopData = $options['heights']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $height): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option value="<?php echo e($height->id); ?>"
-                                        <?php echo e(old('height') == $height->id ? 'selected' : ''); ?>><?php echo e($height->name); ?>
+                                        <?php echo e(in_array($height->id, $selectedAdvanceFilters['max_height']) ? 'selected' : ''); ?>>
+                                        <?php echo e($height->name); ?>
 
                                     </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -145,10 +150,15 @@
                         Religion </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="advance_religion" name="religion[]" style="width: 432px" multiple>
+                    <select id="advance_religion" class="custom-select2" name="religion[]" style="width: 432px"
+                        multiple>
+                        <option value="0"
+                            <?php echo e(in_array(0, old('religion', $selectedAdvanceFilters['religion'])) ? 'selected' : ''); ?>>
+                            Does't Matter </option>
                         <?php $__currentLoopData = $options['religions']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $religion): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($religion->id); ?>"
-                                <?php echo e(old('religion') == $religion->id ? 'selected' : ''); ?>><?php echo e($religion->name); ?>
+                                <?php echo e(in_array($religion->id, old('religion', $selectedAdvanceFilters['religion'])) ? 'selected' : ''); ?>>
+                                <?php echo e($religion->name); ?>
 
                             </option>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -162,11 +172,14 @@
                 <div class="col-xxl-6 col-xl-6">
                     <label class="mt-10">
                         Caste </label>
+
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select multiple id="advance_caste" name="caste[]" style="width: 432px">
+                    <select multiple id="advance_caste" class="custom-select2 advance_caste" name="caste[]"
+                        multiple="multiple" style="width: 432px">
 
                     </select>
+
                 </div>
             </div>
         </div>
@@ -176,12 +189,16 @@
                     <label class="mt-10">
                         Mother Tongue </label>
                 </div>
+                
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="advance_mother_tongue" name="mother_tongue[]" style="width: 432px" multiple>
-                        <option value="0" selected>Doesn't Matter</option>
+                    <select id="advance_mother_tongue" class="custom-select2" name="mother_tongue[]"
+                        style="width: 432px" multiple>
+                        <option value="0"
+                            <?php echo e(in_array(0, $selectedAdvanceFilters['mother_tongue']) ? 'selected' : ''); ?>>Doesn't
+                            Matter</option>
                         <?php $__currentLoopData = $options['motherTongues']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $motherTongue): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <option value="<?php echo e($motherTongue->id); ?>"
-                                <?php echo e(old('mother_tongue') == $motherTongue->id ? 'selected' : ''); ?>>
+                                <?php echo e(in_array($motherTongue->id, $selectedAdvanceFilters['mother_tongue']) ? 'selected' : ''); ?>>
                                 <?php echo e($motherTongue->name); ?>
 
                             </option>
@@ -196,11 +213,15 @@
                     <label class="mt-10">
                         Country </label>
                 </div>
+
                 <div class="col-xxl-10 col-xl-10">
-                    <select class="select2-results__group" id="advance_country" name="country[]" multiple="multiple"
+                    <select class="custom-select2" id="advance_country" name="country[]" multiple="multiple"
                         style="width: 432px">
+                        <option value="0" <?php echo e(in_array(0, $selectedAdvanceFilters['country']) ? 'selected' : ''); ?>>
+                            Doesn't Matter</option>
                         <?php $__currentLoopData = $options['countries']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($country->id); ?>">
+                            <option value="<?php echo e($country->id); ?>"
+                                <?php echo e(in_array($country->id, $selectedAdvanceFilters['country']) ? 'selected' : ''); ?>>
                                 <?php echo e($country->country); ?>
 
                             </option>
@@ -216,7 +237,7 @@
                         State </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class=" select2-results__group" id="advance_state" name="state[]" multiple="multiple"
+                    <select class="custom-select2" id="advance_state" name="state[]" multiple="multiple"
                         style="width: 432px">
 
                     </select>
@@ -230,8 +251,7 @@
                         City </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class=" select2-results__group" id="advance_city" name="city[]" multiple
-                        style="width: 432px">
+                    <select class="custom-select2" id="advance_city" name="city[]" multiple style="width: 432px">
 
                     </select>
                 </div>
@@ -244,11 +264,13 @@
                         Income </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select class="select2-results__group" id="advance_income" name="income[]" multiple
+                    <select class="custom-select2" id="advance_income" name="income[]" multiple
                         style="width: 432px">
-                        <option value="0" selected>Doesn't Matter</option>
+                        <option value="0" <?php echo e(in_array(0, $selectedAdvanceFilters['income']) ? 'selected' : ''); ?>>
+                            Doesn't Matter</option>
                         <?php $__currentLoopData = $options['incomes']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $income): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($income->id); ?>">
+                            <option value="<?php echo e($income->id); ?>"
+                                <?php echo e(in_array($income->id, $selectedAdvanceFilters['income']) ? 'selected' : ''); ?>>
                                 <?php echo e($income->income); ?>
 
                             </option>
@@ -257,6 +279,7 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
@@ -264,12 +287,15 @@
                         Marital status </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="advance_marital_status" class="ams" name="marital_status[]" multiple
-                        style="width: 432px">
-                        <option value="0" id="option_marital_status" selected>Doesn't Matter
+                    <select id="advance_marital_status" class="form-control custom-select2" name="marital_status[]"
+                        multiple style="width: 432px">
+                        <option value="0"
+                            <?php echo e(in_array(0, $selectedAdvanceFilters['marital_status']) ? 'selected' : ''); ?>>Doesn't
+                            Matter
                         </option>
                         <?php $__currentLoopData = $options['maritalStatuses']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $maritalStatus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($maritalStatus->id); ?>">
+                            <option value="<?php echo e($maritalStatus->id); ?>"
+                                <?php echo e(in_array($maritalStatus->id, $selectedAdvanceFilters['marital_status']) ? 'selected' : ''); ?>>
                                 <?php echo e($maritalStatus->name); ?>
 
                             </option>
@@ -278,29 +304,25 @@
                 </div>
             </div>
         </div>
-        <div class="form-group" id="children_div">
+        <div class="form-group children" id="children_div">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
                     <label class="mt-10">
                         Children </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="advance_children" name="children[]" style="width: 432px" multiple>
-                        <option value="0" id="optionMaritalStatus" selected>Doesn't Matter
+                    <select id="advance_children" class="form-control custom-select2 " name="children[]"
+                        style="width: 432px" multiple>
+                        <option value="0" id="advance_children" selected>Doesn't Matter
                         </option>
-                        <option value="1">No</option>
-                        <option value="2">Yes, Living together</option>
-                        <option value="3">Yes, Not Living together</option>
+                        <option value="00">No</option>
+                        <option value="1">Yes, Living together</option>
+                        <option value="2">Yes, Not Living together</option>
                     </select>
                 </div>
-                <script>
-                    $(document).ready(function() {
-
-
-                    });
-                </script>
             </div>
         </div>
+
         <div class="form-group">
             <div class="row">
                 <div class="col-xxl-6 col-xl-6">
@@ -308,16 +330,16 @@
                         Profiles Show </label>
                 </div>
                 <div class="col-xxl-10 col-xl-10">
-                    <select id="advance_photo" name="photo" style="width: 432px" class="form-control">
-                        <option value="0" selected>Doesn't Matter</option>
-                        <option value="1">With Photo</option>
+                    <select id="advance_photo" name="profile_show[]" style="width: 432px" class="form-control">
+                        <option value="0" <?php echo e(in_array(0, $selectedAdvanceFilters['profile_show']) ? 'selected' : ''); ?>>
+                            Doesn't Matter</option>
+                        <option value="1" <?php echo e(in_array(1, $selectedAdvanceFilters['profile_show']) ? 'selected' : ''); ?>>
+                            With Photo</option>
 
                     </select>
                 </div>
             </div>
         </div>
-
-
         <div class="container mt-5">
             
             <div class="accordion" id="accordionExample">
@@ -339,11 +361,18 @@
                                             Manglik Status </label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10">
-                                        <select id="advance_manglik" name="manglik" class="form-control"
+                                        <select id="advance_manglik" name="manglik[]"
+                                            class="custom-select2 form-control"
                                             style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
-                                            <option value="1">Manglik</option>
-                                            <option value="2">Non-Manglik</option>
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['manglik']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
+                                            <option value="1"
+                                                <?php echo e(in_array(1, $selectedAdvanceFilters['manglik']) ? 'selected' : ''); ?>>
+                                                Manglik</option>
+                                            <option value="2"
+                                                <?php echo e(in_array(2, $selectedAdvanceFilters['manglik']) ? 'selected' : ''); ?>>
+                                                Non-Manglik</option>
 
                                         </select>
                                     </div>
@@ -357,10 +386,15 @@
                                         </label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10">
-                                        <select id="advance_manglik" name="horoscope" class="form-control"
+                                        <select id="advance_manglik" name="horoscope[]"
+                                            class="form-control custom-select2"
                                             style="width: 429px;margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
-                                            <option value="1">Yes</option>
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['horoscope']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
+                                            <option value="1"
+                                                <?php echo e(in_array(1, $selectedAdvanceFilters['horoscope']) ? 'selected' : ''); ?>>
+                                                Yes</option>
                                         </select>
                                     </div>
                                 </div>
@@ -387,10 +421,14 @@
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
                                         <select id="advance_family_status" name="family_status[]"
-                                            class="form-control" multiple style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                            class="form-control custom-select2" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['family_status']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['familyStatus']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $status): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($status->id); ?>">
+                                                <option value="<?php echo e($status->id); ?>"
+                                                    <?php echo e(in_array($status->id, $selectedAdvanceFilters['family_status']) ? 'selected' : ''); ?>>
                                                     <?php echo e($status->name); ?>
 
                                                 </option>
@@ -400,7 +438,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <hr>
@@ -422,11 +460,15 @@
                                             Education</label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
-                                        <select id="advance_education" name="education[]" class="form-control"
-                                            multiple style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                        <select id="advance_education" name="education[]"
+                                            class="form-control custom-select2" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['education']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['educations']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $education): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($education->id); ?>">
+                                                <option value="<?php echo e($education->id); ?>"
+                                                    <?php echo e(in_array($education->id, $selectedAdvanceFilters['education']) ? 'selected' : ''); ?>>
                                                     <?php echo e($education->education); ?>
 
                                                 </option>
@@ -444,11 +486,15 @@
                                             Occupation </label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
-                                        <select id="advance_occupation" name="occupation[]" class="form-control"
-                                            multiple style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                        <select id="advance_occupation" name="occupation[]"
+                                            class="form-control custom-select2" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['occupation']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['occupations']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $occupation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($occupation->id); ?>">
+                                                <option value="<?php echo e($occupation->id); ?>"
+                                                    <?php echo e(in_array($occupation->id, $selectedAdvanceFilters['occupation']) ? 'selected' : ''); ?>>
                                                     <?php echo e($occupation->occupation); ?>
 
                                                 </option>
@@ -479,10 +525,14 @@
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
                                         <select id="advance_physical_status" name="physical_status[]"
-                                            class="form-control" multiple style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                            class="form-control custom-select2" multiple
+                                            style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['physical_status']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['physicalStatuses']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $physicalStatus): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($physicalStatus->id); ?>">
+                                                <option value="<?php echo e($physicalStatus->id); ?>"
+                                                    <?php echo e(in_array($physicalStatus->id, $selectedAdvanceFilters['physical_status']) ? 'selected' : ''); ?>>
                                                     <?php echo e($physicalStatus->name); ?>
 
                                                 </option>
@@ -498,11 +548,17 @@
                                         <label class="mt-10">HIV+?</label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
-                                        <select id="advance_hiv" name="hiv[]" class="form-control" multiple
-                                            style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
-                                            <option value="1">HIV+</option>
-                                            <option value="2">HIV-</option>
+                                        <select id="advance_hiv" name="hiv[]" class="form-control custom-select2"
+                                            multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['hiv']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
+                                            <option value="1"
+                                                <?php echo e(in_array(1, $selectedAdvanceFilters['hiv']) ? 'selected' : ''); ?>>
+                                                HIV+</option>
+                                            <option value="2"
+                                                <?php echo e(in_array(2, $selectedAdvanceFilters['hiv']) ? 'selected' : ''); ?>>
+                                                HIV-</option>
                                         </select>
                                     </div>
                                 </div>
@@ -514,11 +570,14 @@
                                         <label class="mt-10">Diet</label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
-                                        <select id="advance_diet" name="diet[]" class="form-control" multiple
-                                            style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                        <select id="advance_diet" name="diet[]" class="form-control custom-select2"
+                                            multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['diet']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['dietaryHabits']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $diet): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($diet->id); ?>">
+                                                <option value="<?php echo e($diet->id); ?>"
+                                                    <?php echo e(in_array($diet->id, $selectedAdvanceFilters['diet']) ? 'selected' : ''); ?>>
                                                     <?php echo e($diet->name); ?>
 
                                                 </option>
@@ -534,11 +593,14 @@
                                         <label class="mt-10">Drink</label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
-                                        <select id="advance_drink" name="drink[]" class="form-control" multiple
-                                            style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                        <select id="advance_drink" name="drink[]" class="form-control custom-select2"
+                                            multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['drink']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['habits']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $habit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($habit->id); ?>">
+                                                <option value="<?php echo e($habit->id); ?>"
+                                                    <?php echo e(in_array($habit->id, $selectedAdvanceFilters['drink']) ? 'selected' : ''); ?>>
                                                     <?php echo e($habit->name); ?>
 
                                                 </option>
@@ -554,11 +616,14 @@
                                         <label class="mt-10">Smoke</label>
                                     </div>
                                     <div class="col-xxl-10 col-xl-10" style="margin-left: -176px;">
-                                        <select id="advance_smoke" name="smoke[]" class="form-control" multiple
-                                            style="width: 429px; margin-left: -177px;">
-                                            <option value="0" selected>Doesn't Matter</option>
+                                        <select id="advance_smoke" name="smoke[]" class="form-control custom-select2"
+                                            multiple style="width: 429px; margin-left: -177px;">
+                                            <option value="0"
+                                                <?php echo e(in_array(0, $selectedAdvanceFilters['smoke']) ? 'selected' : ''); ?>>
+                                                Doesn't Matter</option>
                                             <?php $__currentLoopData = $options['habits']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $habit): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($habit->id); ?>">
+                                                <option value="<?php echo e($habit->id); ?>"
+                                                    <?php echo e(in_array($habit->id, $selectedAdvanceFilters['smoke']) ? 'selected' : ''); ?>>
                                                     <?php echo e($habit->name); ?>
 
                                                 </option>
@@ -595,137 +660,44 @@
         </div>
     </form>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         $(document).ready(function() {
-            const $maritalStatus = $("#advance_marital_status");
-            const selectedMaritalStatus = $maritalStatus.val() || [];
-            const $children = $("#advance_children");
-            const selectChildren = $children.val() || [];
-            // Default Marital Status
-            if (selectedMaritalStatus.includes('0') || selectedMaritalStatus.length === 0) {
-                $maritalStatus.val('0').trigger("change.select2");
+            const advanceReligion = $('#advance_religion');
+            const selectedReligionIds = advanceReligion.val();
+            if (selectedReligionIds) {
+                loadList('get-caste', selectedReligionIds, 'advanceCasteCriteria')
             }
-            // Default Children
-            if (selectChildren.includes('0') || selectChildren.length === 0) {
-                $(this).val('0').trigger("change.select2");
-                console.log(selectChildren);
-            }
-            // Marital Status Select 
-            $maritalStatus.on("change", function() {
-                let selectOptions = $(this).val() || [];
-                let checkZero = $(this).val() || [];
-                if (selectOptions.length === 0) {
-                    $(this).val(['0']).trigger("change.select2");
-                }
-                if (selectOptions.length > 1 && selectOptions.includes('0')) {
-                    if (selectOptions) {
-                        selectOptions = selectOptions.filter(id => id !== '0');
-                        $(this).val(selectOptions).trigger("change.select2");
-                        if (checkZero.length > 2 && checkZero.includes('0')) {
-                            $(this).val('0').trigger("change.select2");
-                        }
-                    }
-                }
-                if (selectOptions.length > 1 && selectOptions.includes('0')) {
-                    selectOptions = selectOptions.filter(id => id == '0');
-                    $(this).val(selectOptions).trigger("change.select2");
-                }
-                // Show Children Div
-                if (selectOptions.includes("1") && selectOptions.length === 1) {
-                    $(this).val(["1"]).trigger("change.select2");
-                    let $advanceChildren = $("#advance_children");
-                    let selectedValuesChildren = $advanceChildren.val() || [];
-                    if (selectedValuesChildren.includes('0')) {
-                        $advanceChildren.val('0').trigger(
-                            "change.select2");
-
-                    } else {
-                        $advanceChildren.val('0').trigger(
-                            "change.select2");
-                    }
-                    $("#children_div").hide();
-                } else {
-
-                    $("#children_div").show();
-                }
-            });
-            // Children Select 
-            $children.on("change", function() {
-                let optionChildren = $(this).val() || [];
-                let checkChildrenZero = $(this).val() || [];
-                if (optionChildren.length === 0) {
-                    $(this).val('0').trigger("change.select2");
-                }
-                if (optionChildren.length > 1) {
-                    if (optionChildren) {
-                        optionChildren = optionChildren.filter(id => id !== '0');
-                        $(this).val(optionChildren).trigger("change.select2");
-                        if (checkChildrenZero.length > 2 && checkChildrenZero.includes('0')) {
-                            $(this).val(['0']).trigger("change.select2");
-                        }
-                    }
-                }
-                if (optionChildren.length > 1 && optionChildren.includes('0')) {
-                    optionChildren = optionChildren.filter(id => id == '0');
-                    $(this).val(['0']).trigger("change.select2");
-                }
-            });
         });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // const oldAdvanceReligionValue = Array.from(advance_religion.selectedOptions).map(option => option.value);
-        // if (oldAdvanceReligionValue.length > 0) {
-        //     $('#advance_caste_div').css('display', 'block');
-        //     $.ajax({
-        //         url: 'get-caste',
-        //         type: 'POST',
-        //         data: {
-        //             'religions': oldAdvanceReligionValue
-        //         },
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-
-        //         success: function(castes) {
-        //             $('#advance_caste').html(castes);
-
-        //         },
-        //         error: function(xhr, status, error) {
-        //             console.error('Error Status:', status);
-        //             console.error('Error Details:', xhr.responseText);
-
-        //         }
-        //     });
-        // } else {
-        //     console.log("No religion value selected or available.");
-        // }
-
-
         $('#advance_religion').on('change', function() {
             const religionId = $(this).val();
+            // if(religionId.length === 1 && religionId.includes('0')){
+            //      $('#advance_caste_div').hide();
+            // }else{
+            //      $('#advance_caste_div').show();
+            // }
             if (religionId) {
-                $.ajax({
-                    url: 'get-caste',
-                    method: 'POST',
-                    data: {
-                        'religions': religionId
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(castes) {
-                        $('#advance_caste_div').css('display', 'block');
-                        $('#advance_caste').html(castes);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error Status:', status);
-                        console.error('Error Details:', xhr.responseText);
-                    }
-                });
+                // $.ajax({
+                //     url: 'get-caste',
+                //     method: 'POST',
+                //     data: {
+                //         'ids': religionId
+                //     },
+                //     headers: {
+                //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                //     },
+                //     success: function(castes) {
+                //         $('#advance_caste_div').css('display', 'block');
+                //         $('#advance_caste').html(castes);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         console.error('Error Status:', status);
+                //         console.error('Error Details:', xhr.responseText);
+                //     }
+                // });
+                loadList('get-caste', religionId, 'advanceCasteCriteria')
             } else {
                 $('#advance_caste_div').css('display', 'none');
                 $('#advance_caste').fadeOut();
@@ -736,29 +708,132 @@
     });
 </script>
 <script>
+    function defaultCity() {
+        const advanceCity = $('#advance_city');
+        const selectedCityIds = advanceCity.val();
+        if (selectedCityIds === null) {
+            $('#advance_city').val('0');
+        }
+    }
+
+    function defaultCaste() {
+        const advanceCaste = $('#advance_caste');
+        const selectedCasteIds = advanceCaste.val();
+        if (selectedCasteIds === null) {
+            $('#advance_caste').val('0');
+        }
+    }
+
+
+
+    function loadList(route, selectedId, action) {
+        $.ajax({
+            url: route,
+            method: 'POST',
+            data: {
+                'ids': selectedId,
+                'action': action,
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response) {
+
+                if (response.action === 'advanceCasteList') {
+                    $('#advance_caste').html(response.data);
+                    $('#advance_caste_div').css('display', 'block');
+
+                }
+
+
+                if (response.action === 'stateList') {
+                    $('#basicState').html(response.data);
+                    $('#basicStateDiv').show();
+                    const stateIds = $('#basicState').val();
+                    if (stateIds) {
+                        if (stateIds.length === 0 && stateIds.includes('0')) {
+                            $('#basicCityDiv').hide();
+                        } else {
+                            $('#basicCityDiv').show();
+                        }
+                        let route = 'get-city'
+                        let action = 'basicCityCriteria'
+
+                        loadList(route, stateIds, action)
+                    }
+
+                }
+                if (response.action === 'advanceStateList') {
+
+                    $('#advance_state').html(response.advanceState);
+                    $('#advance_state_div').show();
+                    const stateIds = $('#advance_state').val();
+
+                    if (stateIds) {
+                        if (stateIds.length === 0 && stateIds.includes('0')) {
+                            $('#advance_state_div').hide();
+                        } else {
+                            $('#advance_state_div').show();
+                        }
+                        loadList('get-city', stateIds, 'advanceCityCriteria')
+                    }
+
+                }
+                if (response.action === 'advanceCityList') {
+                    $('#advance_city').html(response.advanceCity);
+                    $('#advance_city_div').show();
+                }
+
+
+                if (response.action === 'cityList') {
+                    $('#basicCity').html(response.data);
+                    $('#basicCityDiv').css('display', 'block');
+                }
+
+                if (response.action === 'hide') {
+                    $('#basicStateDiv').hide();
+                    $('#basicCityDiv').hide();
+                }
+                if (response.action === 'hideAdvanceCity') {
+                    $('#advance_city_div').hide();
+
+                }
+
+            },
+            complete: function(response) {
+                defaultCity();
+                defaultCaste();
+
+            },
+            error: function(xhr, status, error) {
+                console.error('Error Status:', status);
+                console.error('Error Details:', xhr.responseText);
+            }
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
+        $(document).ready(function() {
+            const advanceCountry = $('#advance_country');
+            const selectedCountryIds = advanceCountry.val();
+            if (selectedCountryIds) {
+                loadList('get-state', selectedCountryIds, 'advanceStateCriteria')
+            }
+        });
+
         $("#advance_country").on('change', function() {
             const countryId = $(this).val();
             if (countryId) {
 
-                $.ajax({
-                    url: 'get-state',
-                    method: 'POST',
-                    data: {
-                        'countries': countryId
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(states) {
-                        $('#advance_state_div').css('display', 'block');
-                        $('#advance_state').html(states);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error Status:', status);
-                        console.error('Error Details:', xhr.responseText);
-                    }
-                });
+                if (countryId.length === 1 && countryId.includes('0')) {
+                    $('#advance_state_div').hide();
+                    $('#advance_city_div').hide();
+                } else {
+                    $('#advance_state_div').show();
+                    $('#advance_city_div').show();
+                }
+                loadList('get-state', countryId, 'advanceStateCriteria')
+
             } else {
                 $('#advance_state_div').css('display', 'none');
                 $('#advance_state').fadeOut();
@@ -767,35 +842,24 @@
             }
         });
 
-
-
-
     });
 </script>
 <script>
+    $(document).ready(function() {
+        const advanceState = $('#advance_state');
+        const selectedStateIds = advanceState.val();
+        if (selectedStateIds) {
+            loadList('get-city', selectedStateIds, 'advanceCityCriteria')
+        }
+    });
+
+
     document.addEventListener("DOMContentLoaded", function() {
         $("#advance_state").on('change', function() {
             const StateId = $(this).val();
             if (StateId) {
+                loadList('get-city', StateId, 'advanceCityCriteria')
 
-                $.ajax({
-                    url: 'get-city',
-                    method: 'POST',
-                    data: {
-                        'states': StateId
-                    },
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(cities, states) {
-                        $('#advance_city_div').css('display', 'block');
-                        $('#advance_city').html(cities);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error Status:', status);
-                        console.error('Error Details:', xhr.responseText);
-                    }
-                });
             } else {
                 $('#advance_city_div').css('display', 'none');
                 $('#advance_city').fadeOut();
@@ -861,10 +925,10 @@
             allowClear: true,
 
         });
-        $('#maritalStatus').select2({
-            placeholder: "Select Marital Status",
-            allowClear: true,
-        });
+        // $('#maritalStatus').select2({
+        //     placeholder: "Select Marital Status",
+        //     allowClear: true,
+        // });
         $('#advance_family_status').select2({
             placeholder: "Select Family Status",
             allowClear: true,
@@ -911,61 +975,6 @@
             allowClear: true,
         });
 
-    });
-
-
-    $(document).ready(function() {
-        let previousSelectedOptionValue = []; // To track previously selected values
-
-
-        $("#maritalStatus").on("change", function(e) {
-            const maritalStatus = document.getElementById("maritalStatus");
-            const lastSelectedValue = e?.params?.data?.id;
-            const doesNotMatter = '0';
-            let selectedValues = $(this).val(); // Get selected values
-
-            const addedValue = selectedValues.filter(val => !previousSelectedOptionValue.includes(val));
-            if (addedValue.length > 0) {
-                console.log("Latest selected value:", addedValue[0]);
-            }
-            // Find the newly unselected value
-            const removedValue = previousSelectedOptionValue.filter(val => !selectedValues.includes(
-                val));
-            if (removedValue.length > 0) {
-                console.log("Latest unselected value:", removedValue[0]);
-            }
-
-            previousSelectedOptionValue = selectedValues;
-
-
-            if (maritalStatus) {
-                const selectedOptions = maritalStatus.selectedOptions;
-
-                // if (selectedValues.length > 1 && [selectedValues.length - 1] === 0) {
-                //     selectedValues = ['0'];
-                //     if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
-                //         $(maritalStatus).val(selectedValues).trigger('change');
-                //     }
-                // } else {
-                //     // 
-                // }
-
-                if (selectedValues.length > 1 && selectedValues.includes(doesNotMatter)) {
-                    selectedValues = selectedValues.filter(value => value !== '0');
-                    if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
-                        $(maritalStatus).val(selectedValues).trigger('change');
-                    }
-                }
-
-
-                // if (selectedValues.includes(doesNotMatter)) {
-                //     selectedValues = [doesNotMatter];
-                //     if ($(maritalStatus).val().toString() !== selectedValues.toString()) {
-                //         $(maritalStatus).val(selectedValues).trigger('change');
-                //     }
-                // }
-            }
-        });
     });
 </script>
 <?php /**PATH C:\xampp\htdocs\mmm\resources\views\components\searches\advance-search-component.blade.php ENDPATH**/ ?>

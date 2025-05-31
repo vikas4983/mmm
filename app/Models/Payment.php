@@ -14,8 +14,8 @@ class Payment extends Model
         'price',
         'paid',
         'contact',
-       'expiry_date',
-       'is_paid',
+        'expiry_date',
+        'is_paid',
     ];
 
 
@@ -24,17 +24,13 @@ class Payment extends Model
     {
         return $value == 1 ? 'Active' : 'InActive';
     }
-
-
-
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function plan(){
+    public function plan()
+    {
         return $this->belongsTo(Plan::class, 'plan_id');
     }
 }
-

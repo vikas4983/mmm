@@ -11,11 +11,11 @@ class ShowMessageComponent extends Component
     /**
      * Create a new component instance.
      */
-    public $user;
+    public $users;
 
-    public function __construct($user)
+    public function __construct($users)
     {
-        $this->user = $user;
+        $this->users = $users;
     }
 
     /**

@@ -36,6 +36,131 @@
     use App\Models\DietaryHabit;
     $dietaryHabits = DietaryHabit::all();
 ?>
+<style>
+    .sk-fading-circle {
+        position: relative;
+    }
+
+    .sk-circle {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .sk-circle:before {
+        content: '';
+        display: block;
+        margin: 0 auto;
+        width: 20%;
+        height: 20%;
+        background-color: #ED7C21;
+        border-radius: 100%;
+        animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
+    }
+
+    .sk-circle2 {
+        transform: rotate(30deg);
+    }
+
+    .sk-circle3 {
+        transform: rotate(60deg);
+    }
+
+    .sk-circle4 {
+        transform: rotate(90deg);
+    }
+
+    .sk-circle5 {
+        transform: rotate(120deg);
+    }
+
+    .sk-circle6 {
+        transform: rotate(150deg);
+    }
+
+    .sk-circle7 {
+        transform: rotate(180deg);
+    }
+
+    .sk-circle8 {
+        transform: rotate(210deg);
+    }
+
+    .sk-circle9 {
+        transform: rotate(240deg);
+    }
+
+    .sk-circle10 {
+        transform: rotate(270deg);
+    }
+
+    .sk-circle11 {
+        transform: rotate(300deg);
+    }
+
+    .sk-circle12 {
+        transform: rotate(330deg);
+    }
+
+    .sk-circle2:before {
+        animation-delay: -1.1s;
+    }
+
+    .sk-circle3:before {
+        animation-delay: -1s;
+    }
+
+    .sk-circle4:before {
+        animation-delay: -0.9s;
+    }
+
+    .sk-circle5:before {
+        animation-delay: -0.8s;
+    }
+
+    .sk-circle6:before {
+        animation-delay: -0.7s;
+    }
+
+    .sk-circle7:before {
+        animation-delay: -0.6s;
+    }
+
+    .sk-circle8:before {
+        animation-delay: -0.5s;
+    }
+
+    .sk-circle9:before {
+        animation-delay: -0.4s;
+    }
+
+    .sk-circle10:before {
+        animation-delay: -0.3s;
+    }
+
+    .sk-circle11:before {
+        animation-delay: -0.2s;
+    }
+
+    .sk-circle12:before {
+        animation-delay: -0.1s;
+    }
+
+    @keyframes sk-circleFadeDelay {
+
+        0%,
+        39%,
+        100% {
+            opacity: 0.3;
+        }
+
+        40% {
+            opacity: 1;
+        }
+    }
+</style>
 <div class="form-group ">
     <?php switch($name):
         case ('profile_for'): ?>
@@ -60,6 +185,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         <?php break; ?>
+
         <?php case ('alternate_owned_by'): ?>
             <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
@@ -82,6 +208,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         <?php break; ?>
+
         <?php case ('landline_owned_by'): ?>
             <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
@@ -175,7 +302,27 @@ unset($__errorArgs, $__bag); ?>
         <?php break; ?>
 
         <?php case ('religion'): ?>
-            <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
+            <label for="<?php echo e($name); ?>" style="display: inline-flex; align-items: center;">
+                <b class="text-danger mr-1 gtRegMandatory">*</b>&nbsp;<?php echo e($label); ?>
+
+                <span id="loader" style="display: none; margin-left: 8px;">
+                    <div class="sk-fading-circle" style="width: 20px; height: 20px;">
+                        <div class="sk-circle1 sk-circle"></div>
+                        <div class="sk-circle2 sk-circle"></div>
+                        <div class="sk-circle3 sk-circle"></div>
+                        <div class="sk-circle4 sk-circle"></div>
+                        <div class="sk-circle5 sk-circle"></div>
+                        <div class="sk-circle6 sk-circle"></div>
+                        <div class="sk-circle7 sk-circle"></div>
+                        <div class="sk-circle8 sk-circle"></div>
+                        <div class="sk-circle9 sk-circle"></div>
+                        <div class="sk-circle10 sk-circle"></div>
+                        <div class="sk-circle11 sk-circle"></div>
+                        <div class="sk-circle12 sk-circle"></div>
+                    </div>
+                </span>
+            </label>
+
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control" required>
                 <option value="">Select <?php echo e($label); ?></option>
                 <?php $__currentLoopData = $religions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $religion): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -195,6 +342,7 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
+
             <div class="form-group" id="hiddenCaste" style="display: none" required>
                 <label for="caste"><b class="text-danger mr-5 gtRegMandatory">*</b>Caste</label>
                 <select id="caste" name="caste" class="form-control">
@@ -213,31 +361,40 @@ unset($__errorArgs, $__bag); ?>
         <?php break; ?>
 
         <?php case ('country'): ?>
-            <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
-            <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
-                <option value="">Select </option>
-                <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($country->id); ?>" <?php echo e(old($name) == $country->id ? 'selected' : ''); ?>>
-                        <?php echo e($country->country); ?>
+            <?php
+                $requestPath = request()->path();
 
-                    </option>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </select>
-            <?php $__errorArgs = [$name];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                <span class="text-danger" style="font-size: 0.8em;"><?php echo e($message); ?></span>
-            <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-            <div class="form-group" id="hiddenState" style="display: none">
-                <label for="state"><b class="text-danger mr-5 gtRegMandatory">*</b>State</label>
-                <select id="state" name="state" class="form-control">
+            ?>
+            <?php if($requestPath === 'frontend/registration/horoscopes/create'): ?>
+                <label for="<?php echo e($name); ?>" style="display: inline-flex; align-items: center;">
+                    Birth of Country
+                    <span id="country-loader" style="display: none; margin-left: 8px;">
+                        <div class="sk-fading-circle" style="width: 20px; height: 20px;">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                    </span>
+                </label>
+                <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
+                    <option value="">Select </option>
+                    <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($country->id); ?>" <?php echo e(old($name) == $country->id ? 'selected' : ''); ?>>
+                            <?php echo e($country->country); ?>
+
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
-                <?php $__errorArgs = ['state'];
+                <?php $__errorArgs = [$name];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -247,12 +404,86 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-            </div>
-            <div class="form-group" id="hiddenCity" style="display: none">
-                <label for="city"><b class="text-danger mr-5 gtRegMandatory">*</b>City</label>
-                <select id="city" name="city" class="form-control">
+                <p></p>
+                <div class="form-group" id="hiddenState" style="display: none">
+                    <label style="display: inline-flex; align-items: center;">
+                        Birth of State
+                        <span id="state-loader" style="display: none; margin-left: 8px;">
+                            <div class="sk-fading-circle" style="width: 20px; height: 20px;">
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </span>
+                    </label>
+                    <select id="state" name="state" class="form-control">
+                    </select>
+                    <?php $__errorArgs = ['state'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="text-danger" style="font-size: 0.8em;"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+                <div class="form-group" id="hiddenCity" style="display: none">
+                    <label for="city">Birth of City</label>
+                    <select id="city" name="city" class="form-control">
+                    </select>
+                    <?php $__errorArgs = ['city'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="text-danger" style="font-size: 0.8em;"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+            <?php else: ?>
+                <label for="<?php echo e($name); ?>" style="display: inline-flex; align-items: center;">
+                    <b class="text-danger mr-1 gtRegMandatory">*</b>&nbsp;<?php echo e($label); ?>
+
+                    <span id="country-loader" style="display: none; margin-left: 8px;">
+                        <div class="sk-fading-circle" style="width: 20px; height: 20px;">
+                            <div class="sk-circle1 sk-circle"></div>
+                            <div class="sk-circle2 sk-circle"></div>
+                            <div class="sk-circle3 sk-circle"></div>
+                            <div class="sk-circle4 sk-circle"></div>
+                            <div class="sk-circle5 sk-circle"></div>
+                            <div class="sk-circle6 sk-circle"></div>
+                            <div class="sk-circle7 sk-circle"></div>
+                            <div class="sk-circle8 sk-circle"></div>
+                            <div class="sk-circle9 sk-circle"></div>
+                            <div class="sk-circle10 sk-circle"></div>
+                            <div class="sk-circle11 sk-circle"></div>
+                            <div class="sk-circle12 sk-circle"></div>
+                        </div>
+                    </span>
+                </label>
+                <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control">
+                    <option value="">Select </option>
+                    <?php $__currentLoopData = $countries; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $country): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($country->id); ?>" <?php echo e(old($name) == $country->id ? 'selected' : ''); ?>>
+                            <?php echo e($country->country); ?>
+
+                        </option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
-                <?php $__errorArgs = ['city'];
+                <?php $__errorArgs = [$name];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -262,7 +493,55 @@ $message = $__bag->first($__errorArgs[0]); ?>
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
-            </div>
+                <div class="form-group" id="hiddenState" style="display: none">
+                    <label style="display: inline-flex; align-items: center;">
+                        <b class="text-danger mr-1 gtRegMandatory">*</b>&nbsp;State
+                        <span id="state-loader" style="display: none; margin-left: 8px;">
+                            <div class="sk-fading-circle" style="width: 20px; height: 20px;">
+                                <div class="sk-circle1 sk-circle"></div>
+                                <div class="sk-circle2 sk-circle"></div>
+                                <div class="sk-circle3 sk-circle"></div>
+                                <div class="sk-circle4 sk-circle"></div>
+                                <div class="sk-circle5 sk-circle"></div>
+                                <div class="sk-circle6 sk-circle"></div>
+                                <div class="sk-circle7 sk-circle"></div>
+                                <div class="sk-circle8 sk-circle"></div>
+                                <div class="sk-circle9 sk-circle"></div>
+                                <div class="sk-circle10 sk-circle"></div>
+                                <div class="sk-circle11 sk-circle"></div>
+                                <div class="sk-circle12 sk-circle"></div>
+                            </div>
+                        </span>
+                    </label>
+                    <select id="state" name="state" class="form-control">
+                    </select>
+                    <?php $__errorArgs = ['state'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="text-danger" style="font-size: 0.8em;"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+                <div class="form-group" id="hiddenCity" style="display: none">
+                    <label for="city"><b class="text-danger mr-5 gtRegMandatory">*</b>City</label>
+                    <select id="city" name="city" class="form-control">
+                    </select>
+                    <?php $__errorArgs = ['city'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <span class="text-danger" style="font-size: 0.8em;"><?php echo e($message); ?></span>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
+            <?php endif; ?>
         <?php break; ?>
 
         <?php case ('marital_status'): ?>
@@ -289,12 +568,11 @@ unset($__errorArgs, $__bag); ?>
             <div class="form-group" id="hiddenChildren" style="display: none">
                 <label for="children"><b class="text-danger mr-5 gtRegMandatory">*</b>Children</label>
                 <select id="children" name="children" class="form-control">
-                    <option value="">Select</option>
-                    <option value="0">None</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                    <option value="4">Four</option>
+                    <option value="0">Select</option>
+                    <option value="00">None</option>
+                    <option value="1">Yes, Living together</option>
+                    <option value="2">Yes, Not Living together</option>
+                    
                 </select>
                 <?php $__errorArgs = ['children'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -356,7 +634,25 @@ unset($__errorArgs, $__bag); ?>
         <?php break; ?>
 
         <?php case ('employee'): ?>
-            <label for="<?php echo e($name); ?>"><b class="text-danger mr-5 gtRegMandatory">*</b><?php echo e($label); ?></label>
+        <label style="display: inline-flex; align-items: center;">
+            <b class="text-danger mr-1 gtRegMandatory">*</b>&nbsp;State
+            <span id="employee-loader" style="display: none; margin-left: 8px;">
+                <div class="sk-fading-circle" style="width: 20px; height: 20px;">
+                    <div class="sk-circle1 sk-circle"></div>
+                    <div class="sk-circle2 sk-circle"></div>
+                    <div class="sk-circle3 sk-circle"></div>
+                    <div class="sk-circle4 sk-circle"></div>
+                    <div class="sk-circle5 sk-circle"></div>
+                    <div class="sk-circle6 sk-circle"></div>
+                    <div class="sk-circle7 sk-circle"></div>
+                    <div class="sk-circle8 sk-circle"></div>
+                    <div class="sk-circle9 sk-circle"></div>
+                    <div class="sk-circle10 sk-circle"></div>
+                    <div class="sk-circle11 sk-circle"></div>
+                    <div class="sk-circle12 sk-circle"></div>
+                </div>
+            </span>
+        </label>
             <select id="<?php echo e($name); ?>" name="<?php echo e($name); ?>" class="form-control" required>
                 <option value="">Select </option>
                 <?php $__currentLoopData = $employees; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $employee): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>

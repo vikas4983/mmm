@@ -35,6 +35,7 @@ use App\Models\Religion;
 use App\Models\State;
 use App\Models\User;
 use App\Models\ViewProfile;
+use App\Services\MyMatchService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -53,6 +54,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use App\Services\OptionService;
+use App\Services\RecentJoinProfile;
+use App\Services\RecentVisitedProfile;
 
 class UserController extends Controller
 {
@@ -68,12 +71,15 @@ class UserController extends Controller
     use UserEmailTemplateTrait;
     use MemberOtpTrait;
 
-    public function dashboard()
+    public function dashboard(RecentJoinProfile $recentJoinProfile, RecentVisitedProfile $recentVisitedProfile, MyMatchService $myMatch)
     {
         session(['login' => 'yes']);
         $dashboardConstacts = config('constants.dashboard');
-        //dump( $dashboardConstacts );
-        return view('dashboard', compact('dashboardConstacts'));
+        $path = '';
+        $recentJoinProfiles = $recentJoinProfile->getProfile($path);
+        $recentVisitedProfiles = $recentVisitedProfile->getVisitedProfile();
+        $myMatches = $myMatch->myMatch();
+        return view('dashboard', compact('dashboardConstacts', 'recentJoinProfiles', 'recentVisitedProfiles', 'myMatches'));
     }
     public function index(Request $request)
     {
@@ -121,24 +127,13 @@ class UserController extends Controller
         return view('admin.users.index', compact('users', 'paidUsers', 'premiumUsersCount', 'active', 'inActive', 'countAll'));
     }
 
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.admins.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request) {}
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
         try {
@@ -235,14 +230,8 @@ class UserController extends Controller
         return view('frontend.users.plans.activePlan', compact('activePlanDetails'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(User $user) {}
 
-    /**
-     * Update the specified resource in storage.
-     */
 
     public function updateProfile(Request $request)
     {
@@ -1026,8 +1015,6 @@ class UserController extends Controller
             ])
             ->withCount('payments')
             ->get();
-        // dd($freeUsersOrders);
-
         return view('admin.users.orders', compact('orders', 'profilePrefixs', 'freeUsersOrders'));
     }
 }

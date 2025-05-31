@@ -2,9 +2,8 @@
 <?php $__env->startSection('title', 'Search Result'); ?>
 <?php $__env->startSection('content'); ?>
 
-<div>
-  
-  <?php if (isset($component)) { $__componentOriginalfa9909dfd47d8283fd80d4d75a386af1 = $component; } ?>
+    <div>
+        <?php if (isset($component)) { $__componentOriginalfa9909dfd47d8283fd80d4d75a386af1 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalfa9909dfd47d8283fd80d4d75a386af1 = $attributes; } ?>
 <?php $component = App\View\Components\SearchResultComponent::resolve(['searchResults' => $searchResults,'user' => $user,'options' => $options] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('search-result-component'); ?>
@@ -24,7 +23,7 @@
 <?php $component = $__componentOriginalfa9909dfd47d8283fd80d4d75a386af1; ?>
 <?php unset($__componentOriginalfa9909dfd47d8283fd80d4d75a386af1); ?>
 <?php endif; ?>
-</div>
+    </div>
 
 <?php $__env->stopSection(); ?>
 

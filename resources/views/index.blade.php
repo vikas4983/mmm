@@ -83,7 +83,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="active ripplelink"><a href="{{ url('/') }}"
                                         class="inPrem2Link">Home</a></li>
-                                <li class="dropdown">
+                                {{-- <li class="dropdown">
                                     <a href="search.php" class="dropdown-toggle ripplelink inPrem2Link"
                                         data-toggle="dropdown" role="button" aria-expanded="false">
                                         <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
@@ -96,7 +96,7 @@
                                         <li><a href="search?gt-location-search">Location Search</a></li>
                                         <li><a href="search?gt-occupation-search">Occupation Search</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
                                 <!--                                        <li class="ripplelink"><a href="success-story.php"><i class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
                                     -->
@@ -158,8 +158,7 @@
                                     </div>
                                     <div class="gt-slideUp-form-body">
 
-                                        <form action="{{ route('members.store') }}" id="registerPage1"
-                                            method="post" name="registerPage1" onsubmit="return validateForm()">
+                                        <form action="{{ route('members.store') }}" method="post">
                                             @csrf
                                             @php
                                                 $fields = config('formFields.register');
