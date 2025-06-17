@@ -29,6 +29,10 @@
 
                         <div class="gt-filter-result collapse in aside-sideFilter" id="collapseExample" bis_skin_checked="1"
                             aria-expanded="true">
+                            <form name="frm_filter" id="frm_filter" method="post" action="">
+
+                                <div class="gt-panel gt-panel-default" bis_skin_checked="1">
+                                    <div class="gt-panel-head" bis_skin_checked="1">
                                         <div class="row" bis_skin_checked="1">
                                             <div class="col-xs-12" bis_skin_checked="1">
                                                 <b>Photo Setting </b>
@@ -809,9 +813,6 @@
                         <div class="filter-profile">
                             <x-profile-card-component :searchResults="$searchResults" />
                         </div>
-                        <div>
-                            {{ $searchResults->links() }}
-                        </div>
 
                         <div class="modal fade-in" id="myModal1" tabindex="-1" role="dialog"
                             aria-labelledby="myModalLabel" aria-hidden="true" bis_skin_checked="1"></div>
@@ -1155,7 +1156,7 @@
                     });
                 });
 
-                function fetchDataFrom(route, checkedValues, action, filter) {
+                function fetchDataFrom(route, checkedValues, action,filter) {
                     $.ajax({
                         url: route,
                         type: 'POST',
@@ -1163,7 +1164,7 @@
                             ids: checkedValues,
                             action: action,
                             filter: filter,
-
+                            
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
@@ -1276,33 +1277,27 @@
 
                     });
                 });
-
-
-
                 $(document).ready(function() {
                     let checkedValues = $('.religion-checkbox:checked').map(function() {
                         return $(this).val();
                     }).get();
-
+                   
                     if (checkedValues.length === 1 && checkedValues.includes('0')) {
                         $('#whole-caste-div').hide();
                     } else {
-
-                        fetchDataFrom('get-caste', checkedValues, 'sidebarFilter', 'basicSearch');
+                        
+                        fetchDataFrom('get-caste', checkedValues, 'sidebarFilter','basicSearch');
                         $('#whole-caste-div').show();
                     }
                 });
-
-
-
 
                 $(document).ready(function() {
                     let checkedValues = $('.country-checkbox:checked').map(function() {
                         return $(this).val();
                     }).get();
                     if (checkedValues.length === 1 && checkedValues.includes('0')) {
-                        $('#state-div').hide();
-                        $('#city-div').hide();
+                         $('#state-div').hide();
+                         $('#city-div').hide();
                     } else {
                         $('#state-div').show();
                     }
@@ -1352,7 +1347,7 @@
                             const route = '/get-state';
                             const action = 'sidebarFilter';
                             loader.style.display = 'flex';
-                            sLoader();
+                           sLoader();
                             fetchDataFrom(route, checkedValues, action);
                         }
                     });
