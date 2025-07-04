@@ -73,7 +73,7 @@
         Advance search contain criteria that helps you to find a suitable profile.
     </p>
 
-    <form action="<?php echo e(route('advance.search')); ?>" method="post">
+    <form action="<?php echo e(route('advance.search')); ?>" method="get">
         <?php echo csrf_field(); ?>
         <div class="form-group">
             <div class="row">

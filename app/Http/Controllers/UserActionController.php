@@ -604,7 +604,7 @@ class UserActionController extends Controller
             redirect()->route()->back()->with('error', 'Something went wrong!');
         }
         $myShortlistedIds = $user->shortlisted->pluck('shortlisted_user_id')->toArray();
-        $searchResults = User::whereIn('id', $myShortlistedIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $myShortlistedIds)->where('status', 1)->paginate(1);
         $heading = 'All My Shortlisted';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -615,7 +615,7 @@ class UserActionController extends Controller
             redirect()->route()->back()->with('error', 'Something went wrong!');
         }
         $shortlistedByOtherIds = $user->shortlistedUser->pluck('shortlisted_by_id')->toArray();
-        $searchResults = User::whereIn('id', $shortlistedByOtherIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $shortlistedByOtherIds)->where('status', 1)->paginate(1);
         $heading = 'All Shortlisted by Others';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -659,7 +659,7 @@ class UserActionController extends Controller
             return redirect()->route('/');
         }
         $sentByMeIds =  $user->senderInvitation->where('is_sent', 1)->where('is_friend', 0)->where('is_decline', 0)->pluck('receiver_id')->toArray();
-        $searchResults = User::whereIn('id', $sentByMeIds)->where('status', 1)->orderBy('id', 'desc')->get();
+        $searchResults = User::whereIn('id', $sentByMeIds)->where('status', 1)->orderBy('id', 'desc')->paginate(1);
         $heading = 'All Interest Sent';
         return view('frontend.users.interests.interest', compact('searchResults', 'heading'));
     }
@@ -670,7 +670,7 @@ class UserActionController extends Controller
             return redirect()->route('/');
         }
         $acceptByOtherIds =  $user->senderInvitation->where('is_sent', 1)->where('is_friend', 1)->where('is_decline', 0)->pluck('receiver_id')->toArray();
-        $searchResults = User::whereIn('id', $acceptByOtherIds)->where('status', 1)->orderBy('id', 'desc')->get();
+        $searchResults = User::whereIn('id', $acceptByOtherIds)->where('status', 1)->orderBy('id', 'desc')->paginate(1);
         $heading = 'All Interest Sent Accepted';
         return view('frontend.users.interests.interest', compact('searchResults', 'heading'));
     }
@@ -691,7 +691,7 @@ class UserActionController extends Controller
     private function interestSentByOther($user)
     {
         $sentByOtherIds =  $user->receiverInvitation->where('is_friend', 0)->where('is_sent', 1)->where('is_decline', 0)->pluck('sender_id')->toArray();
-        return User::with('senderInvitation')->whereIn('id', $sentByOtherIds)->where('status', 1)->orderBy('id', 'desc')->get();
+        return User::with('senderInvitation')->whereIn('id', $sentByOtherIds)->where('status', 1)->orderBy('id', 'desc')->paginate(1);
     }
 
 
@@ -721,7 +721,7 @@ class UserActionController extends Controller
             redirect()->route()->back()->with('error', 'Something went wrong!');
         }
         $acceptedByMe = $user->receiverInvitation->where('is_friend', 1)->pluck('sender_id')->toArray();
-        $searchResults = User::whereIn('id', $acceptedByMe)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $acceptedByMe)->where('status', 1)->paginate(1);
         $heading = 'All Interest Received Accepted';
         return view('frontend.users.interests.interest', compact('searchResults', 'heading'));
     }
@@ -772,7 +772,7 @@ class UserActionController extends Controller
             redirect()->route()->back()->with('error', 'Something went wrong!');
         }
         $declineByMeIds = $user->receiverInvitation->where('is_decline', 1)->pluck('sender_id')->toArray();
-        $searchResults = User::whereIn('id', $declineByMeIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $declineByMeIds)->where('status', 1)->paginate(1);
         $heading = 'All Interest Received Rejected';
         return view('frontend.users.interests.interest', compact('searchResults', 'heading'));
     }
@@ -784,7 +784,7 @@ class UserActionController extends Controller
         }
         $declineByOtherIds = $user->senderInvitation->where('is_decline', 1)->pluck('receiver_id')->toArray();
 
-        $searchResults = User::whereIn('id', $declineByOtherIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $declineByOtherIds)->where('status', 1)->paginate(1);
 
         $heading = 'All Interest Sent Rejected';
         return view('frontend.users.interests.interest', compact('searchResults', 'heading'));
@@ -821,7 +821,7 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $blockByMeIds = $user->blockedUser->pluck('blocked_id')->toArray();
-        $searchResults = User::whereIn('id', $blockByMeIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $blockByMeIds)->where('status', 1)->paginate(1);;
         $heading = 'All Blocked By You';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -829,7 +829,7 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $blockByOtherIds = $user->blockedByUsers->pluck('blocker_id')->toArray();
-        $searchResults = User::whereIn('id', $blockByOtherIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $blockByOtherIds)->where('status', 1)->paginate(1);;
         $heading = 'All Blocked By Others';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -844,7 +844,7 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $viewByMeIds = $user->viewUser->pluck('viewed_id')->toArray();
-        $searchResults = User::whereIn('id', $viewByMeIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $viewByMeIds)->where('status', 1)->paginate(1);
         $heading = 'All Contact View By You';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -853,7 +853,7 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $viewByOtherIds = $user->viewByUsers->pluck('view_id')->toArray();
-        $searchResults = User::whereIn('id', $viewByOtherIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $viewByOtherIds)->where('status', 1)->paginate(1);
         $heading = 'All Contact View By Others';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -861,7 +861,7 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $viewProfileIds = $user->viewProfileByMe->pluck('viewed_user_id')->toArray();
-        $searchResults = User::whereIn('id', $viewProfileIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $viewProfileIds)->where('status', 1)->paginate(1);
         $heading = 'All Profile View By Me';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -869,7 +869,7 @@ class UserActionController extends Controller
     {
         $user = Auth::user();
         $viewProfileIds = $user->viewProfileByOther->pluck('viewer_id')->toArray();
-        $searchResults = User::whereIn('id', $viewProfileIds)->where('status', 1)->get();
+        $searchResults = User::whereIn('id', $viewProfileIds)->where('status', 1)->paginate(1);
         $heading = 'All Profile View By Other';
         return view('userAction.accessControll', compact('searchResults', 'heading'));
     }
@@ -881,7 +881,7 @@ class UserActionController extends Controller
         $users = User::whereIn('id', $userIds)
             ->orderByRaw("FIELD(id, ?) DESC",  [$priorityUserId])
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(1);
         return view('frontend.users.messages.message', compact('users'));
     }
     public function privacySetting()

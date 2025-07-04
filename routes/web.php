@@ -100,15 +100,17 @@ Route::get('/email', function (Request $request) {
 
 Route::middleware('checkRegistrationStep')->group(function () {
     Route::get('login', function () {
-        if (session()->get('registration_step') === '1') {
-            return view('auth.login');
+        if (session()->get('login') === 'yes') {
+
+            return redirect()->route('dashboard');
         }
+        // if (session()->get('registration_step') === '1') {
+
+        //     return view('auth.login');
+        // }
         return view('auth.login');
     })->name('login');
     Route::get('/', function () {
-        if (session()->get('registration_step') === '1') {
-            return view('index');
-        }
         $user = Auth::user();
         if (!$user) {
             return view('index');
@@ -193,9 +195,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     //Search
     Route::get('search', [SearchController::class, 'search'])->name('search');
     Route::post('search-result', [SearchController::class, 'searchById'])->name('search.by.id');
-    Route::post('quick-search-result', [SearchController::class, 'quickSearch'])->name('quick.search');
-    Route::post('basic-search-result', [SearchController::class, 'basicSearch'])->name('basic.search');
-    Route::post('advance-search-result', [SearchController::class, 'advanceSearch'])->name('advance.search');
+    Route::get('quick-search-result', [SearchController::class, 'quickSearch'])->name('quick.search');
+    Route::get('basic-search-result', [SearchController::class, 'basicSearch'])->name('basic.search');
+    Route::get('advance-search-result', [SearchController::class, 'advanceSearch'])->name('advance.search');
     Route::post('sidebar-filter', [SearchController::class, 'sidebarFilter'])->name('sidebar.filter');
     Route::post('sidebar-maritalStatus-filter', [SearchController::class, 'maritalStatusFilter'])->name('sidebar.maritalStatus.filter');
 

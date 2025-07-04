@@ -22,10 +22,10 @@
                                 method="post">
                                 @csrf
 
-                                @php
+                                {{-- @php
                                     session()->forget('registration_step');
-                                @endphp
-                                {{-- @dump(session()->all()) --}}
+                                @endphp --}}
+                                @dump(session()->all())
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
                                     {{ trans('auth.login') }}
                                 </h2>

@@ -159,7 +159,13 @@
                     @else
                         <img src="{{ asset('storage/users/images/nodata-available.jpg') }}" class="img-responsive">
                     @endif
+
                 </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="mt-5" style="margin-top: 1rem;">
+                {{ $users->links() }}
             </div>
         </div>
     </div>

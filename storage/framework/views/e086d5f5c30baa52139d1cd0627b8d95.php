@@ -9,19 +9,19 @@
         'countries',
         'educations',
         'employees',
-        'occupations',
-        'incomes',
-        'fatherOccupations',
+        'occomes',
+        'fatupations',
+        'incherOccupations',
         'motherOccupations',
         'bodyTypes',
         'complexions',
         'bloodGroups',
         'habits',
-        'physicalStatuses',
+        'phyics',
+        'dresicalStatuses',
         'hobbies',
         'interests',
-        'musics',
-        'dresses',
+        'mussses',
         'movies',
         'sports',
     ];
@@ -30,7 +30,8 @@
         $optionData[$key] = Cache::get($key);
     }
     extract($optionData);
-
+   $castes = App\Models\Caste::where('status', 1)->get();
+  
 ?>
 <div class="gt-panel gt-panel-default" id="updateBasicSection" style="display: none">
     <div class="gt-panel-head">
@@ -139,9 +140,11 @@ unset($__errorArgs, $__bag); ?>
                         <label for="caste"><b class="text-danger mr-5 gtRegMandatory">*</b>Caste</label>
                         <select id="caste" name="caste" class="form-control" required>
                             
-                            <?php $__currentLoopData = $user->basicDetails->religions->castes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $caste): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $castes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $caste): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <option value="<?php echo e($caste->id); ?>"
-                                    <?php echo e(old('caste', $user->basicDetails->castes->id) == $caste->id ? 'selected' : ''); ?>>
+                                    <?php echo e(old('caste', $user->basicDetails->caste) ==  $key ? 'selected' : ''); ?>
+
+                                    >
                                     <?php echo e($caste->name); ?>
 
                                 </option>

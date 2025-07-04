@@ -18,9 +18,9 @@ class RecentJoinProfile
             ->oppositeGender($loginUser->gender)
             ->createdWithinLastDays(30);
         if ($path === 'recent-join') {
-            return $query->orderBy('created_at', 'desc')->get();
+            return $query->orderBy('created_at', 'desc')->paginate(1);
         } else {
-            return $query->latest()->take(4)->get();
+            return $query->latest()->take(4)->paginate(1);
         }
     }
 }

@@ -24,7 +24,7 @@
     <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle">
         Searches to provide suitable profiles.
     </p>
-    <form action="{{ route('basic.search') }}" method="post">
+    <form action="{{ route('basic.search') }}" method="get">
         <input hidden name="for" value="basicSearch" >
         @csrf
         <div class="form-group">

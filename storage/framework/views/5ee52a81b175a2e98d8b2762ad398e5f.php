@@ -11,7 +11,7 @@
         $maxAge = $quickFilter['max_age'] ?? [];
         $selectedReligions = $quickFilter['religion'] ?? [];
     ?>
-    <form action="<?php echo e(route('quick.search')); ?>" method="post">
+    <form action="<?php echo e(route('quick.search')); ?>" method="get">
         <?php echo csrf_field(); ?>
         <div class="form-group">
             <div class="row">

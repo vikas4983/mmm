@@ -212,7 +212,8 @@
 
                 <div class="col-xxl-12 col-xl-12 col-xs-16">
                     <!-- Recently Joined -->
-                    <div class="gt-panel inHomePanel">
+                    <?php if(count($recentJoinProfiles) > 0): ?>
+<div class="gt-panel inHomePanel">
                         <div class="gt-panel-border-green">
                             <div class="gt-panel-title inPanelGreenTitle">
                                 <i class="fas fa-user-plus"></i> RECENTLY JOINED
@@ -269,7 +270,7 @@
                                                     <?php endif; ?>
                                                 <?php endif; ?>
                                             <?php endif; ?>
-  <article class="gt-margin-bottom-5 text-center">
+                                            <article class="gt-margin-bottom-5 text-center">
                                                 <?php echo e($recentJoinProfile->age()); ?>,
                                                 <?php echo e($recentJoinProfile->basicDetails->heights->name ?? ''); ?> ,
                                                 <?php echo e($recentJoinProfile->carrierDetails->occupations->occupation ?? ''); ?>
@@ -291,6 +292,9 @@
                             </div>
                         </div>
                     </div>
+                    <?php else: ?>
+                    <?php endif; ?>
+                    
                     <!-- /. Recently Joined -->
 
                     <!-- Featured Profiles -->
@@ -408,7 +412,7 @@
                     }
 
                     $.ajax({
-                        url: "<?php echo e(route('search.by.id')); ?>", 
+                        url: "<?php echo e(route('search.by.id')); ?>",
                         method: "POST",
                         data: {
                             _token: csrfToken,

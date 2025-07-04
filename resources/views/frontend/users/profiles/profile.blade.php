@@ -505,10 +505,19 @@
                         <div id="block-user{{ $profile->id }}" class="btn-group" role="group">
                             <a class="btn btn-default gt-cursor block-btn" data-id="{{ $profile->id }}"
                                 title="Add to Blocklist">
-                                <i class="fa fa-ban"></i>
+                                <i class="fa fa-lock"></i>
                                 <p class="hidden-xs hidden-sm hidden-md"> Add to Blocklist </p>
                             </a>
                         </div>
+                        @elseif($user->blockedUser->contains('blocked_id', $profile->id))
+                        <div id="block-user{{ $profile->id }}" class="btn-group" role="group">
+                            <a class="btn btn-default gt-cursor unBlock-btn " data-id="{{ $profile->id }}" title="Add to Shortlist"
+                                >
+                                <i class="fas fa-unlock"></i>
+                                <p class="hidden-xs hidden-sm hidden-md" style="color: #499202"> Remove to Blocklist</p>
+                            </a>
+                        </div>
+                        
                     @endif
 
                     @if ($user->shortlisted->contains('shortlisted_user_id', $profile->id))
@@ -525,8 +534,8 @@
                         @endphp
                     @elseif($user->shortlistedUser->contains('shortlisted_by_id', $profile->id))
                         <div id="add-to-shorlist{{ $profile->id }}" class="btn-group" role="group">
-                            <a class="btn btn-default gt-cursor remove-to-shortlist-btn" data-id="{{ $profile->id }}"
-                                title="Add to Shortlist">
+                            <a class="btn btn-default gt-cursor " data-id="{{ $profile->id }}" title="Add to Shortlist"
+                                disabled>
                                 <i class="fas fa-bookmark"></i>
                                 <p class="hidden-xs hidden-sm hidden-md" style="color: #499202"> You are shortlisted</p>
                             </a>

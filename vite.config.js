@@ -1,11 +1,14 @@
 import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
-  root: 'C:/xampp/htdocs/mmm',
-  build: {
-    outDir: 'dist', 
-    rollupOptions: {
-      input: 'C:/xampp/htdocs/mmm/index.html',
-    },
-  },
+    plugins: [
+        laravel({
+            input: [
+                'resources/css/app.css',
+                'resources/js/app.js',
+            ],
+            refresh: true,
+        }),
+    ],
 });

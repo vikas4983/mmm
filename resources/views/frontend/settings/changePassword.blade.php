@@ -11,18 +11,18 @@
             <div class="col-xs-16 col-lg-16 col-xxl-16 col-xl-16 gt-search-opt gt-margin-bottom-20">
                 <div role="tabpanel">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="">
+                        {{-- <li role="presentation" class="">
                             <a href="#photo-privacy" aria-controls="photo-privacy" role="tab" data-toggle="tab">
                                 <i class="fa fa-image gt-margin-right-10 fa-lg"></i> Photo Privacy </a>
-                        </li>
-                        <li role="presentation" class="">
+                        </li> --}}
+                        {{-- <li role="presentation" class="">
                             <a href="#blocklist" aria-controls="blocklist" role="tab" data-toggle="tab">
                                 <i class="fa fa-user-times gt-margin-right-10 fa-lg"></i> Blacklist </a>
                         </li>
                         <li role="presentation" class="">
                             <a href="#contact-setting" aria-controls="contact-setting" role="tab" data-toggle="tab">
                                 <i class="fa fa-phone gt-margin-right-10 fa-lg"></i> Contact show setting </a>
-                        </li>
+                        </li> --}}
                         <li role="presentation" class="active">
                             <a href="#change-password" aria-controls="change-password" role="tab" data-toggle="tab">
                                 <i class="fa fa-cog gt-margin-right-10 fa-lg"></i> Change Password </a>
@@ -30,7 +30,7 @@
                     </ul>
                     <div class="tab-content">
                         <!-- Photo Privacy -->
-                        <div role="tabpanel" class="tab-pane  " id="photo-privacy">
+                        {{-- <div role="tabpanel" class="tab-pane  " id="photo-privacy">
                             <div class="row">
                                 <div class="col-xxl-14 col-xxl-offset-2 col-xl-14 col-xl-offset-1">
                                     <h3 class="inSearchTitle">Photo Privacy Setting</h3>
@@ -93,10 +93,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- /. Photo Privacy -->
                         <!-- Blacklist -->
-                        <div role="tabpanel" class="tab-pane " id="blocklist">
+                        {{-- <div role="tabpanel" class="tab-pane " id="blocklist">
                             <div class="row">
                                 <div class="col-xxl-12 col-xxl-offset-2 col-xl-14 col-xl-offset-1">
                                     <h3 class="inSearchTitle">Blocked Members List</h3>
@@ -126,10 +126,10 @@
                                     <div id="blocklistdiv"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- /. Blacklist -->
                         <!-- Contact View -->
-                        <div role="tabpanel" class="tab-pane " id="contact-setting">
+                        {{-- <div role="tabpanel" class="tab-pane " id="contact-setting">
                             <div class="row">
                                 <div class="col-xxl-12 col-xxl-offset-2 col-xl-14 col-xl-offset-1">
                                     <h3 class="inSearchTitle">Contact show setting</h3>
@@ -160,7 +160,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- /. Contact View -->
                         <!-- Change Password -->
                         <div role="tabpanel" class="tab-pane  active " id="change-password">

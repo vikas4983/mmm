@@ -24,7 +24,7 @@
     <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle">
         Searches to provide suitable profiles.
     </p>
-    <form action="<?php echo e(route('basic.search')); ?>" method="post">
+    <form action="<?php echo e(route('basic.search')); ?>" method="get">
         <input hidden name="for" value="basicSearch" >
         <?php echo csrf_field(); ?>
         <div class="form-group">

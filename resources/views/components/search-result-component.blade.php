@@ -9,9 +9,31 @@
                         <div class="gt-panel-head gt-border-radius-5"
                             style="margin-bottom: 11px; margin-top: 11px; padding:9px">
                             <div class="panel-title text-center">
+
                                 <div class="thumbnail gt-margin-bottom-0 inHomeMainThumb" bis_skin_checked="1">
-                                    <img src="http://localhost:8000/storage/users/images/1961734893113.jpg"
-                                        class="img-responsive gtFullWidth" alt="User Image">
+                                    @foreach ($user->images as $image)
+                                        @if ($image->dp_image === '1')
+                                            <a data-toggle="modal" data-target="#photoModal{{ $image->id }}">
+                                                <img src="{{ asset('storage/users/images/' . $image->name) }}"
+                                                    class="img-responsive gtFullWidth " alt="User Image">
+                                                <div class="eye-icon viewPhotosModal">
+                                                    <span
+                                                        style="display: inline-block;background-color: #545C56;color: #fff;padding: 5px 10px;border-radius: 50px;font-size: 14px;font-weight: bold; text-align: center; min-width: 30px;">
+                                                        {{ $user->images->count() ?? '' }}
+                                                    </span>
+                                                </div>
+                                            </a>
+                                            <x-modals.view-photos-modal-component :photos="$user->images" />
+                                        @endif
+                                    @endforeach
+                                    @if ($user->images->isEmpty())
+                                        <div class="image-frame">
+                                            <img src="{{ $user->gender === 'male'
+                                                ? asset('storage/users/images/male-default.jpg')
+                                                : asset('storage/users/images/female-default.jpg') }}"
+                                                class="img-responsive gtFullWidth main-image" alt="User Image">
+                                        </div>
+                                    @endif
                                     <a href="http://localhost:8000/my-photos" class="gt-myhome-caption ripplelink">
 
                                     </a><a href="http://localhost:8000/my-photos">
@@ -775,7 +797,7 @@
                                         gives 10 times faster results.</p>
                                     <p>
                                         <span style="color:red;">
-                                            <b class="result-count">{{ $searchResults->count() ?? '' }}</b>
+                                            <b class="result-count">{{ $count->count() ?? '' }}</b>
                                         </span> Profiles found :
                                         <span class="text-muted gt-margin-left-10">
 
@@ -1156,7 +1178,7 @@
                     });
                 });
 
-                function fetchDataFrom(route, checkedValues, action,filter) {
+                function fetchDataFrom(route, checkedValues, action, filter) {
                     $.ajax({
                         url: route,
                         type: 'POST',
@@ -1164,7 +1186,7 @@
                             ids: checkedValues,
                             action: action,
                             filter: filter,
-                            
+
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
@@ -1281,12 +1303,12 @@
                     let checkedValues = $('.religion-checkbox:checked').map(function() {
                         return $(this).val();
                     }).get();
-                   
+
                     if (checkedValues.length === 1 && checkedValues.includes('0')) {
                         $('#whole-caste-div').hide();
                     } else {
-                        
-                        fetchDataFrom('get-caste', checkedValues, 'sidebarFilter','basicSearch');
+
+                        fetchDataFrom('get-caste', checkedValues, 'sidebarFilter', 'basicSearch');
                         $('#whole-caste-div').show();
                     }
                 });
@@ -1296,8 +1318,8 @@
                         return $(this).val();
                     }).get();
                     if (checkedValues.length === 1 && checkedValues.includes('0')) {
-                         $('#state-div').hide();
-                         $('#city-div').hide();
+                        $('#state-div').hide();
+                        $('#city-div').hide();
                     } else {
                         $('#state-div').show();
                     }
@@ -1347,7 +1369,7 @@
                             const route = '/get-state';
                             const action = 'sidebarFilter';
                             loader.style.display = 'flex';
-                           sLoader();
+                            sLoader();
                             fetchDataFrom(route, checkedValues, action);
                         }
                     });

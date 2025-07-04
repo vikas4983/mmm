@@ -36,7 +36,6 @@ class FilterService
     public function filter($validatedData, $user)
     {
         $gender = $this->getGender($user);
-
         $minHeightId = (int) $validatedData['min_height'];
         $maxHeightId = (int) $validatedData['max_height'];
         [$minYear, $maxYear] = $this->getMinMaxYear($validatedData['min_age'], $validatedData['max_age']);
@@ -142,11 +141,11 @@ class FilterService
                         $q->whereIn('hiv', $hivId);
                     });
             });
-             $photosId = $this->getPhoto($validatedData['profile_show'] ?? '', $query);
-             $query = User::query()->whereIn('id', $photosId);
+            $photosId = $this->getPhoto($validatedData['profile_show'] ?? '', $query);
+            $query = User::query()->whereIn('id', $photosId);
         }
-       
-        return $query->latest()->get();
+
+        return $query;
     }
 
     private function getMaritalStatus($maritalStatusId)
@@ -261,17 +260,16 @@ class FilterService
         return Occupation::whereIn('id', $occupationId)->where('status', 1)->pluck('id')->toArray();
     }
     private function getPhoto($PhotoId, $query)
-    {   
-       
+    {
+
         $userids = $query->get()->pluck('id')->toArray();
         $userId = Auth::user()->id;
         if (!empty($PhotoId) && $PhotoId[0] === '0') {
             $withPhotoIds = Image::whereIn('user_id', $userids)->where('user_id', '!=', $userId)->where('status', 1)->pluck('user_id')->toArray();
-           $filterUsers = array_merge($withPhotoIds, $userids);
+            $filterUsers = array_merge($withPhotoIds, $userids);
             return array_unique($filterUsers);
         }
-       return  Image::with('user')->whereIn('user_id', $userids)->where('user_id', '!=', $userId)->where('status', 1)->pluck('user_id')->toArray();
-     
+        return  Image::with('user')->whereIn('user_id', $userids)->where('user_id', '!=', $userId)->where('status', 1)->pluck('user_id')->toArray();
     }
     private function getMinMaxYear($minY, $maxY)
     {

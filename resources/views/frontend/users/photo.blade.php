@@ -27,7 +27,7 @@
                         </div>
                         <div class="gt-left-pan-option">
                             <div class="row">
-                                <a href="inboxMessages" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('message')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             Inbox </div>
@@ -37,7 +37,7 @@
                                         </span>
                                     </div>
                                 </a>
-                                <a href="sentMessages" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink inBRBtm5">
+                                {{-- <a href="sentMessages" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink inBRBtm5">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             Outbox </div>
@@ -46,7 +46,7 @@
                                                 13 </div>
                                         </span>
                                     </div>
-                                </a>
+                                </a> --}}
                             </div>
                         </div>
                     </div>
@@ -57,10 +57,9 @@
                         </div>
                         <div class="gt-left-pan-option">
                             <div class="row">
-                                <a href="view-profile" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('my.profile')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     Edit Profile </a>
-                                <a href="my-photo" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink inBRBtm5">
-                                    Manage Photos </a>
+                                
                             </div>
                         </div>
                     </div>
@@ -71,83 +70,73 @@
                         </div>
                         <div class="gt-left-pan-option">
                             <div class="row">
-                                <a href="exp-interest" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('my.interest')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             Express Interest Received </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
+                                        {{-- <span class="col-xxl-3 col-xs-3 col-xl-4">
                                             <div class="badge">
                                                 1 </div>
-                                        </span>
+                                        </span> --}}
                                     </div>
                                 </a>
-                                <a href="shortlisted-members" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('my.shortlist')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             My Shortlist Profile </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
+                                        {{-- <span class="col-xxl-3 col-xs-3 col-xl-4">
                                             <div class="badge">
                                                 1 </div>
-                                        </span>
+                                        </span> --}}
                                     </div>
                                 </a>
-                                <a href="blocklisted-members" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('block.by.me')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             My Blocklist Profile </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
+                                        {{-- <span class="col-xxl-3 col-xs-3 col-xl-4">
                                             <div class="badge">
                                                 0 </div>
-                                        </span>
+                                        </span> --}}
                                     </div>
                                 </a>
 
-                                <a href="member-visited-me" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('view.profile.by.other')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             My Profile Viewed By </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
+                                        {{-- <span class="col-xxl-3 col-xs-3 col-xl-4">
                                             <div class="badge">
                                                 1 </div>
-                                        </span>
+                                        </span> --}}
                                     </div>
                                 </a>
-                                <a href="i-visited-members" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('view.profile')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             I Visited Profile </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
+                                        {{-- <span class="col-xxl-3 col-xs-3 col-xl-4">
                                             <div class="badge">
                                                 5 </div>
-                                        </span>
+                                        </span> --}}
                                     </div>
                                 </a>
-                                <a href="who-watch-mobileno" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
+                                <a href="{{route('view.contact.by.me')}}" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink">
                                     <div class="row">
                                         <div class="col-xxl-13 col-xl-12 col-xs-13">
                                             Mobile Numbers Viewed By Me </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
+                                        {{-- <span class="col-xxl-3 col-xs-3 col-xl-4">
                                             <div class="badge">
                                                 0 </div>
-                                        </span>
+                                        </span> --}}
                                     </div>
                                 </a>
 
-                                <a href="photo-request" class="col-xxl-16 col-xl-16 col-xs-16 ripplelink inBRBtm5">
-                                    <div class="row">
-                                        <div class="col-xxl-13 col-xl-12 col-xs-13">
-                                            Photo Password Request Received
-                                        </div>
-                                        <span class="col-xxl-3 col-xs-3 col-xl-4">
-                                            <div class="badge">
-                                                0 </div>
-                                        </span>
-                                    </div>
-                                </a>
+                                
                             </div>
                         </div>
                     </div>
-                    <div class="gt-panel gt-panel-orange inHomeLeftPanel">
+                    {{-- <div class="gt-panel gt-panel-orange inHomeLeftPanel">
                         <div class="gt-panel-head">
                             <div class="gt-panel-title text-center">
                                 SAVED SEARCHES </div>
@@ -166,7 +155,7 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 

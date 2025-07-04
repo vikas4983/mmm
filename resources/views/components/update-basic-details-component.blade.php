@@ -9,19 +9,19 @@
         'countries',
         'educations',
         'employees',
-        'occupations',
-        'incomes',
-        'fatherOccupations',
+        'occomes',
+        'fatupations',
+        'incherOccupations',
         'motherOccupations',
         'bodyTypes',
         'complexions',
         'bloodGroups',
         'habits',
-        'physicalStatuses',
+        'phyics',
+        'dresicalStatuses',
         'hobbies',
         'interests',
-        'musics',
-        'dresses',
+        'mussses',
         'movies',
         'sports',
     ];
@@ -30,7 +30,8 @@
         $optionData[$key] = Cache::get($key);
     }
     extract($optionData);
-
+   $castes = App\Models\Caste::where('status', 1)->get();
+  
 @endphp
 <div class="gt-panel gt-panel-default" id="updateBasicSection" style="display: none">
     <div class="gt-panel-head">
@@ -115,9 +116,10 @@
                         <label for="caste"><b class="text-danger mr-5 gtRegMandatory">*</b>Caste</label>
                         <select id="caste" name="caste" class="form-control" required>
                             {{-- <option value="">Select Caste</option> --}}
-                            @foreach ($user->basicDetails->religions->castes as $caste)
+                            @foreach ($castes as $key => $caste)
                                 <option value="{{ $caste->id }}"
-                                    {{ old('caste', $user->basicDetails->castes->id) == $caste->id ? 'selected' : '' }}>
+                                    {{ old('caste', $user->basicDetails->caste) ==  $key ? 'selected' : '' }}
+                                    >
                                     {{ $caste->name }}
                                 </option>
                             @endforeach

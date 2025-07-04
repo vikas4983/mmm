@@ -563,7 +563,8 @@
 
                 <div class="col-xxl-12 col-xl-12 col-xs-16">
                     <!-- Recently Joined -->
-                    <div class="gt-panel inHomePanel">
+                    @if(count($recentJoinProfiles) > 0)
+<div class="gt-panel inHomePanel">
                         <div class="gt-panel-border-green">
                             <div class="gt-panel-title inPanelGreenTitle">
                                 <i class="fas fa-user-plus"></i> RECENTLY JOINED
@@ -618,7 +619,7 @@
                                                     @endif
                                                 @endif
                                             @endif
-  <article class="gt-margin-bottom-5 text-center">
+                                            <article class="gt-margin-bottom-5 text-center">
                                                 {{ $recentJoinProfile->age() }},
                                                 {{ $recentJoinProfile->basicDetails->heights->name ?? '' }} ,
                                                 {{ $recentJoinProfile->carrierDetails->occupations->occupation ?? '' }}
@@ -638,6 +639,9 @@
                             </div>
                         </div>
                     </div>
+                    @else
+                    @endif
+                    
                     <!-- /. Recently Joined -->
 
                     <!-- Featured Profiles -->
@@ -777,7 +781,8 @@
                     <!-- /. My Matches -->
 
                     <!-- Recently Visited -->
-                    <div class="gt-panel inHomePanel">
+                     @if(count($recentVisitedProfiles) > 0)
+                      <div class="gt-panel inHomePanel">
                         <div class="gt-panel-border-green">
                             <div class="gt-panel-title inPanelGreenTitle">
                                 <i class="fas fa-clock"></i> RECENTLY VISITED
@@ -854,6 +859,9 @@
                             </div>
                         </div>
                     </div>
+                     @else
+                     @endif
+                   
                     <!-- /. Recently Visited -->
                 </div>
             </div>
@@ -879,7 +887,7 @@
                     }
 
                     $.ajax({
-                        url: "{{ route('search.by.id') }}", 
+                        url: "{{ route('search.by.id') }}",
                         method: "POST",
                         data: {
                             _token: csrfToken,

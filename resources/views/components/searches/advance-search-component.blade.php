@@ -73,7 +73,7 @@
         Advance search contain criteria that helps you to find a suitable profile.
     </p>
 
-    <form action="{{ route('advance.search') }}" method="post">
+    <form action="{{ route('advance.search') }}" method="get">
         @csrf
         <div class="form-group">
             <div class="row">

@@ -166,15 +166,16 @@ class UserController extends Controller
         $this->viewProfile($profile->id);
         return view('frontend.users.profiles.profile', compact('profile'));
     }
-    private function viewProfile($id)
+    public function viewProfile($id)
     {
         if (!$id) {
             return redirect()->back()->with('error', 'Something went wrong!');
         }
-        $viewPrfile = ViewProfile::where('viewed_user_id', $id)->first();
-        if (!$viewPrfile) {
+        $user = Auth::user()->id;
+        $viewPrfile = ViewProfile::where('viewer_id', $user)->where('viewed_user_id', $id)->first();
+       if (!$viewPrfile) {
             $viewPrfile = ViewProfile::create([
-                'viewer_id' => Auth::user()->id,
+                'viewer_id' => $user,
                 'viewed_user_id' => $id,
             ]);
         }

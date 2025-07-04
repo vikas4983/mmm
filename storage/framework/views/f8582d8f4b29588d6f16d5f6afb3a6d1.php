@@ -11,18 +11,8 @@
             <div class="col-xs-16 col-lg-16 col-xxl-16 col-xl-16 gt-search-opt gt-margin-bottom-20">
                 <div role="tabpanel">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="">
-                            <a href="#photo-privacy" aria-controls="photo-privacy" role="tab" data-toggle="tab">
-                                <i class="fa fa-image gt-margin-right-10 fa-lg"></i> Photo Privacy </a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#blocklist" aria-controls="blocklist" role="tab" data-toggle="tab">
-                                <i class="fa fa-user-times gt-margin-right-10 fa-lg"></i> Blacklist </a>
-                        </li>
-                        <li role="presentation" class="">
-                            <a href="#contact-setting" aria-controls="contact-setting" role="tab" data-toggle="tab">
-                                <i class="fa fa-phone gt-margin-right-10 fa-lg"></i> Contact show setting </a>
-                        </li>
+                        
+                        
                         <li role="presentation" class="active">
                             <a href="#change-password" aria-controls="change-password" role="tab" data-toggle="tab">
                                 <i class="fa fa-cog gt-margin-right-10 fa-lg"></i> Change Password </a>
@@ -30,137 +20,13 @@
                     </ul>
                     <div class="tab-content">
                         <!-- Photo Privacy -->
-                        <div role="tabpanel" class="tab-pane  " id="photo-privacy">
-                            <div class="row">
-                                <div class="col-xxl-14 col-xxl-offset-2 col-xl-14 col-xl-offset-1">
-                                    <h3 class="inSearchTitle">Photo Privacy Setting</h3>
-                                    <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle"> You can set you photo
-                                        privacy from here,so can manage who can see your photos. </p>
-                                    <div class="row">
-                                        <div class="col-xxl-4 col-xl-4 col-xs-16 col-sm-16 col-md-16 col-lg-6">
-                                            <h5>Current Status :</h5>
-                                        </div>
-                                        <div class="col-xxl-4 col-xl-4 col-xs-10 col-sm-10 col-md-10 col-lg-6">
-                                            <h5>
-                                                <span class="text-danger gt-mar" id="photo_view_status">
-                                                    <i class="fa fa-eye gt-margin-right-10"></i>Show To All
-                                                </span>
-                                            </h5>
-                                        </div>
-                                        <div class="col-xxl-4 col-xl-4 col-xs-6 col-sm-6 col-md-6 col-lg-4">
-                                            <a class="btn btn-danger" role="button" data-toggle="collapse"
-                                                href="#photo-settings" aria-expanded="false" aria-controls="photo-settings">
-                                                <i class="fa fa-pen gt-margin-right-10"></i>Edit
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="row gt-margin-top-20">
-                                        <div class="collapse col-xxl-11 col-xl-12 col-xs-16 col-sm-16 col-md-16 col-lg-12"
-                                            id="photo-settings">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xxl-5 col-xl-5 col-xs-16 col-sm-16 col-md-16 col-lg-6">
-                                            <a class="" role="button" data-toggle="collapse" href="#photo-settings-2"
-                                                aria-expanded="false" aria-controls="photo-settings-2">
-                                                Set Password for protect photo
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="row gt-margin-top-20">
-                                        <div class="collapse col-xxl-11 col-xl-12 col-xs-16 col-sm-16 col-md-16 col-lg-12"
-                                            id="photo-settings-2">
-                                            <div
-                                                class="col-xs-16 col-xxl-16 col-xl-16 col-md-16 col-sm-16 col-lg-16 setting-collapse-bucket">
-                                                <div class="row gt-margin-bottom-10">
-                                                    <form action="" method="post" name="set_photo_pass_form"
-                                                        id="set_photo_pass_form">
-                                                        <div
-                                                            class="col-xxl-6 col-xl-6 col-xs-16 col-sm-16 col-md-16 col-lg-6">
-                                                            <input type="text" name="set_pass"
-                                                                placeholder="Set Photo Password" class="gt-form-control"
-                                                                data-validetta="required">
-                                                        </div>
-                                                        <div
-                                                            class="col-xxl-8 col-xl-8 col-lg-8 col-md-16 col-sm-16 col-xs-16 gt-margin-bottom-10">
-                                                            <input type="submit" name="set_photo_pass" value="Submit"
-                                                                class="btn gt-btn-green">
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <!-- /. Photo Privacy -->
                         <!-- Blacklist -->
-                        <div role="tabpanel" class="tab-pane " id="blocklist">
-                            <div class="row">
-                                <div class="col-xxl-12 col-xxl-offset-2 col-xl-14 col-xl-offset-1">
-                                    <h3 class="inSearchTitle">Blocked Members List</h3>
-                                    <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle">
-                                        You can see all blocked members list here and you also can block directly from here.
-                                    </p>
-                                    <div class="row gt-margin-top-20">
-                                        <form action="" method="post" id="blocklist_form" name="blocklist_form">
-                                            <div class="col-xxl-10 col-xl-10 col-lg-12 col-md-16 col-sm-16 col-xs-16">
-                                                <label> Enter User Id Or Email Id </label>
-                                                <div class="input-group">
-                                                    <span class="">
-                                                        <input type="text" class="gt-form-control flat"
-                                                            placeholder="Enter User Id Or Email Id" name="blockuserid"
-                                                            id="blockuserid" data-validetta="required">
-                                                    </span>
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-danger gt-btn-lg flat" type="submit"
-                                                            name="block_sub" value="block_sub">
-                                                            <i class="fa fa-user-times gt-margin-right-10"></i>Block
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div id="blocklistdiv"></div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <!-- /. Blacklist -->
                         <!-- Contact View -->
-                        <div role="tabpanel" class="tab-pane " id="contact-setting">
-                            <div class="row">
-                                <div class="col-xxl-12 col-xxl-offset-2 col-xl-14 col-xl-offset-1">
-                                    <h3 class="inSearchTitle">Contact show setting</h3>
-                                    <p class="pb-10 gt-border-bottom-smoke-white inSearchSubTitle">
-                                        Contact show setting option gives you access to set privacy for your contact detail.
-                                    </p>
-                                    <div class="row">
-                                        <div class="col-xxl-4 col-xl-4 col-xs-16 col-sm-16 col-md-16 col-lg-6">
-                                            <h5>Current Status :</h5>
-                                        </div>
-                                        <div class="col-xxl-4 col-xl-4 col-xs-10 col-sm-10 col-md-10 col-lg-6">
-                                            <h5>
-                                                <span class="text-danger gt-mar" id="contact_view_status">
-                                                    <i class="fa fa-eye gt-margin-right-10"></i>Show To Express Interest
-                                                    Accepted Paid Member </span>
-                                            </h5>
-                                        </div>
-                                        <div class="col-xxl-4 col-xl-4 col-xs-6 col-sm-6 col-md-6 col-lg-4">
-                                            <a class="btn btn-danger" role="button" data-toggle="collapse"
-                                                href="#contact-show" aria-expanded="false" aria-controls="contact-show">
-                                                <i class="fa fa-pen gt-margin-right-10"></i>Edit
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="row gt-margin-top-20">
-                                        <div class="collapse col-xxl-11 col-xl-12 col-xs-16 col-sm-16 col-md-16 col-lg-12"
-                                            id="contact-show"> </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         <!-- /. Contact View -->
                         <!-- Change Password -->
                         <div role="tabpanel" class="tab-pane  active " id="change-password">

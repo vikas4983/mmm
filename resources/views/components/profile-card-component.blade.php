@@ -292,7 +292,7 @@
                                 <p class="row gt-margin-bottom-0">
                                     <label class="col-xs-7 ">Age :</label>
                                     <span class="col-xs-9">
-                                        {{ $searchResult->basicDetails->age ?? '' }}
+                                        {{ $searchResult->basicDetails->age ?? '' }} -{{$searchResult->id}}
 
                                     </span>
                                 </p>
@@ -551,6 +551,11 @@
         </div>
     </li>
 @endforeach
+<div class="row text-center">
+    <div class="mt-4">
+        {{ $searchResults->links() }}
+    </div>
+</div>
 <x-modals.message-modal-component :searchResults="$searchResults" />
 
 

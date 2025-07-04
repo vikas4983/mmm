@@ -205,12 +205,12 @@ class SearchController extends Controller
                 $query->whereBetween('dob', ["$minYear-01-01", "$maxYear-12-31"]);
             });
         }
-        $searchResults = $query->with('basicDetails')->paginate(1);
-
+        $count = $query->with('basicDetails');
+        $searchResults = $query->with('basicDetails')->latest()->paginate(1)->withQueryString();
+        
         if ($searchResults->count() > 0) {
-
             $this->quickSearchCriteria($validatedData);
-            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user'));
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user','count'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
@@ -226,10 +226,12 @@ class SearchController extends Controller
         }
         $options = $optionService->getOptions();
 
-        $searchResults = $filterService->filter($validatedData, $user)->sortByDesc('id');
+        $count = $filterService->filter($validatedData, $user)->get();
+        $searchResults = $filterService->filter($validatedData, $user)->latest()->paginate(1)->withQueryString();
+
         if (count($searchResults) > 0) {
             $this->basicSearchCriteria($validatedData);
-            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user'));
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user', 'count'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
@@ -237,17 +239,20 @@ class SearchController extends Controller
     public function advanceSearch(AdvanceFilterRequest $request, OptionService $optionService, FilterService $filterService)
     {
         $validatedData = $request->validated();
-      
+
+
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');
         }
         $options = $optionService->getOptions();
-        $searchResults = $filterService->filter($validatedData, $user);
+        $count = $filterService->filter($validatedData, $user)->get();
+        $searchResults = $filterService->filter($validatedData, $user)->latest()->paginate(1)->withQueryString();
 
         if (count($searchResults) > 0) {
             $this->advanceSearchCriteria($validatedData);
-            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user'));
+
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user', 'count'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
@@ -257,7 +262,7 @@ class SearchController extends Controller
     {
         $validatedData = $request->validated();
         $user = Auth::user();
-        
+
         if (!$user) {
             return redirect()->with('error', 'Login first!');
         }
