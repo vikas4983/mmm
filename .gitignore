@@ -4,7 +4,6 @@
 # Laravel specific
 /public/hot
 /public/storage
-/storage/logs/*
 /storage/*.key
 /vendor
 
@@ -19,16 +18,32 @@
 !/storage/framework/testing
 !/storage/framework/views
 
-# Ignore log files
+# Ignore compiled views (Blade templates)
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+# Ignore logs
 *.log
 /storage/logs/*
+!/storage/logs/.gitignore
 
-# IDE / Editor files
+# Ignore bootstrap cache files
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# IDE/Editor files
 /.idea
 /.vscode
-/.phpunit.result.cache
+*.sublime-project
+*.sublime-workspace
+
+# PHPUnit
+.phpunit.result.cache
+
+# Mac / Windows / Linux system files
+.DS_Store
+Thumbs.db
 
 # Ignore environment files
 .env
 .env.*.backup
-.DS_Store

@@ -101,12 +101,9 @@ Route::get('/email', function (Request $request) {
 Route::middleware('checkRegistrationStep')->group(function () {
     Route::get('login', function () {
         if (session()->get('login') === 'yes') {
-         return redirect()->route('dashboard');
+            return redirect()->route('dashboard');
         }
-        // if (session()->get('registration_step') === '1') {
 
-        //     return view('auth.login');
-        // }
         return view('auth.login');
     })->name('login');
     Route::get('/', function () {
