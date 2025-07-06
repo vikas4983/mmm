@@ -7,24 +7,24 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Pagination\Paginator;
 use App\Services\OptionService;
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
-        // Register any application services if needed
+        // You can bind the OptionService if needed here.
+        $this->app->singleton(OptionService::class, fn () => new OptionService());
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        // Register the Blade component
+        // Use Bootstrap pagination
         Paginator::useBootstrap();
+
+        // Register custom blade component
         Blade::component('form-fields', FormFieldsComponent::class);
-       
+
+        // Call the load method from your OptionService
+       // app(OptionService::class)->load();
     }
 }

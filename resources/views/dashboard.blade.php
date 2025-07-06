@@ -559,89 +559,91 @@
                     </div>
                 </aside>
                 <div id="app"></div>
-                <script src="{{ mix('js/app.js') }}"></script>
-
                 <div class="col-xxl-12 col-xl-12 col-xs-16">
                     <!-- Recently Joined -->
-                    @if(count($recentJoinProfiles) > 0)
-<div class="gt-panel inHomePanel">
-                        <div class="gt-panel-border-green">
-                            <div class="gt-panel-title inPanelGreenTitle">
-                                <i class="fas fa-user-plus"></i> RECENTLY JOINED
+                    @if (count($recentJoinProfiles) > 0)
+                        <div class="gt-panel inHomePanel">
+                            <div class="gt-panel-border-green">
+                                <div class="gt-panel-title inPanelGreenTitle">
+                                    <i class="fas fa-user-plus"></i> RECENTLY JOINED
+                                </div>
                             </div>
-                        </div>
-                        <div class="gt-panel-body">
-                            <div class="row">
-                                @foreach ($recentJoinProfiles as $recentJoinProfile)
-                                    <div class="col-xxl-4 col-xs-8 col-lg-4 gt-margin-bottom-10">
-                                        <a href="{{ route('profile', $recentJoinProfile->uuid) }}" target="_blank"
-                                            class="gt-result">
-                                            <div class="thumbnail">
+                            <div class="gt-panel-body">
+                                <div class="row">
+                                    @foreach ($recentJoinProfiles as $recentJoinProfile)
+                                        <div class="col-xxl-4 col-xs-8 col-lg-4 gt-margin-bottom-10">
+                                            <a href="{{ route('profile', $recentJoinProfile->uuid) }}" target="_blank"
+                                                class="gt-result">
+                                                <div class="thumbnail">
+                                                    @php
+                                                        $dpImage = $recentJoinProfile->images->firstWhere(
+                                                            'dp_image',
+                                                            '1',
+                                                        );
+                                                    @endphp
+
+                                                    @if ($dpImage && $dpImage->name)
+                                                        <img src="{{ asset('storage/users/images/' . $dpImage->name) }}"
+                                                            title="{{ $recentJoinProfile->name ?? '' }}" alt="User Image"
+                                                            class="img-responsive gtFullWidth"
+                                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                                    @else
+                                                        <img src="{{ $recentJoinProfile->gender === 'male'
+                                                            ? asset('storage/users/images/male-default.jpg')
+                                                            : asset('storage/users/images/female-default.jpg') }}"
+                                                            title="{{ $recentJoinProfile->name ?? '' }}" alt="User Image"
+                                                            class="img-responsive gtFullWidth"
+                                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                                    @endif
+                                                </div>
                                                 @php
-                                                    $dpImage = $recentJoinProfile->images->firstWhere('dp_image', '1');
+                                                    $recentSetting = $recentJoinProfile->userSettings->first();
+                                                    $authSetting = Auth::user()->userSettings->first();
                                                 @endphp
 
-                                                @if ($dpImage && $dpImage->name)
-                                                    <img src="{{ asset('storage/users/images/' . $dpImage->name) }}"
-                                                        title="{{ $recentJoinProfile->name ?? '' }}" alt="User Image"
-                                                        class="img-responsive gtFullWidth"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                @else
-                                                    <img src="{{ $recentJoinProfile->gender === 'male'
-                                                        ? asset('storage/users/images/male-default.jpg')
-                                                        : asset('storage/users/images/female-default.jpg') }}"
-                                                        title="{{ $recentJoinProfile->name ?? '' }}" alt="User Image"
-                                                        class="img-responsive gtFullWidth"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                @endif
-                                            </div>
-                                            @php
-                                                $recentSetting = $recentJoinProfile->userSettings->first();
-                                                $authSetting = Auth::user()->userSettings->first();
-                                            @endphp
-
-                                            @if (!empty($recentSetting) && !empty($authSetting))
-                                                @if ($recentSetting->name === 0)
-                                                    <h5 class="text-center gt-text-orange">
-                                                        {{ $prefix->name ?? '' }} -
-                                                        {{ $recentJoinProfile->matrimony_id ?? '' }}
-                                                    </h5>
-                                                @elseif ($recentSetting->name === 2 && $authSetting->name === 2)
-                                                    <h5 class="text-center gt-text-orange">
-                                                        {{ $recentJoinProfile->name ?? '' }} ({{ $prefix->name ?? '' }} -
-                                                        {{ $recentJoinProfile->matrimony_id ?? '' }})
-                                                    </h5>
-                                                @else
-                                                    @if (!empty($recentJoinProfile->name))
+                                                @if (!empty($recentSetting) && !empty($authSetting))
+                                                    @if ($recentSetting->name === 0)
                                                         <h5 class="text-center gt-text-orange">
-                                                            {{ $recentJoinProfile->name }}
+                                                            {{ $prefix->name ?? '' }} -
+                                                            {{ $recentJoinProfile->matrimony_id ?? '' }}
                                                         </h5>
+                                                    @elseif ($recentSetting->name === 2 && $authSetting->name === 2)
+                                                        <h5 class="text-center gt-text-orange">
+                                                            {{ $recentJoinProfile->name ?? '' }}
+                                                            ({{ $prefix->name ?? '' }} -
+                                                            {{ $recentJoinProfile->matrimony_id ?? '' }})
+                                                        </h5>
+                                                    @else
+                                                        @if (!empty($recentJoinProfile->name))
+                                                            <h5 class="text-center gt-text-orange">
+                                                                {{ $recentJoinProfile->name }}
+                                                            </h5>
+                                                        @endif
                                                     @endif
                                                 @endif
-                                            @endif
-                                            <article class="gt-margin-bottom-5 text-center">
-                                                {{ $recentJoinProfile->age() }},
-                                                {{ $recentJoinProfile->basicDetails->heights->name ?? '' }} ,
-                                                {{ $recentJoinProfile->carrierDetails->occupations->occupation ?? '' }}
-                                            </article>
-                                            <article class="text-center">
-                                                {{ $recentJoinProfile->carrierDetails->states->state ?? '' }},
-                                                {{ $recentJoinProfile->carrierDetails->countries->country ?? '' }}
-                                            </article>
-                                        </a>
-                                    </div>
-                                @endforeach
-                                <a href="{{ route('recent.join') }}">
-                                    <button class="btn gt-btn-green btn-block gt-margin-top-5 gtFontSMXS12"
-                                        title="View All">
-                                        <i class="fas fa-user-check"></i> Show All </button>
-                                </a>
+                                                <article class="gt-margin-bottom-5 text-center">
+                                                    {{ $recentJoinProfile->age() }},
+                                                    {{ $recentJoinProfile->basicDetails->heights->name ?? '' }} ,
+                                                    {{ $recentJoinProfile->carrierDetails->occupations->occupation ?? '' }}
+                                                </article>
+                                                <article class="text-center">
+                                                    {{ $recentJoinProfile->carrierDetails->states->state ?? '' }},
+                                                    {{ $recentJoinProfile->carrierDetails->countries->country ?? '' }}
+                                                </article>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                    <a href="{{ route('recent.join') }}">
+                                        <button class="btn gt-btn-green btn-block gt-margin-top-5 gtFontSMXS12"
+                                            title="View All">
+                                            <i class="fas fa-user-check"></i> Show All </button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @else
                     @endif
-                    
+
                     <!-- /. Recently Joined -->
 
                     <!-- Featured Profiles -->
@@ -781,87 +783,88 @@
                     <!-- /. My Matches -->
 
                     <!-- Recently Visited -->
-                     @if(count($recentVisitedProfiles) > 0)
-                      <div class="gt-panel inHomePanel">
-                        <div class="gt-panel-border-green">
-                            <div class="gt-panel-title inPanelGreenTitle">
-                                <i class="fas fa-clock"></i> RECENTLY VISITED
+                    @if (count($recentVisitedProfiles) > 0)
+                        <div class="gt-panel inHomePanel">
+                            <div class="gt-panel-border-green">
+                                <div class="gt-panel-title inPanelGreenTitle">
+                                    <i class="fas fa-clock"></i> RECENTLY VISITED
+                                </div>
                             </div>
-                        </div>
-                        <div class="gt-panel-body">
-                            <div class="row">
-                                @foreach ($recentVisitedProfiles as $recentVisitedProfile)
-                                    <div class="col-xxl-4 col-xs-8 col-lg-4 gt-margin-bottom-10">
-                                        <a href="{{ route('profile', $recentVisitedProfile->uuid) }}" target="_blank"
-                                            class="gt-result">
-                                            <div class="thumbnail">
-                                                @php
-                                                    $dpImage = $recentVisitedProfile->images->firstWhere(
-                                                        'dp_image',
-                                                        '1',
-                                                    );
-                                                @endphp
+                            <div class="gt-panel-body">
+                                <div class="row">
+                                    @foreach ($recentVisitedProfiles as $recentVisitedProfile)
+                                        <div class="col-xxl-4 col-xs-8 col-lg-4 gt-margin-bottom-10">
+                                            <a href="{{ route('profile', $recentVisitedProfile->uuid) }}" target="_blank"
+                                                class="gt-result">
+                                                <div class="thumbnail">
+                                                    @php
+                                                        $dpImage = $recentVisitedProfile->images->firstWhere(
+                                                            'dp_image',
+                                                            '1',
+                                                        );
+                                                    @endphp
 
-                                                @if ($dpImage && $dpImage->name)
-                                                    <img src="{{ asset('storage/users/images/' . $dpImage->name) }}"
-                                                        title="{{ $recentVisitedProfile->name ?? '' }}" alt="User Image"
-                                                        class="img-responsive gtFullWidth"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                @else
-                                                    <img src="{{ $recentVisitedProfile->gender === 'male'
-                                                        ? asset('storage/users/images/male-default.jpg')
-                                                        : asset('storage/users/images/female-default.jpg') }}"
-                                                        title="{{ $recentVisitedProfile->name ?? '' }}" alt="User Image"
-                                                        class="img-responsive gtFullWidth"
-                                                        style="width: 150px; height: 150px; object-fit: cover;">
-                                                @endif
-                                            </div>
-                                            @php
-                                                $recentVisited = $recentVisitedProfile->userSettings->first();
-                                            @endphp
-                                            @if (!empty($recentVisited) && !empty($authSetting))
-                                                @if ($recentVisited->name === 0)
-                                                    <h5 class="text-center gt-text-orange">
-                                                        {{ $prefix->name ?? '' }} -
-                                                        {{ $recentJoinProfile->matrimony_id ?? '' }}
-                                                    </h5>
-                                                @elseif ($recentVisited->name === 2 && $authSetting->name === 2)
-                                                    <h5 class="text-center gt-text-orange">
-                                                        {{ $recentJoinProfile->name ?? '' }} ({{ $prefix->name ?? '' }} -
-                                                        {{ $recentJoinProfile->matrimony_id ?? '' }})
-                                                    </h5>
-                                                @else
-                                                    @if (!empty($recentJoinProfile->name))
+                                                    @if ($dpImage && $dpImage->name)
+                                                        <img src="{{ asset('storage/users/images/' . $dpImage->name) }}"
+                                                            title="{{ $recentVisitedProfile->name ?? '' }}"
+                                                            alt="User Image" class="img-responsive gtFullWidth"
+                                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                                    @else
+                                                        <img src="{{ $recentVisitedProfile->gender === 'male'
+                                                            ? asset('storage/users/images/male-default.jpg')
+                                                            : asset('storage/users/images/female-default.jpg') }}"
+                                                            title="{{ $recentVisitedProfile->name ?? '' }}"
+                                                            alt="User Image" class="img-responsive gtFullWidth"
+                                                            style="width: 150px; height: 150px; object-fit: cover;">
+                                                    @endif
+                                                </div>
+                                                @php
+                                                    $recentVisited = $recentVisitedProfile->userSettings->first();
+                                                @endphp
+                                                @if (!empty($recentVisited) && !empty($authSetting))
+                                                    @if ($recentVisited->name === 0)
                                                         <h5 class="text-center gt-text-orange">
-                                                            {{ $recentJoinProfile->name }}
+                                                            {{ $prefix->name ?? '' }} -
+                                                            {{ $recentJoinProfile->matrimony_id ?? '' }}
                                                         </h5>
+                                                    @elseif ($recentVisited->name === 2 && $authSetting->name === 2)
+                                                        <h5 class="text-center gt-text-orange">
+                                                            {{ $recentJoinProfile->name ?? '' }}
+                                                            ({{ $prefix->name ?? '' }} -
+                                                            {{ $recentJoinProfile->matrimony_id ?? '' }})
+                                                        </h5>
+                                                    @else
+                                                        @if (!empty($recentJoinProfile->name))
+                                                            <h5 class="text-center gt-text-orange">
+                                                                {{ $recentJoinProfile->name }}
+                                                            </h5>
+                                                        @endif
                                                     @endif
                                                 @endif
-                                            @endif
-                                            <article class="gt-margin-bottom-5 text-center">
-                                                {{ $recentVisitedProfile->age() }},
-                                                {{ $recentVisitedProfile->basicDetails->heights->name ?? '' }} ,
-                                                {{ $recentVisitedProfile->carrierDetails->occupations->occupation ?? '' }}
-                                            </article>
-                                            <article class="text-center">
-                                                {{ $recentVisitedProfile->carrierDetails->states->state ?? '' }},
-                                                {{ $recentVisitedProfile->carrierDetails->countries->country ?? '' }}
-                                            </article>
-                                        </a>
-                                    </div>
-                                @endforeach
-                                <a href="{{ route('view.profile') }}">
-                                    <button class="btn gt-btn-green btn-block gt-margin-top-5 gtFontSMXS12"
-                                        title="View All">
-                                        <i class="fas fa-history"></i> Show All </button>
-                                </a>
+                                                <article class="gt-margin-bottom-5 text-center">
+                                                    {{ $recentVisitedProfile->age() }},
+                                                    {{ $recentVisitedProfile->basicDetails->heights->name ?? '' }} ,
+                                                    {{ $recentVisitedProfile->carrierDetails->occupations->occupation ?? '' }}
+                                                </article>
+                                                <article class="text-center">
+                                                    {{ $recentVisitedProfile->carrierDetails->states->state ?? '' }},
+                                                    {{ $recentVisitedProfile->carrierDetails->countries->country ?? '' }}
+                                                </article>
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                    <a href="{{ route('view.profile') }}">
+                                        <button class="btn gt-btn-green btn-block gt-margin-top-5 gtFontSMXS12"
+                                            title="View All">
+                                            <i class="fas fa-history"></i> Show All </button>
+                                    </a>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-                     @else
-                     @endif
-                   
+                    @else
+                    @endif
+
                     <!-- /. Recently Visited -->
                 </div>
             </div>
