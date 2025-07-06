@@ -36,7 +36,6 @@
             </div>
         </div>
     </div>
-     @dump(session()->all())
     <div class="container gt-view-profile">
         <div class="row">
             <div class="col-xxl-3 col-xl-4 col-xs-16 col-sm-16">
