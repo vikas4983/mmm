@@ -43,7 +43,7 @@
                         <img src="{{ isset($image->display_picture) && $image->display_picture ? asset('storage/users/images/' . $image->display_picture) : ($user->gender == 'male' ? asset('storage/users/images/male-default.jpg') : asset('storage/users/images/female-default.jpg')) }}"
                             class="img-responsive gtFullWidth" alt="User Image">
                     @endforeach
-
+                     
 
                     {{-- <img src="{{ asset('storage/users/images/' . ($user->image ?? 'male-default.jpg')) }}" alt="User Image" --}}
                     {{-- class="img-responsive gtFullWidth"> --}}

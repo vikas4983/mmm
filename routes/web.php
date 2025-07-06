@@ -100,15 +100,13 @@ Route::get('/email', function (Request $request) {
 
 Route::middleware('checkRegistrationStep')->group(function () {
     Route::get('login', function () {
-        if (session()->get('login') === 'yes') {
-
+        $user = Auth::user();
+        if (!$user) {
+            return view('index');
+        } else {
             return redirect()->route('dashboard');
         }
-        // if (session()->get('registration_step') === '1') {
-
-        //     return view('auth.login');
-        // }
-        return view('auth.login');
+        return view('index');
     })->name('login');
     Route::get('/', function () {
         $user = Auth::user();
@@ -476,9 +474,9 @@ Route::prefix('admin')
 Route::get('create', [AdminController::class, 'create']);
 Route::get('profile', [AdminController::class, 'twoFactor']);
 route::middleware('auth')->group(function () {});
-Route::get('home', function () {
-    return view('index');
-});
+// Route::get('home', function () {
+//     return view('index');
+// });
 
 Route::prefix('admin')->group(function () {
     // Admin Auth

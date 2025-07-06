@@ -706,7 +706,7 @@
         'type' => 'date',
         'name' => 'dob',
         'label' => 'Date of Birth',
-        'rules' => 'required|date|before:2007-07-04',
+        'rules' => 'required|date|before:2007-07-06',
       ),
       'height' => 
       array (

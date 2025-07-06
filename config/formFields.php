@@ -173,7 +173,7 @@ return [
             'type' => 'email',
             'label' => 'Email',
             'placeholder' => 'Enter Email',
-            'rules' => 'required|email|unique:users,email|max:30',
+            'rules' => 'required|email|unique:users,email|max:50',
         ],
         'password' => [
             'name' => 'password',

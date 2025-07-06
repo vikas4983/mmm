@@ -13,6 +13,7 @@ use App\Models\Image;
 use App\Models\LifeStyle;
 use App\Models\LikeDetail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 trait RegistrationStepsTrait
 {
@@ -66,7 +67,10 @@ trait RegistrationStepsTrait
             session(['registration_step' => 11]);
             return redirect()->route('images.create');
         }
-         session(['login' => 'yes']);
+        session(['login' => 'yes']);
+        if (Session::has('registration_step')) {
+            Session::forget('registration_step');
+        }
         return redirect()->route('dashboard');
     }
 }
