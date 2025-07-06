@@ -1,1 +1,0 @@
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views\frontend\settings\nameSetting.blade.php ENDPATH**/ ?>
