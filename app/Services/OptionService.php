@@ -4,9 +4,27 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Schema;
+
 
 class OptionService
 {
+
+  public function boot()
+    {
+        if (App::runningInConsole() && !App::runningUnitTests()) {
+            return;
+        }
+
+        if (!Schema::hasTable('cache')) {
+            return;
+        }
+
+        $this->getOptions(); // बस यही call करो ताकि cache हो जाए
+    }
+
+
     public function getOptions()
     {
         $options = [
