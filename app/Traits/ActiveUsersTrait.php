@@ -13,7 +13,7 @@ trait ActiveUsersTrait
     public function activeUsers()
     {
         $activeUsers = User::with(['payments.plan' => function ($query) {
-            $query->orderBy('created_at', 'desc'); // Get the latest payment
+            $query->orderBy('created_at', 'desc'); 
         }])->where('status', 1)->
         orderBy('created_at', 'desc')->get();
 

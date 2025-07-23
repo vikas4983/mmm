@@ -509,15 +509,14 @@
                                 <p class="hidden-xs hidden-sm hidden-md"> Add to Blocklist </p>
                             </a>
                         </div>
-                        @elseif($user->blockedUser->contains('blocked_id', $profile->id))
+                    @elseif($user->blockedUser->contains('blocked_id', $profile->id))
                         <div id="block-user{{ $profile->id }}" class="btn-group" role="group">
-                            <a class="btn btn-default gt-cursor unBlock-btn " data-id="{{ $profile->id }}" title="Add to Shortlist"
-                                >
+                            <a class="btn btn-default gt-cursor unBlock-btn " data-id="{{ $profile->id }}"
+                                title="Add to Shortlist">
                                 <i class="fas fa-unlock"></i>
                                 <p class="hidden-xs hidden-sm hidden-md" style="color: #499202"> Remove to Blocklist</p>
                             </a>
                         </div>
-                        
                     @endif
 
                     @if ($user->shortlisted->contains('shortlisted_user_id', $profile->id))

@@ -44,6 +44,7 @@ use App\Http\Controllers\AdminMenuController;
 use App\Http\Controllers\AjaxRequestController;
 use App\Http\Controllers\BasicDetailController;
 use App\Http\Controllers\CarrierDetailController;
+use App\Http\Controllers\CmsPageViewController;
 use App\Http\Controllers\ContactDetailController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\EmailTemplateController;
@@ -84,6 +85,16 @@ Route::get('refresh', function () {
     Artisan::call('optimize');
     return 'refresh project';
 });
+
+Route::get('/send-test-mail', function () {
+    Mail::raw('This is a test mail using server SMTP settings.', function ($message) {
+        $message->to('mmmdata2022@gmail.com')
+            ->subject('Test Mail from Server SMTP');
+    });
+
+    return 'Sent!';
+});
+
 
 
 Route::get('/test', function () {
@@ -163,7 +174,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::patch('mobile-update', [UserController::class, 'mobileUpdate'])->name('mobile.update');
     Route::post('request-otp', [UserController::class, 'requestOtpForMobileChange'])->name('request.otp');
     Route::get('mobile-verification', [UserController::class, 'showMobileVerificationPage'])->name('mobile.verification');
-    Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
+
     Route::post('request-otp-again', [UserController::class, 'requestOtpForMobileChangeAgain'])->name('request.otp.again');
     //Update User Profile
     Route::view('frontend.settings.changePassword', 'frontend.settings.changePassword')->name('changePassword');
@@ -249,7 +260,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     // RazorPay
     // Route::post('payment', [RazorpayPaymentController::class, 'index'])->name('payment');
     // Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
+
 });
+Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
 
 Route::resource('members', MemberController::class)->middleware('checkRegistrationStep');
 Route::get('verification', [MemberOtpController::class, 'verification'])->name('verification');
@@ -273,34 +286,12 @@ Route::middleware('checkRegistrationStep')->group(function () {
     Route::post('login-otp', [MemberOtpController::class, 'loginOtp'])->name('login.otp');
 });
 
-
-
-
-//Footer
-Route::middleware('checkRegistrationStep')->group(function () {
-    Route::view('aboutUs', 'aboutUs');
-    Route::view('faq', 'faq');
-    Route::view('help', 'help');
-    Route::view('misuse', 'misuse');
-    Route::view('plans', 'plans');
-    Route::view('refund', 'refund');
-    Route::view('successStory', 'successStory');
-});
-
-//After Login
-
-
 //Settings
 Route::resource('logos', LogoFaviconController::class);
 Route::resource('favicons', FaviconController::class);
 Route::resource('emailTemplates', EmailTemplateController::class);
 Route::resource('menus', MenuController::class);
 
-// User Update
-//Route::post('userUpdate/{id}', [UserController::class, 'userUpdate']);
-
-//Search
-//Route::view('frontend.search.quick', 'frontend.search.quick')->name('quick.search');
 
 //Redis
 Route::get('test-redis', [RedisController::class, 'testRedis'])->name('test.redis');
@@ -377,17 +368,18 @@ Route::prefix('admin')
         Route::resource('plans', PlanController::class);
         Route::resource('banners', BannerController::class);
         Route::get('dashboard', [DashboardController::class, 'dashboard']);
-        Route::resource('cmsPages', CmsPageController::class);
+
         Route::resource('profileids', ProfileIdController::class);
         Route::resource('emailSettings', EmailSettingController::class);
         Route::resource('siteSettings', SiteSettingController::class);
         Route::resource('siteConfigs', SiteConfigController::class);
         Route::resource('approvals', ApprovalController::class);
         Route::resource('successStories', SuccessStoryController::class);
-        // Route::resource('users', UserController::class);
+        //  Route::resource('users', UserController::class);
         Route::resource('payments', PaymentController::class);
         Route::resource('spotelights', SpoteLightController::class);
         Route::get('user-orders', [UserController::class, 'paidusersorders']);
+        Route::get('all-user', [UserController::class, 'getUser'])->name('all.user');
         Route::resource('paymentgateways', PaymentGatewayController::class);
         Route::resource('modelCounts', ModelCountController::class);
         Route::resource('adminMenus', AdminMenuController::class);
@@ -469,6 +461,7 @@ Route::prefix('admin')
 //     Auth::logout();
 //     return view('myprofile.login');
 // });
+Route::resource('cmsPages', CmsPageController::class);
 Route::get('create', [AdminController::class, 'create']);
 Route::get('profile', [AdminController::class, 'twoFactor']);
 route::middleware('auth')->group(function () {});
@@ -482,3 +475,4 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::get('/mail', [EmailController::class, 'sendWelcomeEmail']);
+Route::get('{slug}', [CmsPageViewController::class, 'show'])->name('contact');

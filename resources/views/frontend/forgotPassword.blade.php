@@ -38,7 +38,7 @@
                                 </div>
                 
                                 <div class="gt-margin-top-30 form-group">
-                                    <label for="contactInput">Enter Email id / Mobile No / Matri Id</label>
+                                    <label for="contactInput">Enter Email id / Mobile No </label>
                                     <input type="text" id="contactInput" class="gt-form-control" name="contact" placeholder="Enter Email id / Mobile No / Matri Id" data-validetta="required">
                                 </div>
                 

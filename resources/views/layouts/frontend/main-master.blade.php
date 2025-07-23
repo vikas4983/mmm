@@ -54,7 +54,7 @@
     <!-- Chosen CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/prism.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/chosen.css') }}">
-   
+
 
 
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -306,41 +306,68 @@
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Help And Support </h5>
                                 <ul class="">
-                                    <li><a href="contactUs.php">Contact Us</a></li>
-                                    <li><a href="cms?cms_id=13">FAQ</a></li>
-                                    <li><a href="cms?cms_id=16">Refund Policy</a></li>
+                                    @php
+                                        $allowedSlugs = ['contact-us', 'faq-page', 'report-misuse'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
+
                                 </ul>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Terms & Policy </h5>
                                 <ul class="">
-                                    <li><a href="cms?cms_id=7">Terms & Conditions</a></li>
-                                    <li><a href="cms?cms_id=6">Privacy Policy</a></li>
-                                    <li><a href="cms?cms_id=15">Report Misuse</a></li>
+                                    @php
+                                        $allowedSlugs = ['terms-conditions'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Need Help? </h5>
                                 <ul class="">
-                                    <li><a href="membershipplans"><i class="fa fa-star gt-text-orange"></i> Upgrade
-                                            Membership</a></li>
+                                    @php
+                                        $allowedSlugs = ['membership'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Information </h5>
                                 <ul class="">
-                                    <li><a href="success-story">Success Story</a></li>
-                                    <li><a href="cms?cms_id=8">About Us</a></li>
+                                    @php
+                                        $allowedSlugs = ['success-story'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-16">
                                 <h5 class="gt-text-green gt-font-weight-600">About Us</h5>
-                                <p>Welcome to Matrimonywebsite</p>
+                                <p>Welcome to Mangalmandap.com</p>
                             </div>
                             <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-16 text-center">
                                 <h5 class="gt-text-green gt-font-weight-600">
@@ -351,9 +378,11 @@
                                     <li><a href="https://www.googleplus.com" target="_blank"><i
                                                 class="fab fa-pinterest-square"></i></a></li>
                                     <li><a href="https://www.twitter.com" target="_blank"><i
-                                                class="fab fa-twitter-square"></i></a></li>
+                                                class="fab fa-twitter-square"></i></a>
+                                    </li>
                                     <li><a href="https://www.linkedin.com" target="_blank"><i
-                                                class="fab fa-linkedin"></i></a></li>
+                                                class="fab fa-linkedin"></i></a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -627,12 +656,12 @@
         console.log(countryId);
         if (countryId) {
             alert(countryId);
-           if(CountryLoader){
-            CountryLoader.style.display = 'flex';
-            setTimeout(function() {
-                CountryLoader.style.display = 'none';
-            }, 1000);
-           }
+            if (CountryLoader) {
+                CountryLoader.style.display = 'flex';
+                setTimeout(function() {
+                    CountryLoader.style.display = 'none';
+                }, 1000);
+            }
 
             $.ajax({
                 url: '/get-state/' + countryId,

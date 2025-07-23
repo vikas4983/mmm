@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Pagination\Paginator;
 use App\Services\OptionService;
+use Illuminate\Console\Scheduling\Schedule;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
         Blade::component('form-fields', FormFieldsComponent::class);
-       // app(OptionService::class)->load();
+
+        $this->app->booted(function () {
+            $schedule = app(Schedule::class);
+            $schedule->command('queue:work --stop-when-empty')->everyMinute();
+        });
     }
 }

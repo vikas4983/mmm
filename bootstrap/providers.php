@@ -6,4 +6,5 @@ return [
     App\Providers\FrontendUserServiceProvider::class,
     App\Providers\JetstreamServiceProvider::class,
     App\Providers\TelescopeServiceProvider::class,
+    App\Providers\CmsServiceProvider::class,
 ];

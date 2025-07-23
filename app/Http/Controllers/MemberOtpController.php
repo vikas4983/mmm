@@ -63,7 +63,7 @@ class MemberOtpController
         if (!$otp) {
             return redirect()->back()->with('error', 'Incorrect OTP!');
         }
-       
+
         if (now()->greaterThan($otp->expires_at)) {
             return redirect()->back()->with('error', 'OTP has expired');
         }
@@ -80,7 +80,7 @@ class MemberOtpController
     {
         return view('forgotPassword');
     }
-  
+
     public function loginOtp(Request $request)
     {
 

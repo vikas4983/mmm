@@ -267,7 +267,7 @@ if (!function_exists('obfuscateMobileInline')) {
     </script>
     <script>
         function startCountdown() {
-            var countdown = 10; // Set initial countdown value
+            var countdown = 60; // Set initial countdown value
             var timer = setInterval(() => {
                 countdown--;
                 document.getElementById('resend-otp').innerText = `Resend OTP in ${countdown}s`;
@@ -280,7 +280,7 @@ if (!function_exists('obfuscateMobileInline')) {
                     resendOtpButton.style.color = '#ffff';
                     resendOtpButton.style.backgroundColor = '#9E6DE0';
                 }
-            }, 1000); // Decrease countdown every second
+            }, 1000); 
         }
 
         document.getElementById('resend-otp-form').addEventListener('submit', function(e) {

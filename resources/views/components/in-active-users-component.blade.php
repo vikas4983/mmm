@@ -6,9 +6,13 @@
                     <a class="d-block mb-2" href="javascript:void(0)" data-toggle="modal"
                         data-target="#modal-contact-{{ $inActiveUser->id }}">
                         <div class="image mb-3 d-inline-flex mt-n8">
-                            <img src="{{ asset('storage/admin/user-images/' . ($inActiveUser->image ?? 'male-default.jpg')) }}"
-                                class="img-fluid rounded-circle d-inline-block" alt="Avatar Image" width="100px"
-                                height="100px">
+                            <img src="{{ asset('storage/users/images/' . ($inActiveUser->image ?? ($inActiveUser->gender === 'female' ? 'female-default.jpg' : 'male-default.jpg'))) }}"
+                            class="img-fluid rounded-circle d-inline-block"
+                            alt="Avatar Image"
+                            width="100px"
+                            height="100px"
+                            style="border: 2px solid #22ff00; padding: 2px; border-radius: 50%; box-sizing: border-box;">
+                       
                         </div>
                         <h5 class="card-title">{{ $inActiveUser->name ?? '' }} ({{ $inActiveUser->id }})
                             <i class="mdi mdi-security"></i>

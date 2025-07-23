@@ -65,16 +65,16 @@
                             ? asset('storage/admin/logo-favicon/logos/' . $logo->name)
                             : asset('assets/auth/images/logo.png') }} --}}
                         <!-- Logo -->
-                        <div class="col-xxl-5 col-xl-4 col-xs-8 col-md-8 col-lg-5">
+                        {{-- <div class="col-xxl-5 col-xl-4 col-xs-8 col-md-8 col-lg-5">
                             <a href="/" class="ripplelink">
                                 <img src="{{ isset($logos->name) && $logos->name ? asset('storage/admin/logo-favicon/logos/' . $logos->name) : asset('storage/admin/logo-favicon/logos/mangal_logo-removebg-preview.png') }}"
                                     class="img-responsive gt-header-logo" max-height="50px">
                             </a>
 
-                        </div>
+                        </div> --}}
                         <!-- /. Logo -->
                         <!-- Header login form -->
-                        <div
+                        {{-- <div
                             class="col-xxl-8 col-xl-10 col-lg-11 col-xs-16 col-sm-16 col-md-16 pull-right mt-20 hidden-xs hidden-sm hidden-md">
                             <div class="row">
                                 <form action="{{ route('login') }}" method="post" id="headerloginForm">
@@ -112,15 +112,15 @@
                                     <a href="{{ route('login.with.otp') }}" class="gt-text-Grey">Login with OTP</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- /.Header login form -->
 
                         <!-- Header login mobile button-->
-                        <div class="col-xs-8 visible-xs visible-sm visible-md text-right">
+                        {{-- <div class="col-xs-8 visible-xs visible-sm visible-md text-right">
                             <a class="btn gt-btn-orange mt-15" role="button" data-toggle="collapse"
                                 href="#collapseHeadLogin" aria-expanded="false" aria-controls="collapseHeadLogin">
                                 Login </a>
-                        </div>
+                        </div> --}}
                         <!-- /.Header login mobile button -->
                     </div>
                     <!-- Header login form for mobile -->
@@ -223,10 +223,11 @@
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="{{ route('members.create') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                    <a href="{{ route('members.create') }}"><i
+                                            class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
-                               
+
                                 {{-- @if (session()->get('registration_step') != '1')
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
                                         <form action="{{ url('logout') }}" method="post" style="display: inline;">
@@ -251,8 +252,6 @@
     @yield('styles')
     @yield('content')
 
-
-
     <!-- Footer -->
     <footer class="footer-before-login gt-margin-top-25">
         <div class="container">
@@ -261,39 +260,62 @@
                     <h5 class="gt-text-green gt-font-weight-600">
                         Help And Support </h5>
                     <ul class="">
-                        <li><a href="{{ url('help') }}">Help</a></li>
-                        <li><a href="{{ url('faq') }}">FAQ</a></li>
-                        {{-- <li><a href="cms?cms_id=16">Refund Policy</a></li> --}}
-                        <li><a href="{{ url('refund') }}">Refund Policy</a></li>
+                        @php
+                            $allowedSlugs = ['contact-us', 'faq-page', 'report-misuse'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
+
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Terms & Policy </h5>
                     <ul class="">
-                        <li><a href="{{ url('refund') }}">Terms & Conditions</a></li>
-                        <li><a href="{{ url('refund') }}">Privacy Policy</a></li>
-                        {{-- <li><a href="cms?cms_id=15">Report Misuse</a></li> --}}
-                        <li><a href="{{ url('misuse') }}">Report Misuse</a></li>
+                        @php
+                            $allowedSlugs = ['terms-conditions'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
+
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Need Help? </h5>
                     <ul class="">
-                        <li><a href="{{ url('login') }}">Login</a></li>
-                        <li><a href="{{ url('/') }}">Register</a></li>
-                        <li><a href="{{ url('plans') }}"><i class="fa fa-star gt-text-orange"></i> Upgrade
-                                Plan</a></li>
+                        @php
+                            $allowedSlugs = ['membership'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Information </h5>
                     <ul class="">
-                        <li><a href="{{ url('successStory') }}">Success Story</a></li>
-                        {{-- <li><a href="cms?cms_id=8">About Us</a></li> --}}
-                        <li><a href="{{ url('about-us') }}">About Us</a></li>
+                        @php
+                            $allowedSlugs = ['success-story'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -814,4 +836,3 @@
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-

@@ -81,8 +81,9 @@ class UserController extends Controller
         $myMatches = $myMatch->myMatch();
         return view('dashboard', compact('dashboardConstacts', 'recentJoinProfiles', 'recentVisitedProfiles', 'myMatches'));
     }
-    public function index(Request $request)
+    public function getUser(Request $request)
     {
+
         $fullUrl = $request->fullUrl();
         $segments = explode('/', $fullUrl);
         $lastSegment = end($segments);
@@ -109,11 +110,13 @@ class UserController extends Controller
             return view('admin.users.index', compact('paidUsers', 'premiumUsersCount', 'profilePrefixs', 'active', 'inActive', 'countAll'));
         }
         if ($request->activeUsers) {
+
             $activeUsers = $this->activeUsers();
             $this->activeUsersCount(User::class, $urlName, $active);
             return view('admin.users.index', compact('activeUsers', 'profilePrefixs', 'premiumUsersCount', 'active', 'inActive', 'countAll'));
         }
-        if ($request->inactiveUsers) {
+        if ($request->inActiveUsers) {
+
             $inActiveUsers = $this->inActiveUsers();
             $this->inActiveUsersCount(User::class, $urlName, $inActive);
             return view('admin.users.index', compact('inActiveUsers', 'profilePrefixs', 'premiumUsersCount', 'active', 'inActive', 'countAll'));
@@ -173,7 +176,7 @@ class UserController extends Controller
         }
         $user = Auth::user()->id;
         $viewPrfile = ViewProfile::where('viewer_id', $user)->where('viewed_user_id', $id)->first();
-       if (!$viewPrfile) {
+        if (!$viewPrfile) {
             $viewPrfile = ViewProfile::create([
                 'viewer_id' => $user,
                 'viewed_user_id' => $id,
@@ -401,11 +404,16 @@ class UserController extends Controller
     public function showMobileVerificationPage()
     {
         $data = session()->get('data');
+        session(['verification' => 'pending']);
+        if (!$data) {
+            return redirect() > back()->with('error', 'Something went wrong');
+        }
         return view('frontend.users.mobile-verification', compact('data'));
     }
 
     public function verifyOtpForMobile(Request $request)
     {
+
         try {
             $validatedData = $request->validate([
                 'otp' => 'required|numeric|digits:6',
@@ -468,6 +476,7 @@ class UserController extends Controller
 
     public function requestOtpForMobileChangeAgain(Request $request)
     {
+
         try {
             $validatedData = $request->validate([
                 'mobile' => 'required|digits:10',
@@ -1018,4 +1027,9 @@ class UserController extends Controller
             ->get();
         return view('admin.users.orders', compact('orders', 'profilePrefixs', 'freeUsersOrders'));
     }
+
+    // public function getUser(){
+    //    $abc= $this->activeUsers();
+    //    dd($abc);
+    // }
 }

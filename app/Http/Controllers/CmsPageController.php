@@ -29,7 +29,7 @@ class CmsPageController extends Controller
         $segments = explode('/', $url);
         $lastSegment = end($segments);
         $urlName = '/' . $lastSegment;
-        
+
         $this->indexCount(cmsPage::class, $urlName);
         return view('admin.cmspages.index', compact('cmspages', 'active', 'inActive', 'countAll'));
     }
@@ -47,7 +47,6 @@ class CmsPageController extends Controller
      */
     public function store(Request $request,)
     {
-        //dd($request->all());
         cmsPage::create($request->all());
         $smg = "CMS Page Created Successfully!";
         return redirect('admin/cmsPages')->with('success', $smg);
@@ -58,17 +57,16 @@ class CmsPageController extends Controller
      */
     public function show($slug)
     {
-        // Fetch the page from the database based on the slug
+
         $cmsPage = cmsPage::where('slug', $slug)->firstOrFail();
-        if($cmsPage){
+        if ($cmsPage) {
             return view('admin.cmsPages.show', compact('cmsPage'));
-        }
-        else{
+        } else {
             return redirect()->back()->with('error', 'Something Went Wrong!');
         }
-        
+
         // Pass the page data to the view
-       
+
     }
     /**
      * Show the form for editing the specified resource.
@@ -126,7 +124,7 @@ class CmsPageController extends Controller
 
     public function activeItem(Request $request)
     {    //dd("active");
-   // dd($request->all());
+        // dd($request->all());
         $selectedActiveCMSIds = $request->input('selectedActiveCMSIds');
         if (!empty($selectedActiveCMSIds)) {
             $ids = explode(',', $selectedActiveCMSIds[0]);

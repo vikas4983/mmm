@@ -54,12 +54,12 @@
                                     <a href="{{ route('login.with.otp') }}" class="btn gt-btn-green btn-block">Login
                                         With OTP</a>
                                 </div>
-                                <div class="clearfix"></div>
+                                {{-- <div class="clearfix"></div>
                                 <h5 class="text-center gt-margin-top-20">Not received email verification link?</h5>
                                 <div class="form-group text-center">
                                     <a href="resend_email_verify" class="btn gt-btn-blue btn-block">Resend Email
                                         Verification</a>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                     </div>

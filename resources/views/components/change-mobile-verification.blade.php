@@ -7,6 +7,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                  
                     <form id="changeMobileForm" action="{{route('request.otp')}}" method="post" class="inMobileVerifyChange gt-search-opt">
                         @csrf
                         <div class="row">
@@ -16,7 +17,7 @@
                             <div class="col-xxl-16 mt-20">
                                 <div class="form-group">
                                     <label>Mobile No</label>
-                                    <input type="text" class="gt-form-control" id="mobile" name="mobile"
+                                    <input type="text" class="gt-form-control" id="mobile" name="mobile" required
                                         value="{{ old('mobile', $user->mobile ?? '') }}" placeholder="Enter Mobile No"
                                         required>
                                 </div>
