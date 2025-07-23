@@ -15,7 +15,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class email extends Mailable
+class Email extends Mailable
 {
     use Queueable, SerializesModels;
     public $admin;
