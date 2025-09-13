@@ -1005,7 +1005,7 @@
                         }
                     });
                 }
-                console.log('After : ', checkedValues)
+
                 return checkedValues.length ? checkedValues : ['0'];
             }
 
@@ -1087,6 +1087,7 @@
                     },
                     success: function(response) {
                         if (response) {
+                        
                             container.innerHTML = response.html;
                             resultCount(response.count);
                             container.style.display = 'block';
@@ -1107,7 +1108,7 @@
                         });
                     },
                     error: function(xhr) {
-                        console.log(xhr);
+                        // console.log(xhr);
                     }
                 });
             }
@@ -1215,8 +1216,8 @@
                             hLoader();
                         },
                         error: function(xhr, status, error) {
-                            console.error('AJAX error:', status, error);
-                            console.log(xhr.responseText);
+                            // console.error('AJAX error:', status, error);
+                            // console.log(xhr.responseText);
                         }
                     });
                 }
@@ -1289,7 +1290,7 @@
                 $(document).ready(function() {
                     $('.state-checkbox:checked').each(function() {
                         let checkedValues = $(this).val();
-                        console.log(checkedValues);
+
                         if (checkedValues.length === 1 && checkedValues.includes('0')) {
                             $('#city-div').hide();
                         } else if (checkedValues.length > 0) {

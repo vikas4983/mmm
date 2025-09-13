@@ -64,22 +64,22 @@ class sidebarFilterService
         // $manglikId = $this->getManglik($validatedData['manglik'] ?? []);
         // $horoscopeId = $this->getHoroscope($validatedData['horoscope'] ?? []);
         // $familyStatusId = $this->getFamilyStatus($validatedData['family_status'] ?? []);
-        
+
         // $dietId = $this->getDiet($validatedData['diet'] ?? []);
         // $drinkId = $this->getDrink($validatedData['drink'] ?? []);
         // $smokeId = $this->getSmoke($validatedData['smoke'] ?? []);
         // $hivId = $this->getHiv($validatedData['hiv'] ?? []);
         $range = $this->recentJoin($validatedData['join_at'] ?? []);
-      
+
         $query = User::query()->where('gender', $gender);
 
         if ($range === 0) {
             $query = $query->where('status', 1);
         } else {
-            
+
             $query = $query->where('created_at', '>=', now()->subDays($range));
         }
-       
+
         $blockedIds =  $this->userBlock($user);
         $userStatusIds = $this->userStatus();
         if (!empty($blockedIds)) {
@@ -147,7 +147,7 @@ class sidebarFilterService
             //         $q->whereIn('id', $familyStatusId);
             //     });
             // });
-            $query->whereHas('lifestyleDetails', function ($query) use ($dietId, $physicalStatusId ) {
+            $query->whereHas('lifestyleDetails', function ($query) use ($dietId, $physicalStatusId) {
                 $query
                     ->when(isset($physicalStatusId), function ($q) use ($physicalStatusId) {
                         $q->whereIn('physical_status', $physicalStatusId);
@@ -168,7 +168,8 @@ class sidebarFilterService
             $photosId = $this->getPhoto($validatedData['photo'] ?? '', $query);
             $query = User::query()->whereIn('id', $photosId);
         }
-        return $query->latest()->get();
+
+        return $query;
     }
     public function getReligion($religionId)
     {
@@ -303,8 +304,8 @@ class sidebarFilterService
     }
 
     private function recentJoin($joinIds)
-    {  
-       
+    {
+
         $days = [];
 
         if (!is_array($joinIds)) {

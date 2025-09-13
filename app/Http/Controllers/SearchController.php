@@ -30,6 +30,7 @@ use App\Services\FilterService;
 use App\Services\sidebarFilterService;
 use App\Traits\UserBlockTrait;
 use App\Traits\UserStatusTrait;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class SearchController extends Controller
 {
@@ -207,10 +208,10 @@ class SearchController extends Controller
         }
         $count = $query->with('basicDetails');
         $searchResults = $query->with('basicDetails')->latest()->paginate(1)->withQueryString();
-        
+
         if ($searchResults->count() > 0) {
             $this->quickSearchCriteria($validatedData);
-            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user','count'));
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user', 'count'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
@@ -239,8 +240,6 @@ class SearchController extends Controller
     public function advanceSearch(AdvanceFilterRequest $request, OptionService $optionService, FilterService $filterService)
     {
         $validatedData = $request->validated();
-
-
         $user = Auth::user();
         if (!$user) {
             return redirect()->with('error', 'Login first!');
@@ -251,29 +250,25 @@ class SearchController extends Controller
 
         if (count($searchResults) > 0) {
             $this->advanceSearchCriteria($validatedData);
-
             return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user', 'count'));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }
     }
-
     public function sidebarFilter(SidebarFilterRequest $request, OptionService $optionService,  sidebarFilterService $sidebarFilterService,)
     {
         $validatedData = $request->validated();
         $user = Auth::user();
-
         if (!$user) {
             return redirect()->with('error', 'Login first!');
         }
-        $searchResults = $sidebarFilterService->sidebarFilter($validatedData, $user)->sortByDesc('id');
-        $count = $searchResults->count();
+        $searchResults = $sidebarFilterService->sidebarFilter($validatedData, $user)->orderByDesc('id')->paginate(1);
         if (count($searchResults) > 0) {
             if ($request->ajax()) {
                 $html = view('components.profile-card-component', compact('searchResults'))->render();
                 return response()->json([
                     'html' => $html,
-                    'count' => $count,
+                    'count' => $searchResults->total(),
                 ]);
             }
         } else {
@@ -281,7 +276,7 @@ class SearchController extends Controller
                 $html = view('components.no-data.no-data-found-component')->render();
                 return response()->json([
                     'html' => $html,
-                    'count' => $count,
+                    'count' =>  $searchResults->count(),
                 ]);
             }
         }

@@ -553,7 +553,7 @@
 @endforeach
 <div class="row text-center">
     <div class="mt-4">
-        {{ $searchResults->links() }}
+        {{ $searchResults->links() ?? '' }}
     </div>
 </div>
 <x-modals.message-modal-component :searchResults="$searchResults" />
