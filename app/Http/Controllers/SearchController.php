@@ -206,12 +206,13 @@ class SearchController extends Controller
                 $query->whereBetween('dob', ["$minYear-01-01", "$maxYear-12-31"]);
             });
         }
-        $count = $query->with('basicDetails');
-        $searchResults = $query->with('basicDetails')->latest()->paginate(1)->withQueryString();
 
+        $searchResults = $query->with('basicDetails')->latest()->paginate(1)->withQueryString();
+   
+      
         if ($searchResults->count() > 0) {
             $this->quickSearchCriteria($validatedData);
-            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user', 'count'));
+            return view('components.search-result-component', compact('searchResults', 'validatedData', 'options', 'user', ));
         } else {
             return redirect()->back()->with('error', 'Result not found!');
         }

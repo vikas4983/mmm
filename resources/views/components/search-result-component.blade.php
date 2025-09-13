@@ -797,7 +797,7 @@
                                         gives 10 times faster results.</p>
                                     <p>
                                         <span style="color:red;">
-                                            <b class="result-count">{{ $count->count() ?? '' }}</b>
+                                            <b class="result-count">{{ $searchResults->total() ?? '' }}</b>
                                         </span> Profiles found :
                                         <span class="text-muted gt-margin-left-10">
 
