@@ -56,6 +56,7 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LikeDetailController;
 use App\Http\Controllers\ModelCountController;
 use App\Http\Controllers\PayUMoneyController;
+use App\Http\Controllers\RazorPayPaymentGatewayController;
 use App\Http\Controllers\RedisController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserActionController;
@@ -254,13 +255,15 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::Patch('setting-horoscope-update', [UserActionController::class, 'horoscopeUpdate'])->name('settings.horoscope.update');
     Route::Patch('setting-mobile-number-update', [UserActionController::class, 'mobileNumberUpdate'])->name('settings.mobile.number.update');
     // PayuMoney
-    Route::post('order', [PayUMoneyController::class, 'order'])->name('order');
-    Route::any('success', [PayUMoneyController::class, 'success'])->name('success');
-    Route::any('failure', [PayUMoneyController::class, 'failure'])->name('failure');
+    // Route::post('order', [PayUMoneyController::class, 'order'])->name('order');
+    // Route::any('success', [PayUMoneyController::class, 'success'])->name('success');
+    // Route::any('failure', [PayUMoneyController::class, 'failure'])->name('failure');
     // RazorPay
-    // Route::post('payment', [RazorpayPaymentController::class, 'index'])->name('payment');
-    // Route::post('razorpay-payment', [RazorpayPaymentController::class, 'store'])->name('razorpay.payment.store');
-
+    Route::post('/order', [RazorPayPaymentGatewayController::class, 'order'])->name('razorpay.order');
+    Route::post('/make-payment', [RazorPayPaymentGatewayController::class, 'makePayment'])->name('payment.make');
+    Route::post('/razorpay-success', [RazorPayPaymentGatewayController::class, 'success'])->name('razorpay.success');
+    Route::post('/razorpay-failed', [RazorPayPaymentGatewayController::class, 'failed'])->name('razorpay.failed');
+    Route::post('/razorpay-cancelled', [RazorPayPaymentGatewayController::class, 'cancelled'])->name('razorpay.cancelled');
 });
 Route::post('verify-mobile-otp', [UserController::class, 'verifyOtpForMobile'])->name('verify.mobile.otp');
 

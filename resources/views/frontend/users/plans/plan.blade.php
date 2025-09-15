@@ -11,12 +11,14 @@
         <h2 class="text-center inPageTitle fontMerriWeather">Membership Plans</h2>
         <p class="inPageSubTitle text-center mb-20">Select from our multiple membership plan and find your best life partner
             with membership benefits.</p>
+        <h3>
+            @include('alerts.alert')
+        </h3>
         <div class="row">
             <div class="col-xs-16 col-lg-16 col-xxl-16 col-xl-16">
                 <div class="row mb-20">
                     @foreach ($plans as $plan)
-                        <label for="gt-plan-28" class="col-xxl-4 col-xl-4 col-xs-16 col-lg-8"
-                            >
+                        <label for="gt-plan-28" class="col-xxl-4 col-xl-4 col-xs-16 col-lg-8">
                             {{-- style="{{ $plan->id === $activePlan->plan_id ? '' : '' }}" --}}
                             <div class="gt-plan" id="setselected28">
                                 <div class="gt-plan-header">
@@ -148,11 +150,14 @@
                                         </ul>
                                     </div>
                                 @endif
-                                <form action="{{ route('order') }}" method="POST">
+                                <form action="{{ route('razorpay.order') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="planId" value="{{ $plan->id ?? '' }}">
+                                    <input type="hidden" name="plan_id" value="{{ $plan->id ?? '' }}">
+                                    <input type="hidden" name="name" value="{{ $plan->name ?? '' }}">
+                                    <input type="hidden" name="offer_price" value="{{ $plan->offer_price ?? '' }}">
 
-                                    <button type="submit" style="width: 263px;"
+
+                                    <button type="submit" id="pay" style="width: 263px;"
                                         class="gt-plan-footer hidden-xs hidden-sm hidden-md">
                                         Net Payable: ₹ {{ $plan->offer_price > 0 ? $plan->offer_price : $plan->price }}
                                     </button>

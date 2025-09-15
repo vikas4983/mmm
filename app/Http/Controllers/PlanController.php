@@ -142,10 +142,9 @@ class PlanController extends Controller
     public function plan()
     {
         $plans = Plan::all();
-        // Get the ID of the currently authenticated admin
+       
         $adminId = Auth::id();
-        // $currentDate = Carbon::now();
-        // Retrieve the latest payment made by the admin
+       
         $latestPayment = Payment::orderBy('created_at', 'desc')
             ->where('user_id', $adminId)
             ->with(['user'])
