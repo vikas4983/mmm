@@ -7,10 +7,10 @@
     <title>Complete Payment</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-
+ 
 <body onload="startPayment()">
-    <h3 id="status" style="text-align: center">Click the button below to start payment</h3>
-    {{-- <button onclick="startPayment()" style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #3399cc; color: white; border: none; cursor: pointer;">
+    {{-- <h3 id="status" style="text-align: center">Click the button below to start payment</h3>
+    <button onclick="startPayment()" style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #3399cc; color: white; border: none; cursor: pointer;">
         Pay Now
     </button> --}}
     <form id="razorpayForm" method="POST">
@@ -20,14 +20,14 @@
         <input type="hidden" name="razorpay_signature" id="razorpay_signature">
         <input type="hidden" name="payment_status" id="payment_status">
         <input type="hidden" name="payment_description" id="payment_description">
-        <input type="hidden" name="selectedPlanId" id="selectedPlanId" value="{{ $selectedPlanId ?? '' }}">
+        <input type="hidden" name="selectedPlanId" id="selectedPlanId" value="{{ (int) $selectedPlanId ?? '' }}">
     </form>
-
+      
     <script>
         var rzp;
         var options = {
             "key": "{{ $key }}",
-            "amount": "{{ $payment->amount * 100 }}",
+           "amount": {{ (int)$selectedPlanPrice * 100 }},
             "currency": "INR",
             "name": "{{ $user->name }}",
             "description": "Plan Purchase",
@@ -45,7 +45,7 @@
             "prefill": {
                 "name": "{{ $user->name }}",
                 "email": "{{ $user->email }}",
-                "contact": "{{ $user->phone }}"
+                "contact": "{{ $user->mobile }}"
             },
             "theme": {
                 "color": "#3399cc"

@@ -38,7 +38,7 @@
         </div>
       <div class="mb-3">
             <label for="price" class="form-label">Amount (INR)</label>
-            <input type="number" name="offer_price" value="{{$data['offer_price'] ?? '' }}" class="form-control" required>
+            <input type="number" name="offer_price" value="{{(int)$data['offer_price'] ?? '' }}" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Proceed to Pay</button>

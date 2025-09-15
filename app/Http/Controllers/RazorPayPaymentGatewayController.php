@@ -14,15 +14,18 @@ class RazorPayPaymentGatewayController extends Controller
 {
     public function order(Request $request)
     {
+
         $user = Auth::check();
         if (!$user) {
             return redirect()->route('login')->with('error', 'Please login first');
         }
         $data = $request->all();
+
         return view('razorpay.order', compact('data'));
     }
     public function makePayment(Request $request)
     {
+
 
         $selectedPlan = Plan::where('id', $request->plan_id)->first();
         if (!$selectedPlan) {
@@ -35,10 +38,10 @@ class RazorPayPaymentGatewayController extends Controller
         );
         $currentDate = Carbon::now();
         $key = config('services.razorpay.key');
-
+        $selectedPlanPrice = (int)$selectedPlan->offer_price;
         $order = $api->order->create([
             'receipt' => 'order_' . uniqid(),
-            'amount' => $selectedPlan->offer_price * 100,
+            'amount' =>  $selectedPlanPrice * 100,
             'currency' => 'INR',
             'payment_capture' => 1
         ]);
@@ -91,6 +94,12 @@ class RazorPayPaymentGatewayController extends Controller
                 config('services.razorpay.key'),
                 config('services.razorpay.secret')
             );
+            $attributes = [
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_signature' => $request->razorpay_signature
+            ];
+            $api->utility->verifyPaymentSignature($attributes);
             $payment = $api->payment->fetch($request->razorpay_payment_id);
             if ($payment->status === 'captured') {
                 $paymentRecord->update([
