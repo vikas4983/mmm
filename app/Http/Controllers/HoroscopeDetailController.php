@@ -29,6 +29,7 @@ class HoroscopeDetailController extends Controller
      */
     public function store(Request $request)
     {
+        
         $user = Auth::user();
         if (!$user) {
             return redirect()->back()->with('error', 'User not authenticated!');
@@ -41,22 +42,30 @@ class HoroscopeDetailController extends Controller
             $validationRules[$field['name']] = $field['rules'];
         }
         if ($request->input('state')) {
+            $validationRules['state'] = 'nullable|string';
+        }
+        if ($request->input('city')) {
             $validationRules['city'] = 'nullable|string';
+
         }
         $validatedData = $request->validate($validationRules);
-    
+        
+      dump( $validatedData);
         try {
             $existingRecord = HoroscopeDetail::where('user_id', $user->id)->first();
             $dataToSave = array_merge($validatedData, [
                 'place_of_birth' => $request->input('city', ''),
+                'state_of_birth' => $request->input('state', ''),
+                'country_of_birth' => $request->input('country', ''),
                 'status' => 1,
             ]);
-    
+            // dd( $dataToSave);
             if ($existingRecord) {
                 $existingRecord->update($dataToSave);
                 session(['registration_step' => '6']);
             } else {
                 $dataToSave['user_id'] = $user->id;
+               
                 HoroscopeDetail::create($dataToSave);
                 session(['registration_step' => '6']);
             }

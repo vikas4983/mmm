@@ -15,7 +15,7 @@
                     <div class="row">
                         <!-- Frist box -->
                         <div class="col-xl-3 col-md-6">
-                              <a href="{{ route('users.index') }}" class="text-decoration-none">
+                              <a href="{{ route('all.user') }}" class="text-decoration-none">
                             <div class="card card-default bg-secondary">
                                 <div class="d-flex p-5">
                                     <div class="icon-md bg-white rounded-circle mr-3">
@@ -32,7 +32,7 @@
 
                         <!-- Second box -->
                         <div class="col-xl-3 col-md-6">
-                              <a href="{{ route('users.index',['paidUsers' => 'users']) }}" class="text-decoration-none">
+                              <a href="{{ route('all.user',['paidUsers' => 'users']) }}" class="text-decoration-none">
                             <div class="card card-default bg-success">
                                 <div class="d-flex p-5">
                                     <div class="icon-md bg-white rounded-circle mr-3">
@@ -49,7 +49,7 @@
 
                         <!-- Third box -->
                         <div class="col-xl-3 col-md-6">
-                              <a href="{{ route('users.index', ['activeUsers' => 'Users']) }}" class="text-decoration-none">
+                              <a href="{{ route('all.user', ['activeUsers' => 'Users']) }}" class="text-decoration-none">
                             <div class="card card-default bg-primary">
                                 <div class="d-flex p-5">
                                     <div class="icon-md bg-white rounded-circle mr-3">
@@ -66,7 +66,7 @@
 
                         <!-- Fourth box -->
                         <div class="col-xl-3 col-md-6">
-                              <a href="{{ route('users.index', ['inActiveUsers' => 'Users']) }}" class="text-decoration-none">
+                              <a href="{{ route('all.user', ['inActiveUsers' => 'Users']) }}" class="text-decoration-none">
                             <div class="card card-default bg-info">
                                 <div class="d-flex p-5">
                                     <div class="icon-md bg-white rounded-circle mr-3">

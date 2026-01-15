@@ -1,20 +1,49 @@
-/.phpunit.cache
+# Node modules
 /node_modules
-/public/build
+
+# Laravel specific
 /public/hot
 /public/storage
 /storage/*.key
 /vendor
-.env
-.env.backup
-.env.production
-.phpactor.json
-.phpunit.result.cache
-Homestead.json
-Homestead.yaml
-auth.json
-npm-debug.log
-yarn-error.log
-/.fleet
+
+# Ignore everything in storage...
+/storage/*
+# ...but keep these necessary dirs
+!/storage/app
+!/storage/app/public
+!/storage/framework
+!/storage/framework/cache
+!/storage/framework/sessions
+!/storage/framework/testing
+!/storage/framework/views
+
+# Ignore compiled views (Blade templates)
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+
+# Ignore logs
+*.log
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# Ignore bootstrap cache files
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# IDE/Editor files
 /.idea
 /.vscode
+*.sublime-project
+*.sublime-workspace
+
+# PHPUnit
+.phpunit.result.cache
+
+# Mac / Windows / Linux system files
+.DS_Store
+Thumbs.db
+
+# Ignore environment files
+.env
+.env.*.backup

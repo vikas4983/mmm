@@ -25,7 +25,7 @@ class AdminMenu extends Model
 
     public function children(): HasMany
     {
-        return $this->hasMany(AdminMenu::class, 'parent_id', 'id');
+        return $this->hasMany(AdminMenu::class, 'parent_id', 'id')->where('status', 1);
     }
     public function childrenRecursive(): HasMany
     {

@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => env('APP_TIMEZONE', 'Asia/Kolkata'),
+    'timezone' => 'Asia/Kolkata', 
 
     /*
     |--------------------------------------------------------------------------
@@ -125,6 +125,7 @@ return [
 
     'providers' => [
 
+        App\Providers\OptionServiceProvider::class,
         App\Providers\FrontendUserServiceProvider::class,
         App\Providers\CountServiceProvider::class,
         App\Providers\LogoFaviconServiceProvider::class,

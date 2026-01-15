@@ -8,15 +8,18 @@ use Illuminate\Http\Request;
 class CheckRegistrationStep
 {
     public function handle($request, Closure $next)
-    {
-        if (session()->has('login') == 'yes') {
 
-            return redirect()->route('dashboard');
+    {
+        $currentRouteName = $request->route()->getName();
+       
+        if (session()->get('login') === 'yes') {
+            return $next($request);
         }
         if (session()->has('registration_step') === '2') {
-
             return redirect()->route('verification');
         }
+        
+
         $routes = [
             'members.create' => 1,
             'verification' => 2,
@@ -42,12 +45,13 @@ class CheckRegistrationStep
         ];
         if (!session()->has('registration_step')) {
             session(['registration_step' => 1]);
+            
             return redirect()->route('members.create');
         }
         $currentStep = (int) session('registration_step');
         $currentRouteName = $request->route()->getName();
         $requiredStep = $routes[$currentRouteName] ?? 1;
-        // dump($currentStep, $requiredStep);
+
         if ($currentStep !== $requiredStep) {
             return redirect()->route(array_search($currentStep, $routes));
         }

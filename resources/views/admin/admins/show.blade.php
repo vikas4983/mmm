@@ -69,10 +69,10 @@
 
                         </ul>
 
-                        <div class="profile-button">
+                        {{-- <div class="profile-button">
                             <a class="btn btn-primary btn-pill" href="#">Upgrade Plan</a>
 
-                        </div>
+                        </div> --}}
 
 
 
@@ -125,12 +125,12 @@
                                             Profile
                                         </a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{-- <li class="nav-item">
                                         <a class="nav-link" href="{{ url('plan') }}">
                                             <i class="mdi mdi-currency-usd mr-1" style="color:rgb(158,109,224) "></i>
                                             Upgrade
                                         </a>
-                                    </li>
+                                    </li> --}}
 
                                    @if ($admin->image ?? '')
                                       <li class="nav-item">

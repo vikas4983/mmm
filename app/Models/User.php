@@ -8,10 +8,15 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasTeams;
+use Illuminate\Support\Str;
+
+use function Termwind\parse;
 
 class User extends Authenticatable
 {
@@ -30,17 +35,81 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'image',
+        'matrimony_id',
+        'uuid',
         'name',
         'email',
         'password',
         'gender',
         'mobile',
+        'profile_for',
         'status'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->uuid = (string) Str::uuid();
+        });
+
+        static::created(function ($model) {
+            UserSetting::create([
+                'user_id' => $model->id,
+                'name' => 1,
+                'image' => 1,
+                'horoscope' => 1,
+                'mobile' => 1,
+            ]);
+        });
+    }
+
+
+    public function scopeGetUsers($query, $user)
+    {
+        return $query->whereIn('id', $user)
+            ->where('status', 1);
+    }
+    public function scopeExcludeUser($query, $user)
+    {
+        return $query->where('id', '!=', $user->id);
+    }
+
+    public function scopeOppositeGender($query, $gender)
+    {
+        $opposite = $gender === 'male' ? 'female' : 'male';
+        return $query->where('gender', $opposite);
+    }
+
+    public function scopeCreatedWithinLastDays($query, $days = 30)
+    {
+        return $query->where('created_at', '>=', Carbon::now()->subDays($days));
+    }
+
+
+
     public function getStatusAttribute($value)
     {
-        return $value == 1 ? 'Active' : 'Inactive';
+        return $value == 1 ? 'Self' : 'Inactive';
     }
+    public function getProfileForAttribute($value)
+    {
+        return $value == 1 ? 'Self' : ($value == 2 ? 'Son' : ($value == 3 ? 'Daughter' : ($value == 4 ? 'Sister' : ($value == 5 ? 'Brother' : ($value == 6 ? 'Relative/Friend' : 'NA')))));
+    }
+
+    public function getNameAttribute($value)
+    {
+        return ucfirst($value);
+    }
+    public function getCreatedAtAttribute($value)
+    {
+        return carbon::parse($value)->format('d M Y, h:i A');
+    }
+    public function getUpdatedAtAttribute($value)
+    {
+        return carbon::parse($value)->format('d M Y, h:i A');
+    }
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -71,10 +140,121 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function basicDetails()
+    {
+        return $this->hasOne(BasicDetail::class);
+    }
+    public function horoscopeDetails()
+    {
+        return $this->hasOne(HoroscopeDetail::class);
+    }
+    public function carrierDetails()
+    {
+        return $this->hasOne(CarrierDetail::class);
+    }
+    public function familyDetails()
+    {
+        return $this->hasOne(FamilyDetail::class);
+    }
+    public function userFamilyDetails()
+    {
+        return $this->hasOne(FamilyDetail::class);
+    }
+
+    public function lifestyleDetails()
+    {
+        return $this->hasOne(LifeStyle::class);
+    }
+    public function likeDetails()
+    {
+        return $this->hasOne(LikeDetail::class);
+    }
+
+    public function contactDetails()
+    {
+        return $this->hasOne(ContactDetail::class);
+    }
+    public function invitationDetails()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+    public function senderInvitation()
+    {
+        return $this->hasMany(Invitation::class, 'sender_id', 'id'); // User is sender
+    }
+
+    public function receiverInvitation()
+    {
+        return $this->hasMany(Invitation::class, 'receiver_id', 'id'); // User is receiver
+    }
+
+
+
+    public function blockedUser()
+    {
+        return $this->hasMany(UserBlock::class, 'blocker_id');
+    }
+
+    public function blockedByUsers()
+    {
+        return $this->hasMany(UserBlock::class, 'blocked_id');
+    }
+    public function shortlisted()
+    {
+        return $this->hasMany(Shortlist::class, 'shortlisted_by_id');
+    }
+
+    public function shortlistedUser()
+    {
+        return $this->hasMany(Shortlist::class, 'shortlisted_user_id');
+    }
+
+    public function viewUser()
+    {
+        return $this->hasMany(ViewContact::class, 'view_id');
+    }
+
+    public function viewByUsers()
+    {
+        return $this->hasMany(ViewContact::class, 'viewed_id');
+    }
+
+    public function viewProfileByMe()
+    {
+        return $this->hasMany(ViewProfile::class, 'viewer_id');
+    }
+    public function viewProfileByOther()
+    {
+        return $this->hasMany(ViewProfile::class, 'viewed_user_id');
+    }
+
+    public function senderMessage()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+
+    public function receiverMessage()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    public function userSettings()
+    {
+        return $this->hasMany(UserSetting::class);
+    }
+
+    public function getImageUrlAttribute()
+    {
+
+        return Storage::url($this->image);
+    }
     public function images()
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Image::class, 'user_id', 'id');
     }
+
     public function approvals()
     {
         return $this->hasMany(Approval::class);
@@ -82,7 +262,7 @@ class User extends Authenticatable
 
     public function payments()
     {
-        return $this->hasMany(Payment::class, 'user_id');
+        return $this->hasMany(Payment::class, 'user_id', 'id');
     }
     public function plans()
     {
@@ -130,5 +310,17 @@ class User extends Authenticatable
         }
 
         return $paidUsers;
+    }
+
+    public function age()
+    {
+        $user = Auth::user();
+        if (!$user || !$user->basicDetails || !$user->basicDetails->dob) {
+            return null;
+        }
+        $today = Carbon::now();
+        $dob = Carbon::parse($user->basicDetails->dob);
+
+        return "{$dob->age} Years";
     }
 }

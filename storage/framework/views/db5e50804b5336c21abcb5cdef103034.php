@@ -1,1 +1,0 @@
-<?php /**PATH C:\xampp\htdocs\mmm\resources\views\frontend\registration\basicDetails\edit.blade.php ENDPATH**/ ?>

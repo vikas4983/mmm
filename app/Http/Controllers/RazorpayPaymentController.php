@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\RazorPay;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Razorpay\Api\Api;
@@ -19,9 +20,17 @@ class RazorpayPaymentController extends Controller
 {
     public function index(Request $request)
     {
-        $plan = Plan::find($request->plan_id);
-        $order = rand(1111, 99999);
-        return view('razorpay/razorpayView', compact('plan',  'order'));
+
+        dd('ok');
+
+        
+        // $plan = Plan::where('id', $request->planId)->where('status', 1)->firstorFail();
+        // if (!$plan) {
+        //     return redirect()->back()->with('error', 'Something went wrong!');
+        // }
+
+        // $order = rand(11111, 99999);
+        // return view('razorpay/razorpayView', compact('plan',  'order'));
     }
 
     /**
@@ -31,13 +40,12 @@ class RazorpayPaymentController extends Controller
      */
     public function store(Request $request)
     {
-
-        $plan = Plan::find($request->plan_id);
-        $plan_id = $request->plan_id;
-        $admin_id = $request->admin_id;
-        $price = $plan->price;
-        $offer_price = $plan->offer_price;
-        //$plan = $plan->allow_contact;
+          dump($request->all());
+          $signature = $request->input('razorpay_signature');
+          dump( $signature);
+         $planDetails = Plan::where('id', $request->plan_id)->first();
+         dd($planDetails);
+       
 
         $input = $request->all();
         ($api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET')));

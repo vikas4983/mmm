@@ -14,6 +14,10 @@ class City extends Model
     {
         return $this->belongsTo(State::class);
     }
+    public function states()
+    {
+        return $this->belongsTo(State::class, 'state_id', 'id');
+    }
     public function getStatusAttribute($value)
     {
         return $value == 1 ? 'Active' : 'Inactive';

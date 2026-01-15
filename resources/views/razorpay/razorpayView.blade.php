@@ -46,18 +46,17 @@
                                 <form action="{{ route('razorpay.payment.store') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="plan_id" id="plan_id" value="{{ $plan->id }}">
-                                    <input type="hidden" name="admin_id" id="admin_id" value="{{ Auth::user()->id }}">
+                                    <input type="hidden" name="user_id" id="user_id" value="{{  Auth::user()->id }}">
                                     <input type="hidden" name="order_id" id="order_id"
                                         value="{{ rand(1000, 99999) }}">
-                                    <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="{{ env('RAZORPAY_KEY') }}"
-                                        data-amount="{{ $plan->offer_price * 100 ?? '' }}" data-prefill.contact="{{ $admin->contact ?? '8770745845' }}"
-                                        data-buttontext="Pay 10 INR" data-name="Mangal Mandap" data-description="Rozerpay"
-                                        data-image="https://mangalmandap.com/images/mangal_logo.jpg" data-prefill.name={{ $admin->name ?? '' }}
-                                        data-prefill.email={{ $admin->email ?? '' }} data-theme.color="#ff7529"></script>
+                                    <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="rzp_test_2xKGPofIB5s3wI"
+                                        data-amount="{{ $plan->offer_price * 100 ?? '' }}" data-prefill.contact="{{ Auth::user()->mobile ?? '1234567890' }}"
+                                        data-buttontext="Rs.{{ $plan->price }}" data-name="Mangal Mandap" data-description="Rozerpay"
+                                        data-image="https://mangalmandap.com/images/mangal_logo.jpg" data-prefill.name={{ $user->name ?? '' }}
+                                        data-prefill.email={{ $user->email ?? '' }} data-theme.color="#ff7529"></script>
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -30,14 +30,14 @@
                         your
                         perfect match.</p>
                 </article>
-                @include('partials.alerts')
+                @include('alerts.alert')
                 <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
                 <form action="{{ route('carrierDetails.store') }}" method="post">
                     @csrf
                     @php
                         $fields = config('formFields.carrierDetails');
-                        
-                     @endphp
+
+                    @endphp
                     <x-form-fields-component :fields="$fields" />
                     <div class="row form-group">
                         <div class="col-xxl-16 text-center">
@@ -54,11 +54,16 @@
     <script>
         const employee = document.getElementById("employee");
         const occupation = document.getElementById("hiddenOccupation");
+        const employeeLoader = document.getElementById('employee-loader');
+        // Loader class avilable in select component
         employee.addEventListener("change", function() {
             const employeeId = employee.value;
-            console.log(employeeId);
             if (employeeId) {
-                occupation.style.display = 'block';
+                employeeLoader.style.display = 'flex';
+                setTimeout(function() {
+                    employeeLoader.style.display = 'none';
+                }, 1000);
+
                 $.ajax({
                     url: '/get-occupation/' + employeeId,
                     type: 'GET',
@@ -67,7 +72,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
-                        $("#occupation").empty();
+                        occupation.style.display = 'block';
                         $("#occupation").append('<option value="">Select </option>');
                         $.each(data, function(key, value) {
                             $('#occupation').append('<option value="' + value.id + '">' + value
@@ -83,10 +88,93 @@
                     }
                 });
             } else {
+                occupation.style.display = 'none';
+            }
+        });
+    </script>
 
-                $('#occupation').fadeOut();
-                $('#occupation').empty();
-                $('#occupation').append('<option value="">Select occupation</option>');
+    <script>
+        const country = document.getElementById("country");
+        const state = document.getElementById("hiddenState");
+        const state1 = document.getElementById("state");
+        const city = document.getElementById("hiddenCity");
+        const CountryLoader = document.getElementById('country-loader');
+        const stateLoader = document.getElementById('state-loader');
+
+        state.style.display = 'none';
+        country.addEventListener("change", function(e) {
+            let countryId = country.value;
+            console.log(countryId);
+            if (countryId) {
+                if (CountryLoader) {
+                    CountryLoader.style.display = 'flex';
+                    setTimeout(function() {
+                        CountryLoader.style.display = 'none';
+                    }, 1000);
+                }
+
+                $.ajax({
+                    url: '/get-state/' + countryId,
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        state.style.display = 'block';
+                        $("#state").append('<option value="">Select state</option>');
+                        $.each(data, function(key, value) {
+                            $('#state').append('<option value="' + value.id + '">' + value
+                                .state + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error Status:', status);
+                        console.error('Error Details:', xhr.responseText);
+                        alert(
+                            'An error occurred while fetching the caste data. Please try again later.'
+                        );
+                    }
+                });
+            } else {
+                state.style.display = 'none';
+            }
+        });
+
+        city.style.display = 'none';
+        state1.addEventListener("change", function(e) {
+            let stateId = state1.value;
+            if (stateId) {
+                stateLoader.style.display = 'flex';
+                setTimeout(function() {
+                    stateLoader.style.display = 'none';
+                }, 1000);
+
+                $.ajax({
+                    url: '/get-city/' + stateId,
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(data) {
+                        city.style.display = 'block';
+                        $("#city").append('<option value="">Select City</option>');
+                        $.each(data, function(key, value) {
+                            $('#city').append('<option value="' + value.id + '">' + value
+                                .city + '</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error Status:', status);
+                        console.error('Error Details:', xhr.responseText);
+                        alert(
+                            'An error occurred while fetching the caste data. Please try again later.'
+                        );
+                    }
+                });
+            } else {
+                city.style.display = 'none';
             }
         });
     </script>

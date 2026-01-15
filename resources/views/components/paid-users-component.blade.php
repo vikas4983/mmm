@@ -22,10 +22,11 @@ $currentDate = \Carbon\Carbon::now();
                     <a class="d-block mb-2" href="javascript:void(0)" data-toggle="modal"
                         data-target="#modal-contact-{{ $paidUser->user->id }}">
                         <div class="image mb-3 d-inline-flex mt-n8">
-                            <img src="{{ asset('storage/admin/user-images/' . ($paidUser->user->image ?? 'male-default.jpg')) }}"
+                            <img src="{{ asset('storage/users/images/' . ($paidUser->image ?? ($paidUser->gender === 'female' ? 'female-default.jpg' : 'male-default.jpg'))) }}"
                                 class="img-fluid rounded-circle d-inline-block" alt="Avatar Image" width="100px"
                                 height="100px"
                                 style="border: 2px solid #22ff00; padding: 2px; border-radius: 50%; box-sizing: border-box;">
+
                         </div>
 
                         <h5 class="card-title">{{ $paidUser->user->name ?? '' }} ({{ $paidUser->user->id }}) <i

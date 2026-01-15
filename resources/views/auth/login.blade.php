@@ -10,7 +10,7 @@
 
 @endsection
 @section('content')
-    
+
     <div id="body" style="display">
         <div id="wrap" class="gtLogin">
             <div id="main">
@@ -21,26 +21,11 @@
                             <form class="gt-login-form" action="{{ route('login') }}" name="login_form" id="login_form"
                                 method="post">
                                 @csrf
-
-                                @php
-                                    session()->forget('registration_step');
-                                @endphp
-                                {{-- @dump(session()->all()) --}}
                                 <h2 class="inPageTitle fontMerriWeather text-center mt-15 inThemeOrange">
                                     {{ trans('auth.login') }}
                                 </h2>
                                 <p class="inPageSubTitle text-center mb-30">And search your life partner</p>
-
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-                                @include('partials.alerts')
+                                @include('alerts.alert')
                                 @php
                                     $fields = config('formFields.login');
                                 @endphp
@@ -69,12 +54,12 @@
                                     <a href="{{ route('login.with.otp') }}" class="btn gt-btn-green btn-block">Login
                                         With OTP</a>
                                 </div>
-                                <div class="clearfix"></div>
+                                {{-- <div class="clearfix"></div>
                                 <h5 class="text-center gt-margin-top-20">Not received email verification link?</h5>
                                 <div class="form-group text-center">
                                     <a href="resend_email_verify" class="btn gt-btn-blue btn-block">Resend Email
                                         Verification</a>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                     </div>
