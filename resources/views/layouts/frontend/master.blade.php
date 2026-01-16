@@ -65,16 +65,16 @@
                             ? asset('storage/admin/logo-favicon/logos/' . $logo->name)
                             : asset('assets/auth/images/logo.png') }} --}}
                         <!-- Logo -->
-                        <div class="col-xxl-5 col-xl-4 col-xs-8 col-md-8 col-lg-5">
+                        {{-- <div class="col-xxl-5 col-xl-4 col-xs-8 col-md-8 col-lg-5">
                             <a href="/" class="ripplelink">
                                 <img src="{{ isset($logos->name) && $logos->name ? asset('storage/admin/logo-favicon/logos/' . $logos->name) : asset('storage/admin/logo-favicon/logos/mangal_logo-removebg-preview.png') }}"
                                     class="img-responsive gt-header-logo" max-height="50px">
                             </a>
 
-                        </div>
+                        </div> --}}
                         <!-- /. Logo -->
                         <!-- Header login form -->
-                        <div
+                        {{-- <div
                             class="col-xxl-8 col-xl-10 col-lg-11 col-xs-16 col-sm-16 col-md-16 pull-right mt-20 hidden-xs hidden-sm hidden-md">
                             <div class="row">
                                 <form action="{{ route('login') }}" method="post" id="headerloginForm">
@@ -112,15 +112,15 @@
                                     <a href="{{ route('login.with.otp') }}" class="gt-text-Grey">Login with OTP</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <!-- /.Header login form -->
 
                         <!-- Header login mobile button-->
-                        <div class="col-xs-8 visible-xs visible-sm visible-md text-right">
+                        {{-- <div class="col-xs-8 visible-xs visible-sm visible-md text-right">
                             <a class="btn gt-btn-orange mt-15" role="button" data-toggle="collapse"
                                 href="#collapseHeadLogin" aria-expanded="false" aria-controls="collapseHeadLogin">
                                 Login </a>
-                        </div>
+                        </div> --}}
                         <!-- /.Header login mobile button -->
                     </div>
                     <!-- Header login form for mobile -->
@@ -182,13 +182,13 @@
                             </button>
                         </div>
                         <!-- /.Mobile Menu Button -->
-
+                        {{-- @dump(session()->all()) --}}
                         <!-- Menu tabs -->
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-left">
                                 <li class="active ripplelink"><a href="{{ url('/') }}"><i
                                             class="fas fa-home mr-10 fa-lg"></i>Home</a></li>
-                                <li class="dropdown">
+                                {{-- <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
                                         <span class="mr-5"><i
@@ -203,7 +203,7 @@
                                         <li><a href="search?gt-location-search">Location Search</a></li>
                                         <li><a href="search?gt-occupation-search">Occupation Search</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
                                 <li class="ripplelink"><a href="{{ url('successStory') }}"><i
                                             class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
@@ -223,10 +223,12 @@
                                 </li>
 
                                 <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
-                                    <a href="{{ url('/') }}"><i class="fas fa-user-plus mr-10 fa-lg"></i>
+                                    <a href="{{ route('members.create') }}"><i
+                                            class="fas fa-user-plus mr-10 fa-lg"></i>
                                         Signup</a>
                                 </li>
-                                @if (session()->get('registration_step') != '1')
+
+                                {{-- @if (session()->get('registration_step') != '1')
                                     <li class="ripplelink gt-border-right-green gtBorderRightSMXS0">
                                         <form action="{{ url('logout') }}" method="post" style="display: inline;">
                                             @csrf
@@ -237,7 +239,7 @@
                                             </button>
                                         </form>
                                     </li>
-                                @endif
+                                @endif --}}
                             </ul>
                         </div>
                         <!-- /.Menu tabs -->
@@ -250,8 +252,6 @@
     @yield('styles')
     @yield('content')
 
-
-
     <!-- Footer -->
     <footer class="footer-before-login gt-margin-top-25">
         <div class="container">
@@ -260,39 +260,62 @@
                     <h5 class="gt-text-green gt-font-weight-600">
                         Help And Support </h5>
                     <ul class="">
-                        <li><a href="{{ url('help') }}">Help</a></li>
-                        <li><a href="{{ url('faq') }}">FAQ</a></li>
-                        {{-- <li><a href="cms?cms_id=16">Refund Policy</a></li> --}}
-                        <li><a href="{{ url('refund') }}">Refund Policy</a></li>
+                        @php
+                            $allowedSlugs = ['contact-us', 'faq-page', 'report-misuse'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
+
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Terms & Policy </h5>
                     <ul class="">
-                        <li><a href="{{ url('refund') }}">Terms & Conditions</a></li>
-                        <li><a href="{{ url('refund') }}">Privacy Policy</a></li>
-                        {{-- <li><a href="cms?cms_id=15">Report Misuse</a></li> --}}
-                        <li><a href="{{ url('misuse') }}">Report Misuse</a></li>
+                        @php
+                            $allowedSlugs = ['terms-conditions'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
+
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Need Help? </h5>
                     <ul class="">
-                        <li><a href="{{ url('login') }}">Login</a></li>
-                        <li><a href="{{ url('/') }}">Register</a></li>
-                        <li><a href="{{ url('plans') }}"><i class="fa fa-star gt-text-orange"></i> Upgrade
-                                Plan</a></li>
+                        @php
+                            $allowedSlugs = ['membership'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Information </h5>
                     <ul class="">
-                        <li><a href="{{ url('successStory') }}">Success Story</a></li>
-                        {{-- <li><a href="cms?cms_id=8">About Us</a></li> --}}
-                        <li><a href="{{ url('about-us') }}">About Us</a></li>
+                        @php
+                            $allowedSlugs = ['success-story'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -617,7 +640,7 @@
     </script>
     <!-- Validation js -->
     <script type="text/javascript" src="{{ asset('frontend/assets/js/validetta.js') }}"></script>
-    <script>
+    {{-- <script>
         $(function() {
             $('#frm').validetta({
                 errorClose: false,
@@ -630,71 +653,71 @@
                 realTime: true
             });
         });
-    </script>
+    </script> --}}
     <!-- Owl Carousel Js -->
     <script src="{{ asset('frontend/assets/js/owl.carousel.min.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $("#inFetBride").owlCarousel({
-                autoPlay: 3000,
-                items: 5,
-                navigation: true,
-                navigationText: ["<i class='fa fa-chevron-left'></i>",
-                    "<i class='fa fa-chevron-right'></i>"
-                ],
-                itemsDesktop: [1199, 5],
-                itemsDesktopSmall: [979, 4],
-                itemsCustom: [
-                    [0, 1],
-                    [450, 1],
-                    [600, 2],
-                    [700, 2],
-                    [800, 3],
-                    [1000, 5],
-                    [1200, 5],
-                    [1400, 5],
-                    [1600, 5]
-                ],
-            });
-            $("#inFetGroom").owlCarousel({
-                autoPlay: 3000,
-                items: 5,
-                navigation: true,
-                navigationText: ["<i class='fa fa-chevron-left'></i>",
-                    "<i class='fa fa-chevron-right'></i>"
-                ],
-                itemsDesktop: [1199, 5],
-                itemsDesktopSmall: [979, 4],
-                itemsCustom: [
-                    [0, 1],
-                    [450, 1],
-                    [600, 2],
-                    [700, 2],
-                    [800, 3],
-                    [1000, 5],
-                    [1200, 5],
-                    [1400, 5],
-                    [1600, 5]
-                ],
-            });
-            $("#owl-demo-2").owlCarousel({
-                autoPlay: 3000,
-                autoPlay: true,
-                items: 1,
-                itemsDesktop: [1199, 1],
-                itemsDesktopSmall: [979, 1],
-                itemsCustom: [
-                    [0, 1],
-                    [450, 1],
-                    [600, 1],
-                    [700, 1],
-                    [1000, 1],
-                    [1200, 1],
-                    [1400, 1],
-                    [1600, 1]
-                ],
-            });
-        });
+        // $(document).ready(function() {
+        //     $("#inFetBride").owlCarousel({
+        //         autoPlay: 3000,
+        //         items: 5,
+        //         navigation: true,
+        //         navigationText: ["<i class='fa fa-chevron-left'></i>",
+        //             "<i class='fa fa-chevron-right'></i>"
+        //         ],
+        //         itemsDesktop: [1199, 5],
+        //         itemsDesktopSmall: [979, 4],
+        //         itemsCustom: [
+        //             [0, 1],
+        //             [450, 1],
+        //             [600, 2],
+        //             [700, 2],
+        //             [800, 3],
+        //             [1000, 5],
+        //             [1200, 5],
+        //             [1400, 5],
+        //             [1600, 5]
+        //         ],
+        //     });
+        //     $("#inFetGroom").owlCarousel({
+        //         autoPlay: 3000,
+        //         items: 5,
+        //         navigation: true,
+        //         navigationText: ["<i class='fa fa-chevron-left'></i>",
+        //             "<i class='fa fa-chevron-right'></i>"
+        //         ],
+        //         itemsDesktop: [1199, 5],
+        //         itemsDesktopSmall: [979, 4],
+        //         itemsCustom: [
+        //             [0, 1],
+        //             [450, 1],
+        //             [600, 2],
+        //             [700, 2],
+        //             [800, 3],
+        //             [1000, 5],
+        //             [1200, 5],
+        //             [1400, 5],
+        //             [1600, 5]
+        //         ],
+        //     });
+        //     $("#owl-demo-2").owlCarousel({
+        //         autoPlay: 3000,
+        //         autoPlay: true,
+        //         items: 1,
+        //         itemsDesktop: [1199, 1],
+        //         itemsDesktopSmall: [979, 1],
+        //         itemsCustom: [
+        //             [0, 1],
+        //             [450, 1],
+        //             [600, 1],
+        //             [700, 1],
+        //             [1000, 1],
+        //             [1200, 1],
+        //             [1400, 1],
+        //             [1600, 1]
+        //         ],
+        //     });
+        // });
     </script>
     <script>
         $("#gtFetVendor").owlCarousel({
@@ -813,81 +836,3 @@
     });
 </script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    const country = document.getElementById("country");
-    const state = document.getElementById("hiddenState");
-    state.style.display = 'none';
-    country.addEventListener("change", function(e) {
-        let countryId = country.value;
-        console.log(countryId);
-        if (countryId) {
-            state.style.display = 'block';
-            $.ajax({
-                url: '/get-state/' + countryId,
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#state").empty();
-                    $("#state").append('<option value="">Select state</option>');
-                    $.each(data, function(key, value) {
-                        $('#state').append('<option value="' + value.id + '">' + value
-                            .state + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
-                }
-            });
-        } else {
-
-            $('#state').fadeOut();
-            $('#state').empty();
-            $('#state').append('<option value="">Select state</option>');
-        }
-    });
-</script>
-<script>
-    const state1 = document.getElementById("state");
-    const city = document.getElementById("hiddenCity");
-    city.style.display = 'none';
-    state1.addEventListener("change", function(e) {
-        let stateId = state1.value;
-        if (stateId) {
-            city.style.display = 'block';
-            $.ajax({
-                url: '/get-city/' + stateId,
-                type: 'GET',
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    $("#city").empty();
-                    $("#city").append('<option value="">Select City</option>');
-                    $.each(data, function(key, value) {
-                        $('#city').append('<option value="' + value.id + '">' + value
-                            .city + '</option>');
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error Status:', status);
-                    console.error('Error Details:', xhr.responseText);
-                    alert(
-                        'An error occurred while fetching the caste data. Please try again later.'
-                    );
-                }
-            });
-        } else {
-            $('#city').fadeOut();
-            $('#city').empty();
-            $('#city').append('<option value="">Select City</option>');
-        }
-    });
-</script>

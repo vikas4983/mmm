@@ -19,6 +19,7 @@
             <div class="row mb-20">
                 <img src="{{ asset('frontend/assets/img/reg-step-1.png') }}" class="img-responsive">
             </div>
+            @include('alerts.alert')
             <h3 class="gt-text-green mb-10 fontMerriWeather">
                 <i class="fa fa-user mr-10"></i>Basic Information
             </h3>
@@ -47,17 +48,44 @@
     </div>
     </div>
     <script>
+        const dob = document.getElementById('dob');
+        if (dob) {
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+            const minDate = new Date(1900, 0, 1);
+            const formatForInput = (date) => {
+                const d = String(date.getDate()).padStart(2, '0');
+                const m = String(date.getMonth() + 1).padStart(2, '0');
+                const y = date.getFullYear();
+                return `${y}-${m}-${d}`;
+            };
+            dob.setAttribute('min', formatForInput(minDate));
+            dob.setAttribute('max', formatForInput(maxDate));
+            dob.value = formatForInput(maxDate);
+            dob.addEventListener('change', function() {
+                const selected = new Date(this.value);
+                const day = String(selected.getDate()).padStart(2, '0');
+                const month = String(selected.getMonth() + 1).padStart(2, '0');
+                const year = selected.getFullYear();
+                const formattedDate = `${day}/${month}/${year}`;
+            });
+        }
+    </script>
+    <script>
         const religion = document.getElementById("religion");
         const maritalStatus = document.getElementById("marital_status");
         const caste = document.getElementById("hiddenCaste");
         const children = document.getElementById("hiddenChildren");
+        const loader = document.getElementById('loader');
         caste.style.display = 'none';
         children.style.display = 'none';
         religion.addEventListener("change", function(e) {
             let religionId = religion.value;
-
             if (religionId) {
-                caste.style.display = 'block';
+                loader.style.display = 'flex';
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                }, 1000);
                 $.ajax({
                     url: '/get-caste/' + religionId,
                     type: 'GET',
@@ -66,12 +94,8 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {
-                        $("#caste").empty();
-                        $("#caste").append('<option value="">Select Caste</option>');
-                        $.each(data, function(key, value) {
-                            $('#caste').append('<option value="' + value.id + '">' + value
-                                .name + '</option>');
-                        });
+                        caste.style.display = 'block';
+                        $("#caste").html(data.castes);
                     },
                     error: function(xhr, status, error) {
                         console.error('Error Status:', status);
@@ -80,12 +104,10 @@
                             'An error occurred while fetching the caste data. Please try again later.'
                         );
                     }
+
                 });
             } else {
-
-                $('#caste').fadeOut();
-                $('#caste').empty();
-                $('#caste').append('<option value="">Select Caste</option>');
+                caste.style.display = 'none';
             }
         });
         maritalStatus.addEventListener("change", function(e) {

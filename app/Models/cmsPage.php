@@ -11,7 +11,11 @@ class cmsPage extends Model
     use HasFactory;
     public const ACTIVE = 1;
     public $fillable = [
-        'name', 'slug', 'title', 'status','content', // Add any other fields you want to be mass assignable
+        'name',
+        'slug',
+        'title',
+        'status',
+        'content', // Add any other fields you want to be mass assignable
     ];
 
     public function setTitleAttribute($value)
@@ -22,5 +26,9 @@ class cmsPage extends Model
     public function getStatusAttribute($value)
     {
         return $value == 1 ? 'Active' : 'Inactive';
+    }
+
+    public function scopeCmsPages($query){
+      return $query->where('status',1);
     }
 }

@@ -5,7 +5,7 @@
         @if ($type === 'number') minlength="10" maxlength="12" @endif required>
 
     @if ($name === 'password')
-        {{-- Add any password-specific messages or hints here --}}
+        
     @endif
 
     @error($name)

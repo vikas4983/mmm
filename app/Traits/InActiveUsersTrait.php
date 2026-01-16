@@ -14,7 +14,7 @@ trait InActiveUsersTrait
         $inActiveUsers = User::where('status', 0)
             ->orderBy('created_at', 'desc')
             ->get();
-           // dd($inActiveUsers);
+         
         return $inActiveUsers;
     }
 }

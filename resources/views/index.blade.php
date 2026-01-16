@@ -44,6 +44,7 @@
         <div class="loader"></div>
         <h5>Loading...</h5>
     </div>
+
     <!-- /.Loader -->
     <div id="body" style="display:none">
         <div id="wrap">
@@ -83,7 +84,7 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="active ripplelink"><a href="{{ url('/') }}"
                                         class="inPrem2Link">Home</a></li>
-                                <li class="dropdown">
+                                {{-- <li class="dropdown">
                                     <a href="search.php" class="dropdown-toggle ripplelink inPrem2Link"
                                         data-toggle="dropdown" role="button" aria-expanded="false">
                                         <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
@@ -96,7 +97,7 @@
                                         <li><a href="search?gt-location-search">Location Search</a></li>
                                         <li><a href="search?gt-occupation-search">Occupation Search</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
 
                                 <!--                                        <li class="ripplelink"><a href="success-story.php"><i class="fas fa-users mr-10 fa-lg"></i>Success Story</a></li>
                                     -->
@@ -158,8 +159,7 @@
                                     </div>
                                     <div class="gt-slideUp-form-body">
 
-                                        <form action="{{ route('members.store') }}" id="registerPage1"
-                                            method="post" name="registerPage1" onsubmit="return validateForm()">
+                                        <form action="{{ route('members.store') }}" method="post">
                                             @csrf
                                             @php
                                                 $fields = config('formFields.register');
@@ -179,7 +179,7 @@
                         </div>
                     </div>
                 </div>
-                <section class="inPrem2Search">
+                {{-- <section class="inPrem2Search">
                     <div class="container">
                         <form method="post" action="search" id="">
                             <div class="col-xxl-2">
@@ -379,7 +379,7 @@
                         </form>
                     </div>
                     <div class="clearfix"></div>
-                </section>
+                </section> --}}
                 <!-- Welcome Section -->
                 <section class="gt-bg-white">
                     <div class="container pb-50">
@@ -518,7 +518,7 @@
     </section>
     <div class="clearfix"></div>
     <!--- /. Featured Groom --->
-    <section class="gtAndroidDown">
+    {{-- <section class="gtAndroidDown">
         <div class="container">
             <div class="row">
                 <div class="col-xxl-16">
@@ -545,11 +545,12 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
     </div>
     </div>
     <div class="container gt-margin-top-10">
     </div>
+
     <!-- Footer -->
     <footer class="footer-before-login gt-margin-top-25">
         <div class="container">
@@ -558,39 +559,61 @@
                     <h5 class="gt-text-green gt-font-weight-600">
                         Help And Support </h5>
                     <ul class="">
-                        <li><a href="{{ url('help') }}">Help</a></li>
-                        <li><a href="{{ url('faq') }}">FAQ</a></li>
-                        {{-- <li><a href="cms?cms_id=16">Refund Policy</a></li> --}}
-                        <li><a href="{{ url('refund') }}">Refund Policy</a></li>
+                        @php
+                            $allowedSlugs = ['contact-us', 'faq-page', 'report-misuse'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
+
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Terms & Policy </h5>
                     <ul class="">
-                        <li><a href="{{ url('refund') }}">Terms & Conditions</a></li>
-                        <li><a href="{{ url('refund') }}">Privacy Policy</a></li>
-                        {{-- <li><a href="cms?cms_id=15">Report Misuse</a></li> --}}
-                        <li><a href="{{ url('misuse') }}">Report Misuse</a></li>
+                        @php
+                            $allowedSlugs = ['terms-conditions'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Need Help? </h5>
                     <ul class="">
-                        <li><a href="{{ url('login') }}">Login</a></li>
-                        <li><a href="{{ url('register') }}">Register</a></li>
-                        <li><a href="{{ url('plans') }}"><i class="fa fa-star gt-text-orange"></i> Upgrade
-                                Plan</a></li>
+                        @php
+                            $allowedSlugs = ['membership'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
                 <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Information </h5>
                     <ul class="">
-                        <li><a href="{{ url('success-story') }}">Success Story</a></li>
-                        {{-- <li><a href="cms?cms_id=8">About Us</a></li> --}}
-                        <li><a href="{{ url('about-us') }}">About Us</a></li>
+                        @php
+                            $allowedSlugs = ['success-story'];
+                        @endphp
+
+                        @foreach ($cmsPages as $page)
+                            @if (in_array($page->slug, $allowedSlugs))
+                                <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                            @endif
+                        @endforeach
                     </ul>
                 </div>
             </div>
@@ -599,7 +622,7 @@
                     <h5 class="gt-text-green gt-font-weight-600">About Us</h5>
                     <p>Welcome to Mangalmandap.com</p>
                 </div>
-                <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-16 text-center">
+                {{-- <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-16 text-center">
                     <h5 class="gt-text-green gt-font-weight-600">
                         Join us on social </h5>
                     <ul class="gt-footer-social">
@@ -613,7 +636,7 @@
                         <li><a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin"></i></a>
                         </li>
                     </ul>
-                </div>
+                </div> --}}
             </div>
         </div>
     </footer>
@@ -688,63 +711,37 @@
     </div>
     <!-- Right Click Disable -->
 
-    {{-- <script language=JavaScript>
-    function clickIE4() {
-        if (event.button == 2) {
-            return false;
-        }
-    }
-
-    function clickNS4(e) {
-        if (document.layers || document.getElementById && !document.all) {
-            if (e.which == 2 || e.which == 3) {
+    <script language=JavaScript>
+        function clickIE4() {
+            if (event.button == 2) {
                 return false;
             }
         }
-    }
-    if (document.layers) {
-        document.captureEvents(Event.MOUSEDOWN);
-        document.onmousedown = clickNS4;
-    } else if (document.all && !document.getElementById) {
-        document.onmousedown = clickIE4;
-    }
-    document.oncontextmenu = new Function("return false")
-</script> --}}
+
+        function clickNS4(e) {
+            if (document.layers || document.getElementById && !document.all) {
+                if (e.which == 2 || e.which == 3) {
+                    return false;
+                }
+            }
+        }
+        if (document.layers) {
+            document.captureEvents(Event.MOUSEDOWN);
+            document.onmousedown = clickNS4;
+        } else if (document.all && !document.getElementById) {
+            document.onmousedown = clickIE4;
+        }
+        document.oncontextmenu = new Function("return false")
+    </script>
 
     <!-- /.Right Click Disable -->
 
-    <!-- Live Chat -->
-    <script type="text/javascript">
-        var auto_refresh = setInterval(
-            function() {
-                $('#count').load('parts/online').fadeIn("slow");
-            }, 15000
-        ); // refresh every 10 second
-    </script>
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
     <small class="pull-right">
     </small>
     <!-- /. Live Chat -->
 
-    <!-- Analytic Code -->
-    <script>
-        var id = 'UA-demo';
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-        ga('create', id, 'auto');
-        ga('send', 'pageview');
-    </script>
-    <!-- /.Analytic Code -->
-
+    
 
 
     </div>

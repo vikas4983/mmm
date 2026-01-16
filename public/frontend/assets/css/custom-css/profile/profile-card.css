@@ -1,0 +1,68 @@
+.image-frame {
+    position: relative;
+    width: 100px;
+    height: 120px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f9f9f9;
+}
+
+.main-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.eye-icon {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #E47203;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.eye-icon:hover {
+    background-color: rgba(228, 114, 3, 0.8);
+    color: #fff;
+}
+
+.blurred-image {
+    filter: blur(2px);
+    transition: filter 0.3s ease;
+}
+
+.blurred-image-frame {
+    position: relative;
+    overflow: hidden;
+}
+
+.center-text {
+    position: absolute;
+/* top: 50%; */
+/* left: 50%; */
+/* transform: translate(-50%, -50%); */
+/* background-color: rgba(0, 0, 0, 0.5); */
+color: #ffffff;
+/* padding: 5px 10px; */
+border-radius: 5px;
+font-size: 15px;
+margin-top: 3rem;
+
+}

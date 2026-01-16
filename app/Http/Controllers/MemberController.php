@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\otp\VerifyOTPRequest;
 use App\Jobs\UserSendEmailJob;
 use App\Models\Member;
 use App\Models\MemberOtp;
@@ -20,7 +21,10 @@ class MemberController extends Controller
 
     public function index()
     {
-        //
+
+        // $members = User::where('status', 1)->get();
+        // dd(  $members);
+        // return view('dashboard', compact('members'));
     }
 
     /**
@@ -34,13 +38,26 @@ class MemberController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate(
+            [
+                'mobile' => 'required|unique:users,mobile',
+                'email' => 'required|unique:users,email',
+            ],
+            [
+                'mobile.unique' => 'Mobile number already registered, try with a different number.',
+                'email.unique' => 'Email already registered, try with a different email.',
+            ]
+        );
         $fields = config('formFields.register');
         $validationRules = [];
         foreach ($fields as $key => $field) {
             $validationRules[$field['name']] = $field['rules'];
         }
+        $validationRules['matrimony_id'] = 'required' | 'integer';
+        $matrimonyId = rand('000000', '999999');
         $validateData = $request->validate($validationRules);
         $validateData['password'] = Hash::make($validateData['password']);
+        $validateData['matrimony_id'] = $matrimonyId;
         if ($validateData) {
             $user = User::create($validateData);
             session(['registration_step' => '2']);
@@ -52,10 +69,9 @@ class MemberController extends Controller
                 'email' => $validateData['email'],
             ];
             session(['accountInfo' => $accountInfo]);
-
             $emailTemplate = $this->userEmailTemplate($name);
             UserSendEmailJob::dispatch($user, $emailTemplate);
-           
+
             return redirect('verification')->with(['success' =>  'OTP has been sent to your email & mobile number!']);
         } else {
             return redirect()
@@ -134,13 +150,9 @@ class MemberController extends Controller
     {
         //
     }
-    public function otpVarify(Request $request)
+    public function otpVarify(VerifyOTPRequest $request)
     {
-        $validatedData = $request->validate([
-            'otp' => 'required|numeric|digits:6',
-            'mobile' => 'required|numeric|digits:10',
-            'email' => 'required|email',
-        ]);
+        $validatedData = $request->validated();
 
         $otp = $validatedData['otp'];
         $mobile = $validatedData['mobile'] ?? null;
@@ -166,7 +178,9 @@ class MemberController extends Controller
         if (now()->greaterThan($otp->expires_at)) {
             return redirect()->back()->with('error', 'OTP has expired');
         }
-
+        $user->update([
+            'status' => 1
+        ]);
         Auth::login($user);
         session(['registration_step' => '4']);
         return redirect()->route('basicDetails.create')->with('success', 'Congratulations! Your account has been verified. Please complete the form.');

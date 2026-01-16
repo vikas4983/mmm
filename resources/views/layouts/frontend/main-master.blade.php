@@ -4,7 +4,7 @@
 <head>
     <!-- Required Meta -->
     <meta charset="utf-8">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
@@ -22,6 +22,7 @@
     <link href="{{ asset('frontend/assets/css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/custom-responsive.css') }}" rel="stylesheet">
     <link href="{{ asset('frontend/assets/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('frontend/assets/css/custom-css/message-modal.css') }}" rel="stylesheet">
     <link
         href="{{ isset($favicons->name) && !empty($favicons->name)
             ? asset('storage/admin/logo-favicon/favicons/' . $favicons->name)
@@ -34,6 +35,12 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('frontend/assets/js/custom-js/user-action/user-action.js') }}"></script>
+
+
+
+
+
 
     <!-- Google Fonts -->
     <link
@@ -47,6 +54,13 @@
     <!-- Chosen CSS -->
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/prism.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/chosen.css') }}">
+
+
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    @yield('header')
+    <script src="{{ asset('frontend/js/custom-js/user-action/user-action.js') }}"></script>
 </head>
 
 <body>
@@ -111,7 +125,7 @@
                                             <span class="gt-text-orange">
                                                 {{ $user->created_at ?? 'NA' }} </span>
                                         </p>
-                                        @if (isset($latestPayment))
+                                        @if (isset($latestPayment) ?? '')
                                             <p class="gt-margin-bottom-5 font-13">Membership :
                                                 {{ $latestPayment->is_paid == 'Active' ? 'Paid' : 'Free' }} <span
                                                     class="gt-text-orange"></span>
@@ -161,54 +175,52 @@
                                         <span class="mr-5">My Profile</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ route('myProfile') }}">View Profile</a></li>
+                                        <li><a href="{{ route('my.profile') }}">View Profile</a>
+                                        </li>
                                         {{-- <li><a href="#">Edit Profile</a></li> --}}
-                                        <li><a href="{{ url('saved-search') }}">My Saved Searches</a></li>
-                                        <li><a href="{{ url('messages') }}">My Messages</a></li>
+                                        {{-- <li><a href="{{ url('saved-search') }}">My Saved Searches</a></li> --}}
+                                        <li><a href="{{ route('message') }}">My Messages</a></li>
                                         <li><a href="{{ url('my-interest') }}">My Express Interest</a></li>
-                                        <li><a href="{{ url('my-photos') }}">Manage Photo</a></li>
-                                        <li><a href="{{ url('my-horoscope') }}">Manage Horoscope</a></li>
-                                        <li><a href="{{ url('document') }}">Manage Document</a></li>
+                                        <li><a href="{{ route('view.profile') }}">Access Control</a></li>
+                                        <li><a href="{{ route('my.photos') }}">Manage Photo</a></li>
+                                        {{-- <li><a href="{{ url('my-horoscope') }}">Manage Horoscope</a></li>
+                                        <li><a href="{{ url('document') }}">Manage Document</a></li> --}}
                                     </ul>
                                 </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
+                                <li class="active ripplelink"><a href="{{ route('search') }}">Search</a></li>
+                                {{-- <li class="dropdown">
+                                    <a href="{{ route('search') }}" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
                                         <span class="mr-5">Search</span><span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ route('quickSearch') }}">Quick Search</a></li>
+                                        <li><a href="{{ route('search') }}">Quick Search</a></li>
                                         <li><a href="{{ url('basic-search') }}">Basic Search</a></li>
                                         <li><a href="{{ url('advance-search') }}">Advanced Search</a></li>
                                         <li><a href="{{ url('keyword-search') }}">Keyword Search</a></li>
                                         <li><a href="{{ url('location-search') }}">Location Search</a></li>
                                         <li><a href="{{ url('occupation-search') }}">Occupation Search</a></li>
                                     </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">My Matches</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="one-way-matches">One Way Matches</a></li>
-                                        <li><a href="two-way-matches">Two Way Matches</a></li>
-                                        <li><a href="broader-matches">Broader Matches</a></li>
-                                        <li><a href="preferred-matches">Preferred Matches</a></li>
-                                        <li><a href="custom-matches">Custom Matches</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
-                                        role="button" aria-expanded="false">
-                                        <span class="mr-5">Membership</span><span class="fa fa-angle-down"></span>
-                                    </a>
-                                    <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ url('plan') }}">Membership Plans</a></li>
-                                        <li><a href="{{ url('active-plan') }}">Current Plan</a></li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown">
+                                </li> --}}
+                                @if (!empty($activePlan) && $activePlan->is_paid === 'Active')
+                                    <li class="dropdown">
+                                        <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
+                                            role="button" aria-expanded="false">
+                                            <span class="mr-5">Membership</span><span
+                                                class="fa fa-angle-down"></span>
+                                        </a>
+                                        <ul class="dropdown-menu flat" role="menu">
+                                            <li><a href="{{ route('plan') }}">Membership Plans</a></li>
+
+                                            <li><a href="{{ route('active.plan') }}">Current Plan</a></li>
+                                        @else
+                                            <li class="active ripplelink"><a
+                                                    href="{{ route('plan') }}">Membership</a></li>
+                                @endif
+
+                            </ul>
+                            </li>
+                            {{-- <li class="dropdown">
                                     <a href="#" class="dropdown-toggle ripplelink" data-toggle="dropdown"
                                         role="button" aria-expanded="false">
                                         <span class="mr-5">Profile Details</span><span
@@ -222,9 +234,9 @@
                                         <li><a href="{{ url('mobile-numbers-view-by') }}">My Mobile No Viewed By</a>
                                         </li>
                                         <li><a href="{{ url('i-view-mobile-numbers') }}">I View Mobile No </a></li>
-                                        {{-- <li><a href="photo-request">Photo Password Request</a></li> --}}
+                                        <li><a href="photo-request">Photo Password Request</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown gt-border-right-green gt-border-left-green">
@@ -234,8 +246,7 @@
                                             class="hidden-xxl hidden-xl hidden-lg">Settings</span>
                                     </a>
                                     <ul class="dropdown-menu flat" role="menu">
-                                        <li><a href="{{ url('privacy') }}">Privacy Setting </a></li>
-                                        <li><a href="settings?contactdiv">Contact View Setting</a></li>
+                                        <li><a href="{{ route('setting.name') }}">Privacy Setting </a></li>
                                         <li><a href="{{ Route('changePassword') }}">Change Password</a></li>
                                         <li>
                                             <form id="logoutForm" action="{{ route('logout') }}" method="POST">
@@ -295,41 +306,68 @@
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Help And Support </h5>
                                 <ul class="">
-                                    <li><a href="contactUs.php">Contact Us</a></li>
-                                    <li><a href="cms?cms_id=13">FAQ</a></li>
-                                    <li><a href="cms?cms_id=16">Refund Policy</a></li>
+                                    @php
+                                        $allowedSlugs = ['contact-us', 'faq-page', 'report-misuse'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
+
                                 </ul>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Terms & Policy </h5>
                                 <ul class="">
-                                    <li><a href="cms?cms_id=7">Terms & Conditions</a></li>
-                                    <li><a href="cms?cms_id=6">Privacy Policy</a></li>
-                                    <li><a href="cms?cms_id=15">Report Misuse</a></li>
+                                    @php
+                                        $allowedSlugs = ['terms-conditions'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Need Help? </h5>
                                 <ul class="">
-                                    <li><a href="membershipplans"><i class="fa fa-star gt-text-orange"></i> Upgrade
-                                            Membership</a></li>
+                                    @php
+                                        $allowedSlugs = ['membership'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-8 col-sm-16 col-md-8">
                                 <h5 class="gt-text-green gt-font-weight-600">
                                     Information </h5>
                                 <ul class="">
-                                    <li><a href="success-story">Success Story</a></li>
-                                    <li><a href="cms?cms_id=8">About Us</a></li>
+                                    @php
+                                        $allowedSlugs = ['success-story'];
+                                    @endphp
+
+                                    @foreach ($cmsPages as $page)
+                                        @if (in_array($page->slug, $allowedSlugs))
+                                            <li><a href="{{ url($page->slug) }}">{{ $page->title }}</a></li>
+                                        @endif
+                                    @endforeach
                                 </ul>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xxl-10 col-xl-10 col-lg-10 col-md-16">
                                 <h5 class="gt-text-green gt-font-weight-600">About Us</h5>
-                                <p>Welcome to Matrimonywebsite</p>
+                                <p>Welcome to Mangalmandap.com</p>
                             </div>
                             <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-16 text-center">
                                 <h5 class="gt-text-green gt-font-weight-600">
@@ -340,9 +378,11 @@
                                     <li><a href="https://www.googleplus.com" target="_blank"><i
                                                 class="fab fa-pinterest-square"></i></a></li>
                                     <li><a href="https://www.twitter.com" target="_blank"><i
-                                                class="fab fa-twitter-square"></i></a></li>
+                                                class="fab fa-twitter-square"></i></a>
+                                    </li>
                                     <li><a href="https://www.linkedin.com" target="_blank"><i
-                                                class="fab fa-linkedin"></i></a></li>
+                                                class="fab fa-linkedin"></i></a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -430,31 +470,34 @@
                     </div>
                 </div>
                 <!-- Right Click Disable -->
-                <!--
-<script language=JavaScript>
-    function clickIE4() {
-        if (event.button == 2) {
-            return false;
-        }
-    }
 
-    function clickNS4(e) {
-        if (document.layers || document.getElementById && !document.all) {
-            if (e.which == 2 || e.which == 3) {
-                return false;
-            }
-        }
-    }
-    if (document.layers) {
-        document.captureEvents(Event.MOUSEDOWN);
-        document.onmousedown = clickNS4;
-    } else if (document.all && !document.getElementById) {
-        document.onmousedown = clickIE4;
-    }
-    document.oncontextmenu = new Function("return false")
-</script>
--->
+                {{-- <script language=JavaScript>
+                    function clickIE4() {
+                        if (event.button == 2) {
+                            return false;
+                        }
+                    }
+
+                    function clickNS4(e) {
+                        if (document.layers || document.getElementById && !document.all) {
+                            if (e.which == 2 || e.which == 3) {
+                                return false;
+                            }
+                        }
+                    }
+                    if (document.layers) {
+                        document.captureEvents(Event.MOUSEDOWN);
+                        document.onmousedown = clickNS4;
+                    } else if (document.all && !document.getElementById) {
+                        document.onmousedown = clickIE4;
+                    }
+                    document.oncontextmenu = new Function("return false")
+                </script> --}}
+
                 <!-- /.Right Click Disable -->
+
+
+
 
                 <!-- Live Chat -->
                 <script type="text/javascript">
@@ -467,6 +510,10 @@
                     // refresh every 10 second
                 </script>
                 <script src="{{ asset('frontend/assets/js/jquery.min.js') }}"></script>
+
+
+                {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+                <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
                 {{-- <small class="pull-right">
         <link rel="stylesheet" type="text/css" href="mmm/who-is-online/widget.css" />
     <script type="text/javascript" src="mmm/who-is-online/widget.js"></script>
@@ -552,6 +599,10 @@
 <script>
     $(document).ready(function() {
         dis_thumbnail();
+
+        $(document).ready(function() {
+            $('.js-example-basic-multiple').select2();
+        });
     });
 
     function dis_thumbnail() {
@@ -582,10 +633,98 @@
             },
             dataType: 'json',
             success: function(data) {
-                // alert('Success');
+
             }
         });
     });
 </script>
-
 {{-- <script src="{{ asset('frontend/assets/js/custom-js/user-update-modal.js') }}"></script> --}}
+{{-- Country, State, City --}}
+
+
+<script>
+    const country = document.getElementById("country");
+    const state = document.getElementById("hiddenState");
+    const state1 = document.getElementById("state");
+    const city = document.getElementById("hiddenCity");
+    const CountryLoader = document.getElementById('country-loader');
+    const stateLoader = document.getElementById('state-loader');
+
+    state.style.display = 'none';
+    country.addEventListener("change", function(e) {
+        let countryId = country.value;
+        console.log(countryId);
+        if (countryId) {
+            alert(countryId);
+            if (CountryLoader) {
+                CountryLoader.style.display = 'flex';
+                setTimeout(function() {
+                    CountryLoader.style.display = 'none';
+                }, 1000);
+            }
+
+            $.ajax({
+                url: '/get-state/' + countryId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    state.style.display = 'block';
+                    $("#state").append('<option value="">Select state</option>');
+                    $.each(data, function(key, value) {
+                        $('#state').append('<option value="' + value.id + '">' + value
+                            .state + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+            state.style.display = 'none';
+        }
+    });
+
+    city.style.display = 'none';
+    state1.addEventListener("change", function(e) {
+        let stateId = state1.value;
+        if (stateId) {
+            stateLoader.style.display = 'flex';
+            setTimeout(function() {
+                stateLoader.style.display = 'none';
+            }, 1000);
+
+            $.ajax({
+                url: '/get-city/' + stateId,
+                type: 'GET',
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    city.style.display = 'block';
+                    $("#city").append('<option value="">Select City</option>');
+                    $.each(data, function(key, value) {
+                        $('#city').append('<option value="' + value.id + '">' + value
+                            .city + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error Status:', status);
+                    console.error('Error Details:', xhr.responseText);
+                    alert(
+                        'An error occurred while fetching the caste data. Please try again later.'
+                    );
+                }
+            });
+        } else {
+            city.style.display = 'none';
+        }
+    });
+</script>

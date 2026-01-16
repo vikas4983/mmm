@@ -10,46 +10,100 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Services\PayUMoneyService;
+use Illuminate\Support\Facades\Log;
 
 class PayUMoneyController extends Controller
 {
+    protected $payu;
+
+    public function __construct(PayUMoneyService $payu)
+    {
+        $this->payu = $payu;
+    }
+    public function order(Request $request)
+    {
+        $user = Auth::user();
+        $plan = Plan::where('id', $request->planId)->where('status', 1)->firstorFail();
+        if (!$plan) {
+            return redirect()->back()->with('error', 'Something went wrong!');
+        }
+
+        if (isset($plan) && isset($plan->offer_price)) {
+            $finalPrice = isset($plan->offer_price) && $plan->offer_price > 0 ? $plan->offer_price : $plan->price;
+            $data = [
+                'key' => 'qrIcqG',
+                'txnid' => uniqid(),
+                'amount' =>  $finalPrice,
+                'productinfo' => $plan->name,
+                'firstname' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->mobile,
+                'surl' => url('success'),
+                'furl' => url('failure'),
+
+
+            ];
+        }
+
+
+        $data['hash'] = $this->payu->generateHash($data);
+        $endpoint = $this->payu->getEndpoint();
+
+        return view('payment', compact('data', 'endpoint'));
+    }
+
+    public function success(Request $request)
+    {
+       // session(['payment_status' => 'failure']);
+        dd('success');
+        return response()->json(['status' => 'success', 'data' => $request->all()]);
+    }
+
+    public function failure(Request $request)
+    {  
+        dd('failuer');
+        Log::info('PayU Failure Response:', $request->all()); // Log the request
+        return response()->json([
+            'message' => 'Payment Failed',
+            'data' => $request->all()
+        ]);
+    }
+
+
     public function payUMoneyView(Request $request)
     {
-        //dd ($request->all());
+        dd($request->all());
         $plan_id = $request->plan_id;
         $admin_id = $request->admin_id;
         $name = $request->name;
         $allow_contact = $request->allow_contact;
         $offer_price = $request->offer_price;
 
-        $MERCHANT_KEY = "fB7m8s"; // TEST MERCHANT KEY
-        $SALT = "eRis5Chv"; // TEST SALT
-        $PAYU_BASE_URL = "https://test.payu.in";
+        $MERCHANT_KEY = 'fB7m8s'; // TEST MERCHANT KEY
+        $SALT = 'eRis5Chv'; // TEST SALT
+        $PAYU_BASE_URL = 'https://test.payu.in';
 
         //$PAYU_BASE_URL = "https://secure.payu.in"; // PRODUCATION
         $name = $name;
-        $successURL = route(
-            'pay.u.response',
-            [
-                'plan_id' => $plan_id,
-                'admin_id' => $admin_id,
-                'offer_price' => $offer_price,
-                'allow_contact' => $allow_contact,
-            ]
-        );
+        $successURL = route('pay.u.response', [
+            'plan_id' => $plan_id,
+            'admin_id' => $admin_id,
+            'offer_price' => $offer_price,
+            'allow_contact' => $allow_contact,
+        ]);
         $failURL = route('pay.u.cancel', [
             'plan_id' => $plan_id,
             'admin_id' => $admin_id,
             'offer_price' => $offer_price,
-
         ]);
         $email = 'example@gmail.com';
         $amount = $offer_price;
 
         $action = '';
         $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-        $posted = array();
-        $posted = array(
+        $posted = [];
+        $posted = [
             'key' => $MERCHANT_KEY,
             'txnid' => $txnid,
             'amount' => $amount,
@@ -59,7 +113,7 @@ class PayUMoneyController extends Controller
             'surl' => $successURL,
             'furl' => $failURL,
             'service_provider' => null,
-        );
+        ];
 
         if (empty($posted['txnid'])) {
             $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
@@ -68,7 +122,7 @@ class PayUMoneyController extends Controller
         }
 
         $hash = '';
-        $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+        $hashSequence = 'key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10';
 
         if (empty($posted['hash']) && sizeof($posted) > 0) {
             $hashVarsSeq = explode('|', $hashSequence);
@@ -112,7 +166,7 @@ class PayUMoneyController extends Controller
             $bankcode = $request->bankcode;
             $error = $request->error;
             $error_Message = $request->error_Message;
-            $columnName = "mihpayid";
+            $columnName = 'mihpayid';
 
             // Column Value if Exist Then Excute The Line
             $column_mihpayid = PayUMoney::where($columnName, $mihpayid)->value($columnName);
@@ -123,7 +177,6 @@ class PayUMoneyController extends Controller
 
             if ($column_mihpayid != $mihpayid) {
                 if ($status == 'success') {
-
                     // For expiry date
                     $plan = Plan::findOrFail($plan_id);
                     $currentDate = Carbon::now();
@@ -170,11 +223,11 @@ class PayUMoneyController extends Controller
 
                         DB::commit();
 
-                        $msg = "You have successfully upgraded a plan!";
+                        $msg = 'You have successfully upgraded a plan!';
                         //$url = route('plann');
-                        return redirect()->route("plann")->with('success', $msg);
+                        return redirect()->route('plann')->with('success', $msg);
                         //return redirect('error')->with('success', $msg);
-                        return "Second";
+                        return 'Second';
                     } else {
                         // For expiry date
                         $plan = Plan::findOrFail($plan_id);
@@ -216,22 +269,21 @@ class PayUMoneyController extends Controller
 
                         DB::commit();
 
-                        $msg = "You have successfully bought a plan!";
+                        $msg = 'You have successfully bought a plan!';
                         // $url = route('admin.plans.plan');
-                        return redirect()->route("plann")->with('success', $msg);
-                        return "first";
+                        return redirect()->route('plann')->with('success', $msg);
+                        return 'first';
                     }
                 }
             }
         } catch (\Exception $ex) {
             DB::rollBack();
             // dd($ex->getMessage());
-            $msg = "An error occurred while processing your request.";
+            $msg = 'An error occurred while processing your request.';
             // $url = route('admin.plans.plan');
             abort(404);
         }
     }
-
 
     public function payUCancel(Request $request)
     {
@@ -281,8 +333,8 @@ class PayUMoneyController extends Controller
                 'error' => $error,
                 'error_Message' => $error_Message,
             ]);
-            $msg = "Your Payment Was Unsuccessfull, Please Try Again!";
-            return redirect()->route("plann")->with('info', $msg);
+            $msg = 'Your Payment Was Unsuccessfull, Please Try Again!';
+            return redirect()->route('plann')->with('info', $msg);
         }
     }
 }

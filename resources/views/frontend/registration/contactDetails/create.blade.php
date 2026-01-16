@@ -31,7 +31,7 @@
                         your
                         perfect match.</p>
                 </article>
-                @include('partials.alerts')
+                @include('alerts.alert')
                 <b class="text-danger mr-5 gtRegMandatory">*</b><b class="gt-text-Grey">Mandatory fields</b>
                 <form action="{{ route('contactDetails.store') }}" method="post">
                     @csrf
@@ -53,7 +53,7 @@
         </div>
 
     </div>
-    <script>
+    {{-- <script>
         const employee = document.getElementById("employee");
         const occupation = document.getElementById("hiddenOccupation");
         employee.addEventListener("change", function() {
@@ -91,5 +91,5 @@
                 $('#occupation').append('<option value="">Select occupation</option>');
             }
         });
-    </script>
+    </script> --}}
 @endsection

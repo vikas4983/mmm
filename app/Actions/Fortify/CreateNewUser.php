@@ -25,8 +25,7 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        dd($input);
-        $fields = config('formFields.register');
+      $fields = config('formFields.register');
         $rules = [];
 
         foreach ($fields as $field => $fieldConfig) {
@@ -57,7 +56,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'mobile' => $input['mobile'],
                 'gender' => $input['gender'],
-                'password' => Hash::make($input['password']), // Correct the Hashing
+                'password' => Hash::make($input['password']), 
             ]),
 
             function (User $user) {

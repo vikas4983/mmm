@@ -234,7 +234,7 @@
             });
         </script> --}}
 
-        <script>
+        {{-- <script>
             const religion = document.getElementById("religion");
             const caste = document.getElementById("hiddenCaste");
             caste.style.display = 'none';
@@ -273,48 +273,10 @@
                     $('#caste').append('<option value="">Select Caste</option>');
                 }
             });
-        </script>
+        </script> --}}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            const country = document.getElementById("country");
-            const state = document.getElementById("hiddenState");
-            state.style.display = 'none';
-            country.addEventListener("change", function(e) {
-                let countryId = country.value;
-                if (countryId) {
-                    state.style.display = 'block';
-                    $.ajax({
-                        url: '/get-state/' + countryId,
-                        type: 'GET',
-                        dataType: 'json',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(data) {
-                            $("#state").empty();
-                            $("#state").append('<option value="">Select state</option>');
-                            $.each(data, function(key, value) {
-                                $('#state').append('<option value="' + value.id + '">' + value
-                                    .state + '</option>');
-                            });
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Error Status:', status);
-                            console.error('Error Details:', xhr.responseText);
-                            alert(
-                                'An error occurred while fetching the caste data. Please try again later.'
-                            );
-                        }
-                    });
-                } else {
-
-                    $('#state').fadeOut();
-                    $('#state').empty();
-                    $('#state').append('<option value="">Select state</option>');
-                }
-            });
-        </script>
-        <script>
+       
+        {{-- <script>
             const state1 = document.getElementById("state");
             const city = document.getElementById("hiddenCity");
             city.style.display = 'none';
@@ -351,7 +313,7 @@
                     $('#city').append('<option value="">Select City</option>');
                 }
             });
-        </script>
+        </script>  --}}
 
     </div>
 
